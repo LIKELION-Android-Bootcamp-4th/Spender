@@ -12,9 +12,10 @@ import com.example.spender.ui.theme.Typography
 
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Text("titleLarge", style = Typography.titleLarge)
         Text("titleMedium", style = Typography.titleMedium)
