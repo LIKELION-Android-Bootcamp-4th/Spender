@@ -30,8 +30,10 @@ fun HomeScreen(navHostController: NavHostController) {
                             // TODO: 알림 모아보기로 이동하는 로직
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.Notifications,
-                            contentDescription = "알림 보기")
+                        Icon(
+                            imageVector = Icons.Default.Notifications,
+                            contentDescription = "알림 보기"
+                        )
                     }
                 }
             )
