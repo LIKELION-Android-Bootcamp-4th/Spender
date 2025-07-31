@@ -4,13 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,7 +16,7 @@ import com.example.spender.core.ui.BottomNavigationBar
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.mypage.MypageScreen
-import com.example.spender.feature.report.ReportScreen
+import com.example.spender.feature.report.ui.list.ReportListScreen
 import com.example.spender.ui.theme.navigation.BottomNavigationItem
 import com.example.spender.ui.theme.navigation.SpenderNavigation
 
@@ -52,7 +49,7 @@ fun MainScreen(rootNavHostController: NavHostController) {
                 AnalysisScreen(rootNavHostController)
             }
             composable(BottomNavigationItem.Report.route) {
-                ReportScreen(rootNavHostController)
+                ReportListScreen(rootNavHostController)
             }
             composable(BottomNavigationItem.Mypage.route) {
                 MypageScreen(rootNavHostController)
