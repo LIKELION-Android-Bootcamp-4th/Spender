@@ -56,4 +56,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //jetpack compose
+    implementation(libs.compose.nav)
+    implementation(libs.coroutines.core)
+    implementation(libs.lifecycle.viewmodel.compose)
+
+    implementation(libs.lifecycle.viewmodel.ktx)
 }
