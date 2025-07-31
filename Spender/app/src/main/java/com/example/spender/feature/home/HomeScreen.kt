@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.spender.feature.home.ui.BudgeProgress
+import com.example.spender.feature.home.ui.RecentTransactionsSection
 import com.example.spender.feature.home.ui.TotalExpenseCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,14 +52,13 @@ fun HomeScreen(navHostController: NavHostController) {
                     .padding(padding),
             ) {
                 item {
-                    TotalExpenseCard(totalExpense)
+                    TotalExpenseCard(totalExpense = totalExpense)
                 }
                 item {
                     BudgeProgress(budget = budget, totalExpense = totalExpense)
                 }
                 item {
-                    //최근 기록 들어갈 곳
-                    // 한 5~10개 정도?
+                    RecentTransactionsSection()
                 }
             }
         }
