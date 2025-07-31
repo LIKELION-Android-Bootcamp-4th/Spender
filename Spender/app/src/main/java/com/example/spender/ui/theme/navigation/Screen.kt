@@ -1,4 +1,5 @@
-package com.example.spender.ui.theme.navigation;
+package com.example.spender.ui.theme.navigation
 
-public class Screen {
+sealed class Screen(val route: String) {
+    object MainScreen : Screen("main")
 }
