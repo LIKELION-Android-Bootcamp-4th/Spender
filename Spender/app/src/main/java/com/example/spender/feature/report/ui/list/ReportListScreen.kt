@@ -1,27 +1,36 @@
 package com.example.spender.feature.report.ui.list
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.spender.feature.report.domain.model.Report
 import com.example.spender.feature.report.ui.component.ReportSummaryCard
+
 
 //@Composable
 //fun ReportListScreen(navHostController: NavHostController) {
@@ -39,6 +48,7 @@ import com.example.spender.feature.report.ui.component.ReportSummaryCard
 fun ReportListScreen(
     navController: NavHostController
 ) {
+    var currentYear by remember { mutableStateOf(2025) }
     val sampleReports = listOf(
         Report(1, "2025.01", 800000, 1000000),
         Report(2, "2025.02", 1300000, 1000000),
@@ -56,9 +66,44 @@ fun ReportListScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        text = "리포트"
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = { currentYear-- },
+                            modifier = Modifier.size(36.dp)
+                        ) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                                contentDescription = "이전 년도"
+                            )
+                        }
+
+                        Text(
+                            text = "${currentYear}년",
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+
+                        IconButton(
+                            onClick = { if(currentYear < 2025) currentYear++ },
+                            modifier = Modifier.size(36.dp).alpha(if(currentYear < 2025) 1f else 0f),
+                            enabled = true
+                        ) {
+                            Icon(
+                                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                contentDescription = "다음 년도"
+                            )
+                        }
+
+
+                    }
+                },
+                actions = {
+                    IconButton(onClick = {
+
+                    }) {
+                        Icon(imageVector = Icons.Default.DateRange, contentDescription = "캘린더")
+                    }
                 }
             )
         },
