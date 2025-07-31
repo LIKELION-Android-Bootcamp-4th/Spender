@@ -1,5 +1,6 @@
 package com.example.spender.feature.report.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,7 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode.Companion.Color
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,9 +43,13 @@ fun ReportSummaryCard(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .background(Color.White)
+            .shadow(4.dp, RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(6.dp)
+
+        elevation = CardDefaults.cardElevation(6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),

@@ -63,4 +63,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
 
     implementation(libs.lifecycle.viewmodel.ktx)
+
+    implementation("androidx.compose.material:material-icons-extended")
+
 }
