@@ -2,6 +2,7 @@ package com.example.spender.feature.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -15,14 +16,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.spender.feature.home.ui.BudgeProgress
 import com.example.spender.feature.home.ui.TotalExpenseCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
+    val totalExpense = 542560
+    val budget = 1000000
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
+                modifier = Modifier.height(56.dp),
                 title = { },
                 actions = {
                     IconButton(
@@ -43,17 +49,16 @@ fun HomeScreen(navHostController: NavHostController) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding),
-//                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 item {
-                    TotalExpenseCard(totalExpense = 150000)
+                    TotalExpenseCard(totalExpense)
                 }
                 item {
-                    //예산 프로그래스바가 들어갈 곳
+                    BudgeProgress(budget = budget, totalExpense = totalExpense)
                 }
                 item {
                     //최근 기록 들어갈 곳
+                    // 한 5~10개 정도?
                 }
             }
         }
