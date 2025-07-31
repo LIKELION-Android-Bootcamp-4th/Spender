@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Spender</string>
-    <string name="tab_home">Home</string>
-    <string name="tab_analysis">Chart</string>
-    <string name="tab_mypage">MyPage</string>
-    <string name="tab_report">Report</string>
+    <string name="tab_home">홈</string>
+    <string name="tab_analysis">통계</string>
+    <string name="tab_mypage">마이페이지</string>
+    <string name="tab_report">리포트</string>
 </resources>

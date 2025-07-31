@@ -3,7 +3,9 @@ package com.example.spender.ui.theme.navigation
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Assignment
+import androidx.compose.material.icons.automirrored.filled.MultilineChart
 import androidx.compose.material.icons.automirrored.filled.ShowChart
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.Modifier
@@ -23,7 +25,7 @@ sealed class BottomNavigationItem(
     data object Analysis: BottomNavigationItem(
         route = "analysis",
         title = R.string.tab_analysis,
-        icon = Icons.AutoMirrored.Filled.ShowChart
+        icon = Icons.Default.BarChart
     )
     data object Report: BottomNavigationItem(
         route = "report",

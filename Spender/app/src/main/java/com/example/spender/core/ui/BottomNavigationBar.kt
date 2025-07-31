@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -26,6 +27,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.spender.ui.theme.DarkPointColor
+import com.example.spender.ui.theme.DefaultFontColor
+import com.example.spender.ui.theme.LightFontColor
+import com.example.spender.ui.theme.LightPointColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.navigation.BottomNavigationItem
 import androidx.compose.material.ripple.rememberRipple as rememberRipple
@@ -42,21 +47,22 @@ fun BottomNavigationBar(navHostController: NavHostController) {
     val currentDestination = navBackStackEntry?.destination
 
     NavigationBar (
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.surface,
+
     ){
         screens.forEach { screen ->
             val isSelected = currentDestination?.route == screen.route
 
             NavigationBarItem(
                 icon = { Icon(screen.icon, contentDescription = null) },
-                label = { Text(text = stringResource(screen.title), color = if (isSelected) PointColor else Color.Gray) },
+                label = { Text(text = stringResource(screen.title), color = if (isSelected) DarkPointColor else Color.Gray) },
                 selected = isSelected,
                 onClick = { navHostController.navigate(screen.route) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = PointColor,
-                    selectedTextColor = PointColor,
-                    unselectedIconColor = Color.Gray,
-                    unselectedTextColor = Color.Gray,
+                    selectedIconColor = DarkPointColor,
+                    selectedTextColor = DarkPointColor,
+                    unselectedIconColor = LightPointColor,
+                    unselectedTextColor = LightPointColor,
                     indicatorColor = Color.Transparent
                 )
             )
