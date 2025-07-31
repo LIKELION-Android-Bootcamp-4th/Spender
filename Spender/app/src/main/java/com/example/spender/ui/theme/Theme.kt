@@ -10,7 +10,6 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.example.spender.core.ui.MyTypography
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -53,7 +52,7 @@ fun SpenderTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = MyTypography,
+        typography = Typography,
         content = content
     )
 }

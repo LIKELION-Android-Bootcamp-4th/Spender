@@ -1,19 +1,14 @@
 package com.example.spender.feature.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.spender.core.ui.MyTypography
+import com.example.spender.ui.theme.Typography
 
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
@@ -21,17 +16,17 @@ fun HomeScreen(navHostController: NavHostController) {
         .fillMaxSize()
         .background(MaterialTheme.colorScheme.background)
     ) {
-        Text("titleLarge", style = MyTypography.titleLarge)
-        Text("titleMedium", style = MyTypography.titleMedium)
-        Text("titleSmall", style = MyTypography.titleSmall)
+        Text("titleLarge", style = Typography.titleLarge)
+        Text("titleMedium", style = Typography.titleMedium)
+        Text("titleSmall", style = Typography.titleSmall)
 
-        Text("bodyLarge", style = MyTypography.bodyLarge)
-        Text("bodyMedium", style = MyTypography.bodyMedium)
-        Text("bodySmall", style = MyTypography.bodySmall)
+        Text("bodyLarge", style = Typography.bodyLarge)
+        Text("bodyMedium", style = Typography.bodyMedium)
+        Text("bodySmall", style = Typography.bodySmall)
 
-        Text("labelLarge", style = MyTypography.labelLarge)
-        Text("labelMedium", style = MyTypography.labelMedium)
-        Text("labelSmall", style = MyTypography.labelSmall)
+        Text("labelLarge", style = Typography.labelLarge)
+        Text("labelMedium", style = Typography.labelMedium)
+        Text("labelSmall", style = Typography.labelSmall)
 
 
     }
