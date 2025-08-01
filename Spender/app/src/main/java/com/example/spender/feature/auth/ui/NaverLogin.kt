@@ -1,5 +1,6 @@
 package com.example.spender.feature.auth.ui
 
+import android.R.attr.onClick
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -29,8 +30,7 @@ import com.example.spender.ui.theme.WhiteColor
 fun NaverLogin() {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+            .fillMaxWidth(),
         border = BorderStroke(1.dp, color = NaverColor),
         shape = RoundedCornerShape(0.dp),
         colors = CardDefaults.cardColors(

@@ -29,8 +29,7 @@ import com.example.spender.ui.theme.WhiteColor
 fun KakaoLogin() {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+            .fillMaxWidth(),
         border = BorderStroke(1.dp, color = KakaoColor),
         shape = RoundedCornerShape(0.dp),
         colors = CardDefaults.cardColors(
