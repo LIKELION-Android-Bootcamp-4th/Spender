@@ -2,6 +2,7 @@ package com.example.spender.feature.analysis
 
 import android.app.Application
 import android.icu.util.Calendar
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spender.feature.analysis.model.CalendarItemData
@@ -27,7 +28,7 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
     val now = Calendar.getInstance()
     var year = now.get(Calendar.YEAR)
     var month = now.get(Calendar.MONTH)
-    private val nowYear = now.get(Calendar.YEAR)
+    private val nowYear = now.get(Calendar.YEAR) //현재 날짜 set
     private val nowMonth = now.get(Calendar.MONTH)
     private val nowDay = now.get(Calendar.DATE)
 
@@ -62,10 +63,7 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
         }
 
         for (i in 1 .. now.getActualMaximum(Calendar.DAY_OF_MONTH)) {
-            if (year == nowYear
-                && month == nowMonth
-                && i == nowDay
-            ) {
+            if (year == nowYear && month == nowMonth && i == nowDay) {
                 calendarData.add(CalendarItemData(i, 0, false, true))
                 continue
             }
@@ -82,7 +80,18 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
             calendarData[index] = calendarData[index].copy(background = true)
         }
 
+        if (_selectionState.value != listOf(0, 0, 0)) {
+            if (_selectionState.value[0] == year && _selectionState.value[1] == month) {
+                val idx = calendarData.indexOfFirst { it.day == _selectionState.value[2] }
+                calendarData[idx] = calendarData[idx].copy(background = false)
+            }
+        }
+
         _calendarItem.value = calendarData
-        _selectionState.value = listOf(year, month, calendarData[index].day)
+        if (calendarData[index].background) {
+            _selectionState.value = listOf(year, month, calendarData[index].day)
+        } else {
+            _selectionState.value = listOf(0, 0, 0)
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.spender.feature.analysis
 
 import android.app.Application
+import android.util.Log
 import android.widget.CalendarView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -96,8 +97,7 @@ fun CalendarScreen(navHostController: NavHostController) {
             )
             Spacer(Modifier.height(10.dp))
             Calendar(calendarData,  {
-                viewModel.setCalendar() //초기화
-                viewModel.updateSelection(it, year.value, month.value) //선택 (초기화 후 선택 로직이라 재검토 필요)
+                viewModel.updateSelection(it, year.value, month.value)
             }, selectionState, year.value, month.value)
         }
     }
