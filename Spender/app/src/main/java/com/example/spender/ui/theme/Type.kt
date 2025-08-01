@@ -2,33 +2,86 @@ package com.example.spender.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.spender.R
 
-// Set of Material typography styles to start with
+val NotoSansFamily = FontFamily(
+    Font(R.font.notosans_bold, FontWeight.Bold),
+    Font(R.font.notosans_regular, FontWeight.Normal)
+)
+
 val Typography = Typography(
+    // 제일 큰 글씨, 온보딩과 예산설정 등 (볼드 적용 O)
+    titleLarge = TextStyle(
+        fontFamily = NotoSansFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        color = DefaultFontColor
+    ),
+    // 앱바 타이틀 등 크게 잘 보여야 하는 글씨들 (볼드 적용 O)
+    titleMedium = TextStyle(
+        fontFamily = NotoSansFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+        color = DefaultFontColor
+    ),
+    // 본문 내 카테고리나 다이얼로그의 타이틀 (볼드 적용 O)
+    titleSmall = TextStyle(
+        fontFamily = NotoSansFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        color = DefaultFontColor
+    ),
+
+    // 탭에서 선택되지 않은 항목을 위함 (연한색, 볼드 적용 X)
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = NotoSansFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp,
+        color = LightFontColor
+    ),
+
+    // 어플의 기본 폰트 사이즈 (볼드 적용 X)
+    bodyMedium = TextStyle(
+        fontFamily = NotoSansFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        color = DefaultFontColor
     ),
+
+    // (볼드 적용 X)
+    bodySmall = TextStyle(
+        fontFamily = NotoSansFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        color = DefaultFontColor
+    ),
+
+    // (연한색, 볼드 적용 X)
+    labelLarge = TextStyle(
+        fontFamily = NotoSansFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        color = LightFontColor
+    ),
+
+    // (연한색, 볼드 적용 X)
+    labelMedium = TextStyle(
+        fontFamily = NotoSansFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        color = LightFontColor
+    ),
+
+    // (연한색, 볼드 적용 X)
     labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        fontFamily = NotoSansFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp,
+        color = LightFontColor
     )
-    */
+
 )

@@ -1,4 +1,4 @@
-package com.example.spender.feature.report
+package com.example.spender.feature.analysis
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,11 +13,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 @Composable
-fun ReportScreen(navHostController: NavHostController) {
+fun GraphScreen(navHostController: NavHostController) {
     Box(modifier = Modifier
         .fillMaxSize()
         .background(MaterialTheme.colorScheme.background)
     ) {
-        Text("ReportScreen", fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+        Text("GraphScreen", fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color.Black)
     }
 }

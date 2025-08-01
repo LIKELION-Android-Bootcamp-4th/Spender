@@ -1,10 +1,14 @@
 package com.example.spender.ui.theme.navigation
 
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.automirrored.filled.Assignment
+import androidx.compose.material.icons.automirrored.filled.MultilineChart
+import androidx.compose.material.icons.automirrored.filled.ShowChart
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.spender.R
 
@@ -21,16 +25,16 @@ sealed class BottomNavigationItem(
     data object Analysis: BottomNavigationItem(
         route = "analysis",
         title = R.string.tab_analysis,
-        icon = Icons.Default.Info
+        icon = Icons.Default.BarChart
     )
     data object Report: BottomNavigationItem(
         route = "report",
         title = R.string.tab_report,
-        icon = Icons.Default.DateRange
+        icon = Icons.AutoMirrored.Filled.Assignment
     )
     data object Mypage: BottomNavigationItem (
         route = "mypage",
         title = R.string.tab_mypage,
-        icon = Icons.Default.AccountCircle
+        icon = Icons.Default.Person
     )
 }

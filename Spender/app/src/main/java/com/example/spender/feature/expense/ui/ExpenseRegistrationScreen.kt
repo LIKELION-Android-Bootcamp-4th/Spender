@@ -1,5 +1,6 @@
-package com.example.spender.feature.expense
+package com.example.spender.feature.expense.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,6 +31,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.example.spender.ui.theme.NotoSansFamily
+import com.example.spender.ui.theme.PointColor
+import com.example.spender.ui.theme.Typography
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,7 +49,7 @@ fun ExpenseRegistrationScreen() {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("지출 등록", fontWeight = FontWeight.Bold) },
+                title = { Text("지출 등록", style = Typography.titleMedium) },
                 navigationIcon = {
                     IconButton(onClick = { /* 뒤로가기 */ }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
@@ -55,14 +59,25 @@ fun ExpenseRegistrationScreen() {
             )
         },
         bottomBar = {
-            Button( //
+            Button(
+                //
                 onClick = { /* 지출 등록 로직 */ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                shape = RoundedCornerShape(12.dp)
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = PointColor,
+                ),
+                shape = RoundedCornerShape(12.dp),
             ) {
-                Text("지출 등록", modifier = Modifier.padding(vertical = 6.dp), fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                Text(
+                    "지출 등록",
+                    modifier = Modifier.padding(vertical = 6.dp),
+                    fontSize = 20.sp,
+                    fontFamily = NotoSansFamily,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White
+                )
             }
         },
         containerColor = Color.White
@@ -114,6 +129,7 @@ fun ExpenseRegistrationScreen() {
                             fontSize = 18.sp,
                             color = if (isSelected) Color.Black else Color.Gray,
                             fontWeight = FontWeight.Bold,
+                            fontFamily = NotoSansFamily,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
@@ -123,16 +139,22 @@ fun ExpenseRegistrationScreen() {
             // 금액 입력
             TextField(
                 value = amount,
-                onValueChange = { if (it.length <= 10) amount = it.filter { char -> char.isDigit() } },
+                onValueChange = {
+                    if (it.length <= 10) amount = it.filter { char -> char.isDigit() }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 40.dp, vertical = 16.dp ),
+                    .padding(horizontal = 40.dp, vertical = 16.dp),
                 placeholder = { Text("지출을 입력하세요", fontSize = 14.sp, color = Color.Gray) },
                 trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 visualTransformation = NumberCommaTransformation(),
                 singleLine = true,
-                textStyle = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Start),
+                textStyle = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Start
+                ),
 
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
@@ -146,7 +168,7 @@ fun ExpenseRegistrationScreen() {
 
             HorizontalDivider(color = Color(0xFFF0F2F5))
 
-            // 카테고리/날짜 선택
+            // 카테고리
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -154,10 +176,9 @@ fun ExpenseRegistrationScreen() {
             ) {
                 Text(
                     text = "카테고리",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    style = Typography.titleSmall,
                 )
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(30.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -167,7 +188,8 @@ fun ExpenseRegistrationScreen() {
                     Text(
                         text = "취미/여가",
                         modifier = Modifier.padding(start = 20.dp),
-                        style = MaterialTheme.typography.bodyLarge
+                        style = Typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold
                     )
                     Spacer(Modifier.weight(1f))
                 }
@@ -182,10 +204,9 @@ fun ExpenseRegistrationScreen() {
             ) {
                 Text(
                     text = "날짜",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
+                    style = Typography.titleSmall,
                 )
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(30.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -195,10 +216,15 @@ fun ExpenseRegistrationScreen() {
                 ) {
                     Text(
                         text = "2025.07.28",
-                        style = MaterialTheme.typography.bodyLarge
+                        style = Typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold
                     )
                     Spacer(Modifier.width(12.dp))
-                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "날짜 선택", tint = Color.Gray)
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "날짜 선택",
+                        tint = Color.Black
+                    )
                 }
             }
 
@@ -206,8 +232,11 @@ fun ExpenseRegistrationScreen() {
 
             // 감정 태그
             Column(modifier = Modifier.padding(horizontal = 34.dp, vertical = 24.dp)) {
-                Text("감정 태그", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(16.dp))
+                Text(
+                    "감정 태그",
+                    style = Typography.titleSmall,
+                )
+                Spacer(Modifier.height(30.dp))
                 EmotionTagGroup(
                     emotions = listOf("만족", "불만", "충동", "억울"),
                     selectedEmotion = selectedEmotion,
@@ -219,15 +248,24 @@ fun ExpenseRegistrationScreen() {
 
             // 메모
             Column(modifier = Modifier.padding(horizontal = 34.dp, vertical = 24.dp)) {
-                Text("메모", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(16.dp))
+                Text(
+                    "메모",
+                    style = Typography.titleSmall,
+                )
+                Spacer(Modifier.height(30.dp))
                 OutlinedTextField(
                     value = memo,
                     onValueChange = { memo = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(120.dp),
-                    placeholder = { Text("메모", color = Color.Gray, fontSize = 14.sp) },
+                    placeholder = {
+                        Text(
+                            "메모",
+                            color = Color.Gray,
+                            fontSize = 14.sp
+                        )
+                    },
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -247,22 +285,30 @@ private fun EmotionTagGroup(
     onEmotionSelected: (String) -> Unit
 ) {
     FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(18.dp),
+        modifier = Modifier.padding(start = 20.dp)
     ) {
         emotions.forEach { emotion ->
             val isSelected = emotion == selectedEmotion
             FilterChip(
                 selected = isSelected,
                 onClick = { onEmotionSelected(emotion) },
-                label = { Text(emotion) },
-                shape = RoundedCornerShape(50),
+                label = { Text(text = emotion, color = if (isSelected) Color.White else Color.Black.copy(alpha = 0.8f))},
+                shape = RoundedCornerShape(30),
                 colors = FilterChipDefaults.filterChipColors(
-                    containerColor = Color(0xFFF0F2F5),
-                    labelColor = Color.Gray,
-                    selectedContainerColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color.White,
+                    labelColor = Color.Black.copy(alpha = 0.8f),
+                    selectedContainerColor = PointColor,
                     selectedLabelColor = Color.White
                 ),
-                border = null
+                border = if (isSelected) {
+                    null
+                } else {
+                    BorderStroke(
+                        width = 1.dp,
+                        color = Color.LightGray
+                    )
+                }
             )
         }
     }
