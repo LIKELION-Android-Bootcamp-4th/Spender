@@ -64,7 +64,7 @@ dependencies {
 
     implementation(libs.lifecycle.viewmodel.ktx)
 
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation(libs.mpandroidchart)
+    implementation(libs.androidx.material.icons.extended)
 
 }
