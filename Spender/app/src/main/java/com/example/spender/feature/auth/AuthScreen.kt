@@ -34,7 +34,8 @@ fun AuthScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(88.dp))
-            Icon( // TODO: 임시..? 아이콘
+            Icon(
+                // TODO: 임시..? 아이콘
                 painter = painterResource(id = R.drawable.temp_icon),
                 contentDescription = null,
                 tint = Color.Unspecified,
