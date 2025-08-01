@@ -34,7 +34,7 @@ fun BudgetProgressSection(
             buildAnnotatedString {
                 append("예산의 ")
                 withStyle(SpanStyle(PointColor)){
-                    append("${progressPercent}")
+                    append("${progressPercent}%")
                 }
                 append("를 썼어요")
             },

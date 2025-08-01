@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.spender.ui.theme.DefaultFontColor
+import com.example.spender.ui.theme.LightFontColor
 import com.example.spender.ui.theme.Typography
 
 @Composable
@@ -44,7 +46,8 @@ fun CategorySpendingList() {
                             .background(dotColor, shape = CircleShape)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(text = "$name 61%", style = Typography.bodyMedium) // 임시 %
+                    Text(text = name, style = Typography.bodyMedium)
+                    Text(text = " 61%", style = Typography.bodySmall, color = LightFontColor)
                 }
 
                 Text(text = amount, style = Typography.bodyMedium)
