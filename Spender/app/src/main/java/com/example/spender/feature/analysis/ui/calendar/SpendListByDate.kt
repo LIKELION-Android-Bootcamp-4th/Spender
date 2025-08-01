@@ -21,6 +21,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.feature.analysis.domain.model.SpendListItemData
+import com.example.spender.feature.analysis.ui.SpendListItemComponent
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.Typography
 
@@ -45,24 +46,7 @@ fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int) { //캘린더 하단 �
         Spacer(Modifier.height(10.dp))
         LazyColumn {
             itemsIndexed(itemData) { index, item ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 15.dp, horizontal = 15.dp)
-                ) {
-                    Row {
-                        Text(item.name, style = Typography.bodyMedium)
-                        Spacer(Modifier.weight(1f))
-                        Text(
-                            text = if (item.income) "+${DecimalFormat("#,###").format(item.price)}원" else "-${DecimalFormat("#,###").format(item.price)}원",
-                            style = TextStyle(
-                                color = if (item.income) Color.Blue else Color.Red,
-                                fontFamily = NotoSansFamily,
-                                fontSize = 16.sp
-                            )
-                        )
-                    }
-                }
+                SpendListItemComponent(item)
                 if (index != itemData.lastIndex) {
                     Spacer(Modifier.height(5.dp))
                     HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
