@@ -34,6 +34,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.spender.feature.analysis.ui.calendar.CalendarScreen
+import com.example.spender.feature.analysis.ui.graph.GraphScreen
 import com.example.spender.ui.theme.SpenderTheme
 
 @Composable
