@@ -31,6 +31,7 @@ import androidx.navigation.NavHostController
 import com.example.spender.feature.report.domain.model.Report
 import com.example.spender.feature.report.ui.component.ReportSummaryCard
 import com.example.spender.feature.report.ui.detail.ReportDetailScreen
+import com.example.spender.ui.theme.navigation.Screen
 
 
 //@Composable
@@ -122,8 +123,7 @@ fun ReportListScreen(
                     ReportSummaryCard(
                         report = report,
                         onClick = {
-                            //navController.navigate("report_detail/${report.id}")
-                            ReportDetailScreen(navHostController = navHostController)
+                            navHostController.navigate(Screen.ReportDetail.createRoute(report.id))
                         }
                     )
                 }
