@@ -19,15 +19,12 @@ import com.example.spender.ui.theme.PointColor
 
 @Composable
 fun BudgetProgressBar(
-    modifier: Modifier = Modifier,
-    budget: Int,
-    totalExpense: Int
+    percentage: Float,
+    percentText: String
 ) {
-    val percentage = totalExpense.toFloat() / budget.toFloat()
-    val percentText = "${(percentage * 100).toInt()}%"
 
     Card(
-        modifier = modifier
+        modifier = Modifier
             .height(108.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(

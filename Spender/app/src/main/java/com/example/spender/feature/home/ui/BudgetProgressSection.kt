@@ -1,22 +1,37 @@
 package com.example.spender.feature.home.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.example.spender.R
+import com.example.spender.ui.theme.LightSurface
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
 @Composable
 fun BudgeProgress(budget: Int, totalExpense: Int) {
-    val percentText = "${((totalExpense.toFloat() / budget.toFloat()) * 100).toInt()}%"
+    val percentage = totalExpense.toFloat() / budget.toFloat()
+    val percentText = "${(percentage * 100).toInt()}%"
 
     Column(
         modifier = Modifier
@@ -43,9 +58,58 @@ fun BudgeProgress(budget: Int, totalExpense: Int) {
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(Modifier.height(8.dp))
 
-        BudgetProgressBar(budget = budget, totalExpense = totalExpense)
+        BudgetProgressBar(percentage = percentage, percentText = percentText)
 
+        Spacer(Modifier.height(8.dp))
+
+        // 예산 대비 지출 경고 카드
+        Card(
+            modifier = Modifier
+                .height(56.dp),
+            shape = RoundedCornerShape(10.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = LightSurface,
+            ),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.warningicon),
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = "이대로라면 예산을 초과할 것 같아요!", //TODO: percentage 별로 분기할 것
+                    style = Typography.bodyMedium
+                )
+            }
+        }
+
+        //예산 설정 하러 가기 텍스트 버튼
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            TextButton(
+                modifier = Modifier,
+                onClick = {
+                    //TODO: 예산설정화면으로 이동하는 로직
+                }
+            ) {
+                Text(
+                    text = "예산 설정하러 가기",
+                    style = Typography.labelMedium.copy(
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+        }
     }
 }
