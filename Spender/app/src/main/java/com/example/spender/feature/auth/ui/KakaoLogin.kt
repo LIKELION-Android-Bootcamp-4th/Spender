@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.spender.R
 import com.example.spender.ui.theme.BlackColor
 import com.example.spender.ui.theme.KakaoColor
+import com.example.spender.ui.theme.KakaoLabelColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 
@@ -49,7 +50,7 @@ fun KakaoLogin() {
             Icon(
                 painter = painterResource(id = R.drawable.kakao_icon),
                 contentDescription = null,
-                tint = BlackColor,
+                tint = KakaoLabelColor,
             )
 
             Spacer(modifier = Modifier.width(8.dp))
