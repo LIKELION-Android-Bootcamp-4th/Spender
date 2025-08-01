@@ -53,7 +53,7 @@ fun ReportDetailScreen(navHostController: NavHostController, reportId: Int) {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "${2025}년 월간 리포트") // TODO : 값 받아와서 해당 년도로 수정
+                    Text(text = "${2025}년 1월 월간 리포트") // TODO : 값 받아와서 해당 년도로 수정
                 },
                 navigationIcon = {
                     IconButton(onClick = { navHostController.popBackStack() }) {
