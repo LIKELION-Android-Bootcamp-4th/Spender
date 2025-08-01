@@ -8,6 +8,7 @@ import com.example.spender.MainScreen
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.mypage.MypageScreen
+import com.example.spender.feature.report.ui.detail.ReportDetailScreen
 import com.example.spender.feature.report.ui.list.ReportListScreen
 
 @Composable
@@ -30,6 +31,13 @@ fun SpenderNavigation(navController: NavHostController) {
         }
         composable(BottomNavigationItem.Mypage.route) {
             MypageScreen(navController)
+        }
+
+        composable(Screen.ReportDetail.route){ backStackEntry ->
+            val reportId = backStackEntry.arguments?.getString("reportId")?.toIntOrNull()
+            if(reportId != null){
+                ReportDetailScreen(navController, reportId)
+            }
         }
     }
 }

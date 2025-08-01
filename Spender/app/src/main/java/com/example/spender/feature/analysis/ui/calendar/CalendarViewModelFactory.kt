@@ -1,4 +1,4 @@
-package com.example.spender.feature.analysis
+package com.example.spender.feature.analysis.ui.calendar
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

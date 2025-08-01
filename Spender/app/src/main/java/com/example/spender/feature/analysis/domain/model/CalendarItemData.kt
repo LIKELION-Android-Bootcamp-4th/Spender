@@ -1,4 +1,4 @@
-package com.example.spender.feature.analysis.model
+package com.example.spender.feature.analysis.domain.model
 
 data class CalendarItemData(
     val day: Int = 0,

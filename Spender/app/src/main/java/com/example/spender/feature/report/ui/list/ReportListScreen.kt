@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.spender.feature.report.domain.model.Report
 import com.example.spender.feature.report.ui.component.ReportSummaryCard
+import com.example.spender.feature.report.ui.detail.ReportDetailScreen
+import com.example.spender.ui.theme.navigation.Screen
 
 
 //@Composable
@@ -46,7 +48,7 @@ import com.example.spender.feature.report.ui.component.ReportSummaryCard
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportListScreen(
-    navController: NavHostController
+    navHostController: NavHostController
 ) {
     var currentYear by remember { mutableStateOf(2025) }
     val sampleReports = listOf(
@@ -113,7 +115,7 @@ fun ReportListScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -121,8 +123,7 @@ fun ReportListScreen(
                     ReportSummaryCard(
                         report = report,
                         onClick = {
-                            //navController.navigate("report_detail/${report.id}")
-
+                            navHostController.navigate(Screen.ReportDetail.createRoute(report.id))
                         }
                     )
                 }
