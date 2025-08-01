@@ -1,20 +1,14 @@
-package com.example.spender.feature.analysis
+package com.example.spender.feature.analysis.ui.calendar
 
-import android.app.Application
-import android.util.Log
-import android.widget.CalendarView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,103 +20,44 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import com.example.spender.feature.analysis.model.CalendarItemData
+import com.example.spender.feature.analysis.domain.model.CalendarItemData
 import com.example.spender.ui.theme.DefaultFontColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.TabColor
-import java.util.Calendar
+import com.example.spender.ui.theme.Typography
 
 @Composable
-fun CalendarScreen(navHostController: NavHostController) {
-    val context = LocalContext.current
-    val viewModel: CalendarViewModel = viewModel(
-        factory = CalendarViewModelFactory(context.applicationContext as Application)
-    )
-
-    val calendarData by viewModel.calendarItem.collectAsState()
-    val selectionState by viewModel.selectionState.collectAsState()
-    var year = remember { mutableStateOf(Calendar.getInstance().get(Calendar.YEAR)) }
-    var month = remember { mutableStateOf(Calendar.getInstance().get(Calendar.MONTH)) }
-
-    fun clickPrevious() {
-        month.value -= 1
-        if (month.value < 0) {
-            month.value = 11
-            year.value -= 1
-        }
-        viewModel.setCalendar(year.value, month.value)
-    }
-
-    fun clickNext() {
-        month.value += 1
-        if (month.value >= 12) {
-            month.value = 0
-            year.value += 1
-        }
-        viewModel.setCalendar(year.value, month.value)
-    }
-
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)
-        .padding(horizontal = 24.dp)
-    ) {
-        Column {
-            CalendarHeader(year.value, month.value,
-                { /* TODO show datepicker */ },
-                { clickPrevious() },
-                { clickNext() }
-            )
-            Spacer(Modifier.height(10.dp))
-            Calendar(calendarData,  {
-                viewModel.updateSelection(it, year.value, month.value)
-            }, selectionState, year.value, month.value)
-        }
-    }
-}
-
-@Composable
-fun CalendarHeader(
+fun CalendarHeader( //캘린더 상단 화살표 및 연월표시
     year: Int,
     month: Int,
     clickDatePicker: () -> Unit,
     clickPrevious: () -> Unit,
     clickNext: () -> Unit
-    ) {
+) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(
             text = "${month+1}월",
-            style = TextStyle(color = DefaultFontColor, fontSize = 20.sp),
+            style = Typography.titleMedium,
             modifier = Modifier.alignByBaseline()
         )
         Spacer(Modifier.width(10.dp))
         Text(
             text = "$year",
-            style = TextStyle(color = DefaultFontColor, fontSize = 16.sp),
+            style = Typography.bodyMedium,
             modifier = Modifier.alignByBaseline()
         )
         Spacer(Modifier.width(8.dp))
@@ -161,7 +96,7 @@ fun CalendarHeader(
 }
 
 @Composable
-fun Calendar(data: List<CalendarItemData>, onClick: (Int) -> Unit, selection: List<Int>, year: Int, month: Int) {
+fun Calendar(data: List<CalendarItemData>, onClick: (Int) -> Unit, selection: List<Int>, year: Int, month: Int) { //캘린더
     val day = listOf("월", "화", "수", "목", "금", "토", "일")
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
@@ -212,14 +147,9 @@ fun Calendar(data: List<CalendarItemData>, onClick: (Int) -> Unit, selection: Li
                         item.expense < 0 -> Color.Red
                         else -> Color.Transparent
                     }
-                ))
+                )
+                )
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CalendarPreview() {
-
 }

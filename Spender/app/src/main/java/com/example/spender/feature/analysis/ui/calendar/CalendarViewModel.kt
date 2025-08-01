@@ -1,11 +1,10 @@
-package com.example.spender.feature.analysis
+package com.example.spender.feature.analysis.ui.calendar
 
 import android.app.Application
 import android.icu.util.Calendar
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spender.feature.analysis.model.CalendarItemData
+import com.example.spender.feature.analysis.domain.model.CalendarItemData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +17,14 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList()
     )
+
+    val now = Calendar.getInstance()
+    var year = now.get(Calendar.YEAR)
+    var month = now.get(Calendar.MONTH)
+    val nowYear = now.get(Calendar.YEAR) //현재 날짜 set
+    val nowMonth = now.get(Calendar.MONTH)
+    val nowDay = now.get(Calendar.DATE)
+
     val _selectionState = MutableStateFlow<List<Int>>(listOf(0, 0, 0))
     val selectionState: StateFlow<List<Int>> = _selectionState.stateIn(
         scope = viewModelScope,
@@ -25,21 +32,11 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
         initialValue = listOf(0, 0, 0)
     )
 
-    val now = Calendar.getInstance()
-    var year = now.get(Calendar.YEAR)
-    var month = now.get(Calendar.MONTH)
-    private val nowYear = now.get(Calendar.YEAR) //현재 날짜 set
-    private val nowMonth = now.get(Calendar.MONTH)
-    private val nowDay = now.get(Calendar.DATE)
-
     init {
         setCalendar()
     }
 
-    fun setCalendar(setYear: Int? = null, setMonth: Int? = null) {
-        year = setYear ?: nowYear
-        month = setMonth ?: nowMonth
-
+    fun setCalendar(setYear: Int? = nowYear, setMonth: Int? = nowMonth) {
         now.set(Calendar.YEAR, year)
         now.set(Calendar.MONTH, month)
         now.set(Calendar.DATE, 1)
@@ -78,20 +75,26 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
         val calendarData = _calendarItem.value.toMutableList()
         if (calendarData[index].day != 0) {
             calendarData[index] = calendarData[index].copy(background = true)
-        }
-
-        if (_selectionState.value != listOf(0, 0, 0)) {
-            if (_selectionState.value[0] == year && _selectionState.value[1] == month) {
-                val idx = calendarData.indexOfFirst { it.day == _selectionState.value[2] }
-                calendarData[idx] = calendarData[idx].copy(background = false)
-            }
-        }
-
-        _calendarItem.value = calendarData
-        if (calendarData[index].background) {
+            _calendarItem.value = calendarData
             _selectionState.value = listOf(year, month, calendarData[index].day)
-        } else {
-            _selectionState.value = listOf(0, 0, 0)
         }
+    }
+
+    fun previousMonth() {
+        month -= 1
+        if (month < 0) {
+            month = 11
+            year -= 1
+        }
+        setCalendar(month, year)
+    }
+
+    fun nextMonth() {
+        month += 1
+        if (month >= 12) {
+            month = 0
+            year += 1
+        }
+        setCalendar(year, month)
     }
 }

@@ -1,4 +1,4 @@
-package com.example.spender.feature.analysis
+package com.example.spender.feature.analysis.ui.graph
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
