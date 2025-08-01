@@ -47,7 +47,7 @@ fun KakaoLogin() {
             horizontalArrangement = Arrangement.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.kakao),
+                painter = painterResource(id = R.drawable.kakao_icon),
                 contentDescription = null,
                 tint = BlackColor,
             )
