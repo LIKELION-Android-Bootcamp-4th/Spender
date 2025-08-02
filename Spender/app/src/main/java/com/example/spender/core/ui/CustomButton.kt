@@ -24,6 +24,7 @@ import com.example.spender.ui.theme.WhiteColor
 fun CustomLongButton(
     text: String,
     onClick: () -> Unit,
+    isEnabled: Boolean = true,
     modifier: Modifier = Modifier
         .height(56.dp)
         .fillMaxWidth()
@@ -32,10 +33,11 @@ fun CustomLongButton(
         onClick = onClick,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(
-            containerColor = PointColor,
+            containerColor = if (isEnabled) PointColor else LightPointColor,
             contentColor = WhiteColor
         ),
         shape = RoundedCornerShape(16.dp),
+        enabled = isEnabled
     ) {
         Text(
             text = text,
