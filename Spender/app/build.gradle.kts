@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -66,5 +68,7 @@ dependencies {
 
     implementation(libs.mpandroidchart)
     implementation(libs.androidx.material.icons.extended)
+
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
 
 }

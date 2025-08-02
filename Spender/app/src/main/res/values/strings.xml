@@ -4,4 +4,10 @@
     <string name="tab_analysis">통계</string>
     <string name="tab_mypage">마이페이지</string>
     <string name="tab_report">리포트</string>
+
+    <string-array name="onboarding_title">
+        <item>우리앱자랑을여기에써야하는데뭘써야할지모르겠네요</item>
+        <item>한달 예산은 얼마인가요?</item>
+        <item>이제 시작해봅시다.</item>
+    </string-array>
 </resources>
