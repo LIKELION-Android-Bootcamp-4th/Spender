@@ -1,38 +1,32 @@
 package com.example.spender.feature.report.ui.detail.component
 
-import android.view.ViewGroup
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import com.example.spender.ui.theme.PointColor
+import androidx.core.graphics.toColorInt
 import com.example.spender.ui.theme.Typography
-import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import android.graphics.Color as AndroidColor
 
 @Composable
 fun CategorySpendingSection(){
+    val labels = listOf("식비", "자녀/육아", "교통", "교육/학습")
+    val values = listOf(61f, 21f, 14f, 3f)
+    val colors = listOf(
+        "#18C1AC".toColorInt(), // 식비
+        "#2E9AFE".toColorInt(), // 자녀/육아
+        "#6378EC".toColorInt(), // 교통
+        "#9B59B6".toColorInt()  // 교육/학습
+    )
+
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -60,7 +54,11 @@ fun CategorySpendingSection(){
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        CategoryPieChart()
+        CategoryPieChart(
+            labels = labels,
+            values = values,
+            colors = colors
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 

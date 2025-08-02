@@ -1,9 +1,9 @@
-import org.gradle.kotlin.dsl.implementation
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -66,9 +66,16 @@ dependencies {
 
     implementation(libs.lifecycle.viewmodel.ktx)
 
+    // mp android chart
     implementation(libs.mpandroidchart)
+
     implementation(libs.androidx.material.icons.extended)
 
+    // firebase
+    implementation(platform("com.google.firebase:firebase-bom:34.0.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
     implementation("androidx.datastore:datastore-preferences:1.1.7")
+
 
 }

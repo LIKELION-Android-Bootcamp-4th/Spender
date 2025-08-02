@@ -20,6 +20,7 @@ val DefaultFontColor = Color(0xFF222836)
 val LightFontColor = Color(0x80222836)
 val DarkPointColor = Color(0xFF181D2A)
 val LightPointColor = Color(0xFFAEB9C1)
+val LightBackgroundColor = Color(0xFFF2F5F6)
 
 val NaverColor = Color(0xFF03C75A)
 val KakaoColor = Color(0xFFFEE500)
