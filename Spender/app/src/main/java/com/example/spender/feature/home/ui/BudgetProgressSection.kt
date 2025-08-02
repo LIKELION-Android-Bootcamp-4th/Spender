@@ -77,7 +77,7 @@ fun BudgeProgress(budget: Int, totalExpense: Int) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.warningicon),
+                    painter = painterResource(id = R.drawable.warning_icon),
                     contentDescription = null,
                     modifier = Modifier.size(16.dp)
                 )

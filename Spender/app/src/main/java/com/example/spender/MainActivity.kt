@@ -25,9 +25,11 @@ import com.example.spender.core.ui.BottomNavigationBar
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.mypage.MypageScreen
+import com.example.spender.feature.onboarding.data.OnboardingPref
 import com.example.spender.feature.report.ui.list.ReportListScreen
 import com.example.spender.ui.theme.SpenderTheme
 import com.example.spender.ui.theme.navigation.BottomNavigationItem
+import com.example.spender.ui.theme.navigation.Screen
 import com.example.spender.ui.theme.navigation.SpenderNavigation
 
 class MainActivity : ComponentActivity() {
@@ -40,7 +42,18 @@ class MainActivity : ComponentActivity() {
                 dynamicColor = false
             ) {
                 val navController = rememberNavController()
-                SpenderNavigation(navController)
+
+                val isOnboardingShown = OnboardingPref.wasShown(this)
+                val startDestination = if (isOnboardingShown) {
+                    Screen.MainScreen.route
+                } else {
+                    Screen.OnboardingScreen.route
+                }
+
+                SpenderNavigation(
+                    navController = navController,
+                    startDestination = startDestination
+                )
             }
         }
     }

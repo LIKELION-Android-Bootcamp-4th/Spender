@@ -74,4 +74,8 @@ dependencies {
     // firebase
     implementation(platform("com.google.firebase:firebase-bom:34.0.0"))
     implementation("com.google.firebase:firebase-analytics")
+
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
+
+
 }

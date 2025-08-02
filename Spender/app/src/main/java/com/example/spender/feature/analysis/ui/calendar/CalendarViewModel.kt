@@ -2,6 +2,9 @@ package com.example.spender.feature.analysis.ui.calendar
 
 import android.app.Application
 import android.icu.util.Calendar
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spender.feature.analysis.domain.model.CalendarItemData
@@ -19,8 +22,8 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
     )
 
     val now = Calendar.getInstance()
-    var year = now.get(Calendar.YEAR)
-    var month = now.get(Calendar.MONTH)
+    var year: MutableState<Int> = mutableIntStateOf(now.get(Calendar.YEAR))
+    var month: MutableState<Int> = mutableIntStateOf(now.get(Calendar.MONTH))
     val nowYear = now.get(Calendar.YEAR) //현재 날짜 set
     val nowMonth = now.get(Calendar.MONTH)
     val nowDay = now.get(Calendar.DATE)
@@ -32,14 +35,20 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
         initialValue = listOf(0, 0, 0)
     )
 
+    val showDatePicker: MutableState<Boolean?> = mutableStateOf(null)
+
     init {
         setCalendar()
+        setDialog()
     }
 
     fun setCalendar(setYear: Int? = nowYear, setMonth: Int? = nowMonth) {
-        now.set(Calendar.YEAR, year)
-        now.set(Calendar.MONTH, month)
+        now.set(Calendar.YEAR, setYear ?: year.value)
+        now.set(Calendar.MONTH, setMonth ?: month.value)
         now.set(Calendar.DATE, 1)
+
+        if (setYear != null) year.value = setYear
+        if (setMonth != null) month.value = setMonth
 
         val calendarData = mutableListOf<CalendarItemData>()
         val startDay = when (now.get(Calendar.DAY_OF_WEEK)) {
@@ -60,7 +69,7 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
         }
 
         for (i in 1 .. now.getActualMaximum(Calendar.DAY_OF_MONTH)) {
-            if (year == nowYear && month == nowMonth && i == nowDay) {
+            if (year.value == nowYear && month.value == nowMonth && i == nowDay) {
                 calendarData.add(CalendarItemData(i, 0, false, true))
                 continue
             }
@@ -80,21 +89,43 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
-    fun previousMonth() {
-        month -= 1
-        if (month < 0) {
-            month = 11
-            year -= 1
+    fun updateSelectionByDay(day: Int, year: Int, month: Int) {
+        val calendarData = _calendarItem.value.toMutableList()
+        val index = calendarData.indexOfFirst { it.day == day }
+        if (calendarData[index].day != 0) {
+            calendarData[index] = calendarData[index].copy(background = true)
+            _calendarItem.value = calendarData
+            _selectionState.value = listOf(year, month, calendarData[index].day)
         }
-        setCalendar(month, year)
+    }
+
+    fun previousMonth() {
+        month.value -= 1
+        if (month.value < 0) {
+            month.value = 11
+            year.value -= 1
+        }
+        setCalendar(month.value, year.value)
     }
 
     fun nextMonth() {
-        month += 1
-        if (month >= 12) {
-            month = 0
-            year += 1
+        month.value += 1
+        if (month.value >= 12) {
+            month.value = 0
+            year.value += 1
         }
-        setCalendar(year, month)
+        setCalendar(year.value, month.value)
+    }
+
+    private fun setDialog() {
+        showDatePicker.value = false
+    }
+
+    fun showDialog() {
+        showDatePicker.value = true
+    }
+
+    fun closeDialog() {
+        showDatePicker.value = false
     }
 }

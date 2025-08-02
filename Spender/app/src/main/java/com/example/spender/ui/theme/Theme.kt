@@ -20,7 +20,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
+    primary = PointColor,
     secondary = PurpleGrey40,
     tertiary = Pink40,
     background = Color.White,
