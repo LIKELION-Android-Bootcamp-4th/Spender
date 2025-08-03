@@ -1,14 +1,19 @@
 package com.example.spender.feature.report.ui.component
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -16,6 +21,8 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -25,7 +32,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.core.common.util.formatToManWon
 import com.example.spender.feature.report.domain.model.Report
+import com.example.spender.ui.theme.DarkPointColor
+import com.example.spender.ui.theme.LightBackgroundColor
+import com.example.spender.ui.theme.LightFontColor
+import com.example.spender.ui.theme.LightPointColor
 import com.example.spender.ui.theme.PointColor
+import com.example.spender.ui.theme.Typography
+import com.github.mikephil.charting.highlight.Highlight
 
 @Composable
 fun ReportSummaryCard(
@@ -39,7 +52,7 @@ fun ReportSummaryCard(
     val isOverBudget = usageRatio > 1f
     val progressColor = if (isOverBudget) androidx.compose.ui.graphics.Color.Red else PointColor
 
-    Card(
+    Card( // TODO : ui 수정
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
@@ -83,6 +96,83 @@ fun ReportSummaryCard(
                 text = "${formatToManWon(report.totalExpense)} / ${formatToManWon(report.budget)}",
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = 14.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun ReportSummaryCardHorizontal(
+    report: Report,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    isHighlighted: Boolean = false
+) {
+    val usageRatio = if (report.budget > 0) {
+        report.totalExpense.toFloat() / report.budget
+    } else 0f
+
+    val usagePercent = (usageRatio * 100).toInt()
+    val isOverBudget = usageRatio > 1f
+    val percentDiff = if (isOverBudget) usagePercent - 100 else 100 - usagePercent
+    val percentText = if (isOverBudget) "+$percentDiff%" else "-$percentDiff%"
+    val percentColor = if (isOverBudget) Color.Red else PointColor
+
+//    val backgroundColor = if (isHighlighted) Color.White else Color.White
+//    val borderStroke = if (isHighlighted) BorderStroke(0.dp, LightPointColor) else null
+//    val elevation = if (isHighlighted) 60.dp else 2.dp
+
+    val backgroundColor by animateColorAsState(
+        if (isHighlighted) Color(0xFFDFEBFC) else Color.White
+    )
+    // CFE0F9
+    // D8E6FB
+
+    val border = if (isHighlighted) BorderStroke(1.5.dp, Color(0xFF000000)) else null
+
+    val elevation = if (isHighlighted) 8.dp else 2.dp
+
+
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .clickable { onClick() }
+            .padding(vertical = 4.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .shadow(2.dp, RoundedCornerShape(16.dp))
+            .background(backgroundColor, shape = RoundedCornerShape(12.dp)),
+        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        elevation = CardDefaults.cardElevation(elevation),
+//        border = border
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // 좌측: 년월
+            Text(
+                text = report.yearMonth,
+                fontSize = 20.sp,
+                color = Color.Black,
+                style = Typography.titleLarge
+            )
+
+            // 가운데: 총 지출
+            Text(
+                text = formatToManWon(report.totalExpense),
+                fontSize = 16.sp,
+                color = Color.Black
+            )
+
+            // 우측: 예산 대비 퍼센트
+            Text(
+                text = percentText,
+                color = percentColor,
+                style = Typography.bodyMedium
             )
         }
     }
