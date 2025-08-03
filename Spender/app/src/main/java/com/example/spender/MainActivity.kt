@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.spender.core.ui.BottomNavigationBar
 import com.example.spender.feature.analysis.AnalysisScreen
+import com.example.spender.feature.expense.ui.ExpenseRegistrationParentScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.mypage.MypageScreen
 import com.example.spender.feature.onboarding.data.OnboardingPref
@@ -41,19 +42,20 @@ class MainActivity : ComponentActivity() {
                 darkTheme = false,
                 dynamicColor = false
             ) {
-                val navController = rememberNavController()
-
-                val isOnboardingShown = OnboardingPref.wasShown(this)
-                val startDestination = if (isOnboardingShown) {
-                    Screen.MainScreen.route
-                } else {
-                    Screen.OnboardingScreen.route
-                }
-
-                SpenderNavigation(
-                    navController = navController,
-                    startDestination = startDestination
-                )
+//                val navController = rememberNavController()
+//
+//                val isOnboardingShown = OnboardingPref.wasShown(this)
+//                val startDestination = if (isOnboardingShown) {
+//                    Screen.MainScreen.route
+//                } else {
+//                    Screen.OnboardingScreen.route
+//                }
+//
+//                SpenderNavigation(
+//                    navController = navController,
+//                    startDestination = startDestination
+//                )
+                ExpenseRegistrationParentScreen()
             }
         }
     }
