@@ -187,7 +187,7 @@ fun ExpenseContent(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-private fun EmotionTagGroup(
+fun EmotionTagGroup(
     emotions: List<String>,
     selectedEmotion: String,
     onEmotionSelected: (String) -> Unit

@@ -24,8 +24,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.spender.core.ui.BottomNavigationBar
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.expense.ui.ExpenseRegistrationParentScreen
+import com.example.spender.feature.expense.ui.expensedetail.ExpenseDetailScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.income.ui.IncomeRegistrationScreen
+import com.example.spender.feature.income.ui.incomedetail.IncomeDetailScreen
 import com.example.spender.feature.mypage.MypageScreen
 import com.example.spender.feature.onboarding.data.OnboardingPref
 import com.example.spender.feature.report.ui.list.ReportListScreen
