@@ -26,7 +26,7 @@ fun EmotionTagSection(){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 36.dp)
+            .padding(top = 48.dp)
     ){
 
         Text(
