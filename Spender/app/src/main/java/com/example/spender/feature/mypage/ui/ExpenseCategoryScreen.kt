@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -207,7 +208,6 @@ private fun CategoryRow(
                         color = Color.LightGray,
                         shape = RoundedCornerShape(4.dp)
                     )
-                    .width(110.dp)
             ) {
                 DropdownMenuItem(
                     text = {
@@ -223,6 +223,7 @@ private fun CategoryRow(
                         onEditClick()
                         expanded = false
                     },
+                    contentPadding = PaddingValues(horizontal = 42.dp, vertical = 8.dp)
                 )
                 HorizontalDivider()
                 DropdownMenuItem(
@@ -239,6 +240,7 @@ private fun CategoryRow(
                         onDeleteClick()
                         expanded = false
                     },
+                    contentPadding = PaddingValues(horizontal = 42.dp, vertical = 8.dp)
                 )
             }
         }

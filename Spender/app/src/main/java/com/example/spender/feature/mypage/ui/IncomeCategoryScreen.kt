@@ -186,7 +186,7 @@ private fun IncomeCategoryRow(
                         onEditClick()
                         expanded = false
                     },
-                    contentPadding = PaddingValues(horizontal = 46.dp, vertical = 8.dp)
+                    contentPadding = PaddingValues(horizontal = 42.dp, vertical = 8.dp)
                 )
                 HorizontalDivider()
                 DropdownMenuItem(
@@ -203,7 +203,7 @@ private fun IncomeCategoryRow(
                         onDeleteClick()
                         expanded = false
                     },
-                    contentPadding = PaddingValues(horizontal = 46.dp, vertical = 8.dp)
+                    contentPadding = PaddingValues(horizontal = 42.dp, vertical = 8.dp)
                 )
             }
         }
