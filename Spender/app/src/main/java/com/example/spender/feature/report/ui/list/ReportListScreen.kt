@@ -1,5 +1,7 @@
 package com.example.spender.feature.report.ui.list
 
+import android.graphics.Canvas
+import android.graphics.RectF
 import android.graphics.Typeface
 import android.view.ViewGroup
 import androidx.compose.foundation.background
@@ -14,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,119 +46,23 @@ import com.example.spender.core.common.util.formatToManWon
 import com.example.spender.feature.report.domain.model.Report
 import com.example.spender.feature.report.ui.component.ReportSummaryCardHorizontal
 import com.example.spender.ui.theme.LightBackgroundColor
-import com.example.spender.ui.theme.LightFontColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.navigation.Screen
+import com.github.mikephil.charting.animation.ChartAnimator
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.github.mikephil.charting.renderer.BarChartRenderer
+import com.github.mikephil.charting.utils.ViewPortHandler
 import android.graphics.Color as AndroidColor
-
-
-//@Composable
-//fun ReportListScreen(navHostController: NavHostController) {
-//    Box(modifier = Modifier
-//        .fillMaxSize()
-//        .background(MaterialTheme.colorScheme.background)
-//    ) {
-//        Text("ReportScreen", fontSize = 50.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-//    }
-//
-//}
-
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun ReportListScreen(
-//    navHostController: NavHostController
-//) {
-//    var currentYear by remember { mutableStateOf(2025) }
-//    val sampleReports = listOf(
-//        Report(1, "2025.01", 800000, 1000000),
-//        Report(2, "2025.02", 1300000, 1000000),
-//        Report(3, "2025.03", 950000, 1000000),
-//        Report(4, "2025.04", 1530000, 1000000),
-//        Report(5, "2025.05", 1190000, 1000000),
-//        Report(6, "2025.06", 800000, 1000000),
-//        Report(7, "2025.07", 800000, 1000000),
-//        Report(8, "2025.08", 800000, 1000000)
-//
-//
-//    )
-//
-//    Scaffold(
-//        topBar = {
-//            CenterAlignedTopAppBar(
-//                title = {
-//                    Row(
-//                        verticalAlignment = Alignment.CenterVertically
-//                    ) {
-//                        IconButton(
-//                            onClick = { currentYear-- },
-//                            modifier = Modifier.size(36.dp)
-//                        ) {
-//                            Icon(
-//                                Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-//                                contentDescription = "이전 년도"
-//                            )
-//                        }
-//
-//                        Text(
-//                            text = "${currentYear}년",
-//                            modifier = Modifier.padding(horizontal = 8.dp)
-//                        )
-//
-//                        IconButton(
-//                            onClick = { if(currentYear < 2025) currentYear++ },
-//                            modifier = Modifier.size(36.dp).alpha(if(currentYear < 2025) 1f else 0f),
-//                            enabled = true
-//                        ) {
-//                            Icon(
-//                                Icons.AutoMirrored.Filled.KeyboardArrowRight,
-//                                contentDescription = "다음 년도"
-//                            )
-//                        }
-//
-//
-//                    }
-//                },
-//                actions = {
-//                    IconButton(onClick = {
-//
-//                    }) {
-//                        Icon(imageVector = Icons.Default.DateRange, contentDescription = "캘린더")
-//                    }
-//                }
-//            )
-//        },
-//        content = { padding ->
-//            LazyVerticalGrid(
-//                columns = GridCells.Fixed(2),
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(padding)
-//                    .padding(horizontal = 16.dp, vertical = 4.dp),
-//                verticalArrangement = Arrangement.spacedBy(16.dp),
-//                horizontalArrangement = Arrangement.spacedBy(16.dp)
-//            ) {
-//                items(sampleReports) { report ->
-//                    ReportSummaryCard(
-//                        report = report,
-//                        onClick = {
-//                            navHostController.navigate(Screen.ReportDetail.createRoute(report.id))
-//                        }
-//                    )
-//                }
-//            }
-//
-//        },
-//    )
-//}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -179,8 +84,6 @@ fun ReportListScreen(
         Report(10, "2025.10", 900000, 1000000),
         Report(11, "2025.11", 650000, 1000000),
         Report(12, "2025.12", 1200000, 1000000)
-
-
     )
 
     val barValues = sampleReports.map { it.totalExpense.toFloat() }
@@ -277,15 +180,6 @@ fun ReportListScreen(
                             isHighlighted = isHighlighted
                         )
                     }
-//                    items(sampleReports) { report ->
-//                        ReportSummaryCardHorizontal(
-//                            report = report,
-//                            onClick = {
-//                                navHostController.navigate(Screen.ReportDetail.createRoute(report.id))
-//
-//                            }
-//                        )
-//                    }
                 }
             }
         }
@@ -320,7 +214,8 @@ fun MonthlySpendingBarChart(
                     legend.isEnabled = false
                     setTouchEnabled(true)
                     isHighlightPerTapEnabled = true
-                    setScaleEnabled(true)
+                    isDoubleTapToZoomEnabled = false
+                    setScaleEnabled(false)
                     setPinchZoom(true)
 
                     xAxis.apply {
@@ -337,7 +232,7 @@ fun MonthlySpendingBarChart(
             },
             update = { chart ->
                 val entries = values.mapIndexed { index, value ->
-                    BarEntry(index.toFloat(), value)
+                    BarEntry(index.toFloat(), value).apply { data = index }
                 }
 
                 val mainColor = AndroidColor.rgb(49, 130, 246)
@@ -358,9 +253,13 @@ fun MonthlySpendingBarChart(
                     })
                 }
 
-                chart.setOnChartValueSelectedListener(object : com.github.mikephil.charting.listener.OnChartValueSelectedListener {
-                    override fun onValueSelected(e: com.github.mikephil.charting.data.Entry?, h: com.github.mikephil.charting.highlight.Highlight?) {
-                        val index = e?.x?.toInt() ?: return
+                chart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+                    override fun onValueSelected(e: Entry?, h: Highlight?) {
+                        val index = when {
+                            e?.data is Int -> e.data as Int
+                            e?.x != null -> e.x.toInt()
+                            else -> return
+                        }
                         onBarClick(index)
                     }
 
@@ -368,6 +267,8 @@ fun MonthlySpendingBarChart(
                 })
 
 
+                chart.renderer = RoundedVerticalBarChartRenderer(chart, chart.animator, chart.viewPortHandler)
+                chart.renderer.initBuffers()
                 chart.invalidate()
             }
         )
@@ -375,5 +276,50 @@ fun MonthlySpendingBarChart(
 
 }
 
+class RoundedVerticalBarChartRenderer(
+    chart: BarChart,
+    animator: ChartAnimator,
+    viewPortHandler: ViewPortHandler
+) : BarChartRenderer(chart, animator, viewPortHandler) {
 
+    private val barRect = RectF()
+
+    override fun drawDataSet(c: Canvas, dataSet: IBarDataSet, index: Int) {
+        val trans = mChart.getTransformer(dataSet.axisDependency)
+
+        mBarBorderPaint.color = dataSet.barBorderColor
+        mBarBorderPaint.strokeWidth = dataSet.barBorderWidth
+
+        val drawBorder = dataSet.barBorderWidth > 0f
+        val phaseX = mAnimator.phaseX
+        val phaseY = mAnimator.phaseY
+        val barData = mChart.barData
+        val barWidthHalf = barData.barWidth / 2f
+        val radius = 8f
+
+        val buffer = mBarBuffers[index]
+        buffer.setPhases(phaseX, phaseY)
+        buffer.setDataSet(index)
+        buffer.setInverted(mChart.isInverted(dataSet.axisDependency))
+        buffer.setBarWidth(barData.barWidth)
+
+        buffer.feed(dataSet)
+        trans.pointValuesToPixel(buffer.buffer)
+
+        for (j in 0 until buffer.size() step 4) {
+            barRect.left = buffer.buffer[j]
+            barRect.top = buffer.buffer[j + 1]
+            barRect.right = buffer.buffer[j + 2]
+            barRect.bottom = buffer.buffer[j + 3]
+
+            mRenderPaint.color = dataSet.getColor(j / 4)
+
+            c.drawRoundRect(barRect, radius, radius, mRenderPaint)
+
+            if (drawBorder) {
+                c.drawRoundRect(barRect, radius, radius, mBarBorderPaint)
+            }
+        }
+    }
+}
 

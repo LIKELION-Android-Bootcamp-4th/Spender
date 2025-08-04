@@ -108,7 +108,7 @@ class RoundedBarChartRenderer(
             barRect.right = buffer.buffer[j + 2]
             barRect.bottom = buffer.buffer[j + 3]
 
-            mRenderPaint.color = dataSet.getColor(j / 4) // ✅ 막대마다 다른 색상 지정
+            mRenderPaint.color = dataSet.getColor(j / 4)
 
             c.drawRoundRect(barRect, radius, radius, mRenderPaint)
 
