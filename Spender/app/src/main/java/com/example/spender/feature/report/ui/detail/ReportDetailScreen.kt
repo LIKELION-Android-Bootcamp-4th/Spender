@@ -35,6 +35,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.feature.report.ui.detail.component.BudgetProgressSection
 import com.example.spender.feature.report.ui.detail.component.CategorySpendingSection
 import com.example.spender.feature.report.ui.detail.component.EmotionTagSection
@@ -51,18 +52,23 @@ fun ReportDetailScreen(navHostController: NavHostController, reportId: Int) {
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(text = "${2025}년 1월 월간 리포트") // TODO : 값 받아와서 해당 년도로 수정
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navHostController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "뒤로 가기"
-                        )
-                    }
-                }
+//            CenterAlignedTopAppBar(
+//                title = {
+//                    Text(text = "${2025}년 1월 월간 리포트") // TODO : 값 받아와서 해당 년도로 수정
+//                },
+//                navigationIcon = {
+//                    IconButton(onClick = { navHostController.popBackStack() }) {
+//                        Icon(
+//                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+//                            contentDescription = "뒤로 가기"
+//                        )
+//                    }
+//                }
+//            )
+            CustomTopAppBar(
+                title = "${2025}년 1월 월간 리포트",
+                navHostController,
+                showBackButton = true
             )
         },
         content = { padding ->
