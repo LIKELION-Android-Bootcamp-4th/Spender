@@ -50,15 +50,19 @@ fun BudgetScreen(navHostController: NavHostController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+
                 ) {
+                    Spacer(modifier = Modifier.height(40.dp))
+
                     Text(
                         text = "한 달 예산을 입력해주세요",
                         style = Typography.titleLarge,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 10.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(80.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
 
                     BudgetInputField(
                         budget = budget,
