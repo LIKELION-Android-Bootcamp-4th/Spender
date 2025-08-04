@@ -60,6 +60,7 @@ fun OcrResultScreen() {
     var memo by remember { mutableStateOf("매달 28일 OOO 에게 이체\nOO은행 00-00000000-00 OOO") }
     var selectedEmotion by remember { mutableStateOf("만족") }
 
+    
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
