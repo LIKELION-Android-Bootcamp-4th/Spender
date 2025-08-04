@@ -10,4 +10,6 @@
         <item>한달 예산은 얼마인가요?</item>
         <item>이제 시작해봅시다.</item>
     </string-array>
+
+    <string name="default_web_client_id">1073077761870-is2da6dro8u2rqgqt56m6hl1rccq9nqh.apps.googleusercontent.com</string>
 </resources>

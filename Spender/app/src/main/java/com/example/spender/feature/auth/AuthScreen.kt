@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.spender.R
 import com.example.spender.feature.auth.ui.GoogleLogin
 import com.example.spender.feature.auth.ui.KakaoLogin
@@ -23,7 +24,9 @@ import com.example.spender.feature.auth.ui.NaverLogin
 import com.example.spender.ui.theme.WhiteColor
 
 @Composable
-fun AuthScreen() {
+fun AuthScreen(
+    navController: NavHostController
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -43,17 +46,11 @@ fun AuthScreen() {
                     .size(250.dp),
             )
             Spacer(Modifier.height(224.dp))
-            GoogleLogin()
+            GoogleLogin(navController)
             Spacer(Modifier.height(24.dp))
             NaverLogin()
             Spacer(Modifier.height(24.dp))
             KakaoLogin()
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AuthScreenPreview() {
-    AuthScreen()
 }
