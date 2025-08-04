@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import com.example.spender.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,7 +23,7 @@ fun CustomTopAppBar(
 ) {
     CenterAlignedTopAppBar(
         title = {
-            Text(text = title, style = MaterialTheme.typography.titleMedium)
+            Text(text = title, style = Typography.titleMedium)
         },
         navigationIcon = {
             if (showBackButton) {
