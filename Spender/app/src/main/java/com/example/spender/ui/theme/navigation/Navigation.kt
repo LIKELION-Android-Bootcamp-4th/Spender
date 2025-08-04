@@ -8,6 +8,7 @@ import com.example.spender.MainScreen
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.auth.AuthScreen
 import com.example.spender.feature.home.HomeScreen
+import com.example.spender.feature.home.ui.NotificationListScreen
 import com.example.spender.feature.mypage.MypageScreen
 import com.example.spender.feature.mypage.ui.BudgetScreen
 import com.example.spender.feature.mypage.ui.ExpenseCategoryScreen
@@ -47,6 +48,10 @@ fun SpenderNavigation(
         }
         composable(BottomNavigationItem.Mypage.route) {
             MypageScreen(navController)
+        }
+
+        composable(Screen.NotificationListScreen.route) {
+            NotificationListScreen(navController)
         }
 
         composable(Screen.ReportDetail.route) { backStackEntry ->

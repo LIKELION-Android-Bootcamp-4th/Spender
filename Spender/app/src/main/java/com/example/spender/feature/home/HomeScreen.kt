@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,6 +20,7 @@ import androidx.navigation.NavHostController
 import com.example.spender.feature.home.ui.BudgeProgress
 import com.example.spender.feature.home.ui.RecentTransactionsSection
 import com.example.spender.feature.home.ui.TotalExpenseCard
+import com.example.spender.ui.theme.LightPointColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,13 +36,14 @@ fun HomeScreen(navHostController: NavHostController) {
                 actions = {
                     IconButton(
                         onClick = {
-                            // TODO: 알림 모아보기 화면으로 이동하는 로직
+                            navHostController.navigate("notification_list")
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Notifications,
+                            imageVector = Icons.Rounded.Notifications,
                             contentDescription = "알림 보기",
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(28.dp),
+                            tint = LightPointColor
                         )
                     }
                 },

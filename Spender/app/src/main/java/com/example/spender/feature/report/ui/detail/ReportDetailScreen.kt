@@ -52,21 +52,8 @@ fun ReportDetailScreen(navHostController: NavHostController, reportId: Int) {
 
     Scaffold(
         topBar = {
-//            CenterAlignedTopAppBar(
-//                title = {
-//                    Text(text = "${2025}년 1월 월간 리포트") // TODO : 값 받아와서 해당 년도로 수정
-//                },
-//                navigationIcon = {
-//                    IconButton(onClick = { navHostController.popBackStack() }) {
-//                        Icon(
-//                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-//                            contentDescription = "뒤로 가기"
-//                        )
-//                    }
-//                }
-//            )
             CustomTopAppBar(
-                title = "${2025}년 1월 월간 리포트",
+                title = "${2025}년 1월 월간 리포트",  // TODO : 값 받아와서 해당 년도 & 월로 수정
                 navHostController,
                 showBackButton = true
             )
@@ -75,7 +62,7 @@ fun ReportDetailScreen(navHostController: NavHostController, reportId: Int) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
                     .padding(padding)
-                    .padding(horizontal = 24.dp, vertical = 10.dp)
+                    .padding(horizontal = 24.dp, vertical = 24.dp)
             ) {
                 // 이번달 총 지출
                 item {
