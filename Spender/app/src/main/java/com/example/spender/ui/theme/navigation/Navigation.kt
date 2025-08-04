@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.spender.MainScreen
 import com.example.spender.feature.analysis.AnalysisScreen
+import com.example.spender.feature.auth.AuthScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.mypage.MypageScreen
 import com.example.spender.feature.onboarding.OnboardingScreen
@@ -26,6 +27,9 @@ fun SpenderNavigation(
         }
         composable(Screen.OnboardingScreen.route) {
             OnboardingScreen(navController)
+        }
+        composable(Screen.AuthScreen.route) {
+            AuthScreen(navController)
         }
         composable(BottomNavigationItem.Home.route) {
             HomeScreen(navController)
