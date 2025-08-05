@@ -29,11 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.spender.R
+import com.example.spender.core.data.remote.auth.LoginType
+import com.example.spender.core.data.service.login
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 import com.example.spender.ui.theme.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun GoogleLogin(
@@ -49,7 +52,7 @@ fun GoogleLogin(
     ) { result ->
         viewModel.googleLogin(result) {
             Log.d("Login", "Google SignIn Success!")
-
+            login(FirebaseAuth.getInstance().currentUser, LoginType.GOOGLE.type)
             navController.navigate(Screen.MainScreen.route) {
                 popUpTo(Screen.AuthScreen.route) {
                     inclusive = true
