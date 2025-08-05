@@ -8,7 +8,7 @@ sealed class Screen(val route: String) {
     object NotificationListScreen: Screen("notification_list")
 
     object ReportDetail : Screen("report_detail/{reportId}") {
-        fun createRoute(reportId: Int) = "report_detail/$reportId"
+        fun createRoute(reportId: String) = "report_detail/$reportId"
     }
 
     object BudgetScreen : Screen("budget")
