@@ -7,11 +7,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import com.example.spender.R
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -76,7 +80,8 @@ fun IncomeCategoryScreen(navHostController: NavHostController) {
                     currentCategory = null
                     showEditDialog = true
                 },
-                containerColor = Color.White
+                containerColor = Color.White,
+                shape = CircleShape
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_floating_add),
@@ -168,7 +173,7 @@ private fun IncomeCategoryRow(
                     .background(Color.White)
                     .border(
                         width = 1.dp,
-                        color = Color.LightGray,
+                        color = Color.Gray,
                         shape = RoundedCornerShape(4.dp)
                     )
             ) {
@@ -186,9 +191,11 @@ private fun IncomeCategoryRow(
                         onEditClick()
                         expanded = false
                     },
-                    contentPadding = PaddingValues(horizontal = 42.dp, vertical = 8.dp)
+                    modifier = Modifier
+                        .height(34.dp)
+                        .width(120.dp),
                 )
-                HorizontalDivider()
+                HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp), color = Color.Gray)
                 DropdownMenuItem(
                     text = {
                         Text(
@@ -203,7 +210,9 @@ private fun IncomeCategoryRow(
                         onDeleteClick()
                         expanded = false
                     },
-                    contentPadding = PaddingValues(horizontal = 42.dp, vertical = 8.dp)
+                    modifier = Modifier
+                        .height(34.dp)
+                        .width(120.dp),
                 )
             }
         }
