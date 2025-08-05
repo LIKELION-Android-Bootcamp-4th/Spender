@@ -114,8 +114,87 @@ fun getIncomeList(year: Int, month: Int): MutableList<ExpenseDto> {
     return incomeList
 }
 
-// 가장 소비가 컸던 날 찾아서 반환 (단, 수입을 신경 쓰지는 않음)
-fun getMaxExpense(year: Int, month: Int): Pair<String, Int> {
+// 하루 동안의 수입/지출 내역
+fun getDailyList(year: Int, month: Int, day: Int): MutableList<ExpenseDto> {
+    val uid = getFirebaseAuth()
+    val dataList = mutableListOf<ExpenseDto>()
+
+    val startOfDay = Calendar.getInstance().apply {
+        set(Calendar.YEAR, year)
+        set(Calendar.MONTH, month)
+        set(Calendar.DAY_OF_MONTH, day)
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }
+
+    val endOfDay = Calendar.getInstance().apply {
+        set(Calendar.YEAR, year)
+        set(Calendar.MONTH, month)
+        set(Calendar.DAY_OF_MONTH, day)
+        set(Calendar.HOUR_OF_DAY, 23)
+        set(Calendar.MINUTE, 59)
+        set(Calendar.SECOND, 59)
+        set(Calendar.MILLISECOND, 999)
+    }
+
+    try {
+        val expenseRef = getFirebaseRef().document(uid!!).collection("expenses")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfDay.time))
+            .whereLessThanOrEqualTo("createdAt", Timestamp(endOfDay.time))
+        expenseRef.get().addOnSuccessListener { document ->
+            for (doc in document) {
+                val data = doc.data
+                val expense = ExpenseDto(
+                    amount = data["amount"]?.toString()?.toInt() ?: 0,
+                    memo = data["memo"]?.toString() ?: "",
+                    title = data["title"]?.toString() ?: "",
+                    date = data["date"] as? Timestamp ?: Timestamp.now(),
+                    receiptUrl = "",
+                    emotionId = "",
+                    categoryId = data["categoryId"]?.toString() ?: "",
+                    createdAt = data["createdAt"] as? Timestamp ?: Timestamp.now()
+                )
+                dataList.add(expense)
+            }
+        }
+    } catch (e: Exception) {
+        Log.d("Analysis / Expense Daily List", "Expense list error")
+    }
+
+    try {
+        val incomeRef = getFirebaseRef().document(uid!!).collection("incomes")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfDay.time))
+            .whereLessThanOrEqualTo("createdAt", Timestamp(endOfDay.time))
+        incomeRef.get().addOnSuccessListener { document ->
+            for (doc in document) {
+                val data = doc.data
+                val expense = ExpenseDto(
+                    amount = data["amount"]?.toString()?.toInt() ?: 0,
+                    memo = data["memo"]?.toString() ?: "",
+                    title = data["title"]?.toString() ?: "",
+                    date = data["date"] as? Timestamp ?: Timestamp.now(),
+                    receiptUrl = "",
+                    emotionId = "",
+                    categoryId = data["categoryId"]?.toString() ?: "",
+                    createdAt = data["createdAt"] as? Timestamp ?: Timestamp.now()
+                )
+                dataList.add(expense)
+            }
+        }
+    } catch (e: Exception) {
+        Log.d("Analysis / Income Daily List", "Income list error")
+    }
+
+    dataList.sortByDescending { it.createdAt }
+    return dataList
+}
+
+// 일당 소비 총액 반환 (단, 수입을 신경 쓰지는 않음)
+fun getDailyTotalList(year: Int, month: Int): MutableMap<String, Int> {
     val uid = getFirebaseAuth()
 
     val startOfMonth = Calendar.getInstance().apply {
@@ -157,15 +236,52 @@ fun getMaxExpense(year: Int, month: Int): Pair<String, Int> {
                 dailySum[day] = dailySum.getOrDefault(day, 0) + amount
             }
         }
+    } catch (e: Exception) {
+        Log.d("Analysis / Daily Sum List", "Daily expense error")
+    }
 
-        val maxDay = dailySum.maxByOrNull { it.value }
-        return if (maxDay != null) {
-            Pair(maxDay.key, maxDay.value)
-        } else {
-            Pair("0", 0)
+    return dailySum
+}
+
+fun getMaxExpense(year: Int, month: Int): ExpenseDto? {
+    val uid = getFirebaseAuth()
+
+    val startOfMonth = Calendar.getInstance().apply {
+        set(Calendar.YEAR, year)
+        set(Calendar.MONTH, month)
+        set(Calendar.DAY_OF_MONTH, 1)
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }
+
+    val endOfMonth = Calendar.getInstance().apply {
+        set(Calendar.YEAR, year)
+        set(Calendar.MONTH, month)
+        set(Calendar.DAY_OF_MONTH, getActualMaximum(Calendar.DAY_OF_MONTH))
+        set(Calendar.HOUR_OF_DAY, 23)
+        set(Calendar.MINUTE, 59)
+        set(Calendar.SECOND, 59)
+        set(Calendar.MILLISECOND, 999)
+    }
+
+    var expense: ExpenseDto? = null
+
+    try {
+        val expenseRef = getFirebaseRef().document(uid!!).collection("expense")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfMonth.time))
+            .whereLessThanOrEqualTo("createdAt", Timestamp(endOfMonth.time))
+
+        expenseRef.get().addOnSuccessListener { document ->
+            expense = document.documents
+                .mapNotNull { it.toObject(ExpenseDto::class.java) }
+                .maxByOrNull { it.amount }
         }
     } catch (e: Exception) {
-        Log.d("Analysis / MaxExpense", "Max expense error")
-        return Pair("0", 0)
+        Log.d("Analysis / Max Expense", "Max Expense error")
     }
+
+    return expense
 }

@@ -6,6 +6,9 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spender.core.data.remote.expense.ExpenseDto
+import com.example.spender.core.data.service.getDailyTotalList
+import com.example.spender.core.data.service.getMaxExpense
 import com.example.spender.feature.analysis.domain.model.CalendarItemData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,7 +44,7 @@ class GraphViewModel(application: Application): AndroidViewModel(application) {
     val showDatePicker: MutableState<Boolean?> = mutableStateOf(null)
 
     init {
-        _graphData.value = sampleData
+        getDailyExpense()
     }
 
     fun previousMonth() {
@@ -74,5 +77,20 @@ class GraphViewModel(application: Application): AndroidViewModel(application) {
 
     fun closeDialog() {
         showDatePicker.value = false
+    }
+
+    fun getMaxExpense(): ExpenseDto? {
+        return getMaxExpense(year, month)
+    }
+
+    fun getDailyExpense() {
+        val rawData = getDailyTotalList(year, month)
+        val dataList = mutableListOf<CalendarItemData>()
+
+        for (doc in rawData) {
+            dataList.add(CalendarItemData(day = doc.key.toInt(), expense = doc.value))
+        }
+
+        _graphData.value = dataList
     }
 }
