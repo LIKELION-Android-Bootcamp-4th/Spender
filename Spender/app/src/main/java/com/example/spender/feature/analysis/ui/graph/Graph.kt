@@ -1,7 +1,6 @@
 package com.example.spender.feature.analysis.ui.graph
 
 import android.icu.text.DecimalFormat
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,17 +26,17 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.formatter.ValueFormatter
 
 @Composable
-fun LineChart(graphData: List<CalendarItemData>) {
+fun LineChart(sampleData: List<CalendarItemData>) {
     Column {
-        var sampleData = graphData
-        val total = sampleData.sumOf { it.expense }
-        val avg = sampleData.sumOf { it.expense } / 31
+        var graphData = sampleData
+        val total = graphData.sumOf { it.expense }
+        val avg = graphData.sumOf { it.expense } / 31
 
         val data = mutableListOf<CalendarItemData>()
         for (i in 1 .. 31) {
-            if (sampleData.isNotEmpty() && sampleData.first().day == i) {
-                data.add(sampleData.first())
-                sampleData = sampleData.drop(1)
+            if (graphData.isNotEmpty() && graphData.first().day == i) {
+                data.add(graphData.first())
+                graphData = graphData.drop(1)
                 continue
             }
             data.add(CalendarItemData(i, 0))
