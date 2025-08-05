@@ -16,9 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.spender.core.data.remote.auth.LoginType
+import com.example.spender.core.data.service.login
 import com.example.spender.feature.home.ui.BudgeProgress
 import com.example.spender.feature.home.ui.RecentTransactionsSection
 import com.example.spender.feature.home.ui.TotalExpenseCard
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

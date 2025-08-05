@@ -15,30 +15,21 @@ fun getFirebaseAuth(): String? = FirebaseAuth.getInstance().currentUser?.uid
 
 fun getFirebaseRef(): CollectionReference = FirebaseFirestore.getInstance().collection("users")
 
-fun login(user: FirebaseUser, provider: String) {
-    val ref = FirebaseFirestore.getInstance().collection("users").document(user.uid)
-    ref.get().addOnSuccessListener { document ->
-        if (!document.exists()) {
-            val userInfo = mapOf(
-                "email" to user.email,
-                "provider" to provider
-            )
-            ref.set(userInfo)
+fun login(user: FirebaseUser?, provider: String) {
+    if (user != null) {
+        val ref = getFirebaseRef().document(user.uid)
+        ref.get().addOnSuccessListener { document ->
+            if (!document.exists()) {
+                val userInfo = mapOf(
+                    "email" to user.email,
+                    "provider" to provider,
+                    "createdAt" to FieldValue.serverTimestamp()
+                )
+                ref.set(userInfo)
+            }
         }
-    }
-}
-
-fun setUserBudget(budget: Int) {
-    val uid = getFirebaseAuth()
-    val timeStamp = SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(Date(System.currentTimeMillis()))
-    try {
-        val ref = getFirebaseRef().document(uid!!).collection("budgets").document(timeStamp)
-        val budgetInfo = mapOf(
-            "amount" to budget,
-            "month" to timeStamp
-        )
-    } catch (e: Exception) {
-        Log.d("Onboarding / budget", "budget set incomplete - is uid available?")
+    } else {
+        Log.d("Login", "user not found")
     }
 }
 
