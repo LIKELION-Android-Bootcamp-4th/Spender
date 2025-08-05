@@ -23,6 +23,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.spender.core.ui.BottomNavigationBar
 import com.example.spender.feature.analysis.AnalysisScreen
+import com.example.spender.feature.expense.ui.ExpenseRegistrationParentScreen
+import com.example.spender.feature.expense.ui.ocrresult.OcrResultScreen
+import com.example.spender.feature.expense.ui.recurringexpensedetail.RecurringExpenseDetailScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.mypage.MypageScreen
 import com.example.spender.feature.onboarding.data.OnboardingPref
@@ -44,12 +47,14 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 val isOnboardingShown = OnboardingPref.wasShown(this)
+                // 로그인 화면으로 가려면 아래 주석 해제하고
+//                val startDestination = Screen.AuthScreen.route
+                //이거 아래부분 주석처리 하면 됨
                 val startDestination = if (isOnboardingShown) {
                     Screen.MainScreen.route
                 } else {
                     Screen.OnboardingScreen.route
                 }
-
                 SpenderNavigation(
                     navController = navController,
                     startDestination = startDestination

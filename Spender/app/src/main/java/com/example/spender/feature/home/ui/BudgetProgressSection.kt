@@ -21,13 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.spender.R
 import com.example.spender.ui.theme.LightSurface
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
 @Composable
-fun BudgeProgress(budget: Int, totalExpense: Int) {
+fun BudgeProgress(
+    budget: Int,
+    totalExpense: Int,
+    navHostController: NavHostController
+) {
     val percentage = totalExpense.toFloat() / budget.toFloat()
     val percentText = "${(percentage * 100).toInt()}%"
 
@@ -97,7 +102,7 @@ fun BudgeProgress(budget: Int, totalExpense: Int) {
             TextButton(
                 modifier = Modifier,
                 onClick = {
-                    //TODO: 예산설정화면으로 이동하는 로직
+                    navHostController.navigate("budget")
                 }
             ) {
                 Text(
