@@ -20,14 +20,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.spender.core.data.remote.expense.ExpenseDto
+import com.example.spender.feature.analysis.domain.model.CalendarItemData
 import com.example.spender.feature.analysis.domain.model.SpendListItemData
 import com.example.spender.feature.analysis.ui.SpendListItemComponent
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.Typography
 
 @Composable
-fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int) { //캘린더 하단 지출 리스트
-    val itemData = listOf(SpendListItemData("지출테스트", 1000, false), SpendListItemData("수입테스트", 1000, true))
+fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: MutableList<ExpenseDto>) { //캘린더 하단 지출 리스트
+    val itemData = mutableListOf<SpendListItemData>()
+    for (data in list) {
+        itemData.add(SpendListItemData(
+            data.title,
+            data.amount,
+            data.amount > 0
+        ))
+    }
     Column {
         Row(verticalAlignment = Alignment.Bottom) {
             Text(text = when(dayOfWeek) {
@@ -45,7 +54,7 @@ fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int) { //캘린더 하단 �
         }
         Spacer(Modifier.height(10.dp))
         LazyColumn {
-            itemsIndexed(itemData) { index, item ->
+            itemsIndexed(list) { index, item ->
                 SpendListItemComponent(item)
                 if (index != itemData.lastIndex) {
                     Spacer(Modifier.height(5.dp))
