@@ -63,7 +63,11 @@ fun HomeScreen(navHostController: NavHostController) {
                     TotalExpenseCard(totalExpense = totalExpense)
                 }
                 item {
-                    BudgeProgress(budget = budget, totalExpense = totalExpense)
+                    BudgeProgress(
+                        budget = budget,
+                        totalExpense = totalExpense,
+                        navHostController = navHostController
+                    )
                 }
                 item {
                     RecentTransactionsSection() // TODO: 각 데이터의 필드(수입,지출 제목 & 금액) 넘겨줘야 함
