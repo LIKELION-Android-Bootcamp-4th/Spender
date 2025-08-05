@@ -34,7 +34,9 @@ import com.example.spender.ui.theme.SpenderTheme
 import com.example.spender.ui.theme.navigation.BottomNavigationItem
 import com.example.spender.ui.theme.navigation.Screen
 import com.example.spender.ui.theme.navigation.SpenderNavigation
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

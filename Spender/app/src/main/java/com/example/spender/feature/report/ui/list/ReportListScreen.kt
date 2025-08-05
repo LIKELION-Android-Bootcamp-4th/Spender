@@ -41,6 +41,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.common.util.formatToManWon
 import com.example.spender.feature.report.domain.model.Report
@@ -67,7 +68,8 @@ import android.graphics.Color as AndroidColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportListScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    viewModel: ReportListViewModel = hiltViewModel()
 ) {
     var currentYear by remember { mutableStateOf(2025) }
     val currentMonth = 8 // 예시용 (현재 월까지)
