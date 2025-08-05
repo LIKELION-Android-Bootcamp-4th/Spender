@@ -9,7 +9,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -33,8 +32,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,6 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.feature.mypage.domain.model.Category
@@ -55,21 +56,29 @@ import com.example.spender.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpenseCategoryScreen(navHostController: NavHostController) {
+fun ExpenseCategoryScreen(
+    navHostController: NavHostController,
+    viewModel: CategoryViewModel = hiltViewModel()
+) {
+    val categories by viewModel.categories.collectAsState()
 
-    val categoryColors = listOf(
-        Color(0xFFF44336), Color(0xFFE91E63), Color(0xFF9C27B0), Color(0xFF673AB7),
-        Color(0xFF3F51B5), Color(0xFF2196F3), Color(0xFF00BCD4), Color(0xFF009688),
-        Color(0xFF4CAF50), Color(0xFF8BC34A)
-    )
-    // 임시 데이터
-    val categories = remember {
-        mutableStateListOf(
-            Category("취미/여가", categoryColors[0]),
-            Category("식비", categoryColors[1]),
-            Category("교통", categoryColors[2]),
-        )
+    LaunchedEffect(key1 = Unit) {
+        viewModel.loadCategories("EXPENSE")
     }
+
+//    val categoryColors = listOf(
+//        Color(0xFFF44336), Color(0xFFE91E63), Color(0xFF9C27B0), Color(0xFF673AB7),
+//        Color(0xFF3F51B5), Color(0xFF2196F3), Color(0xFF00BCD4), Color(0xFF009688),
+//        Color(0xFF4CAF50), Color(0xFF8BC34A)
+//    )
+//    // 임시 데이터
+//    val categories = remember {
+//        mutableStateListOf(
+//            Category("취미/여가", categoryColors[0]),
+//            Category("식비", categoryColors[1]),
+//            Category("교통", categoryColors[2]),
+//        )
+//    }
 
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -111,7 +120,7 @@ fun ExpenseCategoryScreen(navHostController: NavHostController) {
         content = { padding ->
 
             LazyColumn(modifier = Modifier.padding(padding)) {
-                itemsIndexed(categories) { index, category ->
+                items(categories, key = { it.id }) { category ->
                     CategoryRow(
                         category = category,
                         onEditClick = {
@@ -135,13 +144,9 @@ fun ExpenseCategoryScreen(navHostController: NavHostController) {
                     onDismiss = { showEditDialog = false },
                     onConfirm = { newName ->
                         if (isEditing) {
-                            val index = categories.indexOf(currentCategory)
-                            if (index != -1) {
-                                categories[index] = categories[index].copy(name = newName)
-                            }
+                            currentCategory?.let { viewModel.updateCategory(it.id, newName) }
                         } else {
-                            val newColor = categoryColors.getOrNull(categories.size) ?: Color.Gray
-                            categories.add(Category(newName, newColor))
+                            viewModel.addCategory(newName, "EXPENSE")
                         }
                         showEditDialog = false
                     }
@@ -154,7 +159,7 @@ fun ExpenseCategoryScreen(navHostController: NavHostController) {
                     category = currentCategory,
                     onDismiss = { showDeleteDialog = false },
                     onConfirm = {
-                        categories.remove(currentCategory)
+                        currentCategory?.let { viewModel.deleteCategory(it.id) }
                         showDeleteDialog = false
                     }
                 )
@@ -176,17 +181,17 @@ private fun CategoryRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /*  */ }
+            .clickable { /*   */ }
             .padding(horizontal = 46.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        if (category.color != null) {
+        category.color?.let {
             Box(
                 modifier = Modifier
                     .size(10.dp)
                     .clip(CircleShape)
-                    .background(category.color)
+                    .background(it)
             )
             Spacer(Modifier.width(16.dp))
         }
