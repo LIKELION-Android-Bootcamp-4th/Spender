@@ -1,10 +1,14 @@
 package com.example.spender.feature.mypage.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -94,11 +98,22 @@ private fun NotificationSettingRow(
             colors = SwitchDefaults.colors(
                 uncheckedThumbColor = Color.White, // 오프 동그라미 색
                 uncheckedTrackColor = Color(0xFFD9D9D9), // 오프 배경 색
-                uncheckedBorderColor = Color.Transparent,
+                uncheckedBorderColor = Color.White,
                 checkedThumbColor = Color.White,   // 온 동그라미 색
-                checkedTrackColor = PointColor,   // 온 배경 색
+                checkedTrackColor = PointColor,   // 온 배경
+                checkedBorderColor = Color.White,
             ),
-            modifier = Modifier.scale(1.2f)
+            modifier = Modifier.scale(1.2f),
+            thumbContent = {
+                Box(
+                    modifier = Modifier
+                        .size(30.dp)
+                        .background(
+                            color = if (checked) Color.White else Color.White,
+                            shape = CircleShape
+                        )
+                )
+            },
 
 
         )
