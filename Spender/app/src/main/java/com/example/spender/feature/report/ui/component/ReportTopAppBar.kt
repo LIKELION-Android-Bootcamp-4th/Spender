@@ -17,10 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportTopAppBar(year: Int, onPrev: () -> Unit, onNext: () -> Unit) {
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
     CenterAlignedTopAppBar(
         title = {
             Row(
@@ -39,10 +42,10 @@ fun ReportTopAppBar(year: Int, onPrev: () -> Unit, onNext: () -> Unit) {
                 )
 
                 IconButton(
-                    onClick = onNext, // TODO : 리포트가 있는 경우에만 이동가능하도록 수정
+                    onClick = onNext,
                     modifier = Modifier
                         .size(36.dp)
-                        .alpha(if (year < 2025) 1f else 0f),
+                        .alpha(if (year < currentYear) 1f else 0f),
                     enabled = true
                 ) {
                     Icon(

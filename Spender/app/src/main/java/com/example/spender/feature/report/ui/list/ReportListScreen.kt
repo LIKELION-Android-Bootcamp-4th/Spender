@@ -22,6 +22,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.renderer.BarChartRenderer
 import com.github.mikephil.charting.utils.ViewPortHandler
 import com.google.firebase.auth.FirebaseAuth
+import java.util.Calendar
 
 @Composable
 fun ReportListScreen(
@@ -29,6 +30,7 @@ fun ReportListScreen(
     viewModel: ReportListViewModel = hiltViewModel()
 ) {
     val year by viewModel.currentYear
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
     val reports by viewModel.reportList
     val barValues = reports.map { it.totalExpense.toFloat() }
     val barLabels = reports.map { it.month.substring(5) + "월" }
@@ -46,7 +48,7 @@ fun ReportListScreen(
     Scaffold(
         topBar = {
             ReportTopAppBar(year = year, onPrev = viewModel::goToPreviousYear, onNext = {
-                if (year < 2025) viewModel.goToNextYear()
+                if (year < currentYear) viewModel.goToNextYear()
             })
         },
         content = { padding ->
