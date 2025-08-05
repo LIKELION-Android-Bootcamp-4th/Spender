@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,21 +31,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.core.common.util.formatToManWon
 import com.example.spender.feature.report.domain.model.Report
-import com.example.spender.ui.theme.DarkPointColor
-import com.example.spender.ui.theme.LightBackgroundColor
-import com.example.spender.ui.theme.LightFontColor
-import com.example.spender.ui.theme.LightPointColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
-import com.github.mikephil.charting.highlight.Highlight
 
 @Composable
 fun ReportSummaryCard(
     report: Report,
     onClick: () -> Unit
 ) {
-    val usageRatio = if (report.budget > 0) {
-        report.totalExpense.toFloat() / report.budget
+    val usageRatio = if (report.totalBudget > 0) {
+        report.totalExpense.toFloat() / report.totalBudget
     } else 0f
     val usagePercent = (usageRatio * 100).toInt()
     val isOverBudget = usageRatio > 1f
@@ -68,7 +62,7 @@ fun ReportSummaryCard(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = report.yearMonth, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            Text(text = report.month, fontWeight = FontWeight.Bold, fontSize = 20.sp)
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -93,7 +87,7 @@ fun ReportSummaryCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = "${formatToManWon(report.totalExpense)} / ${formatToManWon(report.budget)}",
+                text = "${formatToManWon(report.totalExpense)} / ${formatToManWon(report.totalBudget)}",
                 style = MaterialTheme.typography.bodySmall,
                 fontSize = 14.sp
             )
@@ -108,8 +102,8 @@ fun ReportSummaryCardHorizontal(
     onClick: () -> Unit = {},
     isHighlighted: Boolean = false
 ) {
-    val usageRatio = if (report.budget > 0) {
-        report.totalExpense.toFloat() / report.budget
+    val usageRatio = if (report.totalBudget > 0) {
+        report.totalExpense.toFloat() / report.totalBudget
     } else 0f
 
     val usagePercent = (usageRatio * 100).toInt()
@@ -155,7 +149,7 @@ fun ReportSummaryCardHorizontal(
         ) {
             // 좌측: 년월
             Text(
-                text = report.yearMonth,
+                text = report.month,
                 fontSize = 20.sp,
                 color = Color.Black,
                 style = Typography.titleLarge

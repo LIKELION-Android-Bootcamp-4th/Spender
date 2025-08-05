@@ -41,8 +41,8 @@ fun getReportList(year: Int): MutableList<ReportDto> {
                     createdAt = data["createdAt"] as? Timestamp ?: Timestamp.now()
                 )
                 reportList.add(report)
-                }
             }
+        }
     } catch (e: Exception) {
         Log.d("Reports / ReportList", "report list error")
     }

@@ -3,6 +3,7 @@ package com.example.spender.feature.report.ui.list
 import android.graphics.Canvas
 import android.graphics.RectF
 import android.graphics.Typeface
+import android.util.Log
 import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +43,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.common.util.formatToManWon
 import com.example.spender.feature.report.domain.model.Report
@@ -62,32 +65,41 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.renderer.BarChartRenderer
 import com.github.mikephil.charting.utils.ViewPortHandler
+import com.google.firebase.auth.FirebaseAuth
 import android.graphics.Color as AndroidColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportListScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    viewModel: ReportListViewModel = hiltViewModel()
 ) {
-    var currentYear by remember { mutableStateOf(2025) }
-    val currentMonth = 8 // 예시용 (현재 월까지)
-    val sampleReports = listOf(
-        Report(1, "2025.01", 800000, 1000000),
-        Report(2, "2025.02", 1300000, 1000000),
-        Report(3, "2025.03", 950000, 1000000),
-        Report(4, "2025.04", 1530000, 1000000),
-        Report(5, "2025.05", 1190000, 1000000),
-        Report(6, "2025.06", 900000, 1000000),
-        Report(7, "2025.07", 800000, 1000000),
-        Report(8, "2025.08", 700000, 1000000),
-        Report(9, "2025.09", 1100000, 1000000),
-        Report(10, "2025.10", 900000, 1000000),
-        Report(11, "2025.11", 650000, 1000000),
-        Report(12, "2025.12", 1200000, 1000000)
-    )
+    val year by viewModel.currentYear
+    val reports by viewModel.reportList
+    val isLoading by viewModel.isLoading
+    val error by viewModel.error
+    val firebaseAuth = FirebaseAuth.getInstance()
+    val currentUser = firebaseAuth.currentUser
 
-    val barValues = sampleReports.map { it.totalExpense.toFloat() }
-    val barLabels = sampleReports.map { it.yearMonth.substring(5) + "월" }
+//    var currentYear by remember { mutableStateOf(2025) }
+//    val currentMonth = 8 // 예시용 (현재 월까지)
+//    val sampleReports = listOf(
+//        Report(1, "2025.01", 800000, 1000000),
+//        Report(2, "2025.02", 1300000, 1000000),
+//        Report(3, "2025.03", 950000, 1000000),
+//        Report(4, "2025.04", 1530000, 1000000),
+//        Report(5, "2025.05", 1190000, 1000000),
+//        Report(6, "2025.06", 900000, 1000000),
+//        Report(7, "2025.07", 800000, 1000000),
+//        Report(8, "2025.08", 700000, 1000000),
+//        Report(9, "2025.09", 1100000, 1000000),
+//        Report(10, "2025.10", 900000, 1000000),
+//        Report(11, "2025.11", 650000, 1000000),
+//        Report(12, "2025.12", 1200000, 1000000)
+//    )
+
+    val barValues = reports.map { it.totalExpense.toFloat() }
+    val barLabels = reports.map { it.month.substring(5) + "월" }
 
     val listState = rememberLazyListState()
     var selectedIndex by remember { mutableStateOf(-1) }
@@ -97,7 +109,33 @@ fun ReportListScreen(
         if (selectedIndex >= 0) {
             listState.animateScrollToItem(selectedIndex)
         }
+        if (currentUser != null) {
+            viewModel.loadReports(year)
+        } else {
+            Log.w("ReportScreen", "사용자 정보 없음")
+        }
     }
+
+
+
+//    DisposableEffect(Unit) {
+//        val listener = FirebaseAuth.AuthStateListener { auth ->
+//            val user = auth.currentUser
+//            if (user != null) {
+//                viewModel.loadReports(year)
+//            } else {
+//                Log.w("ReportScreen", "사용자 정보 없음")
+//                navHostController.navigate(Screen.AuthScreen.route)
+//            }
+//        }
+//
+//        firebaseAuth.addAuthStateListener(listener)
+//
+//        // 화면 종료되면 해제
+//        onDispose {
+//            firebaseAuth.removeAuthStateListener(listener)
+//        }
+//    }
 
     Scaffold(
         topBar = {
@@ -107,7 +145,7 @@ fun ReportListScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         IconButton(
-                            onClick = { currentYear-- },
+                            onClick = { viewModel.goToPreviousYear() },
                             modifier = Modifier.size(36.dp)
                         ) {
                             Icon(
@@ -117,15 +155,15 @@ fun ReportListScreen(
                         }
 
                         Text(
-                            text = "${currentYear}년",
+                            text = "${year}년",
                             modifier = Modifier.padding(horizontal = 8.dp)
                         )
 
                         IconButton(
-                            onClick = { if (currentYear < 2025) currentYear++ },
+                            onClick = { if (year < 2025) viewModel.goToNextYear() }, // TODO : 리포트가 있는 경우에만 이동가능하도록 수정
                             modifier = Modifier
                                 .size(36.dp)
-                                .alpha(if (currentYear < 2025) 1f else 0f),
+                                .alpha(if (year < 2025) 1f else 0f),
                             enabled = true
                         ) {
                             Icon(
@@ -170,12 +208,12 @@ fun ReportListScreen(
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    itemsIndexed(sampleReports) { index, report ->
+                    itemsIndexed(reports) { index, report ->
                         val isHighlighted = index == selectedIndex
                         ReportSummaryCardHorizontal(
                             report = report,
                             onClick = {
-                                navHostController.navigate(Screen.ReportDetail.createRoute(report.id))
+                                navHostController.navigate(Screen.ReportDetail.createRoute(report.month))
                             },
                             isHighlighted = isHighlighted
                         )
