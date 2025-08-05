@@ -57,7 +57,8 @@ fun HomeScreen(navHostController: NavHostController) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
+                    .padding(horizontal = 5.dp),
             ) {
                 item {
                     TotalExpenseCard(totalExpense = totalExpense)
