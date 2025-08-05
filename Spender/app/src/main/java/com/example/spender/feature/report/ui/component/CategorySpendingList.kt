@@ -1,4 +1,4 @@
-package com.example.spender.feature.report.ui.detail.component
+package com.example.spender.feature.report.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.spender.ui.theme.DefaultFontColor
 import com.example.spender.ui.theme.LightFontColor
 import com.example.spender.ui.theme.Typography
 
