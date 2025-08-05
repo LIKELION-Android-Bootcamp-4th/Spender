@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -16,12 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.spender.core.data.remote.auth.LoginType
-import com.example.spender.core.data.service.login
 import com.example.spender.feature.home.ui.BudgeProgress
 import com.example.spender.feature.home.ui.RecentTransactionsSection
 import com.example.spender.feature.home.ui.TotalExpenseCard
-import com.google.firebase.auth.FirebaseAuth
+import com.example.spender.ui.theme.LightPointColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,13 +36,14 @@ fun HomeScreen(navHostController: NavHostController) {
                 actions = {
                     IconButton(
                         onClick = {
-                            // TODO: 알림 모아보기 화면으로 이동하는 로직
+                            navHostController.navigate("notification_list")
                         }
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Notifications,
+                            imageVector = Icons.Rounded.Notifications,
                             contentDescription = "알림 보기",
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(28.dp),
+                            tint = LightPointColor
                         )
                     }
                 },
@@ -57,13 +57,18 @@ fun HomeScreen(navHostController: NavHostController) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding),
+                    .padding(padding)
+                    .padding(horizontal = 5.dp),
             ) {
                 item {
                     TotalExpenseCard(totalExpense = totalExpense)
                 }
                 item {
-                    BudgeProgress(budget = budget, totalExpense = totalExpense)
+                    BudgeProgress(
+                        budget = budget,
+                        totalExpense = totalExpense,
+                        navHostController = navHostController
+                    )
                 }
                 item {
                     RecentTransactionsSection() // TODO: 각 데이터의 필드(수입,지출 제목 & 금액) 넘겨줘야 함
