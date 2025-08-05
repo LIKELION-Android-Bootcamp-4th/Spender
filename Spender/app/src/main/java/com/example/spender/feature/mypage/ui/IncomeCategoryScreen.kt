@@ -12,6 +12,7 @@ import com.example.spender.R
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -76,7 +77,8 @@ fun IncomeCategoryScreen(navHostController: NavHostController) {
                     currentCategory = null
                     showEditDialog = true
                 },
-                containerColor = Color.White
+                containerColor = Color.White,
+                shape = CircleShape
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_floating_add),

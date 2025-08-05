@@ -97,7 +97,8 @@ fun ExpenseCategoryScreen(navHostController: NavHostController) {
                         showEditDialog = true
                     }
                 },
-                containerColor = Color.White
+                containerColor = Color.White,
+                shape = CircleShape
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_floating_add),
