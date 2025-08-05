@@ -18,6 +18,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -33,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.spender.feature.mypage.domain.model.Category
 import com.example.spender.ui.theme.PointColor
@@ -73,11 +75,19 @@ fun CategoryEditDialog(
                     TextField(
                         value = text,
                         onValueChange = { text = it },
-                        label = { Text("카테고리 이름") },
+                        placeholder = {
+                            Text(
+                                "카테고리 이름을 입력해주세요",
+                                color = Color.Gray,
+                                fontSize = 14.sp
+                            )
+                        },
                         singleLine = true,
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.Transparent,
-                            focusedContainerColor = Color.Transparent
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.LightGray,
+                            focusedIndicatorColor = PointColor
                         ),
                         textStyle = Typography.titleMedium
                     )
