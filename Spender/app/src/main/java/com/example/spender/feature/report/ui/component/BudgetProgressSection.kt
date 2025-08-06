@@ -18,64 +18,13 @@ import com.example.spender.ui.theme.Typography
 
 @Composable
 fun BudgetProgressSection(
-    progressPercent: Int = 60
+    totalExpense: Int,
+    totalBudget: Int
 ) {
-//    Column {
-//        Spacer(modifier = Modifier.height(24.dp))
-//
-//        // 예산 퍼센트
-//        Text(
-//            buildAnnotatedString {
-//                append("예산의 ")
-//                withStyle(SpanStyle(PointColor)){
-//                    append("${progressPercent}%")
-//                }
-//                append("를 썼어요")
-//            },
-//            style = Typography.titleMedium
-//        )
-//
-//        Spacer(modifier = Modifier.height(48.dp))
-//
-//        // 상태바
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(40.dp)
-//                .background(color = Color.White, shape = RoundedCornerShape(16.dp))
-//                .padding(horizontal = 16.dp, vertical = 0.dp)
-//        ) {
-//            LinearProgressIndicator(
-//                progress = { progressPercent / 100f },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(8.dp)
-//                    .clip(RoundedCornerShape(4.dp)),
-//                color = Color(0xFF3182F6),
-//                trackColor = Color.LightGray,
-//            )
-//
-//            // 퍼센트 텍스트 위에 띄우기
-//            Text(
-//                text = "$progressPercent",
-//                color = Color.White,
-//                modifier = Modifier
-//                    .align(Alignment.TopCenter)
-//                    .background(Color(0xFF3182F6), shape = RoundedCornerShape(8.dp))
-//                    .padding(horizontal = 8.dp, vertical = 4.dp),
-//                style = Typography.titleSmall
-//            )
-//        }
-//
-//    }
-
-    val totalExpense = 542560
-    val budget = 1000000
-
-    val percentage = totalExpense.toFloat() / budget.toFloat()
+    val percentage = totalExpense.toFloat() / totalBudget.toFloat()
     val percentText = "${(percentage * 100).toInt()}%"
 
-    // TODO : 퍼센트 따라가도록 수정
+    // TODO : 100% 넘으면 빨간색으로!!
 
     Column(
         modifier = Modifier
@@ -88,7 +37,7 @@ fun BudgetProgressSection(
             buildAnnotatedString {
                 append("예산의 ")
                 withStyle(SpanStyle(PointColor)) {
-                    append("${progressPercent}%")
+                    append((percentText))
                 }
                 append("를 썼어요")
             },
