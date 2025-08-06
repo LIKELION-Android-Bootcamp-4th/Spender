@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.spender.core.ui.LoadingScreen
 import com.example.spender.feature.report.ui.component.EmptyReport
 import com.example.spender.feature.report.ui.component.ReportContent
 import com.example.spender.feature.report.ui.component.ReportTopAppBar
@@ -52,23 +53,26 @@ fun ReportListScreen(
             })
         },
         content = { padding ->
-            if (reports.isEmpty()) {
-                EmptyReport(padding)
-            } else {
-                ReportContent(
-                    reports = reports,
-                    barValues = barValues,
-                    barLabels = barLabels,
-                    selectedIndex = selectedIndex,
-                    onBarClick = { index ->
-                        selectedIndex = index
-                    },
-                    listState = listState,
-                    navHostController = navHostController,
-                    paddingValues = padding
-                )
-            }
+            when{
+                viewModel.isLoading.value -> LoadingScreen()
 
+                reports.isEmpty() -> EmptyReport(padding)
+
+                else -> {
+                    ReportContent(
+                        reports = reports,
+                        barValues = barValues,
+                        barLabels = barLabels,
+                        selectedIndex = selectedIndex,
+                        onBarClick = { index ->
+                            selectedIndex = index
+                        },
+                        listState = listState,
+                        navHostController = navHostController,
+                        paddingValues = padding
+                    )
+                }
+            }
         }
     )
 }
