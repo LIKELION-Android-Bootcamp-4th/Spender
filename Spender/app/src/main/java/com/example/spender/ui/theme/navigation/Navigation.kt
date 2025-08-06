@@ -55,9 +55,9 @@ fun SpenderNavigation(
         }
 
         composable(Screen.ReportDetail.route) { backStackEntry ->
-            val reportId = backStackEntry.arguments?.getString("reportId")?.toIntOrNull()
-            if (reportId != null) {
-                ReportDetailScreen(navController, reportId)
+            val month = backStackEntry.arguments?.getString("month")
+            if (month != null) {
+                ReportDetailScreen(navController, month)
             }
         }
 
