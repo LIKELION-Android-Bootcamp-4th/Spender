@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 
+
 class CategoryRepository {
     private val usersCollection = FirebaseFirestore.getInstance().collection("users")
 
@@ -21,7 +22,7 @@ class CategoryRepository {
                 onResult(categories)
             }
     }
-
+    
     fun addCategory(userId: String, categoryName: String, type: String, color: String?) {
         val newCategory = hashMapOf(
             "name" to categoryName,
