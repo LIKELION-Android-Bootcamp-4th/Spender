@@ -34,7 +34,6 @@ fun CategorySpendingSection(
         return
     }
 
-
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -74,7 +73,5 @@ fun CategorySpendingSection(
         Spacer(modifier = Modifier.height(24.dp))
 
         CategorySpendingList(categories)
-
-
     }
 }
