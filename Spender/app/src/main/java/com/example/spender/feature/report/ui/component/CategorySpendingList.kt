@@ -25,8 +25,10 @@ import com.example.spender.ui.theme.Typography
 @Composable
 fun CategorySpendingList(categories : List<CategoryUiModel>) {
 
+    val sortedCategories = categories.sortedByDescending { it.percentage }
+
     Column(modifier = Modifier.fillMaxWidth()) {
-        categories.forEach { category ->
+        sortedCategories.forEach { category ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
