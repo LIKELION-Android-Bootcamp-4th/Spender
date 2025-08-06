@@ -5,6 +5,7 @@ plugins {
 
     id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
 
