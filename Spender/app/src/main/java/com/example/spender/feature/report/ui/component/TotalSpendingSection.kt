@@ -14,9 +14,7 @@ import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
 @Composable
-fun TotalSpendingSection(
-    totalSpending: Int = 988_100 // 서버 연동 전까지 기본값
-) {
+fun TotalSpendingSection(totalExpense: Int) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -29,7 +27,7 @@ fun TotalSpendingSection(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "이번 달 총 지출 %,d원".format(totalSpending),
+            text = "이번 달 총 지출 %,d원".format(totalExpense),
             style = Typography.titleSmall
         )
     }

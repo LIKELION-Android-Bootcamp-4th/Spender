@@ -20,12 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.spender.ui.theme.LightSurface
 import com.example.spender.ui.theme.PointColor
+import com.example.spender.ui.theme.PointRedColor
 
 @Composable
 fun BudgetProgressBar(
     percentage: Float,
     percentText: String
 ) {
+    val highlightColor = if (percentage >= 1f) PointRedColor else PointColor
 
     Card(
         modifier = Modifier
@@ -51,7 +53,7 @@ fun BudgetProgressBar(
                         )
                         .zIndex(1f) // 말풍선이 위에 오도록
                 ) {
-                    BubbleWithText(percentText)
+                    BubbleWithText(percentText, backgroundColor = highlightColor)
                 }
 
                 // 프로그래스 바
@@ -74,7 +76,7 @@ fun BudgetProgressBar(
                             .fillMaxWidth(percentage.coerceIn(0f, 1f))
                             .height(16.dp)
                             .clip(RoundedCornerShape(100))
-                            .background(PointColor)
+                            .background(highlightColor)
                     )
                 }
             }

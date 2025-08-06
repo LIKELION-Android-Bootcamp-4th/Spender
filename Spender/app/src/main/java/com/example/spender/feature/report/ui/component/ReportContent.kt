@@ -84,9 +84,7 @@ fun ReportContent(
                     report = report,
                     onClick = {
                         navHostController.navigate(
-                            Screen.ReportDetail.createRoute(
-                                report.month
-                            )
+                            Screen.ReportDetail.createRoute(report.month)
                         )
                     },
                     isHighlighted = isHighlighted

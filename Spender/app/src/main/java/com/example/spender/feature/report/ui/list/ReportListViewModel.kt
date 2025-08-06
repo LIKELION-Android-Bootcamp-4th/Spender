@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.spender.feature.report.converter.ReportConverter
+import com.example.spender.feature.report.mapper.ReportMapper
 import com.example.spender.feature.report.domain.model.Report
 import com.example.spender.feature.report.domain.repository.ReportRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -47,7 +47,7 @@ class ReportListViewModel @Inject constructor(
             year = year,
             onSuccess = { dtos ->
                 _reportList.value = dtos.mapIndexed { index, dto ->
-                    ReportConverter.fromDto(dto, index)
+                    ReportMapper.fromListDto(dto, index)
                 }
                 _isLoading.value = false
                 _currentYear.value = year

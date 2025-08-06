@@ -9,23 +9,30 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
+import com.example.spender.feature.report.ui.model.CategoryUiModel
 import com.example.spender.ui.theme.Typography
 
 @Composable
-fun CategorySpendingSection(){
-    val labels = listOf("식비", "자녀/육아", "교통", "교육/학습")
-    val values = listOf(61f, 21f, 14f, 3f)
-    val colors = listOf(
-        "#18C1AC".toColorInt(), // 식비
-        "#2E9AFE".toColorInt(), // 자녀/육아
-        "#6378EC".toColorInt(), // 교통
-        "#9B59B6".toColorInt()  // 교육/학습
-    )
+fun CategorySpendingSection(
+    categories : List<CategoryUiModel>
+){
+    val labels = categories.map { it.label }
+    val values = categories.map { it.percentage }
+    val colors = categories.map { it.color.toArgb() }
+
+    val maxCategory = categories.maxByOrNull { it.percentage }
+
+    if (categories.isEmpty()) {
+        Text("표시할 카테고리 지출 정보가 없습니다.")
+        return
+    }
 
     Column (
         modifier = Modifier
@@ -44,12 +51,15 @@ fun CategorySpendingSection(){
         Text(
             buildAnnotatedString {
                 append("이번달 가장 돈을 많이 쓴 카테고리는\n")
-                withStyle(SpanStyle(Color(0xFFFECD43))){
-                    append("식품")
+//                withStyle(SpanStyle(Color(0xFFFECD43))){
+                withStyle(SpanStyle(color = maxCategory?.color ?: Color(0xFFFECD43),
+                    fontSize = 18.sp)){
+                    append(maxCategory?.label ?: "기타")
                 }
                 append("이에요")
             },
-            style = Typography.titleSmall
+            style = Typography.titleSmall,
+            fontSize = 17.sp
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -62,8 +72,6 @@ fun CategorySpendingSection(){
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        CategorySpendingList()
-
-
+        CategorySpendingList(categories)
     }
 }
