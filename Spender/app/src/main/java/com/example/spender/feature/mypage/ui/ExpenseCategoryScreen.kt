@@ -66,20 +66,6 @@ fun ExpenseCategoryScreen(
         viewModel.loadCategories("EXPENSE")
     }
 
-//    val categoryColors = listOf(
-//        Color(0xFFF44336), Color(0xFFE91E63), Color(0xFF9C27B0), Color(0xFF673AB7),
-//        Color(0xFF3F51B5), Color(0xFF2196F3), Color(0xFF00BCD4), Color(0xFF009688),
-//        Color(0xFF4CAF50), Color(0xFF8BC34A)
-//    )
-//    // 임시 데이터
-//    val categories = remember {
-//        mutableStateListOf(
-//            Category("취미/여가", categoryColors[0]),
-//            Category("식비", categoryColors[1]),
-//            Category("교통", categoryColors[2]),
-//        )
-//    }
-
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var currentCategory by remember { mutableStateOf<Category?>(null) }
