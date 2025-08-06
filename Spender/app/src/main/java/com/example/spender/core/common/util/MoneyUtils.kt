@@ -5,7 +5,7 @@ fun Int.toCurrency(): String {
 }
 
 fun formatToManWon(amount: Int): String {
-    val man = amount.toDouble() / 10_000
+    val man = amount / 10_000
 
 //    return if (amount % 10_000 == 0) {
 //        "${man.toInt()}만원"

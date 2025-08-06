@@ -22,7 +22,7 @@ import com.example.spender.R
 import com.example.spender.ui.theme.Typography
 
 @Composable
-fun FeedbackSection(){
+fun FeedbackSection(feedback: String){
     Column {
         Spacer(modifier = Modifier.height(48.dp))
 
@@ -35,7 +35,7 @@ fun FeedbackSection(){
 
         // TODO : 말풍선 형식으로 (예산 보다 아꼈으면 웃는 지출이 / 더 쓰면 화난 지출이)
         FeedbackBox(
-            text = "이번 달은 외식비가 많았어요.\n다음 달에는 줄여볼까요?",
+            feedback = feedback,
             imageResId = R.drawable.spender_happy
         )
 
@@ -45,7 +45,7 @@ fun FeedbackSection(){
 
 @Composable
 fun FeedbackBox(
-    text: String,
+    feedback: String,
     imageResId: Int,
     modifier: Modifier = Modifier
 ) {
@@ -66,7 +66,7 @@ fun FeedbackBox(
     ) {
         // 피드백
         Text(
-            text = text,
+            text = feedback,
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 8.dp),
