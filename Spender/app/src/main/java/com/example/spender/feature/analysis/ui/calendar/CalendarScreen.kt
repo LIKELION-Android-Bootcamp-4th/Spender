@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.spender.core.data.service.getDailyList
 import com.example.spender.ui.theme.PointColor
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -67,11 +68,21 @@ fun CalendarScreen(navHostController: NavHostController) {
             }, selectionState, year, month)
             Spacer(Modifier.height(10.dp))
             if (selectionState == listOf(0, 0, 0)) {
-                SpendListByDate(viewModel.nowMonth, viewModel.nowDay, viewModel.now.get(Calendar.DAY_OF_WEEK) - 1)
+                SpendListByDate(
+                    viewModel.nowMonth,
+                    viewModel.nowDay,
+                    (viewModel.now.get(Calendar.DAY_OF_WEEK) + viewModel.now.get(Calendar.DATE) + 2) % 7,
+                    viewModel.getExpenseListByDate()
+                )
             } else {
                 calendar.set(Calendar.YEAR, selectionState[0])
                 calendar.set(Calendar.MONTH, selectionState[1])
-                SpendListByDate(selectionState[1], selectionState[2], (calendar.get(Calendar.DAY_OF_WEEK) + selectionState[2] - 2) % 7)
+                SpendListByDate(
+                    selectionState[1],
+                    selectionState[2],
+                    (calendar.get(Calendar.DAY_OF_WEEK) + selectionState[2] + 1) % 7,
+                    viewModel.getExpenseListByDate()
+                )
             }
         }
 
@@ -137,9 +148,4 @@ fun CalendarScreen(navHostController: NavHostController) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CalendarPreview() {
 }

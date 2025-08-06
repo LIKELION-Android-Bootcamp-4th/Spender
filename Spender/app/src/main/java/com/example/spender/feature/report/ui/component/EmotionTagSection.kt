@@ -1,4 +1,4 @@
-package com.example.spender.feature.report.ui.detail.component
+package com.example.spender.feature.report.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,7 +26,7 @@ fun EmotionTagSection(){
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 36.dp)
+            .padding(top = 48.dp)
     ){
 
         Text(

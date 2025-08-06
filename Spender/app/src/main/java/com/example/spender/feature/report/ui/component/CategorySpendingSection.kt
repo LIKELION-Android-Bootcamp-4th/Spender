@@ -1,4 +1,4 @@
-package com.example.spender.feature.report.ui.detail.component
+package com.example.spender.feature.report.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

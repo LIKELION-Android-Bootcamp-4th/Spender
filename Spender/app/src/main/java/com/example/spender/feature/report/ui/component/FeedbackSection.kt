@@ -1,4 +1,4 @@
-package com.example.spender.feature.report.ui.detail.component
+package com.example.spender.feature.report.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +24,7 @@ import com.example.spender.ui.theme.Typography
 @Composable
 fun FeedbackSection(){
     Column {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(48.dp))
 
         Text(
             "지출이의 의견",
@@ -34,9 +33,10 @@ fun FeedbackSection(){
 
         Spacer(modifier = Modifier.height(12.dp))
 
+        // TODO : 말풍선 형식으로 (예산 보다 아꼈으면 웃는 지출이 / 더 쓰면 화난 지출이)
         FeedbackBox(
             text = "이번 달은 외식비가 많았어요.\n다음 달에는 줄여볼까요?",
-            imageResId = R.drawable.spender
+            imageResId = R.drawable.spender_happy
         )
 
         Spacer(modifier = Modifier.height(24.dp))
