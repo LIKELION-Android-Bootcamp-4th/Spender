@@ -6,10 +6,12 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -23,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -46,26 +49,82 @@ fun BottomNavigationBar(navHostController: NavHostController) {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    NavigationBar (
+//    NavigationBar (
+//        containerColor = MaterialTheme.colorScheme.surface,
+//
+//    ){
+//        screens.forEach { screen ->
+//            val isSelected = currentDestination?.route == screen.route
+//
+//            NavigationBarItem(
+//                icon = { Icon(screen.icon, contentDescription = null) },
+//                label = { Text(text = stringResource(screen.title), color = if (isSelected) DarkPointColor else Color.Gray) },
+//                selected = isSelected,
+//                onClick = { navHostController.navigate(screen.route) },
+//                colors = NavigationBarItemDefaults.colors(
+//                    selectedIconColor = DarkPointColor,
+//                    selectedTextColor = DarkPointColor,
+//                    unselectedIconColor = LightPointColor,
+//                    unselectedTextColor = LightPointColor,
+//                    indicatorColor = Color.Transparent
+//                )
+//            )
+//        }
+//    }
+    BottomAppBar(
         containerColor = MaterialTheme.colorScheme.surface,
-
-    ){
-        screens.forEach { screen ->
-            val isSelected = currentDestination?.route == screen.route
-
-            NavigationBarItem(
-                icon = { Icon(screen.icon, contentDescription = null) },
-                label = { Text(text = stringResource(screen.title), color = if (isSelected) DarkPointColor else Color.Gray) },
-                selected = isSelected,
-                onClick = { navHostController.navigate(screen.route) },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = DarkPointColor,
-                    selectedTextColor = DarkPointColor,
-                    unselectedIconColor = LightPointColor,
-                    unselectedTextColor = LightPointColor,
-                    indicatorColor = Color.Transparent
+        tonalElevation = 5.dp,
+        actions = {
+            screens.take(2).forEach { screen ->
+                val isSelected = currentDestination?.route == screen.route
+                BottomAppBarItem(
+                    icon = screen.icon,
+                    label = stringResource(screen.title),
+                    selected = isSelected,
+                    onClick = { navHostController.navigate(screen.route) }
                 )
-            )
+            }
+            Spacer(modifier = Modifier.weight(1f)) // FAB 공간 확보
+            screens.takeLast(2).forEach { screen ->
+                val isSelected = currentDestination?.route == screen.route
+                BottomAppBarItem(
+                    icon = screen.icon,
+                    label = stringResource(screen.title),
+                    selected = isSelected,
+                    onClick = { navHostController.navigate(screen.route) }
+                )
+            }
         }
+    )
+}
+
+@Composable
+fun RowScope.BottomAppBarItem(
+    icon: ImageVector,
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .weight(1f)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = onClick
+            )
+            .padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = if (selected) DarkPointColor else LightPointColor
+        )
+        Text(
+            text = label,
+            color = if (selected) DarkPointColor else LightFontColor,
+            style = MaterialTheme.typography.labelSmall
+        )
     }
 }

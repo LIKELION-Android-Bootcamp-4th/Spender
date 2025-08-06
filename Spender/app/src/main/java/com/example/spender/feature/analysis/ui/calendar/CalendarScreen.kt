@@ -1,7 +1,6 @@
 package com.example.spender.feature.analysis.ui.calendar
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,11 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.spender.core.data.service.getDailyList
 import com.example.spender.ui.theme.PointColor
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -39,9 +36,7 @@ import java.util.Locale
 @Composable
 fun CalendarScreen(navHostController: NavHostController) {
     val context = LocalContext.current
-    val viewModel: CalendarViewModel = viewModel(
-        factory = CalendarViewModelFactory(context.applicationContext as Application)
-    )
+    val viewModel: CalendarViewModel = hiltViewModel()
 
     val calendarData by viewModel.calendarItem.collectAsState()
     val selectionState by viewModel.selectionState.collectAsState()
