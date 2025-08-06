@@ -1,4 +1,4 @@
-package com.example.spender.feature.auth.ui
+package com.example.spender.feature.auth.ui.viewmodel
 
 import android.util.Log
 import androidx.activity.result.ActivityResult
@@ -40,5 +40,4 @@ class AuthViewModel : ViewModel() {
             Log.d("Login", "Google SignIn failed! ${e.message}")
         }
     }
-
 }

@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -32,6 +31,7 @@ import com.example.spender.R
 import com.example.spender.core.data.remote.auth.LoginType
 import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.core.data.service.login
+import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 import com.example.spender.ui.theme.navigation.Screen
