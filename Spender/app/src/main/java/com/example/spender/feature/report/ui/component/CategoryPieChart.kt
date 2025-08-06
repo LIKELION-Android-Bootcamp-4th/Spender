@@ -33,7 +33,7 @@ fun CategoryPieChart(
             legend.isEnabled = false
         }
     }, update = { chart ->
-        val maxIndex = values.indices.maxBy { values[it] }
+        val maxIndex = values.indices.maxByOrNull { values[it] } ?: -1
 
         val entries = values.mapIndexed { index, value ->
             if (index == maxIndex) {
@@ -66,7 +66,14 @@ fun CategoryPieChart(
         chart.data = data
         chart.invalidate()
         chart.setEntryLabelTypeface(Typeface.DEFAULT_BOLD)
-        val highlight = Highlight(maxIndex.toFloat(), values[maxIndex], 0)
-        chart.highlightValues(arrayOf(highlight))
+
+        if (maxIndex != -1) {
+            val highlight = Highlight(maxIndex.toFloat(), values[maxIndex], 0)
+            chart.highlightValues(arrayOf(highlight))
+        }
+
+
+//        val highlight = Highlight(maxIndex.toFloat(), values[maxIndex], 0)
+//        chart.highlightValues(arrayOf(highlight))
     })
 }
