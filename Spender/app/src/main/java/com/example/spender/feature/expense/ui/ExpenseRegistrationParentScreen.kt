@@ -39,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
@@ -46,6 +48,7 @@ import com.example.spender.ui.theme.Typography
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseRegistrationParentScreen(
+    navHostController: NavHostController,
     viewModel: RegistrationViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -53,20 +56,16 @@ fun ExpenseRegistrationParentScreen(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("지출 등록", style = Typography.titleMedium) },
-                navigationIcon = {
-                    IconButton(onClick = { /* 뒤로가기 */ }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
+            CustomTopAppBar(
+                title = "지출 등록",
+                navHostController,
+                showBackButton = true
             )
         },
         bottomBar = {
-            if (uiState.selectedTabIndex != 0) {
+            if (uiState.selectedTabIndex == 1 || uiState.selectedTabIndex == 2) {
                 Button(
-                    onClick = { viewModel.register() },
+                    onClick = { viewModel.registerExpense() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
