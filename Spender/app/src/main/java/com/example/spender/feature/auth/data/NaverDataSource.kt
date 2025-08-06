@@ -1,7 +1,6 @@
 package com.example.spender.feature.auth.data
 
 import android.content.Context
-import android.util.Log
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import kotlinx.coroutines.suspendCancellableCoroutine

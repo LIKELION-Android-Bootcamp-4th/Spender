@@ -1,16 +1,12 @@
 package com.example.spender.feature.auth.data
 
 import com.google.firebase.Firebase
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.functions.functions
 
 class FirebaseAuthDataSource {
     private val auth = Firebase.auth
     private val functions = Firebase.functions
-
-    fun signInWithGoogleCredential(idToken: String) =
-        auth.signInWithCredential(GoogleAuthProvider.getCredential(idToken, null))
 
     fun signInWithCustomToken(token: String) =
         auth.signInWithCustomToken(token)
