@@ -5,16 +5,14 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import com.example.spender.R
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -29,8 +27,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.feature.mypage.ui.component.CategoryDeleteDialog
@@ -51,15 +51,17 @@ import com.example.spender.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IncomeCategoryScreen(navHostController: NavHostController) {
-    //임시 데이터
-    val categories = remember {
-        mutableStateListOf(
-            Category("급여"),
-            Category("이자"),
-            Category("기타"),
-        )
+fun IncomeCategoryScreen(
+    navHostController: NavHostController,
+    viewModel: CategoryViewModel = hiltViewModel()
+) {
+
+    val categories by viewModel.categories.collectAsState()
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.loadCategories("INCOME")
     }
+
     var showEditDialog by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var currentCategory by remember { mutableStateOf<Category?>(null) }
@@ -92,7 +94,7 @@ fun IncomeCategoryScreen(navHostController: NavHostController) {
         },
         content = { padding ->
             LazyColumn(modifier = Modifier.padding(padding)) {
-                itemsIndexed(categories) { index, category ->
+                items(categories, key = { it.id }) { category ->
                     IncomeCategoryRow(
                         category = category,
                         onEditClick = {
@@ -116,12 +118,9 @@ fun IncomeCategoryScreen(navHostController: NavHostController) {
                     onDismiss = { showEditDialog = false },
                     onConfirm = { newName ->
                         if (isEditing) {
-                            val index = categories.indexOf(currentCategory)
-                            if (index != -1) {
-                                categories[index] = categories[index].copy(name = newName)
-                            }
+                            currentCategory?.let { viewModel.updateCategory(it.id, newName) }
                         } else {
-                            categories.add(Category(newName))
+                            viewModel.addCategory(newName, "INCOME")
                         }
                         showEditDialog = false
                     }
@@ -132,7 +131,7 @@ fun IncomeCategoryScreen(navHostController: NavHostController) {
                     category = currentCategory,
                     onDismiss = { showDeleteDialog = false },
                     onConfirm = {
-                        categories.remove(currentCategory)
+                        currentCategory?.let { viewModel.deleteCategory(it.id) }
                         showDeleteDialog = false
                     }
                 )
