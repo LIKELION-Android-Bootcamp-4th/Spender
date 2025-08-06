@@ -1,6 +1,5 @@
 package com.example.spender.feature.analysis.ui.graph
 
-import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,9 +37,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.spender.feature.analysis.domain.model.SpendListItemData
 import com.example.spender.feature.analysis.ui.SpendListItemComponent
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
@@ -53,9 +51,7 @@ import java.util.Locale
 @Composable
 fun GraphScreen(navHostController: NavHostController) {
     val context = LocalContext.current
-    val viewModel: GraphViewModel = viewModel(
-        factory = GraphViewModelFactory(context.applicationContext as Application)
-    )
+    val viewModel: GraphViewModel = hiltViewModel()
 
     val graphData by viewModel.graphData.collectAsState()
     val dateData by viewModel.dateData.collectAsState()
