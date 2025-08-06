@@ -1,22 +1,25 @@
 package com.example.spender.feature.analysis.ui.graph
 
-import android.app.Application
 import android.icu.util.Calendar
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spender.core.data.remote.expense.ExpenseDto
-import com.example.spender.core.data.service.getDailyTotalList
-import com.example.spender.core.data.service.getMaxExpense
 import com.example.spender.feature.analysis.domain.model.CalendarItemData
+import com.example.spender.feature.analysis.domain.repository.GraphRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 
-class GraphViewModel(application: Application): AndroidViewModel(application) {
-    val _graphData = MutableStateFlow<List<CalendarItemData>>(emptyList())
+@HiltViewModel
+class GraphViewModel @Inject constructor(
+    private val repository: GraphRepository
+): ViewModel() {
+    private val _graphData = MutableStateFlow<List<CalendarItemData>>(emptyList())
     val graphData: StateFlow<List<CalendarItemData>> = _graphData.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1500),
@@ -34,7 +37,7 @@ class GraphViewModel(application: Application): AndroidViewModel(application) {
     var year = now.get(Calendar.YEAR)
     var month = now.get(Calendar.MONTH)
 
-    val _dateData = MutableStateFlow(listOf(year, month+1))
+    private val _dateData = MutableStateFlow(listOf(year, month+1))
     val dateData: StateFlow<List<Int>> = _dateData.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1500),
@@ -80,11 +83,11 @@ class GraphViewModel(application: Application): AndroidViewModel(application) {
     }
 
     fun getMaxExpense(): ExpenseDto? {
-        return getMaxExpense(year, month)
+        return repository.getMaxExpense(year, month)
     }
 
-    fun getDailyExpense() {
-        val rawData = getDailyTotalList(year, month)
+    private fun getDailyExpense() {
+        val rawData = repository.getDailyTotalList(year, month)
         val dataList = mutableListOf<CalendarItemData>()
 
         for (doc in rawData) {

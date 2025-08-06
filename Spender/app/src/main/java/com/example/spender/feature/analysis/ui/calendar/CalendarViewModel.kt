@@ -1,24 +1,27 @@
 package com.example.spender.feature.analysis.ui.calendar
 
-import android.app.Application
 import android.icu.util.Calendar
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spender.core.data.remote.expense.ExpenseDto
-import com.example.spender.core.data.service.getDailyList
-import com.example.spender.core.data.service.getExpenseList
-import com.example.spender.core.data.service.getIncomeList
 import com.example.spender.feature.analysis.domain.model.CalendarItemData
+import com.example.spender.feature.analysis.domain.repository.CalendarRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlin.math.exp
 
-class CalendarViewModel(application: Application): AndroidViewModel(application) {
+@HiltViewModel
+class CalendarViewModel @Inject constructor(
+    private val repository: CalendarRepository
+): ViewModel(
+
+) {
     val _calendarItem = MutableStateFlow<List<CalendarItemData>>(emptyList())
     val calendarItem: StateFlow<List<CalendarItemData>> = _calendarItem.stateIn(
         scope = viewModelScope,
@@ -33,7 +36,7 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
     val nowMonth = now.get(Calendar.MONTH)
     val nowDay = now.get(Calendar.DATE)
 
-    private val _selectionState = MutableStateFlow<List<Int>>(listOf(0, 0, 0))
+    private val _selectionState = MutableStateFlow(listOf(0, 0, 0))
     val selectionState: StateFlow<List<Int>> = _selectionState.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -73,15 +76,15 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
             calendarData.add(CalendarItemData(0, 0, false, false))
         }
 
-        val expenseList = getExpenseList(year.value, month.value+1)
-        val incomeList = getIncomeList(year.value, month.value+1)
+        val expenseList = repository.getExpenseList(year.value, month.value+1)
+        val incomeList = repository.getIncomeList(year.value, month.value+1)
 
         for (i in 1 .. now.getActualMaximum(Calendar.DAY_OF_MONTH)) {
             var data = CalendarItemData(i, 0, false, false)
             if (expenseList.isNotEmpty() && expenseList[0].date.toDate().date == i) {
                 data = data.copy(expense = data.expense - expenseList[0].amount)
             }
-            if (incomeList.isNotEmpty() && expenseList[0].date.toDate().day == i) {
+            if (incomeList.isNotEmpty() && expenseList[0].date.toDate().date == i) {
                 data = data.copy(expense = data.expense + incomeList[0].amount)
             }
             if (i == nowDay && year.value == nowYear && month.value == nowMonth) {
@@ -145,7 +148,7 @@ class CalendarViewModel(application: Application): AndroidViewModel(application)
 
     fun getExpenseListByDate(): MutableList<ExpenseDto> {
         return if (selectionState.value[2] == 0) {
-            getDailyList(year.value, month.value+1, nowDay)
-        } else getDailyList(year.value, month.value+1, selectionState.value[2])
+            repository.getDailyList(year.value, month.value+1, nowDay)
+        } else repository.getDailyList(year.value, month.value+1, selectionState.value[2])
     }
 }
