@@ -1,5 +1,7 @@
 package com.example.spender.feature.report.mapper
 
+import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.toColorInt
 import com.example.spender.core.data.remote.report.ReportDetailDto
 import com.example.spender.core.data.remote.report.ReportListDto
 import com.example.spender.feature.report.domain.model.CategoryTotal
@@ -17,14 +19,19 @@ object ReportMapper {
         )
     }
 
-    fun fromDetailDto(dto: ReportDetailDto) : ReportDetail{
+    fun fromDetailDto(dto: ReportDetailDto): ReportDetail {
         return ReportDetail(
             month = dto.month,
             totalExpense = dto.totalExpense,
             totalBudget = dto.totalBudget,
             feedback = dto.feedback,
-            byCategory = dto.byCategory.map{
-                CategoryTotal(it.categoryId, it.totalPrice)
+            byCategory = dto.byCategory.map {
+                CategoryTotal(
+                    categoryId = it.categoryId,
+                    categoryName = it.categoryName,
+                    totalPrice = it.totalPrice,
+                    color = Color(it.colorHex.toColorInt())
+                )
             },
             byEmotion = dto.byEmotion.map {
                 EmotionTotal(it.emotionId, it.amount)

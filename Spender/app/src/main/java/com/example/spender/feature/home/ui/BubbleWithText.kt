@@ -1,7 +1,9 @@
 package com.example.spender.feature.home.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Icon
@@ -14,12 +16,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.R
+import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
 @Composable
 fun BubbleWithText(
     percentText: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = PointColor
 ) {
     Box(
         modifier = modifier
@@ -29,7 +33,8 @@ fun BubbleWithText(
         Icon(
             painter = painterResource(id = R.drawable.messagebubble),
             contentDescription = null,
-            tint = Color.Unspecified,
+//            tint = Color.Unspecified,
+            tint = backgroundColor,
             modifier = Modifier.fillMaxSize()
         )
         Text(

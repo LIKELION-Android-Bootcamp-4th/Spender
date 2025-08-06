@@ -33,10 +33,7 @@ fun ReportDetailScreen(
 
     LaunchedEffect (month){
         viewModel.loadReportDetail(month)
-        Log.d("EmotionDebug", report.byEmotion.toString())
     }
-
-    Log.d("리포트 감정 체크", "byEmotion = ${report.byEmotion}")
 
     Scaffold(
         topBar = {
@@ -65,7 +62,7 @@ fun ReportDetailScreen(
 
                 // 카테고리별 지출
                 item {
-                    CategorySpendingSection()
+                    CategorySpendingSection(report.byCategory.toUiModel())
                 }
 
                 // 감정 태그 비율

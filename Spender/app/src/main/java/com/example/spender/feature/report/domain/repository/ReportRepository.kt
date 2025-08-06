@@ -68,7 +68,6 @@ class ReportRepository @Inject constructor(
         val uid = auth.currentUser?.uid
 
         if(uid == null){
-            Log.d("ReportRepo", "UID가 널!!!!!")
             onError(IllegalStateException("User not logged in"))
             return
         }
@@ -82,22 +81,21 @@ class ReportRepository @Inject constructor(
                 try {
                     val data = result.data ?: return@addOnSuccessListener onError(Exception("No data found"))
 
-                    val rawByEmotion = data["by_emotion"]
-                    Log.d("FirestoreCheck", "rawByEmotion = $rawByEmotion")
-
                     val byCategory = (data["byCategory"] as? List<Map<String, Any>>)?.mapNotNull {
                         val id = it["categoryId"] as? String ?: return@mapNotNull null
+                        val name = it["categoryName"] as? String ?: return@mapNotNull null
                         val price = (it["totalPrice"] as? Long)?.toInt() ?: 0
-                        CategoryTotalDto(id, price)
+                        val color = it["color"] as? String ?: return@mapNotNull null
+                        CategoryTotalDto(id, name, price, color)
                     }?.toList() ?: emptyList()
+
+                    Log.d("카테고리", byCategory.toString())
 
                     val byEmotion = (data["byEmotion"] as? List<Map<String, Any>>)?.mapNotNull {
                         val id = it["emotionId"] as? String ?: return@mapNotNull null
                         val amt = (it["amount"] as? Long)?.toInt() ?: 0
                         EmotionTotalDto(id, amt)
                     }?.toList() ?: emptyList()
-
-
 
                     val dto = ReportDetailDto(
                         month = result.id,
@@ -107,8 +105,6 @@ class ReportRepository @Inject constructor(
                         byCategory = byCategory,
                         byEmotion = byEmotion,
                     )
-                    Log.d("리포트 감정 체크", "repo :  ${dto.byEmotion}")
-
 
                     onSuccess(dto)
                 } catch (e: Exception) {

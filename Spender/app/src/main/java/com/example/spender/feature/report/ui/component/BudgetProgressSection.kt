@@ -14,6 +14,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.spender.feature.home.ui.BudgetProgressBar
 import com.example.spender.ui.theme.PointColor
+import com.example.spender.ui.theme.PointRedColor
 import com.example.spender.ui.theme.Typography
 
 @Composable
@@ -23,6 +24,7 @@ fun BudgetProgressSection(
 ) {
     val percentage = totalExpense.toFloat() / totalBudget.toFloat()
     val percentText = "${(percentage * 100).toInt()}%"
+    val highlightColor = if (percentage >= 1f) PointRedColor else PointColor
 
     // TODO : 100% 넘으면 빨간색으로!!
 
@@ -36,7 +38,7 @@ fun BudgetProgressSection(
         Text(
             buildAnnotatedString {
                 append("예산의 ")
-                withStyle(SpanStyle(PointColor)) {
+                withStyle(SpanStyle(highlightColor)) {
                     append((percentText))
                 }
                 append("를 썼어요")

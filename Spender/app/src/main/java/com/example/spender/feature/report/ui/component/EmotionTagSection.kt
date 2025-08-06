@@ -21,10 +21,7 @@ fun EmotionTagSection(
 ){
     val labels = emotions.map { it.label }
     val values = emotions.map { it.percentage }
-    var colors = emotions.map { it.color.toArgb() }
-
-    Log.d("EmotionBarChart", "labels=$labels, values=$values, colors=$colors")
-
+    val colors = emotions.map { it.color.toArgb() }
 
     Column(
         modifier = Modifier
