@@ -44,6 +44,7 @@ import com.example.spender.ui.theme.SpenderTheme
 import com.example.spender.ui.theme.navigation.BottomNavigationItem
 import com.example.spender.ui.theme.navigation.Screen
 import com.example.spender.ui.theme.navigation.SpenderNavigation
+import com.navercorp.nid.NaverIdLoginSDK
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -51,6 +52,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        NaverIdLoginSDK.initialize(
+            context = this,
+            clientId = "btOnE17uFYFcVX7H36Tm",
+            clientSecret = "lVwABQpwoF",
+            clientName = "Spender"
+        )
+
         setContent {
             SpenderTheme(
                 darkTheme = false,
@@ -60,13 +69,13 @@ class MainActivity : ComponentActivity() {
 
                 val isOnboardingShown = OnboardingPref.wasShown(this)
                 // 로그인 화면으로 가려면 아래 주석 해제하고
-                //val startDestination = Screen.AuthScreen.route
+                val startDestination = Screen.AuthScreen.route
                 //이거 아래부분 주석처리 하면 됨
-                val startDestination = if (isOnboardingShown) {
-                    Screen.MainScreen.route
-                } else {
-                    Screen.OnboardingScreen.route
-                }
+//                val startDestination = if (isOnboardingShown) {
+//                    Screen.MainScreen.route
+//                } else {
+//                    Screen.OnboardingScreen.route
+//                }
                 SpenderNavigation(
                     navController = navController,
                     startDestination = startDestination
