@@ -1,8 +1,6 @@
 package com.example.spender
 
-import android.content.Context
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -23,12 +20,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -51,6 +46,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             SpenderTheme(
                 darkTheme = false,
@@ -60,13 +56,13 @@ class MainActivity : ComponentActivity() {
 
                 val isOnboardingShown = OnboardingPref.wasShown(this)
                 // 로그인 화면으로 가려면 아래 주석 해제하고
-//                val startDestination = Screen.AuthScreen.route
+                val startDestination = Screen.AuthScreen.route
                 //이거 아래부분 주석처리 하면 됨
-                val startDestination = if (isOnboardingShown) {
-                    Screen.MainScreen.route
-                } else {
-                    Screen.OnboardingScreen.route
-                }
+//                val startDestination = if (isOnboardingShown) {
+//                    Screen.MainScreen.route
+//                } else {
+//                    Screen.OnboardingScreen.route
+//                }
                 SpenderNavigation(
                     navController = navController,
                     startDestination = startDestination

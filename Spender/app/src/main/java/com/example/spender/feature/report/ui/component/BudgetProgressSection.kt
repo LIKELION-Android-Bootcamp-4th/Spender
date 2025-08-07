@@ -26,8 +26,6 @@ fun BudgetProgressSection(
     val percentText = "${(percentage * 100).toInt()}%"
     val highlightColor = if (percentage >= 1f) PointRedColor else PointColor
 
-    // TODO : 100% 넘으면 빨간색으로!!
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
