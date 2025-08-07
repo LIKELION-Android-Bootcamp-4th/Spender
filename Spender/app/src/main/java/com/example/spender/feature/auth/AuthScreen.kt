@@ -22,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.spender.R
 import com.example.spender.feature.auth.data.FirebaseAuthDataSource
+import com.example.spender.feature.auth.data.KakaoDataSource
 import com.example.spender.feature.auth.data.NaverDataSource
 import com.example.spender.feature.auth.domain.AuthRepository
 import com.example.spender.feature.auth.ui.GoogleLogin
@@ -40,11 +41,12 @@ fun AuthScreen(navController: NavHostController) {
     val authRepository = remember {
         AuthRepository(
             FirebaseAuthDataSource(),
-            NaverDataSource(context)
+            NaverDataSource(context),
+            KakaoDataSource(context)
         )
     }
 
-    val naverViewModel: SocialViewModel = viewModel(
+    val socialViewModel: SocialViewModel = viewModel(
         factory = SignViewModelFactory(application, authRepository)
     )
 
@@ -67,9 +69,9 @@ fun AuthScreen(navController: NavHostController) {
             Spacer(Modifier.height(224.dp))
             GoogleLogin(navController)
             Spacer(Modifier.height(24.dp))
-            NaverLogin(naverViewModel, navController)
+            NaverLogin(socialViewModel, navController)
             Spacer(Modifier.height(24.dp))
-            KakaoLogin()
+            KakaoLogin(socialViewModel, navController)
         }
     }
 }

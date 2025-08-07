@@ -19,7 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.spender.R
+import com.example.spender.feature.auth.ui.viewmodel.SocialViewModel
 import com.example.spender.ui.theme.BlackColor
 import com.example.spender.ui.theme.KakaoColor
 import com.example.spender.ui.theme.KakaoLabelColor
@@ -27,7 +30,10 @@ import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 
 @Composable
-fun KakaoLogin() {
+fun KakaoLogin(
+    viewModel: SocialViewModel,
+    navController: NavHostController
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -37,7 +43,7 @@ fun KakaoLogin() {
             containerColor = WhiteColor
         ),
         onClick = {
-            // TODO: 카카오 로그인 로직 추가
+            viewModel.kakaoLogin(navController)
         }
     ) {
         Row(
@@ -67,10 +73,4 @@ fun KakaoLogin() {
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun KakaoLoginPreview() {
-    KakaoLogin()
 }
