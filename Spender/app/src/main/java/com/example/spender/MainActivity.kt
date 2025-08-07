@@ -15,16 +15,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
@@ -35,11 +45,13 @@ import com.example.spender.core.ui.BottomNavigationBar
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.expense.ui.ExpenseRegistrationParentScreen
 import com.example.spender.feature.home.HomeScreen
+import com.example.spender.feature.income.ui.IncomeRegistrationScreen
 import com.example.spender.feature.mypage.MypageScreen
 import com.example.spender.feature.onboarding.data.OnboardingPref
 import com.example.spender.feature.report.ui.list.ReportListScreen
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.SpenderTheme
+import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.navigation.BottomNavigationItem
 import com.example.spender.ui.theme.navigation.Screen
 import com.example.spender.ui.theme.navigation.SpenderNavigation
@@ -70,7 +82,6 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = startDestination
                 )
-
             }
         }
     }
@@ -79,19 +90,67 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(rootNavHostController: NavHostController) {
     val bottomBarNavController = rememberNavController()
+    var isFabMenuExpanded by remember { mutableStateOf(false) }
     Scaffold(
-        floatingActionButton = { FloatingActionButton(
-            onClick = {rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)},
-            shape = RoundedCornerShape(72.dp),
-            containerColor = PointColor,
-            modifier = Modifier.offset(y = 50.dp).size(72.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add Expense",
-                tint = Color.White
-            )
-        } },
+        floatingActionButton = {
+            Box(
+                contentAlignment = Alignment.Center,
+            ) {
+                FloatingActionButton(
+//            onClick = {rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)},
+                    onClick = { isFabMenuExpanded = true },
+                    shape = RoundedCornerShape(72.dp),
+                    containerColor = PointColor,
+                    modifier = Modifier
+                        .offset(y = 50.dp)
+                        .size(72.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Expense",
+                        tint = Color.White
+                    )
+                }
+                DropdownMenu(
+                    expanded = isFabMenuExpanded,
+                    onDismissRequest = { isFabMenuExpanded = false },
+                    offset = DpOffset(x = (-20).dp, y = (45).dp),
+                    modifier = Modifier
+                        .background(PointColor)
+                ) {
+                    DropdownMenuItem(
+                        text = {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text("수입 등록", color = Color.White)
+                            }
+                        },
+                        onClick = {
+                            rootNavHostController.navigate(Screen.IncomeRegistrationScreen.route)
+                            isFabMenuExpanded = false
+                        }
+                    )
+                    HorizontalDivider(color = Color.White)
+                    DropdownMenuItem(
+                        text = {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text("지출 등록", color = Color.White)
+                            }
+                        },
+                        onClick = {
+                            rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)
+                            isFabMenuExpanded = false
+                        }
+                    )
+                }
+            }
+        },
+
         floatingActionButtonPosition = FabPosition.Center,
         bottomBar = {
             Box( // 상단 모서리 둥글게 처리

@@ -1,6 +1,7 @@
 package com.example.spender.di
 
 import com.example.spender.feature.expense.data.repository.ExpenseRepository
+import com.example.spender.feature.income.data.repository.IncomeRepository
 import com.example.spender.feature.mypage.data.repository.CategoryRepository
 import dagger.Module
 import dagger.Provides
@@ -22,5 +23,11 @@ object RepositoryModule {
     @Singleton
     fun provideCategoryRepository(): CategoryRepository {
         return CategoryRepository()
+    }
+
+    @Provides
+    @Singleton
+    fun provideIncomeRepository(): IncomeRepository {
+        return IncomeRepository()
     }
 }
