@@ -7,7 +7,7 @@ import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.feature.mypage.data.repository.CategoryRepository
 import com.example.spender.feature.mypage.domain.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 

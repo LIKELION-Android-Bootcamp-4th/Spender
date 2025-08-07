@@ -1,5 +1,6 @@
-package com.example.spender.feature.mypage.di
+package com.example.spender.di
 
+import com.example.spender.feature.expense.data.repository.ExpenseRepository
 import com.example.spender.feature.mypage.data.repository.CategoryRepository
 import dagger.Module
 import dagger.Provides
@@ -9,7 +10,13 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object CategoryModule {
+object RepositoryModule {
+
+    @Provides
+    @Singleton
+    fun provideExpenseRepository(): ExpenseRepository {
+        return ExpenseRepository()
+    }
 
     @Provides
     @Singleton
