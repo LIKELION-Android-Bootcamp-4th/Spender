@@ -16,9 +16,9 @@ class MyApplication: Application(){
 
         NaverIdLoginSDK.initialize(
             context = this,
-            clientId = "btOnE17uFYFcVX7H36Tm",
-            clientSecret = "lVwABQpwoF",
-            clientName = "Spender"
+            clientId = getString(R.string.naver_client_id),
+            clientSecret = getString(R.string.naver_client_secret),
+            clientName = getString(R.string.app_name)
         )
 
 //        var keyHash = Utility.getKeyHash(this)
