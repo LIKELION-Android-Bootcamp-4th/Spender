@@ -1,5 +1,6 @@
 package com.example.spender.feature.mypage
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,14 +28,37 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomDialog
+import com.example.spender.feature.auth.data.FirebaseAuthDataSource
+import com.example.spender.feature.auth.data.KakaoDataSource
+import com.example.spender.feature.auth.data.NaverDataSource
+import com.example.spender.feature.auth.domain.AuthRepository
+import com.example.spender.feature.auth.ui.viewmodel.SignViewModelFactory
+import com.example.spender.feature.auth.ui.viewmodel.SocialViewModel
 import com.example.spender.feature.mypage.ui.component.MyPageItemType
 import com.example.spender.feature.mypage.ui.component.Section
 
 @Composable
 fun MypageScreen(navHostController: NavHostController) {
+    val context = LocalContext.current
+    val application = context.applicationContext as Application
+
+    val firebaseAuthDataSource = remember { FirebaseAuthDataSource() }
+    val naverDataSource = remember { NaverDataSource(context) }
+    val kakaoDataSource = remember { KakaoDataSource(context) }
+
+    val authRepository = remember {
+        AuthRepository(firebaseAuthDataSource, naverDataSource, kakaoDataSource)
+    }
+
+    val viewModel: SocialViewModel = viewModel(
+        factory = SignViewModelFactory(application, authRepository)
+    )
+
     var showWithdrawDialog by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }
     val userName = "이름"
@@ -102,7 +126,12 @@ fun MypageScreen(navHostController: NavHostController) {
             title = "로그아웃 하시겠습니까?",
             onConfirm = {
                 showLogoutDialog = false
-                // TODO: 로그아웃 로직
+
+                viewModel.logout(context) {
+                    navHostController.navigate("auth") {
+                        popUpTo("main") { inclusive = true }
+                    }
+                }
             },
             onDismiss = {
                 showLogoutDialog = false

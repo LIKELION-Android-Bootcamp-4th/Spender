@@ -51,7 +51,7 @@ fun GoogleLogin(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        viewModel.googleLogin(result) {
+        viewModel.googleLogin(context, result) {
             Log.d("Login", "Google SignIn Success!")
             login(FirebaseAuth.getInstance().currentUser, LoginType.GOOGLE.type)
             Log.d("Login", getFirebaseAuth() ?: "failed")
