@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.ui.theme.NotoSansFamily
@@ -46,7 +46,7 @@ import com.example.spender.ui.theme.PointColor
 @Composable
 fun ExpenseRegistrationParentScreen(
     navHostController: NavHostController,
-    viewModel: RegistrationViewModel = viewModel()
+    viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -58,9 +58,9 @@ fun ExpenseRegistrationParentScreen(
                 is RegistrationEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
-                is RegistrationEvent.NavigateBack -> {
-                    navHostController.popBackStack()
-                }
+//                is RegistrationEvent.NavigateBack -> {
+//                    navHostController.popBackStack()
+//                }
             }
         }
     }

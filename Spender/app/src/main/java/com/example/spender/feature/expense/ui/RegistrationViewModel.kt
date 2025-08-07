@@ -22,7 +22,7 @@ import java.util.Date
 
 sealed class RegistrationEvent {
     data class ShowToast(val message: String) : RegistrationEvent()
-    data object NavigateBack : RegistrationEvent()
+//    data object NavigateBack : RegistrationEvent()
 }
 
 @HiltViewModel
@@ -115,6 +115,7 @@ class RegistrationViewModel @Inject constructor(
 
         val expenseDto = ExpenseDto(
             amount = currentState.amount.toLongOrNull() ?: 0L,
+            title = currentState.title,
             memo = currentState.memo,
             date = Timestamp(currentState.date),
             categoryId = currentState.categoryId,
@@ -125,7 +126,7 @@ class RegistrationViewModel @Inject constructor(
         if (isSuccess) {
             _eventFlow.emit(RegistrationEvent.ShowToast("저장되었습니다"))
             clearInputs()
-            _eventFlow.emit(RegistrationEvent.NavigateBack)
+//            _eventFlow.emit(RegistrationEvent.NavigateBack)
         } else {
             _eventFlow.emit(RegistrationEvent.ShowToast("저장에 실패했습니다."))
         }
