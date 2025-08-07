@@ -93,6 +93,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     implementation("com.navercorp.nid:oauth:5.10.0")
+    implementation ("com.kakao.sdk:v2-all:2.20.1")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
