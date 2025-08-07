@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.example.spender.MainScreen
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.auth.AuthScreen
+import com.example.spender.feature.expense.ui.ExpenseRegistrationParentScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.home.ui.NotificationListScreen
 import com.example.spender.feature.mypage.MypageScreen
@@ -75,6 +76,9 @@ fun SpenderNavigation(
         }
         composable(Screen.NotificationScreen.route) {
             NotificationScreen(navController)
+        }
+        composable(Screen.ExpenseRegistrationScreen.route) {
+            ExpenseRegistrationParentScreen(navController)
         }
 
 

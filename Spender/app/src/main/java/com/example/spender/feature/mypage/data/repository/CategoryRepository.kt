@@ -5,9 +5,10 @@ import com.example.spender.feature.mypage.domain.model.Category
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
+import javax.inject.Inject
 
 
-class CategoryRepository {
+class CategoryRepository @Inject constructor(){
     private val usersCollection = FirebaseFirestore.getInstance().collection("users")
 
     fun getCategories(userId: String, type: String, onResult: (List<Category>) -> Unit) {
