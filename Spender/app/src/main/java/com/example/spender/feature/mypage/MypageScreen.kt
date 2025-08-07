@@ -65,14 +65,19 @@ fun MypageScreen(navHostController: NavHostController) {
     val userName = "이름"
 
     val onItemClick: (MyPageItemType) -> Unit = { item ->
-        when(item){
+        when (item) {
             MyPageItemType.IncomeCategory -> navHostController.navigate("income_category")
             MyPageItemType.ExpenseCategory -> navHostController.navigate("expense_category")
             MyPageItemType.Budget -> navHostController.navigate("budget")
             MyPageItemType.RegularExpense -> navHostController.navigate("regular_expense")
             MyPageItemType.Notification -> navHostController.navigate("notification")
-            MyPageItemType.Withdraw -> { showWithdrawDialog = true }
-            MyPageItemType.Logout -> { showLogoutDialog = true }
+            MyPageItemType.Withdraw -> {
+                showWithdrawDialog = true
+            }
+
+            MyPageItemType.Logout -> {
+                showLogoutDialog = true
+            }
         }
     }
 
@@ -117,7 +122,20 @@ fun MypageScreen(navHostController: NavHostController) {
             title = "탈퇴하시겠습니까?",
             onConfirm = {
                 showWithdrawDialog = false
-                // TODO: 탈퇴 로직
+
+                viewModel.withdraw(
+                    context,
+                    onSuccess = {
+                        Toast.makeText(context, "탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.", Toast.LENGTH_SHORT)
+                            .show()
+                        navHostController.navigate("auth") {
+                            popUpTo("main") { inclusive = true }
+                        }
+                    },
+                    onError = { msg ->
+                        Toast.makeText(context, "회원탈퇴 실패 $msg", Toast.LENGTH_SHORT).show()
+                    }
+                )
             },
             onDismiss = {
                 showWithdrawDialog = false
@@ -153,7 +171,11 @@ fun UserInfoSection(userName: String) {
             .padding(vertical = 28.dp, horizontal = 28.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(Icons.Default.AccountCircle, contentDescription = null, modifier = Modifier.size(24.dp)) // TODO : 소셜 로그인에 맞는 이미지로 교체
+        Icon(
+            Icons.Default.AccountCircle,
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        ) // TODO : 소셜 로그인에 맞는 이미지로 교체
         Spacer(modifier = Modifier.width(16.dp))
         Text("$userName 님", style = MaterialTheme.typography.titleMedium)
     }
