@@ -76,4 +76,17 @@ class SocialViewModel(
         }
     }
 
+    fun withdraw(context: Context, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            try {
+                authRepository.withdrawUser(context)
+                onSuccess()
+            } catch (e: Exception) {
+                Log.e("Withdraw", "Unlink Failed", e)
+                onError(e.message ?: "error")
+            }
+        }
+    }
+
+
 }
