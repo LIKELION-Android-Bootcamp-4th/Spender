@@ -1,6 +1,7 @@
 package com.example.spender.feature.mypage
 
 import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -76,7 +77,9 @@ fun MypageScreen(navHostController: NavHostController) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(vertical = 14.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 14.dp)
     ) {
         UserInfoSection(userName = userName)
 
@@ -128,6 +131,7 @@ fun MypageScreen(navHostController: NavHostController) {
                 showLogoutDialog = false
 
                 viewModel.logout(context) {
+                    Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
                     navHostController.navigate("auth") {
                         popUpTo("main") { inclusive = true }
                     }
