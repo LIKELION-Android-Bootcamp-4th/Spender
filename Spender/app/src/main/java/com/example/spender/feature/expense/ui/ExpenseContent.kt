@@ -62,11 +62,11 @@ fun ExpenseContent(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("카테고리 선택", style = Typography.labelMedium )
+                    Text("카테고리 선택", style = Typography.labelMedium)
                     TextButton(
-                        onClick = {  }
+                        onClick = { }
                     ) {
-                        Text("관리", style = Typography.labelMedium )
+                        Text("관리", style = Typography.labelMedium)
                     }
                 }
                 Spacer(Modifier.height(16.dp))
@@ -115,30 +115,47 @@ fun ExpenseContent(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        // 금액 입력
-        TextField(
-            value = uiState.amount,
-            onValueChange = { viewModel.onAmountChange(it) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp, vertical = 16.dp),
-            placeholder = { Text("지출을 입력하세요", fontSize = 14.sp, color = Color.Gray) },
-            trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            visualTransformation = NumberCommaTransformation(),
-            singleLine = true,
-            textStyle = TextStyle(
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Start
-            ),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color.Transparent,
-                focusedContainerColor = Color.Transparent,
-                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                focusedIndicatorColor = MaterialTheme.colorScheme.primary
+        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
+            // 금액 입력
+            TextField(
+                value = uiState.amount,
+                onValueChange = { viewModel.onAmountChange(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 40.dp, vertical = 16.dp),
+                placeholder = { Text("지출을 입력하세요", fontSize = 14.sp, color = Color.Gray) },
+                trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                visualTransformation = NumberCommaTransformation(),
+                singleLine = true,
+                textStyle = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Start
+                ),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.primary
+                )
             )
-        )
+
+            //지출 내용
+            TextField(
+                value = uiState.title,
+                onValueChange = { viewModel.onTitleChange(it) },
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = { Text("지출 내용을 입력하세요", fontSize = 16.sp, color = Color.Gray) },
+                singleLine = true,
+                textStyle = TextStyle(fontSize = 18.sp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.LightGray
+                )
+            )
+        }
 
         Spacer(Modifier.height(12.dp))
 
@@ -186,7 +203,7 @@ fun ExpenseContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {viewModel.onDateDialogVisibilityChange(true)}
+                    .clickable { viewModel.onDateDialogVisibilityChange(true) }
                     .padding(start = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -232,7 +249,7 @@ fun ExpenseContent(
             Spacer(Modifier.height(30.dp))
             OutlinedTextField(
                 value = uiState.memo,
-                onValueChange = {viewModel.onMemoChange(it)},
+                onValueChange = { viewModel.onMemoChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
