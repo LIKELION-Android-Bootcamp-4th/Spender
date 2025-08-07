@@ -47,13 +47,18 @@ import androidx.compose.ui.unit.sp
 import com.example.spender.core.ui.CustomShortButton
 import com.example.spender.feature.expense.ui.EmotionTagGroup
 import com.example.spender.feature.expense.ui.NumberCommaTransformation
+import com.example.spender.feature.expense.ui.RegistrationUiState
+import com.example.spender.feature.expense.ui.RegistrationViewModel
 import com.example.spender.ui.theme.BlackColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpenseDetailScreen() {
+fun ExpenseDetailScreen(
+    uiState: RegistrationUiState,
+    viewModel: RegistrationViewModel
+) {
     var amount by remember { mutableStateOf("100") }
     var memo by remember { mutableStateOf("우리는 모금에 실패하고 말았다.") }
     var selectedEmotion by remember { mutableStateOf("만족") }
@@ -197,9 +202,9 @@ fun ExpenseDetailScreen() {
                 )
                 Spacer(Modifier.height(30.dp))
                 EmotionTagGroup(
-                    emotions = listOf("만족", "불만", "충동", "억울"),
-                    selectedEmotion = selectedEmotion,
-                    onEmotionSelected = { selectedEmotion = it }
+                    emotions = uiState.emotions,
+                    selectedEmotion = uiState.selectedEmotion,
+                    onEmotionSelected = { viewModel.onEmotionSelected(it) }
                 )
             }
 
