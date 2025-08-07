@@ -12,4 +12,7 @@
     </string-array>
 
     <string name="default_web_client_id">1073077761870-is2da6dro8u2rqgqt56m6hl1rccq9nqh.apps.googleusercontent.com</string>
+    <string name="kakao_app_key">05bd03f6530f0a6819b1e37e5b7765fc</string>
+    <string name="kakao_redirect_url">kakao05bd03f6530f0a6819b1e37e5b7765fc</string>
+
 </resources>
