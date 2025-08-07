@@ -140,6 +140,7 @@ class RegistrationViewModel @Inject constructor(
     private fun clearInputs() {
         _uiState.update {
             it.copy(
+                title = "",
                 amount = "",
                 memo = "",
                 category = "카테고리 선택",
