@@ -1,5 +1,10 @@
 package com.example.spender.feature.onboarding
 
+import android.Manifest
+import android.os.Build
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +31,9 @@ import com.example.spender.feature.onboarding.ui.BudgetInputField
 import com.example.spender.feature.onboarding.ui.PageIndicator
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.navigation.Screen
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun OnboardingScreen(
@@ -39,6 +47,19 @@ fun OnboardingScreen(
     val isBudgetValid = viewModel.isBudgetValid
 
     val titles = context.resources.getStringArray(R.array.onboarding_title).toList()
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            Log.d("푸시 알림 설정 동의", "알림 권한 허용!!!!")
+            // 👉 Firestore에 기본 알림 설정 저장
+            saveDefaultNotificationSettingsToFirestore(true)
+        } else {
+            saveDefaultNotificationSettingsToFirestore(false)
+            Log.d("푸시 알림 설정 동의", "알림 권한 거부!!!!")
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -74,6 +95,13 @@ fun OnboardingScreen(
                 if (currentPage < 2) {
                     viewModel.onNext()
                 } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    } else {
+                        // Android 12 이하는 바로 저장
+                        saveDefaultNotificationSettingsToFirestore(true)
+                    }
+
                     OnboardingPref.setShown(context)
                     navController.navigate(Screen.MainScreen.route) {
                         popUpTo(Screen.OnboardingScreen.route) {
@@ -85,4 +113,24 @@ fun OnboardingScreen(
             isEnabled = currentPage != 1 || isBudgetValid
         )
     }
+}
+
+fun saveDefaultNotificationSettingsToFirestore(enabled: Boolean) {
+    val uid = Firebase.auth.currentUser?.uid ?: return
+    val db = FirebaseFirestore.getInstance()
+
+    val defaultSettings = mapOf(
+        "budget_alert" to enabled,
+        "report_alert" to enabled,
+        "reminder_alert" to enabled
+    )
+
+    db.collection("users")
+        .document(uid)
+        .collection("notification_settings")
+        .document("notification_settings")
+        .set(defaultSettings)
+        .addOnSuccessListener {
+            Log.d("Firestore", "알림 설정 초기화 완료 : $enabled")
+        }
 }
