@@ -21,7 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.spender.R
-import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
 import com.example.spender.feature.auth.ui.viewmodel.SocialViewModel
 import com.example.spender.ui.theme.NaverColor
 import com.example.spender.ui.theme.Typography
