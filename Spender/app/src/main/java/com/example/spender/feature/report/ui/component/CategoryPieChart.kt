@@ -19,6 +19,14 @@ fun CategoryPieChart(
     values: List<Float>,
     colors: List<Int>
 ) {
+    val sortedData = labels.indices.map { index ->
+        Triple(labels[index], values[index], colors[index])
+    }.sortedByDescending { it.second }
+
+    val sortedLabels = sortedData.map { it.first }
+    val sortedValues = sortedData.map { it.second }
+    val sortedColors = sortedData.map { it.third }
+
     AndroidView(factory = { context ->
         PieChart(context).apply {
             layoutParams = ViewGroup.LayoutParams(
@@ -33,18 +41,18 @@ fun CategoryPieChart(
             legend.isEnabled = false
         }
     }, update = { chart ->
-        val maxIndex = values.indices.maxBy { values[it] }
+        val maxIndex = sortedValues.indices.maxByOrNull { sortedValues[it] } ?: -1
 
-        val entries = values.mapIndexed { index, value ->
+        val entries = sortedValues.mapIndexed { index, value ->
             if (index == maxIndex) {
-                PieEntry(value, labels[index]).apply { data = index } // data 필드에 index 저장
+                PieEntry(value, sortedLabels[index]).apply { data = index } // data 필드에 index 저장
             } else {
                 PieEntry(value, "").apply { data = index }
             }
         }
 
         val dataSet = PieDataSet(entries, "").apply {
-            setColors(colors)
+            setColors(sortedColors)
             valueTextSize = 16f
             valueTextColor = AndroidColor.WHITE
             valueTypeface = Typeface.DEFAULT_BOLD
@@ -66,7 +74,14 @@ fun CategoryPieChart(
         chart.data = data
         chart.invalidate()
         chart.setEntryLabelTypeface(Typeface.DEFAULT_BOLD)
-        val highlight = Highlight(maxIndex.toFloat(), values[maxIndex], 0)
-        chart.highlightValues(arrayOf(highlight))
+
+        if (maxIndex != -1) {
+            val highlight = Highlight(maxIndex.toFloat(), sortedValues[maxIndex], 0)
+            chart.highlightValues(arrayOf(highlight))
+        }
+
+
+//        val highlight = Highlight(maxIndex.toFloat(), values[maxIndex], 0)
+//        chart.highlightValues(arrayOf(highlight))
     })
 }

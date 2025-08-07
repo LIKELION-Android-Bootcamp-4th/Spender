@@ -17,20 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.spender.core.common.util.toCurrency
+import com.example.spender.feature.report.ui.model.CategoryUiModel
 import com.example.spender.ui.theme.LightFontColor
 import com.example.spender.ui.theme.Typography
 
 @Composable
-fun CategorySpendingList() {
-    val categories = listOf(
-        Triple("식비", "186,000원", Color(0xFF18C1AC)),
-        Triple("자녀/육아", "64,000원", Color(0xFF2E9AFE)),
-        Triple("교통", "43,400원", Color(0xFF8E44AD)),
-        Triple("교육/학습", "9,700원", Color(0xFF9B59B6)),
-    )
+fun CategorySpendingList(categories : List<CategoryUiModel>) {
+
+    val sortedCategories = categories.sortedByDescending { it.percentage }
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        categories.forEach { (name, amount, dotColor) ->
+        sortedCategories.forEach { category ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -42,14 +40,14 @@ fun CategorySpendingList() {
                     Box(
                         modifier = Modifier
                             .size(8.dp)
-                            .background(dotColor, shape = CircleShape)
+                            .background(category.color, shape = CircleShape)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(text = name, style = Typography.bodyMedium)
-                    Text(text = " 61%", style = Typography.bodySmall, color = LightFontColor)
+                    Text(text = category.label, style = Typography.bodyMedium)
+                    Text(text = " ${category.percentage.toInt()}%", style = Typography.bodySmall, color = LightFontColor)
                 }
 
-                Text(text = amount, style = Typography.bodyMedium)
+                Text(text = "${category.amount.toCurrency()} 원", style = Typography.bodyMedium)
             }
         }
     }

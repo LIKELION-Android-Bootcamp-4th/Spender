@@ -25,6 +25,7 @@ import androidx.navigation.NavHostController
 import com.example.spender.R
 import com.example.spender.ui.theme.LightSurface
 import com.example.spender.ui.theme.PointColor
+import com.example.spender.ui.theme.PointRedColor
 import com.example.spender.ui.theme.Typography
 
 @Composable
@@ -35,6 +36,7 @@ fun BudgeProgress(
 ) {
     val percentage = totalExpense.toFloat() / budget.toFloat()
     val percentText = "${(percentage * 100).toInt()}%"
+    val highlightColor = if (percentage >= 1f) PointRedColor else PointColor
 
     Column(
         modifier = Modifier
@@ -51,7 +53,7 @@ fun BudgeProgress(
             Text(
                 text = "$percentText",
                 style = Typography.titleMedium.copy(
-                    color = PointColor
+                    color = highlightColor
                 )
             )
             Text(

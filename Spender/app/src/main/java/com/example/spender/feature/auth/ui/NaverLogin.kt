@@ -1,6 +1,5 @@
 package com.example.spender.feature.auth.ui
 
-import android.R.attr.onClick
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -19,26 +18,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.spender.R
+import com.example.spender.feature.auth.ui.viewmodel.SocialViewModel
 import com.example.spender.ui.theme.NaverColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 
 @Composable
-fun NaverLogin() {
+fun NaverLogin(
+    viewModel: SocialViewModel,
+    navController: NavHostController
+) {
+
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         border = BorderStroke(1.dp, color = NaverColor),
         shape = RoundedCornerShape(0.dp),
         colors = CardDefaults.cardColors(
             containerColor = WhiteColor
         ),
-        onClick = {
-            // TODO: 네이버 로그인 로직 추가
-        }
+        onClick = { viewModel.naverLogin(navController) }
     ) {
         Row(
             modifier = Modifier
@@ -48,7 +49,7 @@ fun NaverLogin() {
             horizontalArrangement = Arrangement.Center
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.naver_icon),
+                painter = painterResource(id = R.drawable.naverlogo_icon),
                 contentDescription = null,
                 tint = Color.Unspecified,
             )
@@ -67,10 +68,4 @@ fun NaverLogin() {
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun NaverLoginPreview() {
-    NaverLogin()
 }

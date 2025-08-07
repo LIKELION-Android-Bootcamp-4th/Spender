@@ -7,8 +7,8 @@ sealed class Screen(val route: String) {
 
     object NotificationListScreen: Screen("notification_list")
 
-    object ReportDetail : Screen("report_detail/{reportId}") {
-        fun createRoute(reportId: String) = "report_detail/$reportId"
+    object ReportDetail : Screen("report_detail/{month}") {
+        fun createRoute(month: String) = "report_detail/$month"
     }
 
     object BudgetScreen : Screen("budget")
@@ -16,5 +16,6 @@ sealed class Screen(val route: String) {
     object ExpenseCategoryScreen : Screen("expense_category")
     object RegularExpenseScreen : Screen("regular_expense")
     object NotificationScreen : Screen("notification")
+    object ExpenseRegistrationScreen : Screen("expense_registration")
 
 }
