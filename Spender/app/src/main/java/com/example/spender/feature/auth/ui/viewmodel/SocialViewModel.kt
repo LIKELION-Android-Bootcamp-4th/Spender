@@ -19,7 +19,7 @@ class SocialViewModel(
         viewModelScope.launch {
             try {
                 authRepository.naverLogin()
-                Log.d("Login", "Naver Login Success")
+                Log.d("Login", "Naver Login Success!")
                 val currentUser = Firebase.auth.currentUser
                 val userMap: Map<String, Any?>? = currentUser?.let {
                     mapOf(
@@ -36,6 +36,30 @@ class SocialViewModel(
                 }
             } catch (e: Exception) {
                 Log.e("Login", "Naver Login Fail", e)
+            }
+        }
+    }
+
+    fun kakaoLogin(navController: NavController) {
+        viewModelScope.launch {
+            try {
+                authRepository.kakaoLogin()
+                Log.d("Login", "Kakao Login Success!")
+                val currentUser = Firebase.auth.currentUser
+                val userMap: Map<String, Any?>? = currentUser?.let {
+                    mapOf(
+                        "uid" to it.uid,
+                        "email" to it.email,
+                        "name" to it.displayName,
+                        "photoUrl" to it.photoUrl?.toString()
+                    )
+                }
+                Log.d("Login", "kakao User : ${userMap.toString()}")
+                navController.navigate("main") {
+                    popUpTo("auth") { inclusive = true }
+                }
+            } catch (e: Exception) {
+                Log.e("Login", "Kakao Login Fail", e)
             }
         }
     }
