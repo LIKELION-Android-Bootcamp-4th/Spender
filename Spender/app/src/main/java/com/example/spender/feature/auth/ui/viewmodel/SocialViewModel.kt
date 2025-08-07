@@ -1,10 +1,13 @@
 package com.example.spender.feature.auth.ui.viewmodel
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.spender.core.data.remote.auth.LoginType
+import com.example.spender.feature.auth.data.AuthPrefs
 import com.example.spender.feature.auth.domain.AuthRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -19,6 +22,7 @@ class SocialViewModel(
         viewModelScope.launch {
             try {
                 authRepository.naverLogin()
+                AuthPrefs.setLoginType(getApplication(), LoginType.NAVER)
                 Log.d("Login", "Naver Login Success!")
                 val currentUser = Firebase.auth.currentUser
                 val userMap: Map<String, Any?>? = currentUser?.let {
@@ -44,6 +48,7 @@ class SocialViewModel(
         viewModelScope.launch {
             try {
                 authRepository.kakaoLogin()
+                AuthPrefs.setLoginType(getApplication(), LoginType.KAKAO)
                 Log.d("Login", "Kakao Login Success!")
                 val currentUser = Firebase.auth.currentUser
                 val userMap: Map<String, Any?>? = currentUser?.let {
@@ -63,4 +68,12 @@ class SocialViewModel(
             }
         }
     }
+
+    fun logout(context: Context, onDone: () -> Unit) {
+        viewModelScope.launch {
+            authRepository.logoutByLoginType(context)
+            onDone()
+        }
+    }
+
 }
