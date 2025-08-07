@@ -20,17 +20,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.spender.core.ui.CustomDialog
 import com.example.spender.feature.mypage.ui.component.MyPageItemType
 import com.example.spender.feature.mypage.ui.component.Section
 
 @Composable
 fun MypageScreen(navHostController: NavHostController) {
-    val userName = "이수지"
+    var showWithdrawDialog by remember { mutableStateOf(false) }
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    val userName = "이름"
 
     val onItemClick: (MyPageItemType) -> Unit = { item ->
         when(item){
@@ -39,12 +46,8 @@ fun MypageScreen(navHostController: NavHostController) {
             MyPageItemType.Budget -> navHostController.navigate("budget")
             MyPageItemType.RegularExpense -> navHostController.navigate("regular_expense")
             MyPageItemType.Notification -> navHostController.navigate("notification")
-            MyPageItemType.Withdraw -> {
-                // TODO: 탈퇴 다이얼로그
-            }
-            MyPageItemType.Logout -> {
-                // TODO: 로그아웃 다이얼로그
-            }
+            MyPageItemType.Withdraw -> { showWithdrawDialog = true }
+            MyPageItemType.Logout -> { showLogoutDialog = true }
         }
     }
 
@@ -81,6 +84,32 @@ fun MypageScreen(navHostController: NavHostController) {
 
         AdBanner()
     }
+
+    if (showWithdrawDialog) {
+        CustomDialog(
+            title = "탈퇴하시겠습니까?",
+            onConfirm = {
+                showWithdrawDialog = false
+                // TODO: 탈퇴 로직
+            },
+            onDismiss = {
+                showWithdrawDialog = false
+            }
+        )
+    }
+    if (showLogoutDialog) {
+        CustomDialog(
+            title = "로그아웃 하시겠습니까?",
+            onConfirm = {
+                showLogoutDialog = false
+                // TODO: 로그아웃 로직
+            },
+            onDismiss = {
+                showLogoutDialog = false
+            }
+        )
+    }
+
 }
 
 @Composable
