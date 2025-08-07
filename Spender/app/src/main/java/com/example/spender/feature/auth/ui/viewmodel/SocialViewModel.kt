@@ -10,13 +10,16 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
 
-class SocialViewModel(application: Application, private val authRepository: AuthRepository) : AndroidViewModel(application) {
+class SocialViewModel(
+    application: Application,
+    private val authRepository: AuthRepository
+) : AndroidViewModel(application) {
 
     fun naverLogin(navController: NavController) {
         viewModelScope.launch {
             try {
                 authRepository.naverLogin()
-                Log.d("네이버", "네이버 로그인 성공")
+                Log.d("Login", "Naver Login Success")
                 val currentUser = Firebase.auth.currentUser
                 val userMap: Map<String, Any?>? = currentUser?.let {
                     mapOf(
@@ -27,15 +30,13 @@ class SocialViewModel(application: Application, private val authRepository: Auth
                     )
                 }
 
-                Log.d("Auth", "naver User : ${userMap.toString()}")
+                Log.d("Login", "naver User : ${userMap.toString()}")
                 navController.navigate("main") {
                     popUpTo("auth") { inclusive = true }
                 }
             } catch (e: Exception) {
-                Log.e("Auth", "네이버 로그인 실패", e)
+                Log.e("Login", "Naver Login Fail", e)
             }
         }
     }
-
-
 }
