@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomDialog
-import com.example.spender.feature.auth.ui.viewmodel.SocialViewModel
+import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
 import com.example.spender.feature.mypage.ui.component.MyPageItemType
 import com.example.spender.feature.mypage.ui.component.Section
 
@@ -41,7 +41,7 @@ import com.example.spender.feature.mypage.ui.component.Section
 fun MypageScreen(navHostController: NavHostController) {
     val context = LocalContext.current
 
-    val viewModel: SocialViewModel = hiltViewModel()
+    val viewModel: AuthViewModel = hiltViewModel()
 
     var showWithdrawDialog by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }

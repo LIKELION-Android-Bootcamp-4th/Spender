@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.R
-import com.example.spender.feature.auth.ui.viewmodel.SocialViewModel
+import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
 import com.example.spender.ui.theme.NaverColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
@@ -32,7 +32,7 @@ import com.example.spender.ui.theme.WhiteColor
 fun NaverLogin(
     navController: NavHostController
 ) {
-    val viewModel: SocialViewModel = hiltViewModel()
+    val viewModel: AuthViewModel = hiltViewModel()
     val context = LocalContext.current
 
     Card(
