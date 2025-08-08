@@ -7,6 +7,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.spender.core.data.remote.auth.LoginType
+import com.example.spender.core.data.service.FcmTokenRegistrar
 import com.example.spender.feature.auth.data.AuthPrefs
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
@@ -34,6 +35,10 @@ class AuthViewModel : ViewModel() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         AuthPrefs.setLoginType(context, LoginType.GOOGLE)
+
+                        val app = context.applicationContext as android.app.Application
+                        FcmTokenRegistrar.handleAfterLogin(app)
+
                         onSuccess()
                     } else {
                         _isFailState.value = true

@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.spender.core.data.remote.auth.LoginType
+import com.example.spender.core.data.service.FcmTokenRegistrar
 import com.example.spender.feature.auth.data.AuthPrefs
 import com.example.spender.feature.auth.domain.AuthRepository
 import com.example.spender.feature.onboarding.data.OnboardingPref
@@ -34,6 +35,8 @@ class SocialViewModel(
                         "photoUrl" to it.photoUrl?.toString()
                     )
                 }
+
+                FcmTokenRegistrar.handleAfterLogin(getApplication())
 
                 Log.d("Login", "naver User : ${userMap.toString()}")
 
@@ -64,6 +67,8 @@ class SocialViewModel(
                     )
                 }
                 Log.d("Login", "kakao User : ${userMap.toString()}")
+
+                FcmTokenRegistrar.handleAfterLogin(getApplication())
 
                 navController.navigate(
                     if (OnboardingPref.wasShown(getApplication())) "main"

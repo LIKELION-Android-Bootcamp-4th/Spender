@@ -7,6 +7,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.spender.R
+import com.example.spender.core.data.local.FcmTokenStore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -15,6 +16,24 @@ import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.HiltAndroidApp
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Log.d("FCM", "새 FCM 토큰: $token")
+
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid == null) {
+            FcmTokenStore.save(applicationContext, token)
+            return
+        }
+
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(uid)
+            .set(mapOf("fcmToken" to token), SetOptions.merge())
+            .addOnSuccessListener { Log.d("FCM", "토큰 Firestore 저장 성공") }
+            .addOnFailureListener { e -> Log.e("FCM", "토큰 Firestore 저장 실패", e) }
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         Log.d("FCM", "메시지 수신됨: ${remoteMessage.data}")
@@ -25,25 +44,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         showNotification(title, body)
     }
 
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-        Log.d("FCM", "새 FCM 토큰: $token")
-
-        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        FirebaseFirestore.getInstance()
-            .collection("users")
-            .document(uid)
-            .set(mapOf("fcmToken" to token), SetOptions.merge())
-            .addOnSuccessListener { Log.d("FCM", "토큰 Firestore 저장 성공") }
-            .addOnFailureListener { e -> Log.e("FCM", "토큰 Firestore 저장 실패", e) }
-    }
-
     private fun showNotification(title: String, message: String) {
         val channelId = "default_channel"
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Android 8 이상: 알림 채널 필요
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
@@ -54,7 +59,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
 
         val notification = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.spender_happy) // 앱에 존재하는 아이콘으로 교체
+            .setSmallIcon(R.drawable.spender_happy)
             .setContentTitle(title)
             .setContentText(message)
             .setAutoCancel(true)
