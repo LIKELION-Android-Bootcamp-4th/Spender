@@ -49,28 +49,6 @@ fun BottomNavigationBar(navHostController: NavHostController) {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-//    NavigationBar (
-//        containerColor = MaterialTheme.colorScheme.surface,
-//
-//    ){
-//        screens.forEach { screen ->
-//            val isSelected = currentDestination?.route == screen.route
-//
-//            NavigationBarItem(
-//                icon = { Icon(screen.icon, contentDescription = null) },
-//                label = { Text(text = stringResource(screen.title), color = if (isSelected) DarkPointColor else Color.Gray) },
-//                selected = isSelected,
-//                onClick = { navHostController.navigate(screen.route) },
-//                colors = NavigationBarItemDefaults.colors(
-//                    selectedIconColor = DarkPointColor,
-//                    selectedTextColor = DarkPointColor,
-//                    unselectedIconColor = LightPointColor,
-//                    unselectedTextColor = LightPointColor,
-//                    indicatorColor = Color.Transparent
-//                )
-//            )
-//        }
-//    }
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 5.dp,

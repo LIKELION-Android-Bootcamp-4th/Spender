@@ -25,8 +25,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.spender.ui.theme.PointColor
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -35,11 +37,11 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarScreen(navHostController: NavHostController) {
-    val context = LocalContext.current
     val viewModel: CalendarViewModel = hiltViewModel()
 
     val calendarData by viewModel.calendarItem.collectAsState()
     val selectionState by viewModel.selectionState.collectAsState()
+    val dailyList by viewModel.dailyList.collectAsState()
     val calendar = Calendar.getInstance()
     val showDatePicker = viewModel.showDatePicker.value
     val year = viewModel.year.value
@@ -67,7 +69,7 @@ fun CalendarScreen(navHostController: NavHostController) {
                     viewModel.nowMonth,
                     viewModel.nowDay,
                     (viewModel.now.get(Calendar.DAY_OF_WEEK) + viewModel.now.get(Calendar.DATE) + 2) % 7,
-                    viewModel.getExpenseListByDate()
+                    dailyList.toMutableList()
                 )
             } else {
                 calendar.set(Calendar.YEAR, selectionState[0])
@@ -76,7 +78,7 @@ fun CalendarScreen(navHostController: NavHostController) {
                     selectionState[1],
                     selectionState[2],
                     (calendar.get(Calendar.DAY_OF_WEEK) + selectionState[2] + 1) % 7,
-                    viewModel.getExpenseListByDate()
+                    dailyList.toMutableList()
                 )
             }
         }

@@ -7,13 +7,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import jakarta.inject.Inject
+import kotlinx.coroutines.tasks.await
 import java.util.Calendar
 
 class GraphRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
 ) {
-    fun getMaxExpense(year: Int, month: Int): ExpenseDto? {
+    suspend fun getMaxExpense(year: Int, month: Int): ExpenseDto? {
         val uid = auth.currentUser?.uid
 
         val startOfMonth = Calendar.getInstance().apply {
@@ -36,27 +37,27 @@ class GraphRepository @Inject constructor(
             set(Calendar.MILLISECOND, 999)
         }
 
-        var expense: ExpenseDto? = null
-
-        try {
-            val expenseRef = firestore.collection("users").document(uid!!).collection("expense")
-                .orderBy("createdAt", Query.Direction.DESCENDING)
-                .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfMonth.time))
-                .whereLessThanOrEqualTo("createdAt", Timestamp(endOfMonth.time))
-
-            expenseRef.get().addOnSuccessListener { document ->
-                expense = document.documents
-                    .mapNotNull { it.toObject(ExpenseDto::class.java) }
-                    .maxByOrNull { it.amount }
-            }
+        return try {
+            val expenseRef = firestore.collection("users").document(uid!!).collection("expenses")
+                .orderBy("date", Query.Direction.DESCENDING)
+                .whereGreaterThanOrEqualTo("date", Timestamp(startOfMonth.time))
+                .whereLessThanOrEqualTo("date", Timestamp(endOfMonth.time))
+                .get()
+                .await()
+            expenseRef.documents.mapNotNull { ExpenseDto(
+                amount = -(it["amount"]?.toString()?.toInt() ?: 0),
+                title = it["title"]?.toString() ?: "",
+                date = Timestamp.now(),
+                categoryId = it["categoryId"]?.toString() ?: "",
+                createdAt = Timestamp.now()
+            ) }.maxByOrNull { it.amount }
         } catch (e: Exception) {
             Log.d("Analysis / Max Expense", "Max Expense error")
+            return null
         }
-
-        return expense
     }
 
-    fun getDailyTotalList(year: Int, month: Int): MutableMap<String, Int> {
+    suspend fun getDailyTotalList(year: Int, month: Int): MutableMap<String, Int> {
         val uid = auth.currentUser?.uid
 
         val startOfMonth = Calendar.getInstance().apply {
@@ -82,26 +83,25 @@ class GraphRepository @Inject constructor(
         val dailySum = mutableMapOf<String, Int>()
 
         try {
-            val expenseRef = firestore.collection("users").document(uid!!).collection("expense")
-                .orderBy("createdAt", Query.Direction.DESCENDING)
-                .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfMonth.time))
-                .whereLessThanOrEqualTo("createdAt", Timestamp(endOfMonth.time))
+            val expenseRef = firestore.collection("users").document(uid!!).collection("expenses")
+                .orderBy("date", Query.Direction.DESCENDING)
+                .whereGreaterThanOrEqualTo("date", Timestamp(startOfMonth.time))
+                .whereLessThanOrEqualTo("date", Timestamp(endOfMonth.time))
+                .get()
+                .await()
+            expenseRef.documents.forEach { document ->
+                val data = document.data ?: return@forEach
+                val amount = data["amount"]?.toString()?.toInt() ?: 0
+                val date = data["date"] as? Timestamp ?: Timestamp.now()
 
-            expenseRef.get().addOnSuccessListener { document ->
-                for (doc in document) {
-                    val data = doc.data ?: continue
-                    val amount = data["amount"] as? Int ?: continue
-                    val createdAt = data["createdAt"] as? Timestamp ?: continue
-
-                    val stamp = Calendar.getInstance().apply { time = createdAt.toDate() }
-                    val day = "%02d".format(stamp.get(Calendar.DAY_OF_MONTH))
-                    dailySum[day] = dailySum.getOrDefault(day, 0) + amount
-                }
+                val stamp = Calendar.getInstance().apply { time = date.toDate() }
+                val day = "%02d".format(stamp.get(Calendar.DAY_OF_MONTH))
+                dailySum[day] = dailySum.getOrDefault(day, 0) + amount
             }
+            return dailySum
         } catch (e: Exception) {
             Log.d("Analysis / Daily Sum List", "Daily expense error")
         }
-
         return dailySum
     }
 }
