@@ -29,7 +29,7 @@ fun SpendListItemComponent(item: ExpenseDto?) {
             Spacer(Modifier.weight(1f))
             if (item != null) {
                 Text(
-                    text = if (item.amount > 0) "+${DecimalFormat("#,###").format(item.amount)}원" else "-${DecimalFormat("#,###").format(item.amount)}원",
+                    text = if (item.amount > 0) "+${DecimalFormat("#,###").format(item.amount)}원" else "${DecimalFormat("#,###").format(item.amount)}원",
                     style = TextStyle(
                         color = if (item.amount > 0) Color.Blue else Color.Red,
                         fontFamily = NotoSansFamily,

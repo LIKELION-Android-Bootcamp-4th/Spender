@@ -86,7 +86,6 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.android.gms:play-services-base:18.3.0")
     implementation("androidx.datastore:datastore-preferences:1.1.7")
-    implementation("com.google.firebase:firebase-messaging-ktx:24.1.2")
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.56.2")
