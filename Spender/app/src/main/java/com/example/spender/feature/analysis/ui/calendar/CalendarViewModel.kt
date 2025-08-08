@@ -96,7 +96,7 @@ class CalendarViewModel @Inject constructor(
                 if (expenseList.isNotEmpty() && expenseList[0].date.toDate().date == i) {
                     data = data.copy(expense = data.expense - expenseList[0].amount)
                 }
-                if (incomeList.isNotEmpty() && expenseList[0].date.toDate().date == i) {
+                if (incomeList.isNotEmpty() && incomeList[0].date.toDate().date == i) {
                     data = data.copy(expense = data.expense + incomeList[0].amount)
                 }
                 if (i == nowDay && year.value == nowYear && month.value == nowMonth) {
@@ -107,6 +107,9 @@ class CalendarViewModel @Inject constructor(
             }
 
             _calendarItem.value = calendarData
+            if (_selectionState.value == listOf(0, 0, 0)) {
+                updateSelectionByDay(nowDay, year.value, month.value)
+            }
         }
     }
 
