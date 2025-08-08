@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.R
 import com.example.spender.core.ui.CustomLongButton
@@ -30,13 +31,12 @@ import com.example.spender.ui.theme.navigation.Screen
 @Composable
 fun OnboardingScreen(
     navController: NavHostController,
-    viewModel: OnboardingViewModel = viewModel()
+    viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
     val currentPage by viewModel.currentPage.collectAsState()
-    val budget by viewModel.budget.collectAsState()
-    val isBudgetValid = viewModel.isBudgetValid
+    val budget = viewModel.budget
 
     val titles = context.resources.getStringArray(R.array.onboarding_title).toList()
 
@@ -61,7 +61,7 @@ fun OnboardingScreen(
                 Spacer(modifier = Modifier.height(80.dp))
                 BudgetInputField(
                     budget = budget,
-                    onBudgetChange = { viewModel.onBudgetGet(it) },
+                    onBudgetChange = { viewModel.updateBudget(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                 )
@@ -82,7 +82,7 @@ fun OnboardingScreen(
                     }
                 }
             },
-            isEnabled = currentPage != 1 || isBudgetValid
+            isEnabled = currentPage != 1 || budget < 0
         )
     }
 }
