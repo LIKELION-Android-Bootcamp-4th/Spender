@@ -55,6 +55,7 @@ fun GraphScreen(navHostController: NavHostController) {
 
     val graphData by viewModel.graphData.collectAsState()
     val dateData by viewModel.dateData.collectAsState()
+    val maxData by viewModel.maxExpense.collectAsState()
     val showDatePicker = viewModel.showDatePicker.value
 
     Box(modifier = Modifier
@@ -63,60 +64,61 @@ fun GraphScreen(navHostController: NavHostController) {
     ) {
         Column (modifier = Modifier.padding(horizontal = 24.dp)) {
             //header
-            if (graphData.isEmpty()) {
-                Text("이번 달에는 지출이 없어요", style = Typography.titleMedium)
-            } else {
-                Text("이번 달 중 가장 지출이 많았던 날은", style = Typography.titleMedium)
-                Row {
-                    Text("${dateData[1]}월 ${graphData.maxByOrNull { it.expense }?.day ?: 0}일 ",
-                        style = TextStyle(fontFamily = NotoSansFamily, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = PointColor))
-                    Text("이에요", style = Typography.titleMedium)
+            when {
+                graphData.isEmpty() -> Text("이번 달에는 지출이 없어요", style = Typography.titleMedium)
+                else -> {
+                    Text("이번 달 중 가장 지출이 많았던 날은", style = Typography.titleMedium)
+                    Row {
+                        Text("${dateData[1]}월 ${graphData.maxByOrNull { it.expense }?.day ?: 0}일 ",
+                            style = TextStyle(fontFamily = NotoSansFamily, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = PointColor))
+                        Text("이에요", style = Typography.titleMedium)
+                    }
+                    Spacer(Modifier.height(20.dp))
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text("${dateData[1]}월", style = Typography.titleMedium)
+                        Spacer(Modifier.width(10.dp))
+                        Text("${dateData[0]}", style = Typography.bodyMedium)
+                        Spacer(Modifier.width(10.dp))
+                        IconButton(
+                            onClick = { viewModel.showDialog() },
+                            modifier = Modifier.size(20.dp).align(Alignment.Bottom)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowDown,
+                                contentDescription = "datePicker",
+                                tint = Color.DarkGray
+                            )
+                        }
+                        Spacer(Modifier.weight(1f))
+                        IconButton(
+                            onClick = { viewModel.previousMonth() },
+                            modifier = Modifier.size(20.dp).align(Alignment.Bottom)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowLeft,
+                                contentDescription = "previous month",
+                                tint = Color.DarkGray
+                            )
+                        }
+                        IconButton(
+                            onClick = { viewModel.nextMonth() },
+                            modifier = Modifier.size(20.dp).align(Alignment.Bottom)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowRight,
+                                contentDescription = "next month",
+                                tint = Color.DarkGray
+                            )
+                        }
+                    }
+                    //body
+                    LineChart(graphData)
+                    Spacer(Modifier.height(20.dp))
+                    Text("이번 달 가장 컸던 지출", style = Typography.titleMedium)
+                    Spacer(Modifier.height(10.dp))
+                    HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
+                    SpendListItemComponent(maxData)
                 }
-                Spacer(Modifier.height(20.dp))
-                Row(verticalAlignment = Alignment.Bottom) {
-                    Text("${dateData[1]}월", style = Typography.titleMedium)
-                    Spacer(Modifier.width(10.dp))
-                    Text("${dateData[0]}", style = Typography.bodyMedium)
-                    Spacer(Modifier.width(10.dp))
-                    IconButton(
-                        onClick = { viewModel.showDialog() },
-                        modifier = Modifier.size(20.dp).align(Alignment.Bottom)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "datePicker",
-                            tint = Color.DarkGray
-                        )
-                    }
-                    Spacer(Modifier.weight(1f))
-                    IconButton(
-                        onClick = { viewModel.previousMonth() },
-                        modifier = Modifier.size(20.dp).align(Alignment.Bottom)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowLeft,
-                            contentDescription = "previous month",
-                            tint = Color.DarkGray
-                        )
-                    }
-                    IconButton(
-                        onClick = { viewModel.nextMonth() },
-                        modifier = Modifier.size(20.dp).align(Alignment.Bottom)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowRight,
-                            contentDescription = "next month",
-                            tint = Color.DarkGray
-                        )
-                    }
-                }
-                //body
-                LineChart(graphData)
-                Spacer(Modifier.height(20.dp))
-                Text("이번 달 가장 컸던 지출", style = Typography.titleMedium)
-                Spacer(Modifier.height(10.dp))
-                HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
-                SpendListItemComponent(viewModel.getMaxExpense())
             }
             val dialogState = rememberDatePickerState()
             dialogState.selectedDateMillis = System.currentTimeMillis()
