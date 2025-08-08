@@ -1,30 +1,46 @@
 package com.example.spender.feature.expense.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,13 +51,102 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.ui.theme.Typography
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecurringExpenseContent(
     uiState: RegistrationUiState,
-    viewModel: RegistrationViewModel
+    viewModel: RegistrationViewModel,
+    onManageCategoriesClick: () -> Unit
 ) {
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var isSheetOpen by remember { mutableStateOf(false) }
+    val expenseCategories by viewModel.expenseCategories.collectAsState()
+    val datePickerState = rememberDatePickerState()
+
+    //반복 날짜 바텀시트
+    if (uiState.isRepeatSheetVisible) {
+        ModalBottomSheet(
+            onDismissRequest = { viewModel.onRepeatSheetVisibilityChange(false) },
+            sheetState = sheetState
+        ) {
+            RepeatDaySelectionSheet(
+                onDaySelected = { day ->
+                    viewModel.onRepeatDaySelected(day)
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            viewModel.onRepeatSheetVisibilityChange(false)
+                        }
+                    }
+                }
+            )
+        }
+    }
+    // 카테고리 바텀시트
+    if (isSheetOpen) {
+        ModalBottomSheet(
+            onDismissRequest = { isSheetOpen = false },
+            sheetState = sheetState
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("카테고리 선택", style = Typography.labelMedium)
+                    TextButton(
+                        onClick = {
+                            onManageCategoriesClick()
+                        }
+                    ) {
+                        Text("관리", style = Typography.labelMedium)
+                    }
+                }
+                Spacer(Modifier.height(16.dp))
+                LazyColumn {
+                    items(expenseCategories) { category ->
+                        CategoryBottomSheetItem(
+                            category = category,
+                            onClick = {
+                                viewModel.onCategorySelected(category)
+                                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                    if (!sheetState.isVisible) {
+                                        isSheetOpen = false
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
+    //날짜 선택 다이얼로그
+    if (uiState.isDatePickerDialogVisible) {
+        DatePickerDialog(
+            onDismissRequest = { viewModel.onDateDialogVisibilityChange(false) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.onDateSelected(datePickerState.selectedDateMillis)
+                        viewModel.onDateDialogVisibilityChange(false)
+                    }
+                ) { Text("확인") }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.onDateDialogVisibilityChange(false) }) {
+                    Text("취소")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -108,11 +213,11 @@ fun RecurringExpenseContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { /* 카테고리 선택 로직 */ },
+                    .clickable {isSheetOpen = true},
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "취미/여가",
+                    text = uiState.category,
                     modifier = Modifier.padding(start = 20.dp),
                     style = Typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
@@ -137,12 +242,13 @@ fun RecurringExpenseContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { /* 날짜 선택 로직 */ }
+                    .clickable { viewModel.onDateDialogVisibilityChange(true) }
                     .padding(start = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val dateFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
                 Text(
-                    text = "2025.07.28",
+                    text = dateFormat.format(uiState.date),
                     style = Typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -157,7 +263,7 @@ fun RecurringExpenseContent(
 
         HorizontalDivider(color = Color(0xFFF0F2F5))
 
-        // 카테고리
+        // 반복 날짜
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -171,11 +277,11 @@ fun RecurringExpenseContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { /* 반복기간 선택 로직 */ },
+                    .clickable { viewModel.onRepeatSheetVisibilityChange(true) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "매월 28일",
+                    text = "매월 ${uiState.dayOfMonth}일",
                     modifier = Modifier.padding(start = 20.dp),
                     style = Typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold
@@ -213,6 +319,26 @@ fun RecurringExpenseContent(
                     unfocusedBorderColor = Color(0xFFE0E0E0)
                 )
             )
+        }
+    }
+}
+
+@Composable
+private fun RepeatDaySelectionSheet(onDaySelected: (Int) -> Unit) {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("반복 날짜 선택", style = Typography.labelMedium)
+        Spacer(Modifier.height(16.dp))
+        LazyColumn(modifier = Modifier.navigationBarsPadding()) {
+            items(31) { day ->
+                Text(
+                    text = "매월 ${day + 1}일",
+                    style = Typography.titleMedium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onDaySelected(day + 1) }
+                        .padding(vertical = 12.dp)
+                )
+            }
         }
     }
 }
