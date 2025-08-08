@@ -50,7 +50,7 @@ class GraphRepository @Inject constructor(
                 date = Timestamp.now(),
                 categoryId = it["categoryId"]?.toString() ?: "",
                 createdAt = Timestamp.now()
-            ) }.maxByOrNull { it.amount }
+            ) }.minByOrNull { it.amount }
         } catch (e: Exception) {
             Log.d("Analysis / Max Expense", "Max Expense error")
             return null

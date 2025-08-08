@@ -16,7 +16,6 @@ class CalendarRepository @Inject constructor(
 ) {
     suspend fun getExpenseList(year: Int, month: Int): MutableList<ExpenseDto> {
         val uid = auth.currentUser?.uid
-        val expenseList = mutableListOf<ExpenseDto>()
 
         val startOfMonth = Calendar.getInstance().apply {
             set(Calendar.YEAR, year)
@@ -40,9 +39,9 @@ class CalendarRepository @Inject constructor(
 
         return try {
             val ref = firestore.collection("users").document(uid!!).collection("expenses")
-                .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfMonth.time))
-                .whereLessThanOrEqualTo("createdAt", Timestamp(endOfMonth.time))
-                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .whereGreaterThanOrEqualTo("date", Timestamp(startOfMonth.time))
+                .whereLessThanOrEqualTo("date", Timestamp(endOfMonth.time))
+                .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .await()
 
@@ -65,7 +64,6 @@ class CalendarRepository @Inject constructor(
 
     suspend fun getIncomeList(year: Int, month: Int): MutableList<ExpenseDto> {
         val uid = auth.currentUser?.uid
-        val incomeList = mutableListOf<ExpenseDto>()
 
         val startOfMonth = Calendar.getInstance().apply {
             set(Calendar.YEAR, year)
@@ -89,9 +87,9 @@ class CalendarRepository @Inject constructor(
 
         return try {
             val ref = firestore.collection("users").document(uid!!).collection("incomes")
-                .orderBy("createdAt", Query.Direction.DESCENDING)
-                .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfMonth.time))
-                .whereLessThanOrEqualTo("createdAt", Timestamp(endOfMonth.time))
+                .orderBy("date", Query.Direction.DESCENDING)
+                .whereGreaterThanOrEqualTo("date", Timestamp(startOfMonth.time))
+                .whereLessThanOrEqualTo("date", Timestamp(endOfMonth.time))
                 .get()
                 .await()
 
@@ -162,9 +160,9 @@ class CalendarRepository @Inject constructor(
 
         try {
             val incomeRef = firestore.collection("users").document(uid!!).collection("incomes")
-                .orderBy("createdAt", Query.Direction.DESCENDING)
-                .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfDay.time))
-                .whereLessThanOrEqualTo("createdAt", Timestamp(endOfDay.time))
+                .orderBy("date", Query.Direction.DESCENDING)
+                .whereGreaterThanOrEqualTo("date", Timestamp(startOfDay.time))
+                .whereLessThanOrEqualTo("date", Timestamp(endOfDay.time))
                 .get()
                 .await()
             dataList.addAll(incomeRef.documents.mapNotNull { doc ->

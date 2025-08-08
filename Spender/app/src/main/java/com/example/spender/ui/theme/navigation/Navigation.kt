@@ -20,6 +20,7 @@ import com.example.spender.feature.mypage.ui.RegularExpenseScreen
 import com.example.spender.feature.onboarding.OnboardingScreen
 import com.example.spender.feature.report.ui.detail.ReportDetailScreen
 import com.example.spender.feature.report.ui.list.ReportListScreen
+import com.example.spender.feature.splash.SplashScreen
 
 @Composable
 fun SpenderNavigation(
@@ -38,6 +39,9 @@ fun SpenderNavigation(
         }
         composable(Screen.AuthScreen.route) {
             AuthScreen(navController)
+        }
+        composable(Screen.SplashScreen.route) {
+            SplashScreen(navController)
         }
         composable(BottomNavigationItem.Home.route) {
             HomeScreen(navController)
@@ -87,7 +91,5 @@ fun SpenderNavigation(
         composable(Screen.IncomeRegistrationScreen.route) {
             IncomeRegistrationScreen(navController)
         }
-
-
     }
 }

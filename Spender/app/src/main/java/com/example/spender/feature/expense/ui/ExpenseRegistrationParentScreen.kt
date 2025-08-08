@@ -155,8 +155,14 @@ fun ExpenseRegistrationParentScreen(
                     onManageCategoriesClick = {
                         navHostController.navigate(Screen.ExpenseCategoryScreen.route)
                     }
-                    )
-                2 -> RecurringExpenseContent(uiState, viewModel)
+                )
+                2 -> RecurringExpenseContent(
+                    uiState,
+                    viewModel,
+                    onManageCategoriesClick = {
+                        navHostController.navigate(Screen.ExpenseCategoryScreen.route)
+                    }
+                )
             }
         }
     }

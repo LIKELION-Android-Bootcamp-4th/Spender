@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.feature.expense.data.remote.ExpenseDto
+import com.example.spender.feature.expense.data.remote.RegularExpenseDto
 import com.example.spender.feature.expense.data.repository.ExpenseRepository
+import com.example.spender.feature.expense.data.repository.RegularExpenseRepository
 import com.example.spender.feature.expense.domain.model.Emotion
 import com.example.spender.feature.mypage.data.repository.CategoryRepository
 import com.example.spender.feature.mypage.domain.model.Category
@@ -27,7 +29,8 @@ sealed class RegistrationEvent {
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     private val expenseRepository: ExpenseRepository,
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    private val regularExpenseRepository: RegularExpenseRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(RegistrationUiState())
@@ -63,10 +66,10 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
+    //이벤트 핸들러
     fun onCategorySelected(category: Category) {
         _uiState.update { it.copy(category = category.name, categoryId = category.id) }
     }
-
 
     fun onTabSelected(index: Int) {
         _uiState.update { it.copy(selectedTabIndex = index) }
@@ -92,6 +95,12 @@ class RegistrationViewModel @Inject constructor(
 
     fun onOcrDialogVisibilityChange(isVisible: Boolean) {
         _uiState.update { it.copy(isOcrDialogVisible = isVisible) }
+    }
+    fun onRepeatDaySelected(day: Int) {
+        _uiState.update { it.copy(dayOfMonth = day) }
+    }
+    fun onRepeatSheetVisibilityChange(isVisible: Boolean) {
+        _uiState.update { it.copy(isRepeatSheetVisible = isVisible) }
     }
 
     fun onRegisterClick() {
@@ -131,8 +140,32 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun registerRecurringExpense() {
-        // TODO: 정기 지출 등록 로직 구현
+    private suspend fun registerRecurringExpense() {
+        val userId = getFirebaseAuth() ?: return
+        val currentState = _uiState.value
+
+        if (currentState.amount.isBlank() || currentState.title.isBlank() || currentState.categoryId.isBlank()) {
+            _eventFlow.emit(RegistrationEvent.ShowToast("금액, 내용, 카테고리는 필수 항목입니다."))
+            return
+        }
+
+        val regularExpenseDto = RegularExpenseDto(
+            amount = currentState.amount.toLongOrNull() ?: 0L,
+            title = currentState.title.ifBlank { currentState.category },
+            memo = currentState.memo,
+            categoryId = currentState.categoryId,
+            first_payment_date = Timestamp(currentState.date),
+            repeat_cycle = "MONTHLY",
+            day = currentState.dayOfMonth
+        )
+
+        if (regularExpenseRepository.addRegularExpense(userId, regularExpenseDto)) {
+            _eventFlow.emit(RegistrationEvent.ShowToast("정기 지출이 등록되었습니다"))
+            clearInputs()
+//            _eventFlow.emit(RegistrationEvent.NavigateBack)
+        } else {
+            _eventFlow.emit(RegistrationEvent.ShowToast("저장에 실패했습니다."))
+        }
     }
 
     // 지출등록 후 필드 초기화

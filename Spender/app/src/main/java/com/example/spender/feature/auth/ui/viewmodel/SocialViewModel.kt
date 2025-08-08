@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import com.example.spender.core.data.remote.auth.LoginType
 import com.example.spender.feature.auth.data.AuthPrefs
 import com.example.spender.feature.auth.domain.AuthRepository
+import com.example.spender.feature.onboarding.data.OnboardingPref
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
@@ -35,7 +36,10 @@ class SocialViewModel(
                 }
 
                 Log.d("Login", "naver User : ${userMap.toString()}")
-                navController.navigate("main") {
+
+                navController.navigate(
+                    if (OnboardingPref.wasShown(getApplication())) "main"
+                    else "onboarding") {
                     popUpTo("auth") { inclusive = true }
                 }
             } catch (e: Exception) {
@@ -60,7 +64,10 @@ class SocialViewModel(
                     )
                 }
                 Log.d("Login", "kakao User : ${userMap.toString()}")
-                navController.navigate("main") {
+
+                navController.navigate(
+                    if (OnboardingPref.wasShown(getApplication())) "main"
+                    else "onboarding") {
                     popUpTo("auth") { inclusive = true }
                 }
             } catch (e: Exception) {

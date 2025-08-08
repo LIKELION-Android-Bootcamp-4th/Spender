@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -25,6 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.spender.ui.theme.PointColor
@@ -46,6 +50,22 @@ fun CalendarScreen(navHostController: NavHostController) {
     val showDatePicker = viewModel.showDatePicker.value
     val year = viewModel.year.value
     val month = viewModel.month.value
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.refresh()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -69,7 +89,7 @@ fun CalendarScreen(navHostController: NavHostController) {
                     viewModel.nowMonth,
                     viewModel.nowDay,
                     (viewModel.now.get(Calendar.DAY_OF_WEEK) + viewModel.now.get(Calendar.DATE) + 2) % 7,
-                    dailyList.toMutableList()
+                    dailyList
                 )
             } else {
                 calendar.set(Calendar.YEAR, selectionState[0])
@@ -78,7 +98,7 @@ fun CalendarScreen(navHostController: NavHostController) {
                     selectionState[1],
                     selectionState[2],
                     (calendar.get(Calendar.DAY_OF_WEEK) + selectionState[2] + 1) % 7,
-                    dailyList.toMutableList()
+                    dailyList
                 )
             }
         }
