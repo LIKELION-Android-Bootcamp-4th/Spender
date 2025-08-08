@@ -139,13 +139,13 @@ fun Calendar(data: List<CalendarItemData>, onClick: (Int) -> Unit, selection: Li
                     fontWeight = FontWeight.SemiBold),
                     modifier = Modifier.padding(top = 6.dp)
                 )
-                Text(text = if (item.expense == 0) "" else item.expense.toString(), style = TextStyle(
+                Text(text = if (item.expense == 0) "" else if (item.expense == Int.MAX_VALUE) "0" else item.expense.toString(), style = TextStyle(
                     fontSize = 8.sp,
                     color = when {
                         item.expense > 0 && item.today -> Color.White
                         item.expense > 0 -> Color.Black
                         item.expense < 0 -> Color.Red
-                        else -> Color.Transparent
+                        else -> Color.Black
                     }
                 )
                 )
