@@ -5,10 +5,13 @@ import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.OAuthLoginCallback
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resumeWithException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NaverDataSource(private val context: Context) {
+@Singleton
+class NaverDataSource @Inject constructor() {
 
-    suspend fun signIn(): String = suspendCancellableCoroutine { cont ->
+    suspend fun signIn(context: Context): String = suspendCancellableCoroutine { cont ->
         NaverIdLoginSDK.authenticate(context, object : OAuthLoginCallback {
             override fun onSuccess() {
                 val naverAccessToken = NaverIdLoginSDK.getAccessToken()

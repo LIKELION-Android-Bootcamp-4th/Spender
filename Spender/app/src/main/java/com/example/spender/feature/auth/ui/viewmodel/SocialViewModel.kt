@@ -13,16 +13,19 @@ import com.example.spender.feature.onboarding.data.OnboardingPref
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SocialViewModel(
+@HiltViewModel
+class SocialViewModel @Inject constructor(
     application: Application,
     private val authRepository: AuthRepository
 ) : AndroidViewModel(application) {
 
-    fun naverLogin(navController: NavController) {
+    fun naverLogin(context: Context, navController: NavController) {
         viewModelScope.launch {
             try {
-                authRepository.naverLogin()
+                authRepository.naverLogin(context)
                 AuthPrefs.setLoginType(getApplication(), LoginType.NAVER)
                 Log.d("Login", "Naver Login Success!")
                 val currentUser = Firebase.auth.currentUser
@@ -48,10 +51,10 @@ class SocialViewModel(
         }
     }
 
-    fun kakaoLogin(navController: NavController) {
+    fun kakaoLogin(context: Context, navController: NavController) {
         viewModelScope.launch {
             try {
-                authRepository.kakaoLogin()
+                authRepository.kakaoLogin(context)
                 AuthPrefs.setLoginType(getApplication(), LoginType.KAKAO)
                 Log.d("Login", "Kakao Login Success!")
                 val currentUser = Firebase.auth.currentUser
@@ -78,7 +81,7 @@ class SocialViewModel(
 
     fun logout(context: Context, onDone: () -> Unit) {
         viewModelScope.launch {
-            authRepository.logoutByLoginType(context)
+            authRepository.logoutUser(context)
             onDone()
         }
     }

@@ -16,10 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.R
 import com.example.spender.feature.auth.ui.viewmodel.SocialViewModel
@@ -31,9 +32,10 @@ import com.example.spender.ui.theme.WhiteColor
 
 @Composable
 fun KakaoLogin(
-    viewModel: SocialViewModel,
     navController: NavHostController
 ) {
+    val viewModel: SocialViewModel = hiltViewModel()
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -43,7 +45,7 @@ fun KakaoLogin(
             containerColor = WhiteColor
         ),
         onClick = {
-            viewModel.kakaoLogin(navController)
+            viewModel.kakaoLogin(context, navController)
         }
     ) {
         Row(

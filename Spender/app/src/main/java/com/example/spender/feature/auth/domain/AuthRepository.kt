@@ -15,21 +15,24 @@ import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthRepository(
+@Singleton
+class AuthRepository @Inject constructor(
     private val firebaseAuthDataSource: FirebaseAuthDataSource,
     private val naverDataSource: NaverDataSource,
     private val kakaoDataSource: KakaoDataSource
 ) {
 
-    suspend fun naverLogin() {
-        val accessToken = naverDataSource.signIn()
+    suspend fun naverLogin(context: Context) {
+        val accessToken = naverDataSource.signIn(context)
         Log.d("Login", "naver token : $accessToken")
         signInWithCustomToken("naverCustomAuth", accessToken)
     }
 
-    suspend fun kakaoLogin() {
-        val accessToken = kakaoDataSource.signIn()
+    suspend fun kakaoLogin(context: Context) {
+        val accessToken = kakaoDataSource.signIn(context)
         Log.d("Login", "kakao token : $accessToken")
         signInWithCustomToken("kakaoCustomAuth", accessToken)
     }
@@ -48,7 +51,7 @@ class AuthRepository(
         }
     }
 
-    fun logoutByLoginType(context: Context) {
+    fun logoutUser(context: Context) {
         when (AuthPrefs.getLoginType(context)) {
             LoginType.KAKAO -> {
                 UserApiClient.instance.logout { error ->
