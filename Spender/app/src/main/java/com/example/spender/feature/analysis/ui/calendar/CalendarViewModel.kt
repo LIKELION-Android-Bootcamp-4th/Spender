@@ -1,6 +1,7 @@
 package com.example.spender.feature.analysis.ui.calendar
 
 import android.icu.util.Calendar
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class CalendarViewModel @Inject constructor(
@@ -25,7 +27,7 @@ class CalendarViewModel @Inject constructor(
     val _calendarItem = MutableStateFlow<List<CalendarItemData>>(emptyList())
     val calendarItem: StateFlow<List<CalendarItemData>> = _calendarItem.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
+        started = SharingStarted.WhileSubscribed(1500),
         initialValue = emptyList()
     )
 
@@ -39,62 +41,76 @@ class CalendarViewModel @Inject constructor(
     private val _selectionState = MutableStateFlow(listOf(0, 0, 0))
     val selectionState: StateFlow<List<Int>> = _selectionState.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
+        started = SharingStarted.WhileSubscribed(1500),
         initialValue = listOf(0, 0, 0)
     )
 
     val showDatePicker: MutableState<Boolean?> = mutableStateOf(null)
 
+    private val _dailyList = MutableStateFlow<List<ExpenseDto>>(emptyList())
+    val dailyList: StateFlow<List<ExpenseDto>> = _dailyList.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(1500),
+        initialValue = emptyList()
+    )
+
     init {
-        setCalendar()
-        setDialog()
+        viewModelScope.launch {
+            setCalendar()
+            setDialog()
+        }
     }
 
     fun setCalendar(setYear: Int? = nowYear, setMonth: Int? = nowMonth) {
-        now.set(Calendar.YEAR, setYear ?: year.value)
-        now.set(Calendar.MONTH, setMonth ?: month.value)
-        now.set(Calendar.DATE, 1)
+        viewModelScope.launch {
+            now.set(Calendar.YEAR, setYear ?: year.value)
+            now.set(Calendar.MONTH, setMonth ?: month.value)
+            now.set(Calendar.DATE, 1)
 
-        if (setYear != null) year.value = setYear
-        if (setMonth != null) month.value = setMonth
+            if (setYear != null) year.value = setYear
+            if (setMonth != null) month.value = setMonth
 
-        val calendarData = mutableListOf<CalendarItemData>()
-        val startDay = when (now.get(Calendar.DAY_OF_WEEK)) {
-            1 -> 6
-            2 -> 0
-            3 -> 1
-            4 -> 2
-            5 -> 3
-            6 -> 4
-            7 -> 5
-            else -> -1
-        }
-
-        calendarData.clear()
-
-        for (i in 0 until startDay) {
-            calendarData.add(CalendarItemData(0, 0, false, false))
-        }
-
-        val expenseList = repository.getExpenseList(year.value, month.value+1)
-        val incomeList = repository.getIncomeList(year.value, month.value+1)
-
-        for (i in 1 .. now.getActualMaximum(Calendar.DAY_OF_MONTH)) {
-            var data = CalendarItemData(i, 0, false, false)
-            if (expenseList.isNotEmpty() && expenseList[0].date.toDate().date == i) {
-                data = data.copy(expense = data.expense - expenseList[0].amount)
+            val calendarData = mutableListOf<CalendarItemData>()
+            val startDay = when (now.get(Calendar.DAY_OF_WEEK)) {
+                1 -> 6
+                2 -> 0
+                3 -> 1
+                4 -> 2
+                5 -> 3
+                6 -> 4
+                7 -> 5
+                else -> -1
             }
-            if (incomeList.isNotEmpty() && expenseList[0].date.toDate().date == i) {
-                data = data.copy(expense = data.expense + incomeList[0].amount)
-            }
-            if (i == nowDay && year.value == nowYear && month.value == nowMonth) {
-                calendarData.add(data.copy(background = false, today = true))
-                continue
-            }
-            calendarData.add(data)
-        }
 
-        _calendarItem.value = calendarData
+            calendarData.clear()
+
+            for (i in 0 until startDay) {
+                calendarData.add(CalendarItemData(0, 0, false, false))
+            }
+
+            val expenseList = repository.getExpenseList(year.value, month.value+1)
+            val incomeList = repository.getIncomeList(year.value, month.value+1)
+
+            for (i in 1 .. now.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+                var data = CalendarItemData(i, 0, false, false)
+                if (expenseList.isNotEmpty() && expenseList[0].date.toDate().date == i) {
+                    data = data.copy(expense = data.expense - expenseList[0].amount)
+                }
+                if (incomeList.isNotEmpty() && incomeList[0].date.toDate().date == i) {
+                    data = data.copy(expense = data.expense + incomeList[0].amount)
+                }
+                if (i == nowDay && year.value == nowYear && month.value == nowMonth) {
+                    calendarData.add(data.copy(background = false, today = true))
+                    continue
+                }
+                calendarData.add(data)
+            }
+
+            _calendarItem.value = calendarData
+            if (_selectionState.value == listOf(0, 0, 0)) {
+                updateSelectionByDay(nowDay, year.value, month.value)
+            }
+        }
     }
 
     fun updateSelection(index: Int, year: Int, month: Int) {
@@ -104,6 +120,7 @@ class CalendarViewModel @Inject constructor(
             _calendarItem.value = calendarData
             _selectionState.value = listOf(year, month, calendarData[index].day)
         }
+        getExpenseListByDate()
     }
 
     fun updateSelectionByDay(day: Int, year: Int, month: Int) {
@@ -114,24 +131,29 @@ class CalendarViewModel @Inject constructor(
             _calendarItem.value = calendarData
             _selectionState.value = listOf(year, month, calendarData[index].day)
         }
+        getExpenseListByDate()
     }
 
     fun previousMonth() {
-        month.value -= 1
-        if (month.value < 0) {
-            month.value = 11
-            year.value -= 1
+        viewModelScope.launch {
+            month.value -= 1
+            if (month.value < 0) {
+                month.value = 11
+                year.value -= 1
+            }
+            setCalendar(year.value, month.value)
         }
-        setCalendar(year.value, month.value)
     }
 
     fun nextMonth() {
-        month.value += 1
-        if (month.value >= 12) {
-            month.value = 0
-            year.value += 1
+        viewModelScope.launch {
+            month.value += 1
+            if (month.value >= 12) {
+                month.value = 0
+                year.value += 1
+            }
+            setCalendar(year.value, month.value)
         }
-        setCalendar(year.value, month.value)
     }
 
     private fun setDialog() {
@@ -146,9 +168,12 @@ class CalendarViewModel @Inject constructor(
         showDatePicker.value = false
     }
 
-    fun getExpenseListByDate(): MutableList<ExpenseDto> {
-        return if (selectionState.value[2] == 0) {
-            repository.getDailyList(year.value, month.value+1, nowDay)
-        } else repository.getDailyList(year.value, month.value+1, selectionState.value[2])
+    private fun getExpenseListByDate() {
+        viewModelScope.launch {
+            if (selectionState.value[2] == 0) {
+                _dailyList.value = repository.getDailyList(year.value, month.value+1, nowDay)
+            } else _dailyList.value = repository.getDailyList(year.value, month.value+1, selectionState.value[2])
+            Log.d("esfjge", "${_dailyList.value.size}")
+        }
     }
 }
