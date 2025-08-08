@@ -3,6 +3,7 @@ package com.example.spender.feature.onboarding
 import android.Manifest
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.R
 import com.example.spender.core.ui.CustomLongButton
@@ -38,13 +40,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 @Composable
 fun OnboardingScreen(
     navController: NavHostController,
-    viewModel: OnboardingViewModel = viewModel()
+    viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
     val currentPage by viewModel.currentPage.collectAsState()
-    val budget by viewModel.budget.collectAsState()
-    val isBudgetValid = viewModel.isBudgetValid
+    val budget = viewModel.budget
 
     val titles = context.resources.getStringArray(R.array.onboarding_title).toList()
 
@@ -82,7 +83,7 @@ fun OnboardingScreen(
                 Spacer(modifier = Modifier.height(80.dp))
                 BudgetInputField(
                     budget = budget,
-                    onBudgetChange = { viewModel.onBudgetGet(it) },
+                    onBudgetChange = { viewModel.updateBudget(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                 )
@@ -102,6 +103,15 @@ fun OnboardingScreen(
                         saveDefaultNotificationSettingsToFirestore(true)
                     }
 
+                    viewModel.saveBudget { success ->
+                        if (success) {
+                            Toast.makeText(context, "예산이 설정되었습니다.", Toast.LENGTH_SHORT).show()
+                            Log.d("Budget", "저장 성공")
+                        } else {
+                            Log.d("Budget", "저장 실패")
+                        }
+                    }
+
                     OnboardingPref.setShown(context)
                     navController.navigate(Screen.MainScreen.route) {
                         popUpTo(Screen.OnboardingScreen.route) {
@@ -110,7 +120,7 @@ fun OnboardingScreen(
                     }
                 }
             },
-            isEnabled = currentPage != 1 || isBudgetValid
+            isEnabled = currentPage != 1 || budget > 0
         )
     }
 }
