@@ -59,13 +59,13 @@ class MainActivity : ComponentActivity() {
 
                 val isOnboardingShown = OnboardingPref.wasShown(this)
                 // 로그인 화면으로 가려면 아래 주석 해제하고
-                //val startDestination = Screen.AuthScreen.route
+                val startDestination = Screen.AuthScreen.route
                 //이거 아래부분 주석처리 하면 됨
-                val startDestination = if (isOnboardingShown) {
-                    Screen.MainScreen.route
-                } else {
-                    Screen.OnboardingScreen.route
-                }
+//                val startDestination = if (isOnboardingShown) {
+//                    Screen.MainScreen.route
+//                } else {
+//                    Screen.OnboardingScreen.route
+//                }
                 SpenderNavigation(
                     navController = navController,
                     startDestination = startDestination
