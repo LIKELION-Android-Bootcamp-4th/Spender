@@ -43,6 +43,7 @@ import java.util.Locale
 fun ExpenseContent(
     uiState: RegistrationUiState,
     viewModel: RegistrationViewModel,
+    onManageCategoriesClick: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -64,7 +65,9 @@ fun ExpenseContent(
                 ) {
                     Text("카테고리 선택", style = Typography.labelMedium)
                     TextButton(
-                        onClick = { }
+                        onClick = {
+                            onManageCategoriesClick()
+                        }
                     ) {
                         Text("관리", style = Typography.labelMedium)
                     }
@@ -271,7 +274,7 @@ fun ExpenseContent(
 }
 
 @Composable
-private fun CategoryBottomSheetItem(
+fun CategoryBottomSheetItem(
     category: Category,
     onClick: () -> Unit,
 ) {
