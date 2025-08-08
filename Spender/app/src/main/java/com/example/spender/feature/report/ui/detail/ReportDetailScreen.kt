@@ -52,7 +52,7 @@ fun ReportDetailScreen(
             ) {
                 // 이번달 총 지출
                 item {
-                    TotalSpendingSection(totalExpense = report.totalExpense)
+                    TotalSpendingSection(totalExpense = report.totalExpense, totalBudget = report.totalBudget)
                 }
 
                 // 예산 대비 지출 TODO : 시간 남으면 피그마처럼 초과되는 부분만 빨간색으로 되도록 수정

@@ -41,6 +41,10 @@ fun ReportListScreen(
 
     LaunchedEffect(selectedIndex) {
         if (selectedIndex >= 0) listState.animateScrollToItem(selectedIndex)
+
+    }
+
+    LaunchedEffect(year) {
         FirebaseAuth.getInstance().currentUser?.let {
             viewModel.loadReports(year)
         } ?: Log.w("ReportScreen", "사용자 정보 없음")
