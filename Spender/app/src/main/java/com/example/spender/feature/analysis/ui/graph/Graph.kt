@@ -1,6 +1,7 @@
 package com.example.spender.feature.analysis.ui.graph
 
 import android.icu.text.DecimalFormat
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -34,9 +35,9 @@ fun LineChart(sampleData: List<CalendarItemData>) {
 
         val data = mutableListOf<CalendarItemData>()
         for (i in 1 .. 31) {
-            if (graphData.isNotEmpty() && graphData.first().day == i) {
-                data.add(graphData.first())
-                graphData = graphData.drop(1)
+            val graph = graphData.filter { it.day == i }
+            if (graph.isNotEmpty()) {
+                data.add(graph.first())
                 continue
             }
             data.add(CalendarItemData(i, 0))

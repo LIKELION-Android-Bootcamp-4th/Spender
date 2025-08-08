@@ -62,6 +62,11 @@ class GraphViewModel @Inject constructor(
         getMaxExpense()
     }
 
+    fun refresh() {
+        getDailyExpense()
+        getMaxExpense()
+    }
+
     fun previousMonth() {
         month -= 1
         if (month < 0) {
@@ -104,7 +109,6 @@ class GraphViewModel @Inject constructor(
         viewModelScope.launch {
             val rawData = repository.getDailyTotalList(year, month)
             val dataList = mutableListOf<CalendarItemData>()
-
             for (doc in rawData) {
                 dataList.add(CalendarItemData(day = doc.key.toInt(), expense = doc.value))
             }
