@@ -1,4 +1,4 @@
-package com.example.spender.feature.mypage.ui
+package com.example.spender.feature.mypage.ui.viewmodel
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -7,9 +7,9 @@ import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.feature.mypage.data.repository.CategoryRepository
 import com.example.spender.feature.mypage.domain.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(

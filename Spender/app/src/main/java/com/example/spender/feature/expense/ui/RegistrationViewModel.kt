@@ -1,6 +1,5 @@
 package com.example.spender.feature.expense.ui
 
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spender.core.data.service.getFirebaseAuth

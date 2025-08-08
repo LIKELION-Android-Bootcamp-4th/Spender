@@ -11,12 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TabRow
@@ -41,6 +38,7 @@ import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
+import com.example.spender.ui.theme.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +57,7 @@ fun ExpenseRegistrationParentScreen(
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
 //                is RegistrationEvent.NavigateBack -> {
-//                    navHostController.popBackStack()
+//                    navHostController.popBackStack() //이전화면으로 돌아가기
 //                }
             }
         }
@@ -151,7 +149,13 @@ fun ExpenseRegistrationParentScreen(
             }
             when (uiState.selectedTabIndex) {
                 0 -> OcrContent(uiState, viewModel)
-                1 -> ExpenseContent(uiState, viewModel)
+                1 -> ExpenseContent(
+                    uiState,
+                    viewModel,
+                    onManageCategoriesClick = {
+                        navHostController.navigate(Screen.ExpenseCategoryScreen.route)
+                    }
+                    )
                 2 -> RecurringExpenseContent(uiState, viewModel)
             }
         }

@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.firebase.messaging.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -84,7 +85,6 @@ dependencies {
     implementation("com.google.firebase:firebase-functions-ktx:21.1.0")
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.android.gms:play-services-base:18.3.0")
-
     implementation("androidx.datastore:datastore-preferences:1.1.7")
 
     // hilt

@@ -46,6 +46,7 @@ import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.feature.mypage.ui.component.CategoryDeleteDialog
 import com.example.spender.feature.mypage.ui.component.CategoryEditDialog
 import com.example.spender.feature.mypage.domain.model.Category
+import com.example.spender.feature.mypage.ui.viewmodel.CategoryViewModel
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 

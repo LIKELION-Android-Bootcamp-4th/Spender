@@ -10,6 +10,7 @@ import com.example.spender.feature.auth.AuthScreen
 import com.example.spender.feature.expense.ui.ExpenseRegistrationParentScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.home.ui.NotificationListScreen
+import com.example.spender.feature.income.ui.IncomeRegistrationScreen
 import com.example.spender.feature.mypage.MypageScreen
 import com.example.spender.feature.mypage.ui.BudgetScreen
 import com.example.spender.feature.mypage.ui.ExpenseCategoryScreen
@@ -71,6 +72,9 @@ fun SpenderNavigation(
         composable(Screen.ExpenseCategoryScreen.route) {
             ExpenseCategoryScreen(navController)
         }
+        composable(Screen.IncomeCategoryScreen.route) {
+            IncomeCategoryScreen(navController)
+        }
         composable(Screen.RegularExpenseScreen.route) {
             RegularExpenseScreen(navController)
         }
@@ -79,6 +83,9 @@ fun SpenderNavigation(
         }
         composable(Screen.ExpenseRegistrationScreen.route) {
             ExpenseRegistrationParentScreen(navController)
+        }
+        composable(Screen.IncomeRegistrationScreen.route) {
+            IncomeRegistrationScreen(navController)
         }
 
 
