@@ -61,6 +61,15 @@ class CalendarViewModel @Inject constructor(
         }
     }
 
+    fun refresh() {
+        viewModelScope.launch {
+            if (selectionState.value != listOf(0, 0, 0)) {
+                setCalendar(year.value, month.value)
+                updateSelectionByDay(_selectionState.value[2], _selectionState.value[0], _selectionState.value[1])
+            }
+        }
+    }
+
     fun setCalendar(setYear: Int? = nowYear, setMonth: Int? = nowMonth) {
         viewModelScope.launch {
             now.set(Calendar.YEAR, setYear ?: year.value)
@@ -93,11 +102,16 @@ class CalendarViewModel @Inject constructor(
 
             for (i in 1 .. now.getActualMaximum(Calendar.DAY_OF_MONTH)) {
                 var data = CalendarItemData(i, 0, false, false)
-                if (expenseList.isNotEmpty() && expenseList[0].date.toDate().date == i) {
-                    data = data.copy(expense = data.expense - expenseList[0].amount)
+                val expense = expenseList.filter { it.date.toDate().date == i }
+                val income = incomeList.filter { it.date.toDate().date == i }
+                expense.forEach {
+                    data = data.copy(expense = data.expense - it.amount)
                 }
-                if (incomeList.isNotEmpty() && incomeList[0].date.toDate().date == i) {
-                    data = data.copy(expense = data.expense + incomeList[0].amount)
+                income.forEach {
+                    data = data.copy(expense = data.expense + it.amount)
+                }
+                if (expense.isNotEmpty() && income.isNotEmpty() && data.expense == 0) {
+                    data = data.copy(expense = Int.MAX_VALUE)
                 }
                 if (i == nowDay && year.value == nowYear && month.value == nowMonth) {
                     calendarData.add(data.copy(background = false, today = true))
@@ -173,7 +187,6 @@ class CalendarViewModel @Inject constructor(
             if (selectionState.value[2] == 0) {
                 _dailyList.value = repository.getDailyList(year.value, month.value+1, nowDay)
             } else _dailyList.value = repository.getDailyList(year.value, month.value+1, selectionState.value[2])
-            Log.d("esfjge", "${_dailyList.value.size}")
         }
     }
 }
