@@ -5,9 +5,12 @@ import android.util.Log
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resumeWithException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class KakaoDataSource(private val context: Context) {
-    suspend fun signIn(): String = suspendCancellableCoroutine { cont ->
+@Singleton
+class KakaoDataSource @Inject constructor() {
+    suspend fun signIn(context: Context): String = suspendCancellableCoroutine { cont ->
         UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
             if (error != null) {
                 Log.e("Login", "Kakao SignIn Error! ${error.message}", error)

@@ -3,8 +3,11 @@ package com.example.spender.feature.auth.data
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.functions.functions
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FirebaseAuthDataSource {
+@Singleton
+class FirebaseAuthDataSource @Inject constructor() {
     private val auth = Firebase.auth
     private val functions = Firebase.functions
 
