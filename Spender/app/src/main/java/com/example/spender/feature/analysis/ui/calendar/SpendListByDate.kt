@@ -28,7 +28,7 @@ import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.Typography
 
 @Composable
-fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: MutableList<ExpenseDto>) { //캘린더 하단 지출 리스트
+fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: List<ExpenseDto>) { //캘린더 하단 지출 리스트
     val itemData = mutableListOf<SpendListItemData>()
     for (data in list) {
         itemData.add(SpendListItemData(
