@@ -32,6 +32,7 @@ import com.example.spender.core.data.remote.auth.LoginType
 import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.core.data.service.login
 import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
+import com.example.spender.feature.onboarding.data.OnboardingPref
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 import com.example.spender.ui.theme.navigation.Screen
@@ -55,11 +56,18 @@ fun GoogleLogin(
             Log.d("Login", "Google SignIn Success!")
             login(FirebaseAuth.getInstance().currentUser, LoginType.GOOGLE.type)
             Log.d("Login", getFirebaseAuth() ?: "failed")
-            navController.navigate(Screen.MainScreen.route) {
-                popUpTo(Screen.AuthScreen.route) {
-                    inclusive = true
+
+            val onboardingShown = OnboardingPref.wasShown(context)
+            if (onboardingShown) {
+                navController.navigate(Screen.MainScreen.route) {
+                    popUpTo(Screen.AuthScreen.route) { inclusive = true }
+                }
+            } else {
+                navController.navigate(Screen.OnboardingScreen.route) {
+                    popUpTo(Screen.AuthScreen.route) { inclusive = true }
                 }
             }
+
         }
     }
 
