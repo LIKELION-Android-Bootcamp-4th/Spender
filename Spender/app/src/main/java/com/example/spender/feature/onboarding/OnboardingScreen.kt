@@ -36,6 +36,7 @@ import com.example.spender.ui.theme.navigation.Screen
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 @Composable
 fun OnboardingScreen(
@@ -54,7 +55,6 @@ fun OnboardingScreen(
     ) { isGranted ->
         if (isGranted) {
             Log.d("푸시 알림 설정 동의", "알림 권한 허용!!!!")
-            // 👉 Firestore에 기본 알림 설정 저장
             saveDefaultNotificationSettingsToFirestore(true)
         } else {
             saveDefaultNotificationSettingsToFirestore(false)
@@ -95,7 +95,7 @@ fun OnboardingScreen(
             onClick = {
                 if (currentPage < 2) {
                     viewModel.onNext()
-                } else {
+                } else { // TODO: 콜백 처리?!?!
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     } else {
@@ -129,18 +129,21 @@ fun saveDefaultNotificationSettingsToFirestore(enabled: Boolean) {
     val uid = Firebase.auth.currentUser?.uid ?: return
     val db = FirebaseFirestore.getInstance()
 
-    val defaultSettings = mapOf(
-        "budget_alert" to enabled,
-        "report_alert" to enabled,
-        "reminder_alert" to enabled
+    val settingsMap = mapOf(
+        "notificationSettings" to mapOf(
+            "budgetAlert" to enabled,
+            "reportAlert" to enabled,
+            "reminderAlert" to enabled
+        )
     )
 
     db.collection("users")
         .document(uid)
-        .collection("notification_settings")
-        .document("notification_settings")
-        .set(defaultSettings)
+        .set(settingsMap, SetOptions.merge())
         .addOnSuccessListener {
-            Log.d("Firestore", "알림 설정 초기화 완료 : $enabled")
+            Log.d("Firestore", "알림 설정 초기화 완료 (enabled=$enabled)")
+        }
+        .addOnFailureListener{
+            Log.d("Firestore", "알림 설정 초기화 실패", it)
         }
 }
