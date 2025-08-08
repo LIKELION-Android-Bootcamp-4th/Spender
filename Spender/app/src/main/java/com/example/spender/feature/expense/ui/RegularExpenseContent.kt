@@ -242,7 +242,7 @@ fun RecurringExpenseContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { /* 날짜 선택 로직 */ }
+                    .clickable { viewModel.onDateDialogVisibilityChange(true) }
                     .padding(start = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -326,12 +326,13 @@ fun RecurringExpenseContent(
 @Composable
 private fun RepeatDaySelectionSheet(onDaySelected: (Int) -> Unit) {
     Column(modifier = Modifier.padding(16.dp)) {
-        Text("반복 날짜 선택", style = Typography.titleMedium)
+        Text("반복 날짜 선택", style = Typography.labelMedium)
         Spacer(Modifier.height(16.dp))
         LazyColumn(modifier = Modifier.navigationBarsPadding()) {
             items(31) { day ->
                 Text(
-                    text = "${day + 1}일",
+                    text = "매월 ${day + 1}일",
+                    style = Typography.titleMedium,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { onDaySelected(day + 1) }

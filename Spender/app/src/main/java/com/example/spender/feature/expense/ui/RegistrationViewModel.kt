@@ -144,6 +144,11 @@ class RegistrationViewModel @Inject constructor(
         val userId = getFirebaseAuth() ?: return
         val currentState = _uiState.value
 
+        if (currentState.amount.isBlank() || currentState.title.isBlank() || currentState.categoryId.isBlank()) {
+            _eventFlow.emit(RegistrationEvent.ShowToast("금액, 내용, 카테고리는 필수 항목입니다."))
+            return
+        }
+
         val regularExpenseDto = RegularExpenseDto(
             amount = currentState.amount.toLongOrNull() ?: 0L,
             title = currentState.title.ifBlank { currentState.category },
