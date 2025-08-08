@@ -178,7 +178,7 @@ const generateMonthlyReports = pubsub
           ...summary,
           feedback,
           month: monthStr,
-          created_at: admin.firestore.FieldValue.serverTimestamp(),
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
         });
         console.log(`[${userDoc.id}] 리포트 저장 완료`);
       } catch (err) {
