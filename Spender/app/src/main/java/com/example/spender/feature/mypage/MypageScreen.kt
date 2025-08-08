@@ -1,5 +1,7 @@
 package com.example.spender.feature.mypage
 
+import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,36 +22,69 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.spender.core.ui.CustomDialog
+import com.example.spender.feature.auth.data.FirebaseAuthDataSource
+import com.example.spender.feature.auth.data.KakaoDataSource
+import com.example.spender.feature.auth.data.NaverDataSource
+import com.example.spender.feature.auth.domain.AuthRepository
+import com.example.spender.feature.auth.ui.viewmodel.SignViewModelFactory
+import com.example.spender.feature.auth.ui.viewmodel.SocialViewModel
 import com.example.spender.feature.mypage.ui.component.MyPageItemType
 import com.example.spender.feature.mypage.ui.component.Section
 
 @Composable
 fun MypageScreen(navHostController: NavHostController) {
-    val userName = "이수지"
+    val context = LocalContext.current
+    val application = context.applicationContext as Application
+
+    val firebaseAuthDataSource = remember { FirebaseAuthDataSource() }
+    val naverDataSource = remember { NaverDataSource(context) }
+    val kakaoDataSource = remember { KakaoDataSource(context) }
+
+    val authRepository = remember {
+        AuthRepository(firebaseAuthDataSource, naverDataSource, kakaoDataSource)
+    }
+
+    val viewModel: SocialViewModel = viewModel(
+        factory = SignViewModelFactory(application, authRepository)
+    )
+
+    var showWithdrawDialog by remember { mutableStateOf(false) }
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    val userName = "이름"
 
     val onItemClick: (MyPageItemType) -> Unit = { item ->
-        when(item){
+        when (item) {
             MyPageItemType.IncomeCategory -> navHostController.navigate("income_category")
             MyPageItemType.ExpenseCategory -> navHostController.navigate("expense_category")
             MyPageItemType.Budget -> navHostController.navigate("budget")
             MyPageItemType.RegularExpense -> navHostController.navigate("regular_expense")
             MyPageItemType.Notification -> navHostController.navigate("notification")
             MyPageItemType.Withdraw -> {
-                // TODO: 탈퇴 다이얼로그
+                showWithdrawDialog = true
             }
+
             MyPageItemType.Logout -> {
-                // TODO: 로그아웃 다이얼로그
+                showLogoutDialog = true
             }
         }
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(vertical = 14.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 14.dp)
     ) {
         UserInfoSection(userName = userName)
 
@@ -81,6 +116,51 @@ fun MypageScreen(navHostController: NavHostController) {
 
         AdBanner()
     }
+
+    if (showWithdrawDialog) {
+        CustomDialog(
+            title = "탈퇴하시겠습니까?",
+            onConfirm = {
+                showWithdrawDialog = false
+
+                viewModel.withdraw(
+                    context,
+                    onSuccess = {
+                        Toast.makeText(context, "탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.", Toast.LENGTH_SHORT)
+                            .show()
+                        navHostController.navigate("auth") {
+                            popUpTo("main") { inclusive = true }
+                        }
+                    },
+                    onError = { msg ->
+                        Toast.makeText(context, "회원탈퇴 실패 $msg", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            },
+            onDismiss = {
+                showWithdrawDialog = false
+            }
+        )
+    }
+    if (showLogoutDialog) {
+        CustomDialog(
+            title = "로그아웃 하시겠습니까?",
+            onConfirm = {
+                showLogoutDialog = false
+
+                viewModel.logout(context) {
+                    Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                    navHostController.navigate("auth") {
+                        popUpTo("main") { inclusive = true }
+                    }
+                }
+            },
+            onDismiss = {
+                showLogoutDialog = false
+            }
+        )
+    }
+
 }
 
 @Composable
@@ -91,7 +171,11 @@ fun UserInfoSection(userName: String) {
             .padding(vertical = 28.dp, horizontal = 28.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(Icons.Default.AccountCircle, contentDescription = null, modifier = Modifier.size(24.dp)) // TODO : 소셜 로그인에 맞는 이미지로 교체
+        Icon(
+            Icons.Default.AccountCircle,
+            contentDescription = null,
+            modifier = Modifier.size(24.dp)
+        ) // TODO : 소셜 로그인에 맞는 이미지로 교체
         Spacer(modifier = Modifier.width(16.dp))
         Text("$userName 님", style = MaterialTheme.typography.titleMedium)
     }

@@ -1,10 +1,13 @@
-package com.example.spender.feature.auth.ui
+package com.example.spender.feature.auth.ui.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.spender.core.data.remote.auth.LoginType
+import com.example.spender.feature.auth.data.AuthPrefs
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
@@ -15,6 +18,7 @@ class AuthViewModel : ViewModel() {
     val isFailState: State<Boolean> = _isFailState
 
     fun googleLogin(
+        context: Context,
         activityResult: ActivityResult,
         onSuccess: () -> Unit
     ) {
@@ -29,6 +33,7 @@ class AuthViewModel : ViewModel() {
                 .signInWithCredential(credential)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
+                        AuthPrefs.setLoginType(context, LoginType.GOOGLE)
                         onSuccess()
                     } else {
                         _isFailState.value = true
@@ -40,5 +45,4 @@ class AuthViewModel : ViewModel() {
             Log.d("Login", "Google SignIn failed! ${e.message}")
         }
     }
-
 }

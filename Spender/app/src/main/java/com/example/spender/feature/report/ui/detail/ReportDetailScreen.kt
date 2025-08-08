@@ -38,7 +38,7 @@ fun ReportDetailScreen(
     Scaffold(
         topBar = {
             CustomTopAppBar(
-                title = "${report.month.toYearMonth()} 월간 리포트",  // TODO : 값 받아와서 해당 년도 & 월로 수정
+                title = "${report.month.toYearMonth()} 월간 리포트",
                 navHostController,
                 showBackButton = true
             )
@@ -52,10 +52,10 @@ fun ReportDetailScreen(
             ) {
                 // 이번달 총 지출
                 item {
-                    TotalSpendingSection(totalExpense = report.totalExpense)
+                    TotalSpendingSection(totalExpense = report.totalExpense, totalBudget = report.totalBudget)
                 }
 
-                // 예산 대비 지출
+                // 예산 대비 지출 TODO : 시간 남으면 피그마처럼 초과되는 부분만 빨간색으로 되도록 수정
                 item {
                     BudgetProgressSection(totalExpense = report.totalExpense, totalBudget = report.totalBudget)
                 }
