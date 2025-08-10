@@ -2,6 +2,7 @@ package com.example.spender.feature.expense.data.repository
 
 import android.util.Log
 import com.example.spender.feature.expense.data.remote.RegularExpenseDto
+import com.example.spender.feature.expense.domain.model.RegularExpense
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -17,5 +18,26 @@ class RegularExpenseRepository @Inject constructor() {
             Log.w("Firestore", "정기 지출 등록 실패", e)
             false
         }
+    }
+
+    suspend fun getRegularExpenseById(userId: String, regularExpenseId: String): RegularExpense? {
+        return try {
+            val document = usersCollection.document(userId).collection("regular_expenses").document(regularExpenseId).get().await()
+            document.toObject(RegularExpense::class.java)?.copy(id = document.id)
+        } catch (e: Exception) { null }
+    }
+
+    suspend fun updateRegularExpense(userId: String, regularExpenseId: String, dto: RegularExpenseDto): Boolean {
+        return try {
+            usersCollection.document(userId).collection("regular_expenses").document(regularExpenseId).set(dto).await()
+            true
+        } catch (e: Exception) { false }
+    }
+
+    suspend fun deleteRegularExpense(userId: String, regularExpenseId: String): Boolean {
+        return try {
+            usersCollection.document(userId).collection("regular_expenses").document(regularExpenseId).delete().await()
+            true
+        } catch (e: Exception) { false }
     }
 }

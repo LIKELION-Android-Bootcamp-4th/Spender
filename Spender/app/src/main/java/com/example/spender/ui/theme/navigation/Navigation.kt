@@ -9,6 +9,7 @@ import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.auth.AuthScreen
 import com.example.spender.feature.expense.ui.ExpenseRegistrationParentScreen
 import com.example.spender.feature.expense.ui.expensedetail.ExpenseDetailScreen
+import com.example.spender.feature.expense.ui.recurringexpensedetail.RecurringExpenseDetailScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.home.ui.NotificationListScreen
 import com.example.spender.feature.income.ui.IncomeRegistrationScreen
@@ -78,6 +79,12 @@ fun SpenderNavigation(
             val incomeId = backStackEntry.arguments?.getString("incomeId")
             if (incomeId != null) {
                 IncomeDetailScreen(navController , incomeId = incomeId)
+            }
+        }
+        composable(Screen.RegularExpenseDetailScreen.route) { backStackEntry ->
+            val regularExpenseId = backStackEntry.arguments?.getString("regularExpenseId")
+            if (regularExpenseId != null) {
+                RecurringExpenseDetailScreen(navController , regularExpenseId = regularExpenseId)
             }
         }
 
