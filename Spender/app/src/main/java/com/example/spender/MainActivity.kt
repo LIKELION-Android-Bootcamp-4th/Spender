@@ -91,19 +91,66 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(rootNavHostController: NavHostController) {
     val bottomBarNavController = rememberNavController()
+    var isFabMenuExpanded by remember { mutableStateOf(false) }
     Scaffold(
-        floatingActionButton = { FloatingActionButton(
-            onClick = {rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)},
-            shape = RoundedCornerShape(72.dp),
-            containerColor = PointColor,
-            modifier = Modifier.offset(y = 50.dp).size(72.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add Expense",
-                tint = Color.White
-            )
-        } },
+        floatingActionButton = {
+            Box(
+                contentAlignment = Alignment.Center,
+            ) {
+                FloatingActionButton(
+//            onClick = {rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)},
+                    onClick = { isFabMenuExpanded = true },
+                    shape = RoundedCornerShape(72.dp),
+                    containerColor = PointColor,
+                    modifier = Modifier
+                        .offset(y = 50.dp)
+                        .size(72.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Expense",
+                        tint = Color.White
+                    )
+                }
+                DropdownMenu(
+                    expanded = isFabMenuExpanded,
+                    onDismissRequest = { isFabMenuExpanded = false },
+                    offset = DpOffset(x = (-20).dp, y = (45).dp),
+                    modifier = Modifier
+                        .background(PointColor)
+                ) {
+                    DropdownMenuItem(
+                        text = {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text("수입 등록", color = Color.White)
+                            }
+                        },
+                        onClick = {
+                            rootNavHostController.navigate(Screen.IncomeRegistrationScreen.route)
+                            isFabMenuExpanded = false
+                        }
+                    )
+                    HorizontalDivider(color = Color.White)
+                    DropdownMenuItem(
+                        text = {
+                            Box(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text("지출 등록", color = Color.White)
+                            }
+                        },
+                        onClick = {
+                            rootNavHostController.navigate("expense_registration/1")
+                            isFabMenuExpanded = false
+                        }
+                    )
+                }
+            }
+        },
         floatingActionButtonPosition = FabPosition.Center,
         bottomBar = {
             Box( // 상단 모서리 둥글게 처리
