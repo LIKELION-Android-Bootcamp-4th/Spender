@@ -23,7 +23,7 @@ import java.util.Date
 
 sealed class RegistrationEvent {
     data class ShowToast(val message: String) : RegistrationEvent()
-//    data object NavigateBack : RegistrationEvent()
+    data object NavigateBack : RegistrationEvent()
 }
 
 @HiltViewModel

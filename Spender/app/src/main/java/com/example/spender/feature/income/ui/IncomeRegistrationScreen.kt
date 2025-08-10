@@ -98,6 +98,7 @@ fun IncomeRegistrationScreen(
                 is RegistrationEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
         }
     }

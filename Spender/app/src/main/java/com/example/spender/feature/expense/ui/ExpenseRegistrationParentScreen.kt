@@ -59,6 +59,7 @@ fun ExpenseRegistrationParentScreen(
 //                is RegistrationEvent.NavigateBack -> {
 //                    navHostController.popBackStack() //이전화면으로 돌아가기
 //                }
+                else -> {}
             }
         }
     }
