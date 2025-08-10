@@ -12,6 +12,7 @@ import com.example.spender.feature.expense.ui.expensedetail.ExpenseDetailScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.home.ui.NotificationListScreen
 import com.example.spender.feature.income.ui.IncomeRegistrationScreen
+import com.example.spender.feature.income.ui.incomedetail.IncomeDetailScreen
 import com.example.spender.feature.mypage.MypageScreen
 import com.example.spender.feature.mypage.ui.BudgetScreen
 import com.example.spender.feature.mypage.ui.ExpenseCategoryScreen
@@ -71,6 +72,12 @@ fun SpenderNavigation(
             val expenseId = backStackEntry.arguments?.getString("expenseId")
             if (expenseId != null) {
                 ExpenseDetailScreen(navController, expenseId = expenseId)
+            }
+        }
+        composable(Screen.IncomeDetailScreen.route) { backStackEntry ->
+            val incomeId = backStackEntry.arguments?.getString("incomeId")
+            if (incomeId != null) {
+                IncomeDetailScreen(navController , incomeId = incomeId)
             }
         }
 

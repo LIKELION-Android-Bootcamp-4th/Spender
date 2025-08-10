@@ -8,7 +8,6 @@ data class ExpenseDetailUiState(
     val title: String = "",
     val memo: String = "",
     val date: Date = Date(),
-    val category: String = "",
     val categoryId: String = "",
     val selectedEmotion: Emotion? = null,
     val isLoading: Boolean = true,

@@ -1,13 +1,12 @@
-package com.example.spender.feature.expense.ui.expensedetail
+package com.example.spender.feature.income.ui.incomedetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spender.core.data.service.getFirebaseAuth
-import com.example.spender.feature.expense.data.remote.ExpenseDto
-import com.example.spender.feature.expense.data.repository.ExpenseRepository
-import com.example.spender.feature.expense.domain.model.Emotion
 import com.example.spender.feature.expense.ui.RegistrationEvent
+import com.example.spender.feature.income.data.remote.IncomeDto
+import com.example.spender.feature.income.data.repository.IncomeRepository
 import com.example.spender.feature.mypage.data.repository.CategoryRepository
 import com.example.spender.feature.mypage.domain.model.Category
 import com.google.firebase.Timestamp
@@ -22,53 +21,42 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class ExpenseDetailViewModel @Inject constructor(
-    private val expenseRepository: ExpenseRepository,
+class IncomeDetailViewModel @Inject constructor(
+    private val incomeRepository: IncomeRepository,
     private val categoryRepository: CategoryRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val expenseId: String = savedStateHandle.get<String>("expenseId")!!
+    private val incomeId: String = savedStateHandle.get<String>("incomeId")!!
 
-    private val _uiState = MutableStateFlow(ExpenseDetailUiState())
+    private val _uiState = MutableStateFlow(IncomeDetailUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _expenseCategories = MutableStateFlow<List<Category>>(emptyList())
-    val expenseCategories = _expenseCategories.asStateFlow()
+    private val _incomeCategories = MutableStateFlow<List<Category>>(emptyList())
+    val incomeCategories = _incomeCategories.asStateFlow()
 
     private val _eventFlow = MutableSharedFlow<RegistrationEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private val emotionsList = listOf(
-        Emotion(id = "satisfied", name = "만족"),
-        Emotion(id = "dissatisfied", name = "불만"),
-        Emotion(id = "impulsive", name = "충동"),
-        Emotion(id = "unfair", name = "억울")
-    )
-
     init {
-        _uiState.update { it.copy(emotions = emotionsList) }
-
-        loadExpenseDetails()
-        loadAllExpenseCategories()
+        loadIncomeDetails()
+        loadAllIncomeCategories()
     }
 
-    private fun loadExpenseDetails() {
+    private fun loadIncomeDetails() {
         viewModelScope.launch {
             val userId = getFirebaseAuth() ?: return@launch
-            val expense = expenseRepository.getExpenseById(userId, expenseId)
-            if (expense != null) {
-                val category = categoryRepository.getCategoryById(userId, expense.categoryId)
-
+            val income = incomeRepository.getIncomeById(userId, incomeId)
+            if (income != null) {
+                val category = categoryRepository.getCategoryById(userId, income.categoryId)
                 _uiState.update { currentState ->
                     currentState.copy(
-                        amount = expense.amount.toString(),
-                        title = expense.title,
-                        memo = expense.memo,
-                        date = expense.date,
-                        categoryId = expense.categoryId,
+                        amount = income.amount.toString(),
+                        title = income.title,
+                        memo = income.memo,
+                        date = income.date,
+                        categoryId = income.categoryId,
                         categoryName = category?.name ?: "미분류",
-                        selectedEmotion = emotionsList.find { it.id == expense.emotion },
                         isLoading = false
                     )
                 }
@@ -78,32 +66,23 @@ class ExpenseDetailViewModel @Inject constructor(
         }
     }
 
-    private fun loadAllExpenseCategories() {
+    private fun loadAllIncomeCategories() {
         val userId = getFirebaseAuth() ?: return
-        categoryRepository.getCategories(userId, "EXPENSE") { categoryList ->
-            _expenseCategories.value = categoryList
+        categoryRepository.getCategories(userId, "INCOME") { categoryList ->
+            _incomeCategories.value = categoryList
         }
     }
 
-    // 이벤트 핸들러
     fun onAmountChange(amount: String) {
-        _uiState.update { it.copy(amount = amount) }
+        _uiState.update { it.copy(amount = amount.filter { c -> c.isDigit() }) }
+    }
+
+    fun onTitleChange(title: String) {
+        _uiState.update { it.copy(title = title) }
     }
 
     fun onMemoChange(memo: String) {
         _uiState.update { it.copy(memo = memo) }
-    }
-
-    fun onEmotionSelected(emotion: Emotion) {
-        _uiState.update { it.copy(selectedEmotion = emotion) }
-    }
-
-    fun onDateDialogVisibilityChange(isVisible: Boolean) {
-        _uiState.update { it.copy(isDatePickerDialogVisible = isVisible) }
-    }
-
-    fun onTitleChange(newTitle: String) {
-        _uiState.update { it.copy(title = newTitle) }
     }
 
     fun onCategorySelected(category: Category) {
@@ -111,25 +90,27 @@ class ExpenseDetailViewModel @Inject constructor(
     }
 
     fun onDateSelected(timestamp: Long?) {
-        timestamp ?: return
-        _uiState.update { it.copy(date = Date(timestamp)) }
+        timestamp?.let { _uiState.update { state -> state.copy(date = Date(it)) } }
     }
 
-    fun updateExpense() {
+    fun onDateDialogVisibilityChange(isVisible: Boolean) {
+        _uiState.update { it.copy(isDatePickerDialogVisible = isVisible) }
+    }
+
+    fun updateIncome() {
         viewModelScope.launch {
             val userId = getFirebaseAuth() ?: return@launch
             val currentState = _uiState.value
 
-            val expenseDto = ExpenseDto(
+            val incomeDto = IncomeDto(
                 amount = currentState.amount.toLongOrNull() ?: 0L,
                 title = currentState.title,
                 memo = currentState.memo,
                 date = Timestamp(currentState.date),
-                categoryId = currentState.categoryId,
-                emotion = currentState.selectedEmotion?.id ?: ""
+                categoryId = currentState.categoryId
             )
 
-            if (expenseRepository.updateExpense(userId, expenseId, expenseDto)) {
+            if (incomeRepository.updateIncome(userId, incomeId, incomeDto)) {
                 _eventFlow.emit(RegistrationEvent.ShowToast("수정되었습니다"))
                 _eventFlow.emit(RegistrationEvent.NavigateBack)
             } else {
@@ -138,10 +119,10 @@ class ExpenseDetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteExpense() {
+    fun deleteIncome() {
         viewModelScope.launch {
             val userId = getFirebaseAuth() ?: return@launch
-            if (expenseRepository.deleteExpense(userId, expenseId)) {
+            if (incomeRepository.deleteIncome(userId, incomeId)) {
                 _eventFlow.emit(RegistrationEvent.ShowToast("삭제되었습니다"))
                 _eventFlow.emit(RegistrationEvent.NavigateBack)
             } else {
