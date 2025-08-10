@@ -44,11 +44,16 @@ import com.example.spender.ui.theme.navigation.Screen
 @Composable
 fun ExpenseRegistrationParentScreen(
     navHostController: NavHostController,
+    initialTabIndex: Int,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     val tabs = listOf("영수증", "지출", "정기지출")
+
+    LaunchedEffect(key1 = initialTabIndex) {
+        viewModel.setInitialTabIndex(initialTabIndex)
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->

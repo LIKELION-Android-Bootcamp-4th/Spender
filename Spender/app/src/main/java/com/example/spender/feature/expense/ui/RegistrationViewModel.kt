@@ -190,4 +190,8 @@ class RegistrationViewModel @Inject constructor(
     fun onDateDialogVisibilityChange(isVisible: Boolean) {
         _uiState.update { it.copy(isDatePickerDialogVisible = isVisible) }
     }
+
+    fun setInitialTabIndex(index: Int) {
+        _uiState.update { it.copy(selectedTabIndex = index) }
+    }
 }

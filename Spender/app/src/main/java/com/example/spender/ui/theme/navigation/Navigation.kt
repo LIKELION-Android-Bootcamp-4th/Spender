@@ -2,8 +2,10 @@ package com.example.spender.ui.theme.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.spender.MainScreen
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.auth.AuthScreen
@@ -87,6 +89,19 @@ fun SpenderNavigation(
                 RecurringExpenseDetailScreen(navController , regularExpenseId = regularExpenseId)
             }
         }
+        composable(
+            Screen.ExpenseRegistrationScreen.route,
+            listOf(navArgument("selectedTabIndex") {
+                type = NavType.IntType
+                defaultValue = 1
+            })
+        ) { backStackEntry ->
+            val selectedTabIndex = backStackEntry.arguments?.getInt("selectedTabIndex")
+            ExpenseRegistrationParentScreen(
+                navController,
+                selectedTabIndex ?: 1
+            )
+        }
 
         composable(Screen.BudgetScreen.route) {
             BudgetScreen(navController)
@@ -106,9 +121,9 @@ fun SpenderNavigation(
         composable(Screen.NotificationScreen.route) {
             NotificationScreen(navController)
         }
-        composable(Screen.ExpenseRegistrationScreen.route) {
-            ExpenseRegistrationParentScreen(navController)
-        }
+//        composable(Screen.ExpenseRegistrationScreen.route) {
+//            ExpenseRegistrationParentScreen(navController)
+//        }
         composable(Screen.IncomeRegistrationScreen.route) {
             IncomeRegistrationScreen(navController)
         }

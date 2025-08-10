@@ -40,4 +40,23 @@ class RegularExpenseRepository @Inject constructor() {
             true
         } catch (e: Exception) { false }
     }
+
+    //정기 지출 목록 불러오기
+    fun getRegularExpenses(
+        userId: String,
+        onResult: (List<RegularExpense>) -> Unit
+    ) {
+        usersCollection.document(userId).collection("regular_expenses")
+            .orderBy("createdAt")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    onResult(emptyList())
+                    return@addSnapshotListener
+                }
+                val expenses = snapshot?.documents?.mapNotNull {
+                    it.toObject(RegularExpense::class.java)?.copy(id = it.id)
+                } ?: emptyList()
+                onResult(expenses)
+            }
+    }
 }
