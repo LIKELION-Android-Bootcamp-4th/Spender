@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import com.example.spender.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.HiltAndroidApp
@@ -28,12 +29,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onNewToken(token)
         Log.d("FCM", "새 FCM 토큰: $token")
 
-        // 🔥 Firestore에 저장
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
         FirebaseFirestore.getInstance()
             .collection("users")
             .document(uid)
-            .update("fcmToken", token)
+            .set(mapOf("fcmToken" to token), SetOptions.merge())
+            .addOnSuccessListener { Log.d("FCM", "토큰 Firestore 저장 성공") }
+            .addOnFailureListener { e -> Log.e("FCM", "토큰 Firestore 저장 실패", e) }
     }
 
     private fun showNotification(title: String, message: String) {

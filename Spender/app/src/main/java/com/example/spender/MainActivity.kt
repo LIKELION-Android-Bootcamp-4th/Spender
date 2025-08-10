@@ -69,19 +69,20 @@ class MainActivity : ComponentActivity() {
             ) {
                 val navController = rememberNavController()
 
-                val isOnboardingShown = OnboardingPref.wasShown(this)
-                // 로그인 화면으로 가려면 아래 주석 해제하고
-//                val startDestination = Screen.AuthScreen.route
-                //이거 아래부분 주석처리 하면 됨
-                val startDestination = if (isOnboardingShown) {
-                    Screen.MainScreen.route
-                } else {
-                    Screen.OnboardingScreen.route
-                }
+//                val isOnboardingShown = OnboardingPref.wasShown(this)
+//                // 로그인 화면으로 가려면 아래 주석 해제하고
+////                val startDestination = Screen.AuthScreen.route
+//                //이거 아래부분 주석처리 하면 됨
+//                val startDestination = if (isOnboardingShown) {
+//                    Screen.MainScreen.route
+//                } else {
+//                    Screen.OnboardingScreen.route
+//                }
                 SpenderNavigation(
                     navController = navController,
-                    startDestination = startDestination
+                    startDestination = Screen.SplashScreen.route
                 )
+
             }
         }
     }
@@ -90,67 +91,19 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(rootNavHostController: NavHostController) {
     val bottomBarNavController = rememberNavController()
-    var isFabMenuExpanded by remember { mutableStateOf(false) }
     Scaffold(
-        floatingActionButton = {
-            Box(
-                contentAlignment = Alignment.Center,
-            ) {
-                FloatingActionButton(
-//            onClick = {rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)},
-                    onClick = { isFabMenuExpanded = true },
-                    shape = RoundedCornerShape(72.dp),
-                    containerColor = PointColor,
-                    modifier = Modifier
-                        .offset(y = 50.dp)
-                        .size(72.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add Expense",
-                        tint = Color.White
-                    )
-                }
-                DropdownMenu(
-                    expanded = isFabMenuExpanded,
-                    onDismissRequest = { isFabMenuExpanded = false },
-                    offset = DpOffset(x = (-20).dp, y = (45).dp),
-                    modifier = Modifier
-                        .background(PointColor)
-                ) {
-                    DropdownMenuItem(
-                        text = {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text("수입 등록", color = Color.White)
-                            }
-                        },
-                        onClick = {
-                            rootNavHostController.navigate(Screen.IncomeRegistrationScreen.route)
-                            isFabMenuExpanded = false
-                        }
-                    )
-                    HorizontalDivider(color = Color.White)
-                    DropdownMenuItem(
-                        text = {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text("지출 등록", color = Color.White)
-                            }
-                        },
-                        onClick = {
-                            rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)
-                            isFabMenuExpanded = false
-                        }
-                    )
-                }
-            }
-        },
-
+        floatingActionButton = { FloatingActionButton(
+            onClick = {rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)},
+            shape = RoundedCornerShape(72.dp),
+            containerColor = PointColor,
+            modifier = Modifier.offset(y = 50.dp).size(72.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add Expense",
+                tint = Color.White
+            )
+        } },
         floatingActionButtonPosition = FabPosition.Center,
         bottomBar = {
             Box( // 상단 모서리 둥글게 처리
