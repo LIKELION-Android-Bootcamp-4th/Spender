@@ -2,15 +2,20 @@ package com.example.spender.ui.theme.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.spender.MainScreen
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.auth.AuthScreen
 import com.example.spender.feature.expense.ui.ExpenseRegistrationParentScreen
+import com.example.spender.feature.expense.ui.expensedetail.ExpenseDetailScreen
+import com.example.spender.feature.expense.ui.recurringexpensedetail.RecurringExpenseDetailScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.home.ui.NotificationListScreen
 import com.example.spender.feature.income.ui.IncomeRegistrationScreen
+import com.example.spender.feature.income.ui.incomedetail.IncomeDetailScreen
 import com.example.spender.feature.mypage.MypageScreen
 import com.example.spender.feature.mypage.ui.BudgetScreen
 import com.example.spender.feature.mypage.ui.ExpenseCategoryScreen
@@ -66,6 +71,37 @@ fun SpenderNavigation(
                 ReportDetailScreen(navController, month)
             }
         }
+        composable(Screen.ExpenseDetailScreen.route) { backStackEntry ->
+            val expenseId = backStackEntry.arguments?.getString("expenseId")
+            if (expenseId != null) {
+                ExpenseDetailScreen(navController, expenseId = expenseId)
+            }
+        }
+        composable(Screen.IncomeDetailScreen.route) { backStackEntry ->
+            val incomeId = backStackEntry.arguments?.getString("incomeId")
+            if (incomeId != null) {
+                IncomeDetailScreen(navController , incomeId = incomeId)
+            }
+        }
+        composable(Screen.RegularExpenseDetailScreen.route) { backStackEntry ->
+            val regularExpenseId = backStackEntry.arguments?.getString("regularExpenseId")
+            if (regularExpenseId != null) {
+                RecurringExpenseDetailScreen(navController , regularExpenseId = regularExpenseId)
+            }
+        }
+        composable(
+            Screen.ExpenseRegistrationScreen.route,
+            listOf(navArgument("selectedTabIndex") {
+                type = NavType.IntType
+                defaultValue = 1
+            })
+        ) { backStackEntry ->
+            val selectedTabIndex = backStackEntry.arguments?.getInt("selectedTabIndex")
+            ExpenseRegistrationParentScreen(
+                navController,
+                selectedTabIndex ?: 1
+            )
+        }
 
         composable(Screen.BudgetScreen.route) {
             BudgetScreen(navController)
@@ -85,9 +121,9 @@ fun SpenderNavigation(
         composable(Screen.NotificationScreen.route) {
             NotificationScreen(navController)
         }
-        composable(Screen.ExpenseRegistrationScreen.route) {
-            ExpenseRegistrationParentScreen(navController)
-        }
+//        composable(Screen.ExpenseRegistrationScreen.route) {
+//            ExpenseRegistrationParentScreen(navController)
+//        }
         composable(Screen.IncomeRegistrationScreen.route) {
             IncomeRegistrationScreen(navController)
         }

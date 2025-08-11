@@ -23,7 +23,7 @@ import java.util.Date
 
 sealed class RegistrationEvent {
     data class ShowToast(val message: String) : RegistrationEvent()
-//    data object NavigateBack : RegistrationEvent()
+    data object NavigateBack : RegistrationEvent()
 }
 
 @HiltViewModel
@@ -189,5 +189,9 @@ class RegistrationViewModel @Inject constructor(
 
     fun onDateDialogVisibilityChange(isVisible: Boolean) {
         _uiState.update { it.copy(isDatePickerDialogVisible = isVisible) }
+    }
+
+    fun setInitialTabIndex(index: Int) {
+        _uiState.update { it.copy(selectedTabIndex = index) }
     }
 }

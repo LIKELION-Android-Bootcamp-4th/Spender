@@ -324,7 +324,7 @@ fun RecurringExpenseContent(
 }
 
 @Composable
-private fun RepeatDaySelectionSheet(onDaySelected: (Int) -> Unit) {
+fun RepeatDaySelectionSheet(onDaySelected: (Int) -> Unit) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text("반복 날짜 선택", style = Typography.labelMedium)
         Spacer(Modifier.height(16.dp))
