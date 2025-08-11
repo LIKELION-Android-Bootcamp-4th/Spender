@@ -1,11 +1,12 @@
 package com.example.spender.feature.home.domain
 
+import java.util.Date
+
 data class Notification(
-    val id: Int,
+    val id: String,
     val title: String,
     val content: String,
-    val date: String,
-    val isRead: Boolean,
+    val date: Date,
     val type: NotificationType
 )
 
