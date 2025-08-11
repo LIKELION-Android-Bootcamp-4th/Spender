@@ -10,6 +10,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.spender.core.data.remote.auth.LoginType
+import com.example.spender.core.data.service.FcmTokenRegistrar
 import com.example.spender.feature.auth.data.AuthPrefs
 import com.example.spender.feature.auth.domain.AuthRepository
 import com.example.spender.feature.onboarding.data.OnboardingPref
@@ -49,6 +50,10 @@ class AuthViewModel @Inject constructor(
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         AuthPrefs.setLoginType(context, LoginType.GOOGLE)
+
+                        val app = context.applicationContext as android.app.Application
+                        FcmTokenRegistrar.handleAfterLogin(app)
+
                         onSuccess()
                     } else {
                         _isFailState.value = true

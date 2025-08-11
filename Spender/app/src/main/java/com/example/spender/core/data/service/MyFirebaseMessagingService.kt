@@ -2,11 +2,15 @@ package com.example.spender.core.data.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.example.spender.MainActivity
 import com.example.spender.R
+import com.example.spender.core.data.local.FcmTokenStore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -15,21 +19,16 @@ import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.HiltAndroidApp
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
-        Log.d("FCM", "메시지 수신됨: ${remoteMessage.data}")
-
-        val title = remoteMessage.notification?.title ?: "알림"
-        val body = remoteMessage.notification?.body ?: ""
-
-        showNotification(title, body)
-    }
-
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d("FCM", "새 FCM 토큰: $token")
 
-        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid == null) {
+            FcmTokenStore.save(applicationContext, token)
+            return
+        }
+
         FirebaseFirestore.getInstance()
             .collection("users")
             .document(uid)
@@ -38,28 +37,65 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .addOnFailureListener { e -> Log.e("FCM", "토큰 Firestore 저장 실패", e) }
     }
 
-    private fun showNotification(title: String, message: String) {
-        val channelId = "default_channel"
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
+        Log.d("FCM", "메시지 수신됨: ${remoteMessage.data}")
 
-        // Android 8 이상: 알림 채널 필요
+        // 데이터 페이로드
+        val data = remoteMessage.data
+        val title = data["title"] ?: remoteMessage.notification?.title ?: "알림"
+        val body = data["body"] ?: remoteMessage.notification?.body ?: ""
+        val route = data["route"] // "reports" | "home" | "analysis"
+        val month = data["month"] // "YYYY-MM" (예: 2025-08)
+        val regularExpenseName = data["regularExpenseName"]
+
+        showNotification(title, body, route, month, regularExpenseName)
+    }
+
+    private fun showNotification(
+        title: String,
+        message: String,
+        route: String?,
+        month: String?,
+        regularExpenseName: String?
+    ) {
+        val channelId = "push_general_high"
+        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "기본 알림",
-                NotificationManager.IMPORTANCE_DEFAULT
+            nm.createNotificationChannel(
+                NotificationChannel(channelId, "기본 알림", NotificationManager.IMPORTANCE_HIGH)
             )
-            notificationManager.createNotificationChannel(channel)
         }
 
+        //  알림 탭 시 MainActivity로 이동 + extras 전달
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            route?.let { putExtra("route", it) }
+            month?.let { putExtra("month", it) }
+            regularExpenseName?.let { putExtra("regularExpenseName", it) }
+        }
+
+        val pi = PendingIntent.getActivity(
+            this,
+            (route ?: "default").hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val notification = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.spender_happy) // 앱에 존재하는 아이콘으로 교체
+            .setSmallIcon(R.drawable.spender_happy)
             .setContentTitle(title)
             .setContentText(message)
             .setAutoCancel(true)
+            .setContentIntent(pi)
+            .setTimeoutAfter(20_000)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .build()
 
-        notificationManager.notify(0, notification)
+        nm.notify(System.currentTimeMillis().toInt(), notification)
     }
 }

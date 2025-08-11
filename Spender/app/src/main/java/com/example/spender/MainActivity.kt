@@ -1,8 +1,10 @@
 package com.example.spender
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -25,6 +27,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,6 +63,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    var onNewIntentCallback: ((Intent) -> Unit)? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -85,6 +92,12 @@ class MainActivity : ComponentActivity() {
 
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        onNewIntentCallback?.invoke(intent ?: return)
+        setIntent(intent)
     }
 }
 
@@ -188,6 +201,50 @@ fun MainScreen(rootNavHostController: NavHostController) {
         }
     }
 }
+
+@Composable
+private fun HandlePushNavigation(
+    rootNavController: NavHostController,
+    bottomNavController: NavHostController
+) {
+    val activity = LocalActivity.current as MainActivity
+
+    fun navigateByExtras(intent: Intent) {
+        val route = intent.getStringExtra("route") ?: return
+        val month = intent.getStringExtra("month")
+        val regularExpenseName = intent.getStringExtra("regularExpenseName")
+
+        // 탭 이동
+        when (route) {
+            "home"    -> bottomNavController.navigate(BottomNavigationItem.Home.route)
+            "stats"   -> bottomNavController.navigate(BottomNavigationItem.Analysis.route)
+            "reports" -> bottomNavController.navigate(BottomNavigationItem.Report.route)
+        }
+
+        // 선택: 리포트 상세 바로 열기 (month가 왔을 때)
+        if (route == "reports" && month != null) {
+            rootNavController.navigate(
+                com.example.spender.ui.theme.navigation.Screen.ReportDetail.createRoute(month)
+            )
+        }
+
+        // 중복 처리 방지를 위해 extras 제거
+        intent.replaceExtras(android.os.Bundle())
+    }
+
+    // 앱이 꺼진 상태에서 시작(콜드스타트)
+    LaunchedEffect(Unit) {
+        navigateByExtras(activity.intent)
+    }
+
+    // 앱이 켜진 상태에서 알림 클릭(onNewIntent)
+    DisposableEffect(Unit) {
+        val cb: (Intent) -> Unit = { intent -> navigateByExtras(intent) }
+        activity.onNewIntentCallback = cb
+        onDispose { activity.onNewIntentCallback = null }
+    }
+}
+
 
 //@Composable
 //fun Greeting(name: String, modifier: Modifier = Modifier) {
