@@ -100,6 +100,7 @@ suspend fun getExpenseListForHome(): List<ExpenseDto> {
         for (doc in document) {
             val data = doc.data
             val expense = ExpenseDto(
+                id = doc.id,
                 amount = data["amount"].toString().toInt(),
                 title = data["title"].toString(),
                 date = data["date"] as Timestamp,
