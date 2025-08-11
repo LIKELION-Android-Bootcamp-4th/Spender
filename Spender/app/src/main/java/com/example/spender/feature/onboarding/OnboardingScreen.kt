@@ -45,6 +45,25 @@ fun OnboardingScreen(
 ) {
     val context = LocalContext.current
 
+    val onComplete: (Boolean) -> Unit = { isGranted ->
+        Log.d("푸시 알림 설정 동의", "결과: $isGranted")
+        saveDefaultNotificationSettingsToFirestore(isGranted)
+
+        viewModel.saveBudget { success ->
+            if (success) { // TODO : 알림 설정을 하고 나서 예산 뜨니까 이상함 -> 토스트 뺄까요...?
+                Toast.makeText(context, "예산이 설정되었습니다.", Toast.LENGTH_SHORT).show()
+                Log.d("Budget", "저장 성공")
+            } else {
+                Log.d("Budget", "저장 실패")
+            }
+        }
+
+        OnboardingPref.setShown(context)
+        navController.navigate(Screen.MainScreen.route) {
+            popUpTo(Screen.OnboardingScreen.route) { inclusive = true }
+        }
+    }
+
     val currentPage by viewModel.currentPage.collectAsState()
     val budget = viewModel.budget
 
@@ -53,13 +72,7 @@ fun OnboardingScreen(
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        if (isGranted) {
-            Log.d("푸시 알림 설정 동의", "알림 권한 허용!!!!")
-            saveDefaultNotificationSettingsToFirestore(true)
-        } else {
-            saveDefaultNotificationSettingsToFirestore(false)
-            Log.d("푸시 알림 설정 동의", "알림 권한 거부!!!!")
-        }
+        onComplete(isGranted)
     }
 
     Column(
@@ -97,26 +110,17 @@ fun OnboardingScreen(
                     viewModel.onNext()
                 } else { // TODO: 콜백 처리?!?!
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                    } else {
-                        // Android 12 이하는 바로 저장
-                        saveDefaultNotificationSettingsToFirestore(true)
-                    }
+                        val granted = androidx.core.content.ContextCompat.checkSelfPermission(
+                            context, Manifest.permission.POST_NOTIFICATIONS
+                        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
 
-                    viewModel.saveBudget { success ->
-                        if (success) {
-                            Toast.makeText(context, "예산이 설정되었습니다.", Toast.LENGTH_SHORT).show()
-                            Log.d("Budget", "저장 성공")
+                        if (granted) {
+                            onComplete(true)
                         } else {
-                            Log.d("Budget", "저장 실패")
+                            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                         }
-                    }
-
-                    OnboardingPref.setShown(context)
-                    navController.navigate(Screen.MainScreen.route) {
-                        popUpTo(Screen.OnboardingScreen.route) {
-                            inclusive = true
-                        }
+                    } else {
+                        onComplete(true)
                     }
                 }
             },
