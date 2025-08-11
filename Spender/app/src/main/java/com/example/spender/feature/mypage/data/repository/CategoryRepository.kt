@@ -5,6 +5,7 @@ import com.example.spender.feature.mypage.domain.model.Category
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
@@ -23,7 +24,7 @@ class CategoryRepository @Inject constructor(){
                 onResult(categories)
             }
     }
-    
+
     fun addCategory(userId: String, categoryName: String, type: String, color: String?) {
         val newCategory = hashMapOf(
             "name" to categoryName,
@@ -41,5 +42,22 @@ class CategoryRepository @Inject constructor(){
 
     fun deleteCategory(userId: String, categoryId: String) {
         usersCollection.document(userId).collection("categories").document(categoryId).delete()
+    }
+
+    suspend fun getCategoryById(userId: String, categoryId: String): Category? {
+        return try {
+            val document = usersCollection.document(userId)
+                .collection("categories")
+                .document(categoryId)
+                .get().await()
+            val colorString = document.getString("color")
+            Category(
+                id = document.id,
+                name = document.getString("name") ?: "",
+                color = colorString?.toColor()
+            )
+        } catch (e: Exception) {
+            null
+        }
     }
 }

@@ -10,5 +10,5 @@ data class RegularExpense(
     val categoryId: String = "",
     val firstPaymentDate: Date = Date(),
     val repeatCycle: String = "MONTHLY", // "매월"
-    val day: Int = 28 // "28일"
+    val day: Int = 28
 )

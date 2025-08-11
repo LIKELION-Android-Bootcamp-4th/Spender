@@ -11,13 +11,26 @@ sealed class Screen(val route: String) {
     object ReportDetail : Screen("report_detail/{month}") {
         fun createRoute(month: String) = "report_detail/$month"
     }
+    object ExpenseDetailScreen : Screen("expense_detail/{expenseId}") {
+        fun createRoute(expenseId: String) = "expense_detail/$expenseId"
+    }
+    object IncomeDetailScreen : Screen("income_detail/{incomeId}") {
+        fun createRoute(incomeId: String) = "income_detail/$incomeId"
+    }
+    object RegularExpenseDetailScreen : Screen("regular_expense_detail/{regularExpenseId}") {
+        fun createRoute(regularExpenseId: String) = "regular_expense_detail/$regularExpenseId"
+    }
+
+    object ExpenseRegistrationScreen : Screen("expense_registration/{selectedTabIndex}") {
+        fun createRoute(selectedTabIndex: Int) = "expense_registration/$selectedTabIndex"
+    }
 
     object BudgetScreen : Screen("budget")
     object IncomeCategoryScreen : Screen("income_category")
     object ExpenseCategoryScreen : Screen("expense_category")
     object RegularExpenseScreen : Screen("regular_expense")
     object NotificationScreen : Screen("notification")
-    object ExpenseRegistrationScreen : Screen("expense_registration")
+//    object ExpenseRegistrationScreen : Screen("expense_registration")
     object IncomeRegistrationScreen : Screen("income_registration")
 
 }
