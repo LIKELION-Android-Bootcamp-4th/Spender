@@ -1,28 +1,23 @@
 package com.example.spender.feature.mypage.ui
 
-import android.content.ClipData.Item
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomLongButton
 import com.example.spender.core.ui.CustomTopAppBar
@@ -88,6 +83,7 @@ fun BudgetScreen(navHostController: NavHostController) {
                             if (success) {
                                 Toast.makeText(context, "예산이 설정되었습니다.", Toast.LENGTH_SHORT).show()
                                 Log.d("Budget", "저장 성공")
+                                navHostController.popBackStack()
                             } else {
                                 Log.d("Budget", "저장 실패")
                             }

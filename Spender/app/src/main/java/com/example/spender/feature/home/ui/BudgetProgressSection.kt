@@ -19,10 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.spender.R
+import com.example.spender.feature.home.ui.component.BudgetProgressBar
 import com.example.spender.ui.theme.LightSurface
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.PointRedColor
@@ -30,13 +32,20 @@ import com.example.spender.ui.theme.Typography
 
 @Composable
 fun BudgeProgress(
-    budget: Int,
-    totalExpense: Int,
+    percentage: Float,
     navHostController: NavHostController
 ) {
-    val percentage = totalExpense.toFloat() / budget.toFloat()
-    val percentText = "${(percentage * 100).toInt()}%"
-    val highlightColor = if (percentage >= 1f) PointRedColor else PointColor
+    val percentageForDisplay = percentage
+    val percentageForProgress = percentage / 100f
+    val percentText = "${percentageForDisplay.toInt()}%"
+    val highlightColor = if (percentageForProgress >= 1f) PointRedColor else PointColor
+
+    val warningText = when{
+        percentageForDisplay <= 60f -> stringResource(R.string.budgets_green)
+        percentageForDisplay <= 99f -> stringResource(R.string.budgets_yellow)
+        else -> stringResource(R.string.budgets_red)
+    }
+
 
     Column(
         modifier = Modifier
@@ -64,7 +73,10 @@ fun BudgeProgress(
 
         Spacer(Modifier.height(8.dp))
 
-        BudgetProgressBar(percentage = percentage, percentText = percentText)
+        BudgetProgressBar(
+            percentage = percentageForProgress,
+            percentText = percentText
+        )
 
         Spacer(Modifier.height(8.dp))
 
@@ -90,7 +102,7 @@ fun BudgeProgress(
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    text = "이대로라면 예산을 초과할 것 같아요!", //TODO: percentage 별로 분기할 것
+                    text = warningText,
                     style = Typography.bodyMedium
                 )
             }
