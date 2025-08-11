@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -36,16 +38,23 @@ import com.example.spender.core.ui.CustomDialog
 import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
 import com.example.spender.feature.mypage.ui.component.MyPageItemType
 import com.example.spender.feature.mypage.ui.component.Section
+import com.example.spender.feature.mypage.ui.viewmodel.MypageViewModel
+
 
 @Composable
-fun MypageScreen(navHostController: NavHostController) {
+fun MypageScreen(
+    navHostController: NavHostController,
+    authViewModel: AuthViewModel = hiltViewModel(),
+    mypageViewModel: MypageViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
+    val user by mypageViewModel.user.collectAsState()
 
-    val viewModel: AuthViewModel = hiltViewModel()
+//    val viewModel: AuthViewModel = hiltViewModel()
 
     var showWithdrawDialog by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }
-    val userName = "이름"
+//    val userName = "이름"
 
     val onItemClick: (MyPageItemType) -> Unit = { item ->
         when (item) {
@@ -69,7 +78,10 @@ fun MypageScreen(navHostController: NavHostController) {
             .fillMaxSize()
             .padding(vertical = 14.dp)
     ) {
-        UserInfoSection(userName = userName)
+        UserInfoSection(
+            userName = user.displayName,
+            iconRes = user.providerIcon
+        )
 
         //HorizontalDivider()
 
@@ -106,7 +118,7 @@ fun MypageScreen(navHostController: NavHostController) {
             onConfirm = {
                 showWithdrawDialog = false
 
-                viewModel.withdraw(
+                authViewModel.withdraw(
                     context,
                     onSuccess = {
                         Toast.makeText(context, "탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.", Toast.LENGTH_SHORT)
@@ -131,7 +143,7 @@ fun MypageScreen(navHostController: NavHostController) {
             onConfirm = {
                 showLogoutDialog = false
 
-                viewModel.logout(context) {
+                authViewModel.logout(context) {
                     Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
                     navHostController.navigate("auth") {
                         popUpTo("main") { inclusive = true }
@@ -147,18 +159,26 @@ fun MypageScreen(navHostController: NavHostController) {
 }
 
 @Composable
-fun UserInfoSection(userName: String) {
+fun UserInfoSection(userName: String, iconRes: Int?) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 28.dp, horizontal = 28.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            Icons.Default.AccountCircle,
-            contentDescription = null,
-            modifier = Modifier.size(24.dp)
-        ) // TODO : 소셜 로그인에 맞는 이미지로 교체
+//        Icon(
+//            Icons.Default.AccountCircle,
+//            contentDescription = null,
+//            modifier = Modifier.size(24.dp)
+//        ) // TODO : 소셜 로그인에 맞는 이미지로 교체
+        if (iconRes != null) {
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = "소셜 로그인 아이콘",
+                modifier = Modifier.size(24.dp),
+                tint = Color.Unspecified
+            )
+        }
         Spacer(modifier = Modifier.width(16.dp))
         Text("$userName 님", style = MaterialTheme.typography.titleMedium)
     }
