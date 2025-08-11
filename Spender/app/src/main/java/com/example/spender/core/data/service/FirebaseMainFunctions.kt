@@ -87,30 +87,30 @@ suspend fun getExpenseRate(): Float {
 }
 
 // 최근 5개 소비 가져옴. 단, 이전 달의 소비 기록이어도 가져오게 되어 있음.
-fun getExpenseListForHome(): MutableList<ExpenseDto> {
+suspend fun getExpenseListForHome(): List<ExpenseDto> {
     val uid = getFirebaseAuth()
-    val expenses = mutableListOf<ExpenseDto>()
-    try {
-        val ref = getFirebaseRef().document(uid!!).collection("expenses")
+    return try {
+        val document = getFirebaseRef().document(uid!!).collection("expenses")
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .limit(5)
             .get()
-            .addOnSuccessListener { document ->
-                for (doc in document) {
-                    val data = doc.data
-                    // 디스플레이용. 필수 정보만 넣고 나머지는 안 가져옴
-                    val expense = ExpenseDto(
-                        amount = data["amount"].toString().toInt(),
-                        title = data["title"].toString(),
-                        date = data["date"] as Timestamp,
-                        categoryId = data["categoryId"].toString(),
-                        createdAt = data["createdAt"] as Timestamp
-                    )
-                    expenses.add(expense)
-                }
-            }
+            .await()
+
+        val expenses = mutableListOf<ExpenseDto>()
+        for (doc in document) {
+            val data = doc.data
+            val expense = ExpenseDto(
+                amount = data["amount"].toString().toInt(),
+                title = data["title"].toString(),
+                date = data["date"] as Timestamp,
+                categoryId = data["categoryId"].toString(),
+                createdAt = data["createdAt"] as Timestamp
+            )
+            expenses.add(expense)
+        }
+        expenses
     } catch (e: Exception) {
-        Log.d("Home / RecentExpenses", "Expense list error")
+        Log.e("Home / RecentExpenses", "Expense list error: ${e.message}")
+        emptyList()
     }
-    return expenses
 }

@@ -22,6 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.spender.core.data.remote.expense.ExpenseDto
+import com.example.spender.core.data.service.getExpenseListForHome
 import com.example.spender.core.data.service.getExpenseRate
 import com.example.spender.core.data.service.getTotalExpense
 import com.example.spender.feature.home.ui.BudgeProgress
@@ -33,11 +35,13 @@ import com.example.spender.ui.theme.LightPointColor
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
     var totalExpense by remember { mutableStateOf(0) }
-    var percentage by remember { mutableStateOf(0f)}
+    var percentage by remember { mutableStateOf(0f) }
+    var recentExpenses by remember { mutableStateOf<List<ExpenseDto>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         totalExpense = getTotalExpense()
         percentage = getExpenseRate()
+        recentExpenses = getExpenseListForHome()
     }
 
     Scaffold(
@@ -82,7 +86,7 @@ fun HomeScreen(navHostController: NavHostController) {
                     )
                 }
                 item {
-                    RecentTransactionsSection() // TODO: 각 데이터의 필드(수입,지출 제목 & 금액) 넘겨줘야 함
+                    RecentTransactionsSection(recentExpenses = recentExpenses)
                 }
             }
         }
