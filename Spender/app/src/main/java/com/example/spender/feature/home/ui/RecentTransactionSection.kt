@@ -11,12 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.spender.core.data.remote.expense.ExpenseDto
 import com.example.spender.feature.home.ui.component.RecentItem
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.navigation.Screen
 
 @Composable
-fun RecentTransactionsSection(recentExpenses: List<ExpenseDto>) {
+fun RecentTransactionsSection(
+    recentExpenses: List<ExpenseDto>,
+    navHostController: NavHostController
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -37,7 +42,12 @@ fun RecentTransactionsSection(recentExpenses: List<ExpenseDto>) {
         recentExpenses.forEach { expense ->
             RecentItem(
                 title = expense.title,
-                amount = expense.amount
+                amount = expense.amount,
+                onClick = {
+                    navHostController.navigate(
+                        Screen.ExpenseDetailScreen.createRoute(expense.id)
+                    )
+                }
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
