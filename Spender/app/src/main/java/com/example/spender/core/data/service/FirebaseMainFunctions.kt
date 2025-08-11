@@ -4,24 +4,26 @@ import android.util.Log
 import com.example.spender.core.data.remote.expense.ExpenseDto
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
 import java.util.Calendar
 
 // 총 지출 금액을 가져옴.
-fun getTotalExpense(): Int {
+suspend fun getTotalExpense(): Int {
     val uid = getFirebaseAuth()
-    var total = 0
-    try {
-        val ref = getFirebaseRef().document(uid!!).collection("expense")
-        ref.get().addOnSuccessListener { document ->
-            for (doc in document.documents) {
-                total += doc.data?.get("amount")?.toString()?.toInt() ?: 0
-            }
+    return try {
+        val ref = getFirebaseRef().document(uid!!).collection("expenses")
+        val document = ref.get().await()
+
+        var total = 0
+        for (doc in document.documents) {
+            total += doc.data?.get("amount")?.toString()?.toInt() ?: 0
         }
+        Log.d("Home", "TotalBudget: $total")
+        total
     } catch (e: Exception) {
-        Log.d("Home / TotalBudget", "total budget error")
-        return 0
+        Log.e("Home / TotalBudget", "total budget error: ${e.message}")
+        0
     }
-    return total
 }
 
 // 예산 소진 비율'만' 가져옴. 비율이 위험한지 아닌지는 따로 비즈니스 로직 필요
