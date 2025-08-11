@@ -1,6 +1,7 @@
 const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
 const { sendDataOnly, payloadReminder } = require("../send-fcm");
+const { addNotification } = require("../notification-store");
 
 module.exports = functions.pubsub
   .schedule("0 9 * * *") // 매일 09:00
@@ -9,34 +10,55 @@ module.exports = functions.pubsub
     const today = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
     const day = today.getDate();
 
-    const snap = await admin.firestore()
+    const usersSnap = await admin.firestore()
       .collection("users")
       .where("notificationSettings.reminderAlert", "==", true)
       .get();
 
-    const jobs = [];
-    for (const doc of snap.docs) {
-      const u = doc.data();
-      if (!u.fcmToken) continue;
+    const sendJobs = [];
+    const saveJobs = [];
 
-      // 정기지출 하위 컬렉션 조회
-      const regSnap = await doc.ref.collection("regular_expenses")
+    for (const userDoc of usersSnap.docs) {
+      const u = userDoc.data();
+      const uid = userDoc.id;
+      const token = u.fcmToken;
+      if (!token) continue;
+
+      // 유저의 정기지출 중 오늘(day)이 결제일인 것만
+      const regSnap = await userDoc.ref
+        .collection("regular_expenses")
         .where("day", "==", day)
         .get();
 
-      regSnap.forEach(exp => {
-        const expData = exp.data();
-        jobs.push(sendDataOnly(u.fcmToken, payloadReminder(expData.name))
-          .catch(err => {
-            console.error("REMINDER send error", doc.id, err);
+      if (regSnap.empty) continue;
+
+      regSnap.forEach(reDoc => {
+        const re = reDoc.data();
+        const name = re.title || re.name || "정기지출";
+
+        // 1) 푸시 전송
+        sendJobs.push(
+          sendDataOnly(token, payloadReminder(name)).catch(err => {
+            console.error("REMINDER send error", uid, err);
             if (err?.errorInfo?.code === "messaging/registration-token-not-registered") {
-              return doc.ref.update({ fcmToken: admin.firestore.FieldValue.delete() });
+              return userDoc.ref.update({ fcmToken: admin.firestore.FieldValue.delete() });
             }
           })
+        );
+
+        // 2) 알림 문서 저장 (모아보기 + TTL)
+        saveJobs.push(
+          addNotification(uid, {
+            type: "REMINDER_ALERT",
+            title: `오늘은 ${name} 정기지출이 있는 날이에요!`,
+            content: "정기지출 내역을 확인해보세요.",
+            extra: { route: "stats", regularExpenseName: name }
+          }).catch(err => console.error("REMINDER save error", uid, err))
         );
       });
     }
 
-    await Promise.allSettled(jobs);
+    await Promise.allSettled(sendJobs);
+    await Promise.allSettled(saveJobs);
     return null;
   });
