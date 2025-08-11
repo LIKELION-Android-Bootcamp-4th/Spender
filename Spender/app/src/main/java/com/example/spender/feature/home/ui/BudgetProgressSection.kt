@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.spender.R
+import com.example.spender.feature.home.ui.component.BudgetProgressBar
 import com.example.spender.ui.theme.LightSurface
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.PointRedColor

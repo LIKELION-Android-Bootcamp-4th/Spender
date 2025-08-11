@@ -1,4 +1,4 @@
-package com.example.spender.feature.home.ui
+package com.example.spender.feature.home.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
