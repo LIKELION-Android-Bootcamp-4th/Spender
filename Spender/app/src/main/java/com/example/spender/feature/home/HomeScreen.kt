@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.spender.core.data.service.getExpenseRate
 import com.example.spender.core.data.service.getTotalExpense
 import com.example.spender.feature.home.ui.BudgeProgress
 import com.example.spender.feature.home.ui.RecentTransactionsSection
@@ -32,10 +33,11 @@ import com.example.spender.ui.theme.LightPointColor
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
     var totalExpense by remember { mutableStateOf(0) }
-    val budget = 1000000
+    var percentage by remember { mutableStateOf(0f)}
 
     LaunchedEffect(Unit) {
         totalExpense = getTotalExpense()
+        percentage = getExpenseRate()
     }
 
     Scaffold(
@@ -75,8 +77,7 @@ fun HomeScreen(navHostController: NavHostController) {
                 }
                 item {
                     BudgeProgress(
-                        budget = budget,
-                        totalExpense = totalExpense,
+                        percentage = percentage,
                         navHostController = navHostController
                     )
                 }

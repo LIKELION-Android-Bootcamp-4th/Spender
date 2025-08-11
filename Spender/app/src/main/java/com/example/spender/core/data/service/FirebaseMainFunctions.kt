@@ -27,7 +27,7 @@ suspend fun getTotalExpense(): Int {
 }
 
 // 예산 소진 비율'만' 가져옴. 비율이 위험한지 아닌지는 따로 비즈니스 로직 필요
-fun getExpenseRate(): Int {
+suspend fun getExpenseRate(): Float {
     val uid = getFirebaseAuth()
 
     val startOfMonth = Calendar.getInstance().apply {
@@ -46,36 +46,43 @@ fun getExpenseRate(): Int {
         set(Calendar.MILLISECOND, 999)
     }
 
-    var budget = 1
-    var expense = 0
-
-    try {
+    return try {
         val budgetRef = getFirebaseRef().document(uid!!).collection("budgets")
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .limit(1)
         val expenseRef = getFirebaseRef().document(uid).collection("expenses")
-            .orderBy("createdAt", Query.Direction.DESCENDING)
             .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfMonth.time))
             .whereLessThanOrEqualTo("createdAt", Timestamp(endOfMonth.time))
 
-        budgetRef.get().addOnSuccessListener { document ->
-            for (doc in document) {
-                budget = doc.data["amount"].toString().toInt()
-                break
-            }
+        val budgetDocument = budgetRef.get().await()
+        val expenseDocument = expenseRef.get().await()
+
+        var budget = 1
+        var expense = 0
+
+        for (doc in budgetDocument) {
+            budget = doc.data["amount"].toString().toInt()
+            break
         }
 
-        expenseRef.get().addOnSuccessListener { document ->
-            for (doc in document) {
-                expense += doc.data["amount"].toString().toInt()
-            }
+        for (doc in expenseDocument) {
+            expense += doc.data["amount"].toString().toInt()
         }
 
-        val rate = (((expense.toDouble()) / (budget.toDouble())) * 100).toInt()
-        return rate
+        Log.d("Home", "getExpenseRate expense: $expense")
+        Log.d("Home", "getExpenseRate budget: $budget")
+
+        val rate = if (budget > 0) {
+            (expense.toDouble() / budget.toDouble() * 100).toFloat()
+        } else {
+            0f
+        }
+
+        Log.d("Home", "getExpenseRate: $rate")
+        rate
     } catch (e: Exception) {
-        Log.d("Home / ExpenseRate", "Expense rate error")
-        return 0
+        Log.e("Home / ExpenseRate", "Expense rate error: ${e.message}")
+        0f
     }
 }
 

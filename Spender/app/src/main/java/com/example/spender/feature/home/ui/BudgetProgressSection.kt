@@ -30,13 +30,13 @@ import com.example.spender.ui.theme.Typography
 
 @Composable
 fun BudgeProgress(
-    budget: Int,
-    totalExpense: Int,
+    percentage: Float,
     navHostController: NavHostController
 ) {
-    val percentage = totalExpense.toFloat() / budget.toFloat()
-    val percentText = "${(percentage * 100).toInt()}%"
-    val highlightColor = if (percentage >= 1f) PointRedColor else PointColor
+    val percentageForDisplay = percentage
+    val percentageForProgress = percentage / 100f
+    val percentText = "${percentageForDisplay.toInt()}%"
+    val highlightColor = if (percentageForProgress >= 1f) PointRedColor else PointColor
 
     Column(
         modifier = Modifier
@@ -64,7 +64,10 @@ fun BudgeProgress(
 
         Spacer(Modifier.height(8.dp))
 
-        BudgetProgressBar(percentage = percentage, percentText = percentText)
+        BudgetProgressBar(
+            percentage = percentageForProgress,
+            percentText = percentText
+        )
 
         Spacer(Modifier.height(8.dp))
 
