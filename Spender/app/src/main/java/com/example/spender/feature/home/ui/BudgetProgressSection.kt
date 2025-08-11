@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -38,6 +39,13 @@ fun BudgeProgress(
     val percentageForProgress = percentage / 100f
     val percentText = "${percentageForDisplay.toInt()}%"
     val highlightColor = if (percentageForProgress >= 1f) PointRedColor else PointColor
+
+    val warningText = when{
+        percentageForDisplay <= 60f -> stringResource(R.string.budgets_green)
+        percentageForDisplay <= 99f -> stringResource(R.string.budgets_yellow)
+        else -> stringResource(R.string.budgets_red)
+    }
+
 
     Column(
         modifier = Modifier
@@ -94,7 +102,7 @@ fun BudgeProgress(
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    text = "이대로라면 예산을 초과할 것 같아요!", //TODO: percentage 별로 분기할 것
+                    text = warningText,
                     style = Typography.bodyMedium
                 )
             }
