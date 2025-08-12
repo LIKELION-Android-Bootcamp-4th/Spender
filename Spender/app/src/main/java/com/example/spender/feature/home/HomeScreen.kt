@@ -86,7 +86,10 @@ fun HomeScreen(navHostController: NavHostController) {
                     )
                 }
                 item {
-                    RecentTransactionsSection(recentExpenses = recentExpenses)
+                    RecentTransactionsSection(
+                        recentExpenses = recentExpenses,
+                        navHostController = navHostController
+                    )
                 }
             }
         }
