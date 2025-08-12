@@ -61,15 +61,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.feature.expense.ui.RegistrationEvent
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomTopAppBar
-import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.feature.expense.ui.NumberCommaTransformation
+import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography

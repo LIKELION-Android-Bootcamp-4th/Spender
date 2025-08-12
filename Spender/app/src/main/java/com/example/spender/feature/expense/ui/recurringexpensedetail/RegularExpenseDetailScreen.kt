@@ -61,10 +61,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomShortButton
 import com.example.spender.core.ui.CustomTopAppBar
-import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.feature.expense.ui.NumberCommaTransformation
 import com.example.spender.feature.expense.ui.RegistrationEvent
 import com.example.spender.feature.expense.ui.RepeatDaySelectionSheet
+import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.ui.theme.BlackColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
@@ -97,6 +97,8 @@ fun RecurringExpenseDetailScreen(
                 is RegistrationEvent.NavigateBack -> {
                     navHostController.popBackStack()
                 }
+
+                else -> {}
             }
         }
     }

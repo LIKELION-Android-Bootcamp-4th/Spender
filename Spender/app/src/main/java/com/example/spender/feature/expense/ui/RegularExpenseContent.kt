@@ -50,6 +50,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.ui.theme.Typography
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -184,7 +185,7 @@ fun RecurringExpenseContent(
             // 내용 입력
             TextField(
                 value = uiState.title,
-                onValueChange = {viewModel.onTitleChange(it)},
+                onValueChange = { viewModel.onTitleChange(it) },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("정기지출 내용을 입력하세요", fontSize = 16.sp, color = Color.Gray) },
                 singleLine = true,
@@ -213,7 +214,7 @@ fun RecurringExpenseContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {isSheetOpen = true},
+                    .clickable { isSheetOpen = true },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -302,7 +303,7 @@ fun RecurringExpenseContent(
             Spacer(Modifier.height(30.dp))
             OutlinedTextField(
                 value = uiState.memo,
-                onValueChange = {viewModel.onMemoChange(it)},
+                onValueChange = { viewModel.onMemoChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(260.dp),

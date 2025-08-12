@@ -1,5 +1,9 @@
 package com.example.spender.feature.expense.ui
 
+import android.content.Context
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,12 +26,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.example.spender.BuildConfig
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import android.Manifest
+import android.webkit.MimeTypeMap
+import android.widget.Toast
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.SideEffect
+import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,6 +52,47 @@ fun OcrContent(
     uiState: RegistrationUiState,
     viewModel: RegistrationViewModel
 ) {
+    val context = LocalContext.current
+    var cameraImageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { isSuccess ->
+        if (isSuccess) {
+            cameraImageUri?.let {
+                val imageBytes = context.contentResolver.openInputStream(it)?.readBytes()
+                imageBytes?.let { viewModel.analyzeReceipt(it, "jpg") }
+            }
+        }
+    }
+
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            val fileExtension = context.contentResolver.getType(it)?.let { mimeType ->
+                MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+            } ?: "jpg"
+
+            val imageByteArray = context.contentResolver.openInputStream(it)?.readBytes()
+            imageByteArray?.let { bytes ->
+                viewModel.analyzeReceipt(bytes, fileExtension)
+            }
+        }
+    }
+
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            val uri = createTempImageUri(context)
+            cameraImageUri = uri
+            cameraLauncher.launch(uri)
+        } else {
+            Toast.makeText(context, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -46,7 +104,9 @@ fun OcrContent(
             modifier = Modifier
                 .fillMaxWidth(0.8f)
                 .aspectRatio(1.5f)
-                .clickable { viewModel.onOcrDialogVisibilityChange(true) },
+                .clickable(enabled = !uiState.isLoading) {
+                    viewModel.onOcrDialogVisibilityChange(true)
+                },
             shape = RoundedCornerShape(16.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -69,17 +129,25 @@ fun OcrContent(
                 )
             }
         }
+        if (uiState.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(64.dp),
+                color = PointColor,
+                strokeWidth = 5.dp
+            )
+        }
     }
     if (uiState.isOcrDialogVisible) {
         OcrSelectionDialog(
             onDismissRequest = { viewModel.onOcrDialogVisibilityChange(false) },
             onTakePhotoClick = {
+                val uri = createTempImageUri(context)
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
                 viewModel.onOcrDialogVisibilityChange(false)
-                // TODO: 카메라 촬영 로직
             },
             onSelectImageClick = {
+                galleryLauncher.launch("image/*")
                 viewModel.onOcrDialogVisibilityChange(false)
-                // TODO: 갤러리 선택 로직
             }
         )
     }
@@ -107,6 +175,11 @@ private fun OcrSelectionDialog(
             }
         }
     )
+}
+
+private fun createTempImageUri(context: Context): Uri {
+    val tempFile = File(context.cacheDir, "temp_receipt.jpg")
+    return FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.provider", tempFile)
 }
 
 //@Preview(showBackground = true)
