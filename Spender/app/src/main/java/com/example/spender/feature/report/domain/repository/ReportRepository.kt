@@ -5,7 +5,6 @@ import com.example.spender.core.data.remote.report.CategoryTotalDto
 import com.example.spender.core.data.remote.report.EmotionTotalDto
 import com.example.spender.core.data.remote.report.ReportDetailDto
 import com.example.spender.core.data.remote.report.ReportListDto
-import com.example.spender.core.data.service.getFirebaseAuth
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
@@ -22,7 +21,7 @@ class ReportRepository @Inject constructor(
         val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
         Log.d("ReportRepo", "UID 확인용: $uid")
 
-        val snap = firestore.collection("users")
+        val querySnapshot = firestore.collection("users")
             .document(uid)
             .collection("reports")
             .orderBy(FieldPath.documentId())
@@ -31,7 +30,7 @@ class ReportRepository @Inject constructor(
             .get()
             .await()
 
-        val summaries = snap.documents.mapNotNull { doc ->
+        val summaries = querySnapshot.documents.mapNotNull { doc ->
             val data = doc.data ?: return@mapNotNull null
             try {
                 ReportListDto(
@@ -51,14 +50,14 @@ class ReportRepository @Inject constructor(
 
         val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
 
-        val result = firestore.collection("users")
+        val documentSnapshot = firestore.collection("users")
             .document(uid)
             .collection("reports")
             .document(month)
             .get()
             .await()
 
-        val data = result.data ?: error("데이터 없음")
+        val data = documentSnapshot.data ?: error("데이터 없음")
 
         val byCategory = (data["byCategory"] as? List<Map<String, Any>>)?.mapNotNull {
             val id    = it["categoryId"] as? String ?: return@mapNotNull null
@@ -75,7 +74,7 @@ class ReportRepository @Inject constructor(
         } ?: emptyList()
 
         ReportDetailDto(
-            month        = result.id,
+            month        = documentSnapshot.id,
             totalBudget  = (data["totalBudget"] as? Number)?.toInt() ?: 0,
             totalExpense = (data["totalExpense"] as? Number)?.toInt() ?: 0,
             feedback     = data["feedback"] as? String ?: "",
