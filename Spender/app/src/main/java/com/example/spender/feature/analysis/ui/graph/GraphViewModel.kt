@@ -74,6 +74,8 @@ class GraphViewModel @Inject constructor(
             year -= 1
         }
         _dateData.value = listOf(year, month+1)
+        getDailyExpense()
+        getMaxExpense()
     }
 
     fun nextMonth() {
@@ -83,6 +85,8 @@ class GraphViewModel @Inject constructor(
             year += 1
         }
         _dateData.value = listOf(year, month+1)
+        getDailyExpense()
+        getMaxExpense()
     }
 
     fun setMonth(year: Int, month: Int) {
