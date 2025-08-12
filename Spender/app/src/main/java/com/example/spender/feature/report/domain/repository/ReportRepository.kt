@@ -10,11 +10,43 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import jakarta.inject.Inject
+import kotlinx.coroutines.tasks.await
 
 class ReportRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
-){
+) {
+//    suspend fun getReportList(year: Int) = runCatching {
+//        Log.d("ReportRepo", "getReportList() 실행됨, year=$year")
+//
+//        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+//        Log.d("ReportRepo", "UID 확인용: $uid")
+//
+//        val snap = firestore.collection("users")
+//            .document(uid)
+//            .collection("reports")
+//            .orderBy(FieldPath.documentId())
+//            .startAt("$year-01")
+//            .endAt("$year-12")
+//            .get()
+//            .await()
+//
+//        val summaries = snap.documents.mapNotNull { doc ->
+//            val data = doc.data ?: return@mapNotNull null
+//            try {
+//                ReportListDto(
+//                    month = doc.id,
+//                    totalExpense = (data["totalExpense"] as? Number)?.toInt() ?: 0,
+//                    totalBudget  = (data["totalBudget"] as? Number)?.toInt() ?: 0
+//                )
+//            } catch (e: Exception) {
+//                Log.e("ReportRepo", "getReportList 매핑 실패: ${e.message}", e)
+//                null
+//            }
+//        }
+//        summaries
+//    }
+
     fun getReportList(
         year: Int,
         onSuccess: (List<ReportListDto>) -> Unit,
@@ -60,60 +92,40 @@ class ReportRepository @Inject constructor(
             }
     }
 
-    fun getReportDetail(
-        month: String,
-        onSuccess: (ReportDetailDto) -> Unit,
-        onError: (Exception) -> Unit
-    ){
-        val uid = auth.currentUser?.uid
+    suspend fun getReportDetail(month: String) = runCatching {
 
-        if(uid == null){
-            onError(IllegalStateException("User not logged in"))
-            return
-        }
+        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
 
-        firestore.collection("users")
+        val result = firestore.collection("users")
             .document(uid)
             .collection("reports")
             .document(month)
             .get()
-            .addOnSuccessListener { result ->
-                try {
-                    val data = result.data ?: return@addOnSuccessListener onError(Exception("No data found"))
+            .await()
 
-                    val byCategory = (data["byCategory"] as? List<Map<String, Any>>)?.mapNotNull {
-                        val id = it["categoryId"] as? String ?: return@mapNotNull null
-                        val name = it["categoryName"] as? String ?: return@mapNotNull null
-                        val price = (it["totalPrice"] as? Long)?.toInt() ?: 0
-                        val color = it["color"] as? String ?: return@mapNotNull null
-                        CategoryTotalDto(id, name, price, color)
-                    }?.toList() ?: emptyList()
+        val data = result.data ?: error("데이터 없음")
 
-                    Log.d("카테고리", byCategory.toString())
+        val byCategory = (data["byCategory"] as? List<Map<String, Any>>)?.mapNotNull {
+            val id    = it["categoryId"] as? String ?: return@mapNotNull null
+            val name  = it["categoryName"] as? String ?: return@mapNotNull null
+            val price = (it["totalPrice"] as? Number)?.toInt() ?: 0
+            val color = it["color"] as? String ?: return@mapNotNull null
+            CategoryTotalDto(id, name, price, color)
+        } ?: emptyList()
 
-                    val byEmotion = (data["byEmotion"] as? List<Map<String, Any>>)?.mapNotNull {
-                        val id = it["emotionId"] as? String ?: return@mapNotNull null
-                        val amt = (it["amount"] as? Long)?.toInt() ?: 0
-                        EmotionTotalDto(id, amt)
-                    }?.toList() ?: emptyList()
+        val byEmotion = (data["byEmotion"] as? List<Map<String, Any>>)?.mapNotNull {
+            val id  = it["emotionId"] as? String ?: return@mapNotNull null
+            val amt = (it["amount"] as? Number)?.toInt() ?: 0
+            EmotionTotalDto(id, amt)
+        } ?: emptyList()
 
-                    val dto = ReportDetailDto(
-                        month = result.id,
-                        totalBudget = (data["totalBudget"] as? Long)?.toInt() ?: 0,
-                        totalExpense = (data["totalExpense"] as? Long)?.toInt() ?: 0,
-                        feedback = data["feedback"] as? String ?: "",
-                        byCategory = byCategory,
-                        byEmotion = byEmotion,
-                    )
-
-                    onSuccess(dto)
-                } catch (e: Exception) {
-                    onError(e)
-                }
-            }
-            .addOnFailureListener { e ->
-                Log.e("Report Detail Repo", "Firestore get Report Detail 실패: ${e.message}", e)
-                onError(e)
-            }
+        ReportDetailDto(
+            month        = result.id,
+            totalBudget  = (data["totalBudget"] as? Number)?.toInt() ?: 0,
+            totalExpense = (data["totalExpense"] as? Number)?.toInt() ?: 0,
+            feedback     = data["feedback"] as? String ?: "",
+            byCategory   = byCategory,
+            byEmotion    = byEmotion,
+        )
     }
 }
