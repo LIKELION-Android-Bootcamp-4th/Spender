@@ -33,12 +33,16 @@ class AuthViewModel @Inject constructor(
     private val _isFailState = mutableStateOf(false)
     val isFailState: State<Boolean> = _isFailState
 
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> = _isLoading
+
     fun googleLogin(
         context: Context,
         activityResult: ActivityResult,
         onSuccess: () -> Unit
     ) {
         try {
+            _isLoading.value = true
             val account = GoogleSignIn
                 .getSignedInAccountFromIntent(activityResult.data)
                 .getResult(ApiException::class.java)
@@ -55,20 +59,24 @@ class AuthViewModel @Inject constructor(
                         FcmTokenRegistrar.handleAfterLogin(app)
 
                         onSuccess()
+                        _isLoading.value = false
                     } else {
                         _isFailState.value = true
                         Log.d("Login", "Firebase SignIn failed! ${task.exception} ")
+                        _isLoading.value = false
                     }
                 }
         } catch (e: Exception) {
             _isFailState.value = true
             Log.d("Login", "Google SignIn failed! ${e.message}")
+            _isLoading.value = false
         }
     }
 
     fun naverLogin(context: Context, navController: NavController) {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
                 authRepository.naverLogin(context)
                 AuthPrefs.setLoginType(getApplication(), LoginType.NAVER)
                 Log.d("Login", "Naver Login Success!")
@@ -91,6 +99,8 @@ class AuthViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e("Login", "Naver Login Fail", e)
+            } finally {
+                _isLoading.value = false
             }
         }
     }
@@ -98,6 +108,7 @@ class AuthViewModel @Inject constructor(
     fun kakaoLogin(context: Context, navController: NavController) {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
                 authRepository.kakaoLogin(context)
                 AuthPrefs.setLoginType(getApplication(), LoginType.KAKAO)
                 Log.d("Login", "Kakao Login Success!")
@@ -119,6 +130,8 @@ class AuthViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.e("Login", "Kakao Login Fail", e)
+            } finally {
+                _isLoading.value = false
             }
         }
     }

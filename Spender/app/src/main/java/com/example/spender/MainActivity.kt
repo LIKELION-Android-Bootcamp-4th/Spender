@@ -10,17 +10,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -57,7 +56,6 @@ import com.example.spender.feature.report.ui.list.ReportListScreen
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.SpenderTheme
 import com.example.spender.ui.theme.Typography
-import com.example.spender.ui.theme.WhiteColor
 import com.example.spender.ui.theme.navigation.BottomNavigationItem
 import com.example.spender.ui.theme.navigation.Screen
 import com.example.spender.ui.theme.navigation.SpenderNavigation
@@ -78,15 +76,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 val navController = rememberNavController()
 
-//                val isOnboardingShown = OnboardingPref.wasShown(this)
-//                // 로그인 화면으로 가려면 아래 주석 해제하고
-////                val startDestination = Screen.AuthScreen.route
-//                //이거 아래부분 주석처리 하면 됨
-//                val startDestination = if (isOnboardingShown) {
-//                    Screen.MainScreen.route
-//                } else {
-//                    Screen.OnboardingScreen.route
-//                }
                 SpenderNavigation(
                     navController = navController,
                     startDestination = Screen.SplashScreen.route
@@ -116,17 +105,15 @@ fun MainScreen(rootNavHostController: NavHostController) {
 //            onClick = {rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)},
                     onClick = { isFabMenuExpanded = true },
                     shape = RoundedCornerShape(72.dp),
-                    elevation = FloatingActionButtonDefaults.elevation(0.dp),
-                    containerColor = WhiteColor,
-                    contentColor = Color.Unspecified,
+                    containerColor = PointColor,
                     modifier = Modifier
                         .offset(y = 50.dp)
                         .size(72.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_floating_add),
+                        imageVector = Icons.Default.Add,
                         contentDescription = "Add Expense",
-                        modifier = Modifier.fillMaxSize(),
+                        tint = Color.White
                     )
                 }
                 DropdownMenu(
@@ -220,8 +207,8 @@ private fun HandlePushNavigation(
 
         // 탭 이동
         when (route) {
-            "home"    -> bottomNavController.navigate(BottomNavigationItem.Home.route)
-            "stats"   -> bottomNavController.navigate(BottomNavigationItem.Analysis.route)
+            "home" -> bottomNavController.navigate(BottomNavigationItem.Home.route)
+            "stats" -> bottomNavController.navigate(BottomNavigationItem.Analysis.route)
             "reports" -> bottomNavController.navigate(BottomNavigationItem.Report.route)
         }
 
