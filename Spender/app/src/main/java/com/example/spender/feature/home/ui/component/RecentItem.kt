@@ -1,5 +1,6 @@
 package com.example.spender.feature.home.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,12 +22,14 @@ import com.example.spender.ui.theme.Typography
 @Composable
 fun RecentItem(
     title: String,
-    amount: Int
+    amount: Int,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(72.dp),
+            .height(72.dp)
+            .clickable { onClick() },
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = LightSurface,
