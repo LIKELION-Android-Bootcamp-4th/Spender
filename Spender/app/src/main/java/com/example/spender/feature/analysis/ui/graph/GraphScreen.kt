@@ -47,6 +47,7 @@ import com.example.spender.feature.analysis.ui.SpendListItemComponent
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.navigation.Screen
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -135,8 +136,11 @@ fun GraphScreen(navHostController: NavHostController) {
                     Spacer(Modifier.height(20.dp))
                     Text("이번 달 가장 컸던 지출", style = Typography.titleMedium)
                     Spacer(Modifier.height(10.dp))
-                    HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
-                    SpendListItemComponent(maxData)
+                    SpendListItemComponent(maxData) {
+                        navHostController.navigate(
+                            Screen.ExpenseDetailScreen.createRoute(maxData?.id ?: "")
+                        )
+                    }
                 }
             }
             val dialogState = rememberDatePickerState()

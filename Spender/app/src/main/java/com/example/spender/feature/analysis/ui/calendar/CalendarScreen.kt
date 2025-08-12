@@ -89,7 +89,8 @@ fun CalendarScreen(navHostController: NavHostController) {
                     viewModel.nowMonth,
                     viewModel.nowDay,
                     (viewModel.now.get(Calendar.DAY_OF_WEEK) + viewModel.now.get(Calendar.DATE) + 2) % 7,
-                    dailyList
+                    dailyList,
+                    navHostController
                 )
             } else {
                 calendar.set(Calendar.YEAR, selectionState[0])
@@ -98,7 +99,8 @@ fun CalendarScreen(navHostController: NavHostController) {
                     selectionState[1],
                     selectionState[2],
                     (calendar.get(Calendar.DAY_OF_WEEK) + selectionState[2] + 1) % 7,
-                    dailyList
+                    dailyList,
+                    navHostController
                 )
             }
         }
