@@ -32,6 +32,7 @@ val GooglePointColor = Color(0xFF4285F4)
 
 
 //다크모드 색상
+val DarkModeBackground = Color(0xFF333B50)
 val DarkModeLightSurface = Color(0xFF384157)
 val DarkModeTabColor = Color(0xFF56617B)
 val DarkModePointColor = Color(0xFF3182F6)
