@@ -55,7 +55,8 @@ fun ExpenseContent(
     if (isSheetOpen) {
         ModalBottomSheet(
             onDismissRequest = { isSheetOpen = false },
-            sheetState = sheetState
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.background
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(
@@ -107,9 +108,17 @@ fun ExpenseContent(
                 TextButton(onClick = { viewModel.onDateDialogVisibilityChange(false) }) {
                     Text("취소")
                 }
-            }
+            },
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.background
+            )
         ) {
-            DatePicker(state = datePickerState)
+            DatePicker(
+                state = datePickerState,
+                colors = DatePickerDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
+            )
         }
     }
 
@@ -159,8 +168,6 @@ fun ExpenseContent(
                 )
             )
         }
-
-        Spacer(Modifier.height(12.dp))
 
         HorizontalDivider(color = Color(0xFFF0F2F5))
 

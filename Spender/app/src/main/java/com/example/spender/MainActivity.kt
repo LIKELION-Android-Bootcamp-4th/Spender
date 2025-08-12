@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -21,6 +22,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -56,6 +59,7 @@ import com.example.spender.feature.report.ui.list.ReportListScreen
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.SpenderTheme
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.WhiteColor
 import com.example.spender.ui.theme.navigation.BottomNavigationItem
 import com.example.spender.ui.theme.navigation.Screen
 import com.example.spender.ui.theme.navigation.SpenderNavigation
@@ -102,18 +106,19 @@ fun MainScreen(rootNavHostController: NavHostController) {
                 contentAlignment = Alignment.Center,
             ) {
                 FloatingActionButton(
-//            onClick = {rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)},
                     onClick = { isFabMenuExpanded = true },
                     shape = RoundedCornerShape(72.dp),
-                    containerColor = PointColor,
+                    elevation = FloatingActionButtonDefaults.elevation(0.dp),
+                    containerColor = WhiteColor,
+                    contentColor = Color.Unspecified,
                     modifier = Modifier
                         .offset(y = 50.dp)
                         .size(72.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Add,
+                        painter = painterResource(id = R.drawable.ic_floating_add),
                         contentDescription = "Add Expense",
-                        tint = Color.White
+                        modifier = Modifier.fillMaxSize(),
                     )
                 }
                 DropdownMenu(
