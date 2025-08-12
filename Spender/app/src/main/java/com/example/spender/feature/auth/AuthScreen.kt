@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,13 +19,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.spender.R
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.spender.feature.auth.ui.GoogleLogin
 import com.example.spender.feature.auth.ui.KakaoLogin
 import com.example.spender.feature.auth.ui.NaverLogin
+import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
 import com.example.spender.ui.theme.WhiteColor
 
 @Composable
 fun AuthScreen(navController: NavHostController) {
+    val viewModel: AuthViewModel = hiltViewModel()
+    val isLoading by viewModel.isLoading
 
     Box(
         modifier = Modifier
@@ -47,6 +53,17 @@ fun AuthScreen(navController: NavHostController) {
             NaverLogin(navController)
             Spacer(Modifier.height(24.dp))
             KakaoLogin(navController)
+        }
+
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.2f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
     }
 }
