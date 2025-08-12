@@ -16,80 +16,35 @@ class ReportRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val auth: FirebaseAuth
 ) {
-//    suspend fun getReportList(year: Int) = runCatching {
-//        Log.d("ReportRepo", "getReportList() 실행됨, year=$year")
-//
-//        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
-//        Log.d("ReportRepo", "UID 확인용: $uid")
-//
-//        val snap = firestore.collection("users")
-//            .document(uid)
-//            .collection("reports")
-//            .orderBy(FieldPath.documentId())
-//            .startAt("$year-01")
-//            .endAt("$year-12")
-//            .get()
-//            .await()
-//
-//        val summaries = snap.documents.mapNotNull { doc ->
-//            val data = doc.data ?: return@mapNotNull null
-//            try {
-//                ReportListDto(
-//                    month = doc.id,
-//                    totalExpense = (data["totalExpense"] as? Number)?.toInt() ?: 0,
-//                    totalBudget  = (data["totalBudget"] as? Number)?.toInt() ?: 0
-//                )
-//            } catch (e: Exception) {
-//                Log.e("ReportRepo", "getReportList 매핑 실패: ${e.message}", e)
-//                null
-//            }
-//        }
-//        summaries
-//    }
+    suspend fun getReportList(year: Int) = runCatching {
+        Log.d("ReportRepo", "getReportList() 실행됨, year=$year")
 
-    fun getReportList(
-        year: Int,
-        onSuccess: (List<ReportListDto>) -> Unit,
-        onError: (Exception) -> Unit
-    ){
-        Log.d("ReportRepo", ">>> getReportList() 실행됨, year=$year")
-
-        val uid = auth.currentUser?.uid
+        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
         Log.d("ReportRepo", "UID 확인용: $uid")
-        if(uid == null){
-            Log.d("ReportRepo", "UID가 널!!!!!")
-            onError(IllegalStateException("User not logged in"))
-            return
-        }
 
-        firestore.collection("users")
+        val snap = firestore.collection("users")
             .document(uid)
             .collection("reports")
-            .orderBy(FieldPath.documentId()) // "2025-01", "2025-02"...
+            .orderBy(FieldPath.documentId())
             .startAt("$year-01")
             .endAt("$year-12")
             .get()
-            .addOnSuccessListener { result ->
-                val summaries = result.documents.mapNotNull { doc ->
-                    val data = doc.data ?: return@mapNotNull null
+            .await()
 
-                    try {
-                        ReportListDto(
-                            month = doc.id, // 예: "2025-08"
-                            totalExpense = (data["totalExpense"] as? Long)?.toInt() ?: 0,
-                            totalBudget = (data["totalBudget"] as? Long)?.toInt() ?: 0
-                        )
-                    } catch (e: Exception) {
-                        null
-                    }
-                }
-
-                onSuccess(summaries)
+        val summaries = snap.documents.mapNotNull { doc ->
+            val data = doc.data ?: return@mapNotNull null
+            try {
+                ReportListDto(
+                    month = doc.id,
+                    totalExpense = (data["totalExpense"] as? Number)?.toInt() ?: 0,
+                    totalBudget  = (data["totalBudget"] as? Number)?.toInt() ?: 0
+                )
+            } catch (e: Exception) {
+                Log.e("ReportRepo", "getReportList 매핑 실패: ${e.message}", e)
+                null
             }
-            .addOnFailureListener { e ->
-                Log.e("Report List Repo", "Firestore getReportList 실패: ${e.message}", e)
-                onError(e)
-            }
+        }
+        summaries
     }
 
     suspend fun getReportDetail(month: String) = runCatching {
