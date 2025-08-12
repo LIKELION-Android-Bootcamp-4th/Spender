@@ -143,6 +143,7 @@ class CalendarRepository @Inject constructor(
                 .await()
             expenseRef.documents.mapNotNull { data ->
                 ExpenseDto(
+                    id = data.id,
                     amount = -(data["amount"]?.toString()?.toInt() ?: 0),
                     memo = data["memo"]?.toString() ?: "",
                     title = data["title"]?.toString() ?: "",
@@ -167,6 +168,7 @@ class CalendarRepository @Inject constructor(
                 .await()
             dataList.addAll(incomeRef.documents.mapNotNull { doc ->
                 ExpenseDto(
+                    id = doc.id,
                     amount = doc["amount"]?.toString()?.toInt() ?: 0,
                     memo = doc["memo"]?.toString() ?: "",
                     title = doc["title"]?.toString() ?: "",

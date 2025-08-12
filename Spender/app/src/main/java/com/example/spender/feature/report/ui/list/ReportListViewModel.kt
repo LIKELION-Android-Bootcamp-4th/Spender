@@ -4,12 +4,14 @@ import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.spender.feature.report.mapper.ReportMapper
 import com.example.spender.feature.report.domain.model.Report
 import com.example.spender.feature.report.domain.repository.ReportRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @HiltViewModel
@@ -34,29 +36,26 @@ class ReportListViewModel @Inject constructor(
     val error: State<String?> = _error
 
     fun loadReports(year: Int) {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
-        if (uid == null) {
-            Log.w("ReportVM", "loadReports: UID is null")
-            return
+        viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
+            _currentYear.value = year
+
+            val result = repository.getReportList(year)
+            result.fold(
+                onSuccess = { dtos ->
+                    _reportList.value = dtos.mapIndexed { index, dto ->
+                        ReportMapper.fromListDto(dto, index)
+                }},
+                onFailure = { e ->
+                    _error.value = e.message
+                    _isLoading.value = false
+                }
+            )
+
+            _isLoading.value = false
         }
 
-        _isLoading.value = true
-        _error.value = null
-
-        repository.getReportList(
-            year = year,
-            onSuccess = { dtos ->
-                _reportList.value = dtos.mapIndexed { index, dto ->
-                    ReportMapper.fromListDto(dto, index)
-                }
-                _isLoading.value = false
-                _currentYear.value = year
-            },
-            onError = { e ->
-                _error.value = e.message
-                _isLoading.value = false
-            }
-        )
     }
 
     fun goToPreviousYear() {
@@ -65,5 +64,9 @@ class ReportListViewModel @Inject constructor(
 
     fun goToNextYear() {
         loadReports(_currentYear.value + 1)
+    }
+
+    fun setYear(year: Int){
+        loadReports(year)
     }
 }

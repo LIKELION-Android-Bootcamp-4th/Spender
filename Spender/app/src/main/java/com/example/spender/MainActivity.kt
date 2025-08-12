@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FabPosition
@@ -78,15 +80,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 val navController = rememberNavController()
 
-//                val isOnboardingShown = OnboardingPref.wasShown(this)
-//                // 로그인 화면으로 가려면 아래 주석 해제하고
-////                val startDestination = Screen.AuthScreen.route
-//                //이거 아래부분 주석처리 하면 됨
-//                val startDestination = if (isOnboardingShown) {
-//                    Screen.MainScreen.route
-//                } else {
-//                    Screen.OnboardingScreen.route
-//                }
                 SpenderNavigation(
                     navController = navController,
                     startDestination = Screen.SplashScreen.route
@@ -113,7 +106,6 @@ fun MainScreen(rootNavHostController: NavHostController) {
                 contentAlignment = Alignment.Center,
             ) {
                 FloatingActionButton(
-//            onClick = {rootNavHostController.navigate(Screen.ExpenseRegistrationScreen.route)},
                     onClick = { isFabMenuExpanded = true },
                     shape = RoundedCornerShape(72.dp),
                     elevation = FloatingActionButtonDefaults.elevation(0.dp),
@@ -220,8 +212,8 @@ private fun HandlePushNavigation(
 
         // 탭 이동
         when (route) {
-            "home"    -> bottomNavController.navigate(BottomNavigationItem.Home.route)
-            "stats"   -> bottomNavController.navigate(BottomNavigationItem.Analysis.route)
+            "home" -> bottomNavController.navigate(BottomNavigationItem.Home.route)
+            "stats" -> bottomNavController.navigate(BottomNavigationItem.Analysis.route)
             "reports" -> bottomNavController.navigate(BottomNavigationItem.Report.route)
         }
 

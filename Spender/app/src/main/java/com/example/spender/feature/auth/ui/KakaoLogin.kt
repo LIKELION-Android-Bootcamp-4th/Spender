@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -36,9 +35,9 @@ fun KakaoLogin(
 ) {
     val viewModel: AuthViewModel = hiltViewModel()
     val context = LocalContext.current
+
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         border = BorderStroke(1.dp, color = KakaoColor),
         shape = RoundedCornerShape(0.dp),
         colors = CardDefaults.cardColors(

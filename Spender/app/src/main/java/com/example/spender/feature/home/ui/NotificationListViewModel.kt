@@ -3,9 +3,11 @@ package com.example.spender.feature.home.ui
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.spender.feature.home.domain.Notification
 import com.example.spender.feature.home.domain.repository.NotificationListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,18 +28,21 @@ class NotificationListViewModel @Inject constructor(
     val error: State<String?> = _error
 
     fun load() {
-        _isLoading.value = true
-        _error.value = null
+        viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
 
-        repository.getNotificationList(
-            onSuccess = { list ->
-                _notifications.value = list
-                _isLoading.value = false
-            },
-            onError = { e ->
-                _error.value = e.message
-                _isLoading.value = false
-            }
-        )
+            val result = repository.getNotificationList()
+            result.fold(
+                onSuccess = { list ->
+                    _notifications.value = list
+                    _isLoading.value = false
+                },
+                onFailure = { e ->
+                    _error.value = e.message
+                    _isLoading.value = false
+                }
+            )
+        }
     }
 }

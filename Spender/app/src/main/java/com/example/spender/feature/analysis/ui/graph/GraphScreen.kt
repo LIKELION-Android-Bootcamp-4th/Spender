@@ -47,6 +47,7 @@ import com.example.spender.feature.analysis.ui.SpendListItemComponent
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.navigation.Screen
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -84,7 +85,47 @@ fun GraphScreen(navHostController: NavHostController) {
         Column (modifier = Modifier.padding(horizontal = 24.dp)) {
             //header
             when {
-                graphData.isEmpty() -> Text("이번 달에는 지출이 없어요", style = Typography.titleMedium)
+                graphData.isEmpty() -> {
+                    Text("이번 달에는 지출이 없어요", style = Typography.titleMedium)
+                    Spacer(Modifier.height(20.dp))
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text("${dateData[1]}월", style = Typography.titleMedium)
+                        Spacer(Modifier.width(10.dp))
+                        Text("${dateData[0]}", style = Typography.bodyMedium)
+                        Spacer(Modifier.width(10.dp))
+                        IconButton(
+                            onClick = { viewModel.showDialog() },
+                            modifier = Modifier.size(20.dp).align(Alignment.Bottom)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowDown,
+                                contentDescription = "datePicker",
+                                tint = Color.DarkGray
+                            )
+                        }
+                        Spacer(Modifier.weight(1f))
+                        IconButton(
+                            onClick = { viewModel.previousMonth() },
+                            modifier = Modifier.size(20.dp).align(Alignment.Bottom)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowLeft,
+                                contentDescription = "previous month",
+                                tint = Color.DarkGray
+                            )
+                        }
+                        IconButton(
+                            onClick = { viewModel.nextMonth() },
+                            modifier = Modifier.size(20.dp).align(Alignment.Bottom)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowRight,
+                                contentDescription = "next month",
+                                tint = Color.DarkGray
+                            )
+                        }
+                    }
+                }
                 else -> {
                     Text("이번 달 중 가장 지출이 많았던 날은", style = Typography.titleMedium)
                     Row {
@@ -135,8 +176,11 @@ fun GraphScreen(navHostController: NavHostController) {
                     Spacer(Modifier.height(20.dp))
                     Text("이번 달 가장 컸던 지출", style = Typography.titleMedium)
                     Spacer(Modifier.height(10.dp))
-                    HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
-                    SpendListItemComponent(maxData)
+                    SpendListItemComponent(maxData) {
+                        navHostController.navigate(
+                            Screen.ExpenseDetailScreen.createRoute(maxData?.id ?: "")
+                        )
+                    }
                 }
             }
             val dialogState = rememberDatePickerState()

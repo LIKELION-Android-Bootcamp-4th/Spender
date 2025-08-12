@@ -45,6 +45,7 @@ class GraphRepository @Inject constructor(
                 .get()
                 .await()
             expenseRef.documents.mapNotNull { ExpenseDto(
+                id = it.id,
                 amount = -(it["amount"]?.toString()?.toInt() ?: 0),
                 title = it["title"]?.toString() ?: "",
                 date = Timestamp.now(),

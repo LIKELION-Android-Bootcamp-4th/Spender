@@ -1,5 +1,6 @@
 package com.example.spender.feature.report.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,12 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReportTopAppBar(year: Int, onPrev: () -> Unit, onNext: () -> Unit) {
+fun ReportTopAppBar(year: Int, onPrev: () -> Unit, onNext: () -> Unit, onYearClick: () -> Unit) {
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
     CenterAlignedTopAppBar(
@@ -38,7 +40,8 @@ fun ReportTopAppBar(year: Int, onPrev: () -> Unit, onNext: () -> Unit) {
 
                 Text(
                     text = "${year}년",
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                    modifier = Modifier.padding(horizontal = 8.dp).clickable{ onYearClick() },
+                    textDecoration = TextDecoration.Underline
                 )
 
                 IconButton(
