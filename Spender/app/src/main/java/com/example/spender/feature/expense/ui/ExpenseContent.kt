@@ -169,8 +169,6 @@ fun ExpenseContent(
             )
         }
 
-        Spacer(Modifier.height(12.dp))
-
         HorizontalDivider(color = Color(0xFFF0F2F5))
 
         // 카테고리
