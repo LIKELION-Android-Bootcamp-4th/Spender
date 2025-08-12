@@ -65,4 +65,8 @@ class ReportListViewModel @Inject constructor(
     fun goToNextYear() {
         loadReports(_currentYear.value + 1)
     }
+
+    fun setYear(year: Int){
+        loadReports(year)
+    }
 }
