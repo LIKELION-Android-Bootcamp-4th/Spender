@@ -42,7 +42,9 @@ fun NaverLogin(
         colors = CardDefaults.cardColors(
             containerColor = WhiteColor
         ),
-        onClick = { viewModel.naverLogin(context, navController) }
+        onClick = {
+            viewModel.naverLogin(context, navController)
+        }
     ) {
         Row(
             modifier = Modifier
