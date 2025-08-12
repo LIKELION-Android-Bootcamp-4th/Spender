@@ -40,6 +40,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+        jvmTarget = "1.8"
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     buildFeatures {
         compose = true
@@ -97,4 +101,11 @@ dependencies {
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // For AppWidgets support
+    implementation("androidx.glance:glance-appwidget:1.1.1")
+    // For interop APIs with Material 3
+    implementation("androidx.glance:glance-material3:1.1.1")
+    // For interop APIs with Material 2
+    implementation("androidx.glance:glance-material:1.1.1")
 }
