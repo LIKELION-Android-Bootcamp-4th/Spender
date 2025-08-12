@@ -75,7 +75,6 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SpenderTheme(
-                darkTheme = false,
                 dynamicColor = false
             ) {
                 val navController = rememberNavController()
