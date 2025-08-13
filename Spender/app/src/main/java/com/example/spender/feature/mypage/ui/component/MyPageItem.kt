@@ -13,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -26,8 +25,8 @@ fun MyPageItem(item: MyPageItemType, onClick: () -> Unit) {
             .padding(vertical = 15.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(item.icon, contentDescription = item.title, modifier = Modifier.size(24.dp))
+        Icon(item.icon, contentDescription = item.title, modifier = Modifier.size(24.dp), tint = MaterialTheme.colorScheme.onBackground)
         Spacer(modifier = Modifier.width(25.dp))
-        Text(item.title, style = MaterialTheme.typography.bodyMedium, color = Color.Black, fontSize = 16.sp)
+        Text(item.title, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onBackground, fontSize = 16.sp)
     }
 }
