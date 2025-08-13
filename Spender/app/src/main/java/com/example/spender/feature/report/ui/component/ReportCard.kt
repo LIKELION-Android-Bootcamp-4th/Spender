@@ -51,12 +51,12 @@ fun ReportSummaryCard(
             .fillMaxWidth()
             .aspectRatio(1f)
             .clickable { onClick() }
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .shadow(4.dp, RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(12.dp),
 
         elevation = CardDefaults.cardElevation(6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -117,7 +117,7 @@ fun ReportSummaryCardHorizontal(
 //    val elevation = if (isHighlighted) 60.dp else 2.dp
 
     val backgroundColor by animateColorAsState(
-        if (isHighlighted) Color(0xFFDFEBFC) else Color.White
+        if (isHighlighted) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
     )
     // CFE0F9
     // D8E6FB
@@ -151,7 +151,7 @@ fun ReportSummaryCardHorizontal(
             Text(
                 text = report.month,
                 fontSize = 20.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = Typography.titleLarge
             )
 
@@ -159,7 +159,7 @@ fun ReportSummaryCardHorizontal(
             Text(
                 text = formatToManWon(report.totalExpense),
                 fontSize = 16.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             // 우측: 예산 대비 퍼센트

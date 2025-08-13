@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -68,7 +69,7 @@ fun CalendarHeader( //캘린더 상단 화살표 및 연월표시
             Icon(
                 imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = "datePicker",
-                tint = Color.DarkGray
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
         Spacer(Modifier.weight(1f))
@@ -79,7 +80,7 @@ fun CalendarHeader( //캘린더 상단 화살표 및 연월표시
             Icon(
                 imageVector = Icons.Default.KeyboardArrowLeft,
                 contentDescription = "previous month",
-                tint = Color.DarkGray
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
         IconButton(
@@ -89,7 +90,7 @@ fun CalendarHeader( //캘린더 상단 화살표 및 연월표시
             Icon(
                 imageVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = "next month",
-                tint = Color.DarkGray
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -135,7 +136,7 @@ fun Calendar(data: List<CalendarItemData>, onClick: (Int) -> Unit, selection: Li
             ) {
                 Text(text = if (item.day == 0) "" else item.day.toString(), style = TextStyle(
                     fontSize = 13.sp,
-                    color = if (item.today) Color.White else DefaultFontColor,
+                    color = if (item.today) Color.White else MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold),
                     modifier = Modifier.padding(top = 6.dp)
                 )
@@ -143,9 +144,9 @@ fun Calendar(data: List<CalendarItemData>, onClick: (Int) -> Unit, selection: Li
                     fontSize = 8.sp,
                     color = when {
                         item.expense > 0 && item.today -> Color.White
-                        item.expense > 0 -> Color.Black
+                        item.expense > 0 -> MaterialTheme.colorScheme.onSurface
                         item.expense < 0 -> Color.Red
-                        else -> Color.Black
+                        else -> MaterialTheme.colorScheme.onSurface
                     }
                 )
                 )

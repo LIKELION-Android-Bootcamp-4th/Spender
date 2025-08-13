@@ -13,6 +13,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.spender.ui.theme.DefaultFontColor
+import com.example.spender.ui.theme.LightPointColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
@@ -36,7 +39,7 @@ fun CustomDialog(
     Dialog(onDismissRequest = onDismiss) {
         Card(
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
         ) {
             Column(
                 modifier = Modifier.padding(
@@ -63,10 +66,15 @@ fun CustomDialog(
                     Button(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+                        colors = ButtonDefaults.buttonColors(containerColor = LightPointColor),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("취소", style = Typography.bodySmall, fontWeight = FontWeight.Bold)
+                        Text(
+                            "취소",
+                            style = Typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = DefaultFontColor
+                        )
                     }
                     Button(
                         onClick = onConfirm,
@@ -89,7 +97,7 @@ fun CustomDialog(
 
 @Preview
 @Composable
-fun CustomDialogPreview( ){
+fun CustomDialogPreview() {
     CustomDialog(
         title = "로그아웃 하시겠습니까?",
         onDismiss = {},

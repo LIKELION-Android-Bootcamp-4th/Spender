@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
@@ -38,7 +39,9 @@ import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
+import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.navigation.Screen
+import com.google.common.math.LinearTransformation.horizontal
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -63,18 +66,24 @@ fun ExpenseRegistrationParentScreen(
                 is RegistrationEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
+
                 is RegistrationEvent.OcrSuccess -> {
-                    val encodedTitle = URLEncoder.encode(event.title, StandardCharsets.UTF_8.toString())
-                    val encodedAmount = URLEncoder.encode(event.amount, StandardCharsets.UTF_8.toString())
-                    val encodedDate = URLEncoder.encode(event.date, StandardCharsets.UTF_8.toString())
+                    val encodedTitle =
+                        URLEncoder.encode(event.title, StandardCharsets.UTF_8.toString())
+                    val encodedAmount =
+                        URLEncoder.encode(event.amount, StandardCharsets.UTF_8.toString())
+                    val encodedDate =
+                        URLEncoder.encode(event.date, StandardCharsets.UTF_8.toString())
 
                     navHostController.navigate(
                         Screen.OcrResultScreen.createRoute(encodedTitle, encodedAmount, encodedDate)
                     )
                 }
+
                 is RegistrationEvent.NavigateBack -> {
                     navHostController.popBackStack() //이전화면으로 돌아가기
                 }
+
                 else -> {}
             }
         }
@@ -85,7 +94,7 @@ fun ExpenseRegistrationParentScreen(
             CustomTopAppBar(
                 title = "지출 등록",
                 navHostController,
-                showBackButton = true
+                showBackButton = true,
             )
         },
         bottomBar = {
@@ -103,15 +112,12 @@ fun ExpenseRegistrationParentScreen(
                     Text(
                         "지출 등록",
                         modifier = Modifier.padding(vertical = 6.dp),
-                        fontSize = 20.sp,
-                        fontFamily = NotoSansFamily,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
+                        style = Typography.titleSmall
                     )
                 }
             }
         },
-        containerColor = Color.White
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -125,7 +131,7 @@ fun ExpenseRegistrationParentScreen(
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .height(56.dp)
                     .clip(RoundedCornerShape(10.dp)),
-                containerColor = Color(0xFFF0F2F5),
+                containerColor = MaterialTheme.colorScheme.tertiary,
                 indicator = { tabPositions ->
                     Box(
                         modifier = Modifier
@@ -133,7 +139,7 @@ fun ExpenseRegistrationParentScreen(
                             .fillMaxSize()
                             .padding(4.dp)
                             .background(
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.background,
                                 shape = RoundedCornerShape(10.dp)
                             )
                     )
@@ -157,8 +163,8 @@ fun ExpenseRegistrationParentScreen(
                     ) {
                         Text(
                             text = title,
-                            color = if (isSelected) Color.Black else Color.Gray,
-                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                            style = Typography.titleMedium,
+                            color = if (isSelected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onTertiary,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
@@ -173,6 +179,7 @@ fun ExpenseRegistrationParentScreen(
                         navHostController.navigate(Screen.ExpenseCategoryScreen.route)
                     }
                 )
+
                 2 -> RecurringExpenseContent(
                     uiState,
                     viewModel,
