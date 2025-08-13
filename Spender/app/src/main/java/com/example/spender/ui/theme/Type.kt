@@ -18,70 +18,61 @@ val Typography = Typography(
     titleLarge = TextStyle(
         fontFamily = NotoSansFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 24.sp,
-        color = DefaultFontColor
+        fontSize = 24.sp
     ),
     // 앱바 타이틀 등 크게 잘 보여야 하는 글씨들 (볼드 적용 O)
     titleMedium = TextStyle(
         fontFamily = NotoSansFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp,
-        color = DefaultFontColor
+        fontSize = 20.sp
     ),
     // 본문 내 카테고리나 다이얼로그의 타이틀 (볼드 적용 O)
     titleSmall = TextStyle(
         fontFamily = NotoSansFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
-        color = DefaultFontColor
+        fontSize = 16.sp
     ),
 
     // 탭에서 선택되지 않은 항목을 위함 (연한색, 볼드 적용 X)
     bodyLarge = TextStyle(
         fontFamily = NotoSansFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
-        color = LightFontColor
+        fontSize = 20.sp
     ),
 
     // 어플의 기본 폰트 사이즈 (볼드 적용 X)
     bodyMedium = TextStyle(
         fontFamily = NotoSansFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        color = DefaultFontColor
+        fontSize = 16.sp
     ),
 
     // (볼드 적용 X)
     bodySmall = TextStyle(
         fontFamily = NotoSansFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        color = DefaultFontColor
+        fontSize = 14.sp
     ),
 
     // (연한색, 볼드 적용 X)
     labelLarge = TextStyle(
         fontFamily = NotoSansFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        color = LightFontColor
+        fontSize = 16.sp
     ),
 
     // (연한색, 볼드 적용 X)
     labelMedium = TextStyle(
         fontFamily = NotoSansFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        color = LightFontColor
+        fontSize = 14.sp
     ),
 
     // (연한색, 볼드 적용 X)
     labelSmall = TextStyle(
         fontFamily = NotoSansFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 10.sp,
-        color = LightFontColor
+        fontSize = 10.sp
     )
 
 )

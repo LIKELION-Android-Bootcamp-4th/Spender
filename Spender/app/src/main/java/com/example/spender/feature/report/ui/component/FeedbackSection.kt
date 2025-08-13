@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -81,7 +82,7 @@ fun FeedbackBox(
                 text = "지출이",
                 style = Typography.bodyMedium,
                 fontSize = 16.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -99,7 +100,7 @@ fun FeedbackBox(
                 modifier = Modifier
                     .padding(start = 4.dp, bottom = 0.dp) // 꼬리 너비만큼 오른쪽으로 밀기
                     .background(
-                        color = LightBackgroundColor,
+                        color = MaterialTheme.colorScheme.tertiary,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .padding(16.dp)
@@ -107,7 +108,7 @@ fun FeedbackBox(
                 Text(
                     text = feedback,
                     style = Typography.bodyMedium,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -116,6 +117,7 @@ fun FeedbackBox(
 
 @Composable
 fun TriangleTail(modifier: Modifier = Modifier) {
+    val surfaceVariantColor = MaterialTheme.colorScheme.surfaceVariant
     Canvas(
         modifier = modifier
             .size(12.dp)
@@ -126,6 +128,6 @@ fun TriangleTail(modifier: Modifier = Modifier) {
             lineTo(0f, size.height) // 왼쪽 아래
             close()
         }
-        drawPath(path = path, color = LightBackgroundColor)
+        drawPath(path = path, color = surfaceVariantColor)
     }
 }

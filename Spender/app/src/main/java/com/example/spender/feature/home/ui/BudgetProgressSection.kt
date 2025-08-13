@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -25,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.spender.R
 import com.example.spender.feature.home.ui.component.BudgetProgressBar
-import com.example.spender.ui.theme.LightSurface
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.PointRedColor
 import com.example.spender.ui.theme.Typography
@@ -86,7 +86,7 @@ fun BudgeProgress(
                 .height(56.dp),
             shape = RoundedCornerShape(10.dp),
             colors = CardDefaults.cardColors(
-                containerColor = LightSurface,
+                containerColor = MaterialTheme.colorScheme.surface,
             ),
         ) {
             Row(
@@ -98,12 +98,14 @@ fun BudgeProgress(
                 Icon(
                     painter = painterResource(id = R.drawable.warning_icon),
                     contentDescription = null,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(16.dp),
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = warningText,
-                    style = Typography.bodyMedium
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -123,7 +125,8 @@ fun BudgeProgress(
                     text = "예산 설정하러 가기",
                     style = Typography.labelMedium.copy(
                         textDecoration = TextDecoration.Underline
-                    )
+                    ),
+                    color = MaterialTheme.colorScheme.onTertiary
                 )
             }
         }

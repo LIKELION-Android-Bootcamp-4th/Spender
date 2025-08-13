@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -24,6 +26,7 @@ import com.example.spender.feature.auth.ui.GoogleLogin
 import com.example.spender.feature.auth.ui.KakaoLogin
 import com.example.spender.feature.auth.ui.NaverLogin
 import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
+import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 
 @Composable
@@ -34,25 +37,35 @@ fun AuthScreen(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(WhiteColor)
-            .padding(horizontal = 24.dp, vertical = 20.dp)
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(WhiteColor)
+                .padding(horizontal = 24.dp, vertical = 20.dp)
         ) {
-            Spacer(Modifier.height(88.dp))
-            Icon(
-                painter = painterResource(id = R.drawable.temp_app_icon),
-                contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier.size(250.dp),
-            )
-            Spacer(Modifier.height(224.dp))
-            GoogleLogin(navController)
-            Spacer(Modifier.height(24.dp))
-            NaverLogin(navController)
-            Spacer(Modifier.height(24.dp))
-            KakaoLogin(navController)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(Modifier.height(96.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.spender_default),
+                    contentDescription = null,
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(300.dp),
+                )
+                Text(
+                    text = "꽉잡아 지출이",
+                    style = Typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Spacer(Modifier.height(152.dp))
+                GoogleLogin(navController)
+                Spacer(Modifier.height(24.dp))
+                NaverLogin(navController)
+                Spacer(Modifier.height(24.dp))
+                KakaoLogin(navController)
+            }
         }
 
         if (isLoading) {

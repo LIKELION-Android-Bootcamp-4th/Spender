@@ -71,7 +71,7 @@ fun TabSelector(
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
                 .background(
-                    color = Color.LightGray,
+                    color = MaterialTheme.colorScheme.tertiary,
                     shape = RoundedCornerShape(8.dp)
                 )
         ) {
@@ -96,7 +96,7 @@ fun TabSelector(
                     .height(43.dp)
                     .padding(2.dp)
                     .background(
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.background,
                         shape = RoundedCornerShape(8.dp)
                     )
             )
@@ -120,7 +120,7 @@ fun TabSelector(
                     ) {
                         Text(
                             text = title,
-                            color = if (selectedTabIndex == index) Color.Black else Color.DarkGray,
+                            color = if (selectedTabIndex == index) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onTertiary,
                             style = MaterialTheme.typography.bodyMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(top = 2.dp)

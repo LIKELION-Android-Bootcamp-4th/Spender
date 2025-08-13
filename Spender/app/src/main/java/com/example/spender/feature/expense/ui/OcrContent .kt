@@ -42,6 +42,7 @@ import android.Manifest
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.res.painterResource
 import java.io.File
@@ -111,7 +112,7 @@ fun OcrContent(
                     },
                 shape = RoundedCornerShape(16.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -149,12 +150,14 @@ fun OcrContent(
             Text(
                 text = "• 최대한 바르게 펴진 문서를 기울임 없이, 영역에 가득 차도록 인식해 주십시오.",
                 style = Typography.labelMedium,
+                color = MaterialTheme.colorScheme.onTertiary
             )
             Spacer(Modifier.height(12.dp))
 
             Text(
                 text = "• 접힘, 구겨짐, 빛 반사, 그늘로 인해 글자가 잘 보이지 않으면 정확한 값을 추출할 수 없습니다.",
                 style = Typography.labelMedium,
+                color = MaterialTheme.colorScheme.onTertiary
             )
         }
     }

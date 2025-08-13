@@ -1,5 +1,6 @@
 package com.example.spender.core.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -31,6 +32,7 @@ fun CustomTopAppBar(
         title = {
             Text(text = title, style = Typography.titleMedium)
         },
+        Modifier.background(color = MaterialTheme.colorScheme.background),
         navigationIcon = {
             if (showBackButton) {
                 IconButton(onClick = { navController.popBackStack() }) {

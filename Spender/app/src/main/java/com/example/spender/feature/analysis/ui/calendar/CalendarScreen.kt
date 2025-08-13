@@ -143,25 +143,25 @@ fun CalendarScreen(navHostController: NavHostController) {
                     }
                 },
                 colors = DatePickerDefaults.colors(
-                    containerColor = Color.White.copy(),
+                    containerColor = MaterialTheme.colorScheme.surface,
                     selectedDayContainerColor = PointColor,
                     todayDateBorderColor = PointColor,
                     selectedYearContainerColor = PointColor,
                     disabledSelectedDayContainerColor = PointColor,
                     disabledSelectedYearContainerColor = PointColor,
-                    dayContentColor = Color.Black,
+                    dayContentColor = MaterialTheme.colorScheme.onSurface,
                 ),
             ) {
                 DatePicker(
                     state = dialogState,
                     colors = DatePickerDefaults.colors(
-                        containerColor = Color.White.copy(),
+                        containerColor = MaterialTheme.colorScheme.surface,
                         selectedDayContainerColor = PointColor,
                         todayDateBorderColor = PointColor,
                         selectedYearContainerColor = PointColor,
                         disabledSelectedDayContainerColor = PointColor,
                         disabledSelectedYearContainerColor = PointColor,
-                        dayContentColor = Color.Black,
+                        dayContentColor = MaterialTheme.colorScheme.onSurface,
                     ),
                 )
             }
