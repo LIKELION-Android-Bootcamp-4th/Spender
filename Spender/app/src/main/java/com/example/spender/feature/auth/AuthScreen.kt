@@ -49,17 +49,12 @@ fun AuthScreen(navController: NavHostController) {
             ) {
                 Spacer(Modifier.height(96.dp))
                 Icon(
-                    painter = painterResource(id = R.drawable.spender_default),
+                    painter = painterResource(id = R.drawable.auth_image),
                     contentDescription = null,
                     tint = Color.Unspecified,
-                    modifier = Modifier.size(300.dp),
+                    modifier = Modifier.size(400.dp),
                 )
-                Text(
-                    text = "꽉잡아 지출이",
-                    style = Typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Spacer(Modifier.height(152.dp))
+                Spacer(Modifier.height(88.dp))
                 GoogleLogin(navController)
                 Spacer(Modifier.height(24.dp))
                 NaverLogin(navController)
