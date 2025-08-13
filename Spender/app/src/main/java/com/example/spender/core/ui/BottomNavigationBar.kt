@@ -50,7 +50,7 @@ fun BottomNavigationBar(navHostController: NavHostController) {
     val currentDestination = navBackStackEntry?.destination
 
     BottomAppBar(
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = MaterialTheme.colorScheme.background,
         tonalElevation = 5.dp,
         actions = {
             screens.take(2).forEach { screen ->

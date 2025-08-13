@@ -26,7 +26,7 @@ val DarkModeTabColor = Color(0xFF56617B)
 val DarkModePointColor = Color(0xFF3182F6)
 val DarkModeDefaultFontColor = Color(0xFFFFFFFF)
 val DarkModeLightFontColor = Color(0xFF939CB1)
-val DarkModeSelectedColor = Color(0xFF3462A6)
+val DarkModeSelectedColor = Color(0xFF3F5371)
 
 // 공통 색상
 val DarkPointColor = Color(0xFF181D2A)
