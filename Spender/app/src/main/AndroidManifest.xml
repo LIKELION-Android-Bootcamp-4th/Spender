@@ -15,6 +15,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spender"
         android:name=".MyApplication">
+        <receiver android:name=".core.widget.SpenderSmallReceiverWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/spender_small_widget_info" />
+        </receiver>
+        <receiver android:name=".core.widget.SpenderMediumReceiverWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/spender_medium_widget_info" />
+        </receiver>
+        <receiver android:name=".core.widget.SpenderLargeReceiverWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/spender_large_widget_info" />
+        </receiver>
+
         <service
             android:name=".core.data.service.MyFirebaseMessagingService"
             android:exported="false">
