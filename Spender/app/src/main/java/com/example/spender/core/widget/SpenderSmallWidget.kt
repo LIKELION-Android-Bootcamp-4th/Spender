@@ -2,7 +2,6 @@ package com.example.spender.core.widget
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -45,19 +44,19 @@ class SpenderSmallWidget : GlanceAppWidget() {
         val percent0to100 = withContext(Dispatchers.IO) {
             runCatching { getExpenseRate() }.getOrElse { 0f }
         }
-        val percent01 = (percent0to100 / 100f).coerceIn(0f, 1f)
+        val percent = (percent0to100 / 100f).coerceIn(0f, 1f)
         val percentText = "${percent0to100.toInt()}%"
 
         provideContent {
             SpenderSmallWidgetContent(
-                percent = percent01,
+                percent = percent,
                 percentText = percentText
             )
         }
     }
 }
 
-private fun deepLinkToHomeIntent(context: Context): Intent =
+private fun deepLinkToHome(context: Context): Intent =
     Intent(context, MainActivity::class.java).apply {
         action = Intent.ACTION_VIEW
         data = "spender://home".toUri()
@@ -86,10 +85,10 @@ private fun SpenderSmallWidgetContent(
                 .fillMaxWidth()
                 .height(133.dp)
                 .width(133.dp)
-                .padding(horizontal = 10.dp)
+                .padding(10.dp)
                 .background(ColorProvider(Color.White))
-                .clickable(onClick = actionStartActivity(deepLinkToHomeIntent(context = LocalContext.current))),
-            contentAlignment = Alignment.Center
+                .clickable(onClick = actionStartActivity(deepLinkToHome(context = LocalContext.current))),
+            contentAlignment = Alignment.TopStart
         ) {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -102,24 +101,28 @@ private fun SpenderSmallWidgetContent(
                     Image(
                         provider = ImageProvider(R.drawable.spender_happy),
                         contentDescription = "로고",
-                        modifier = GlanceModifier.size(40.dp)
+                        modifier = GlanceModifier.size(35.dp)
                     )
 
-                    Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium))
+                    Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium, fontSize = 13.sp))
                 }
 
-                BudgetProgressBarGlance(progress01 = percent)
+                Spacer(GlanceModifier.height(5.dp))
+
+                BudgetProgressBarGlance(progress = percent)
 
                 Spacer(GlanceModifier.height(5.dp))
 
                 Text(percentText, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp))
+
+                Spacer(GlanceModifier.height(5.dp))
 
                 Text(
                     text = "예산 대비 지출",
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
                         color = ColorProvider(Color(0x80222836)),
-                        fontSize = 13.sp
+                        fontSize = 12.sp
                     )
                 )
 

@@ -13,11 +13,11 @@ import com.example.spender.ui.theme.PointColor
 
 @Composable
 fun BudgetProgressBarGlance(
-    progress01: Float,
+    progress: Float,
     barHeightDp: Int = 12,
     baseWidthDp: Int = 100,
 ) {
-    val p = progress01.coerceIn(0f, 1f)
+    val p = progress.coerceIn(0f, 1f)
     val fillWidth = (baseWidthDp * p).dp
 
     Box(
