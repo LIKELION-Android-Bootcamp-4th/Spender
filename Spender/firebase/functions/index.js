@@ -13,6 +13,8 @@ const generateMonthlyReports = require("./report-generator");
 const scheduleReportAlerts = require("./alert/report-alert");
 const scheduleBudgetAlerts = require("./alert/budget-alert");
 const scheduleReminderAlerts = require("./alert/reminder-alert");
+const onRegularExpenseCreate = require("./create-regular-expenses");
+const addRegularExpenses = require("./add-regular-expenses");
 
 exports.kakaoCustomAuth = onCall(handleKakao);
 exports.naverCustomAuth = onCall(handleNaver);
@@ -21,3 +23,5 @@ exports.generateMonthlyReports = generateMonthlyReports;
 exports.scheduleReportAlerts = scheduleReportAlerts;
 exports.scheduleBudgetAlerts = scheduleBudgetAlerts;
 exports.scheduleReminderAlerts = scheduleReminderAlerts;
+exports.addDailyExpenses = addRegularExpenses;
+exports.onRegularExpenseCreate = onRegularExpenseCreate;
