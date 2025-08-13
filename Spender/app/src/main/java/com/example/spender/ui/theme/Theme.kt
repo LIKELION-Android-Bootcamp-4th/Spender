@@ -12,15 +12,30 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = DarkModePointColor,
+    onPrimary = WhiteColor,
+    secondary = DarkModePointColor,
+    onSecondary = WhiteColor,
+    tertiary= DarkModeTabColor,
+    onTertiary= DarkModeLightFontColor,
     background = DarkModeBackground,
-    surface = DarkModeBackground
+    onBackground = DarkModeDefaultFontColor,
+    surface = DarkModeLightSurface,
+    onSurface = DarkModeDefaultFontColor,
+    outline = DarkModeTabColor,
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = PointColor,
+    onPrimary = WhiteColor,
+    secondary = PointColor,
+    onSecondary = WhiteColor,
+    tertiary= TabColor,
+    onTertiary= LightFontColor,
     background = WhiteColor,
-    surface = WhiteColor
-
+    onBackground = DefaultFontColor,
+    surface = LightSurface,
+    onSurface = DefaultFontColor,
+    outline = TabColor,
 )
 
 @Composable
