@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -35,19 +36,18 @@ fun BudgetInputField(
                 onBudgetChange(intBudget)
             },
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = LightSurface,
-                unfocusedContainerColor = LightSurface,
-                focusedIndicatorColor = TabColor,
-                unfocusedIndicatorColor = TabColor,
-                cursorColor = TabColor,
+                focusedContainerColor = MaterialTheme.colorScheme.background,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                focusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                cursorColor = MaterialTheme.colorScheme.tertiary,
             ),
             textStyle = Typography.titleLarge,
             placeholder = {
                 Text(
                     "예산을 입력해주세요",
-                    style = Typography.titleLarge.copy(
-                        color = TabColor
-                    )
+                    style = Typography.titleLarge,
+                    color = MaterialTheme.colorScheme.tertiary
                 )
             },
             visualTransformation = CurrencyVisualTransformation(),
