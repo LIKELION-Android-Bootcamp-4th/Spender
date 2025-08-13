@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.spender.R
 import com.example.spender.feature.mypage.domain.model.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,26 +22,39 @@ class MypageViewModel @Inject constructor() : ViewModel() {
 
     private fun loadUserInfo() {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
-
-        firebaseUser?.let { user ->
-            val providerId = user.providerData.find { it.providerId != "firebase" }?.providerId
-
-            val iconRes = when (providerId) {
-                "google.com" -> R.drawable.google_icon
-                "naver.com" -> R.drawable.naverlogo_icon
-                "kakao.com" -> R.drawable.kakao_icon
-                else -> null
-            }
-
-            val displayName = when (providerId) {
-                "google.com" -> user.email ?: "사용자"
-                else -> user.displayName ?: "사용자"
-            }
-
-            _user.value = User(
-                displayName = displayName,
-                providerIcon = iconRes
-            )
+        if (firebaseUser == null) {
+            return
         }
+
+        FirebaseFirestore.getInstance().collection("users").document(firebaseUser.uid)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val provider = document.getString("provider")
+                    val name = document.getString("name")
+                    val email = document.getString("email")
+
+                    val iconRes = when (provider) {
+                        "google" -> R.drawable.google_icon
+                        "naver" -> R.drawable.naverlogo_icon
+                        "kakao" -> R.drawable.kakao_icon
+                        else -> null
+                    }
+
+                    val displayName = when (provider) {
+                        "google" -> email ?: "사용자"
+                        else -> name ?: "사용자"
+                    }
+
+                    _user.value = User(
+                        displayName = displayName,
+                        providerIcon = iconRes
+                    )
+                }
+            }
+            .addOnFailureListener {
+                val displayName = firebaseUser.displayName ?: firebaseUser.email ?: "사용자"
+                _user.value = User(displayName = displayName)
+            }
     }
 }
