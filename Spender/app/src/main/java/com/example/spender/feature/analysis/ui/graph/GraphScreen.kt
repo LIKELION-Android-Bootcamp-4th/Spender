@@ -100,7 +100,7 @@ fun GraphScreen(navHostController: NavHostController) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,
                                 contentDescription = "datePicker",
-                                tint = Color.DarkGray
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                         Spacer(Modifier.weight(1f))
@@ -111,7 +111,7 @@ fun GraphScreen(navHostController: NavHostController) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowLeft,
                                 contentDescription = "previous month",
-                                tint = Color.DarkGray
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                         IconButton(
@@ -121,7 +121,7 @@ fun GraphScreen(navHostController: NavHostController) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowRight,
                                 contentDescription = "next month",
-                                tint = Color.DarkGray
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
@@ -146,7 +146,7 @@ fun GraphScreen(navHostController: NavHostController) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,
                                 contentDescription = "datePicker",
-                                tint = Color.DarkGray
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                         Spacer(Modifier.weight(1f))
@@ -157,7 +157,7 @@ fun GraphScreen(navHostController: NavHostController) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowLeft,
                                 contentDescription = "previous month",
-                                tint = Color.DarkGray
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                         IconButton(
@@ -167,7 +167,7 @@ fun GraphScreen(navHostController: NavHostController) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowRight,
                                 contentDescription = "next month",
-                                tint = Color.DarkGray
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
@@ -218,25 +218,25 @@ fun GraphScreen(navHostController: NavHostController) {
                         }
                     },
                     colors = DatePickerDefaults.colors(
-                        containerColor = Color.White.copy(),
+                        containerColor = MaterialTheme.colorScheme.surface,
                         selectedDayContainerColor = PointColor,
                         todayDateBorderColor = PointColor,
                         selectedYearContainerColor = PointColor,
                         disabledSelectedDayContainerColor = PointColor,
                         disabledSelectedYearContainerColor = PointColor,
-                        dayContentColor = Color.Black,
+                        dayContentColor = MaterialTheme.colorScheme.onSurface,
                     ),
                 ) {
                     DatePicker(
                         state = dialogState,
                         colors = DatePickerDefaults.colors(
-                            containerColor = Color.White.copy(),
+                            containerColor = MaterialTheme.colorScheme.surface,
                             selectedDayContainerColor = PointColor,
                             todayDateBorderColor = PointColor,
                             selectedYearContainerColor = PointColor,
                             disabledSelectedDayContainerColor = PointColor,
                             disabledSelectedYearContainerColor = PointColor,
-                            dayContentColor = Color.Black,
+                            dayContentColor = MaterialTheme.colorScheme.onSurface,
                         ),
                     )
                 }
