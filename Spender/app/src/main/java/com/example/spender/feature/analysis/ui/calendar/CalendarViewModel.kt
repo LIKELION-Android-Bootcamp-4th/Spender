@@ -24,7 +24,7 @@ class CalendarViewModel @Inject constructor(
 ): ViewModel(
 
 ) {
-    val _calendarItem = MutableStateFlow<List<CalendarItemData>>(emptyList())
+    private val _calendarItem = MutableStateFlow<List<CalendarItemData>>(emptyList())
     val calendarItem: StateFlow<List<CalendarItemData>> = _calendarItem.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1500),
