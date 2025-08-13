@@ -55,7 +55,7 @@ fun ReportContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-            .padding(top = 40.dp)
+            .padding(top = 0.dp)
             .background(color = LightBackgroundColor)
     ) {
         MonthlySpendingBarChart(

@@ -28,6 +28,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -61,15 +62,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.feature.expense.ui.RegistrationEvent
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomTopAppBar
-import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.feature.expense.ui.NumberCommaTransformation
+import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
@@ -98,6 +98,7 @@ fun IncomeRegistrationScreen(
                 is RegistrationEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
         }
     }
@@ -106,7 +107,8 @@ fun IncomeRegistrationScreen(
     if (isSheetOpen) {
         ModalBottomSheet(
             onDismissRequest = { isSheetOpen = false },
-            sheetState = sheetState
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.background
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(
@@ -164,9 +166,17 @@ fun IncomeRegistrationScreen(
                 TextButton(onClick = { viewModel.onDateDialogVisibilityChange(false) }) {
                     Text("취소")
                 }
-            }
+            },
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.background
+            )
         ) {
-            DatePicker(state = datePickerState)
+            DatePicker(
+                state = datePickerState,
+                colors = DatePickerDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
+            )
         }
     }
 

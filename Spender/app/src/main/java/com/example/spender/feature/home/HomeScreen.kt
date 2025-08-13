@@ -14,9 +14,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.spender.core.data.remote.expense.ExpenseDto
+import com.example.spender.core.data.service.getExpenseListForHome
+import com.example.spender.core.data.service.getExpenseRate
+import com.example.spender.core.data.service.getTotalExpense
 import com.example.spender.feature.home.ui.BudgeProgress
 import com.example.spender.feature.home.ui.RecentTransactionsSection
 import com.example.spender.feature.home.ui.TotalExpenseCard
@@ -25,8 +34,15 @@ import com.example.spender.ui.theme.LightPointColor
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
-    val totalExpense = 542560
-    val budget = 1000000
+    var totalExpense by remember { mutableStateOf(0) }
+    var percentage by remember { mutableStateOf(0f) }
+    var recentExpenses by remember { mutableStateOf<List<ExpenseDto>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        totalExpense = getTotalExpense()
+        percentage = getExpenseRate()
+        recentExpenses = getExpenseListForHome()
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -65,13 +81,15 @@ fun HomeScreen(navHostController: NavHostController) {
                 }
                 item {
                     BudgeProgress(
-                        budget = budget,
-                        totalExpense = totalExpense,
+                        percentage = percentage,
                         navHostController = navHostController
                     )
                 }
                 item {
-                    RecentTransactionsSection() // TODO: 각 데이터의 필드(수입,지출 제목 & 금액) 넘겨줘야 함
+                    RecentTransactionsSection(
+                        recentExpenses = recentExpenses,
+                        navHostController = navHostController
+                    )
                 }
             }
         }

@@ -12,7 +12,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.example.spender.feature.home.ui.BudgetProgressBar
+import com.example.spender.feature.home.ui.component.BudgetProgressBar
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.PointRedColor
 import com.example.spender.ui.theme.Typography

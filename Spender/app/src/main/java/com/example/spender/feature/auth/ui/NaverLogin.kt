@@ -17,20 +17,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.R
-import com.example.spender.feature.auth.ui.viewmodel.SocialViewModel
+import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
 import com.example.spender.ui.theme.NaverColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 
 @Composable
 fun NaverLogin(
-    viewModel: SocialViewModel,
     navController: NavHostController
 ) {
+    val viewModel: AuthViewModel = hiltViewModel()
+    val context = LocalContext.current
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -39,7 +42,9 @@ fun NaverLogin(
         colors = CardDefaults.cardColors(
             containerColor = WhiteColor
         ),
-        onClick = { viewModel.naverLogin(navController) }
+        onClick = {
+            viewModel.naverLogin(context, navController)
+        }
     ) {
         Row(
             modifier = Modifier

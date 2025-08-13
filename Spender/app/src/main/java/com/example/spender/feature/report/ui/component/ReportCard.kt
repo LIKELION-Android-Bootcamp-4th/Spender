@@ -44,9 +44,9 @@ fun ReportSummaryCard(
     } else 0f
     val usagePercent = (usageRatio * 100).toInt()
     val isOverBudget = usageRatio > 1f
-    val progressColor = if (isOverBudget) androidx.compose.ui.graphics.Color.Red else PointColor
+    val progressColor = if (isOverBudget) Color.Red else PointColor
 
-    Card( // TODO : ui 수정
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)

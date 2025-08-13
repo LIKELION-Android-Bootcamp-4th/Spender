@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,11 +39,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import com.example.spender.feature.analysis.ui.SpendListItemComponent
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.navigation.Screen
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -50,13 +55,28 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GraphScreen(navHostController: NavHostController) {
-    val context = LocalContext.current
     val viewModel: GraphViewModel = hiltViewModel()
 
     val graphData by viewModel.graphData.collectAsState()
     val dateData by viewModel.dateData.collectAsState()
     val maxData by viewModel.maxExpense.collectAsState()
     val showDatePicker = viewModel.showDatePicker.value
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.refresh()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -65,7 +85,47 @@ fun GraphScreen(navHostController: NavHostController) {
         Column (modifier = Modifier.padding(horizontal = 24.dp)) {
             //header
             when {
-                graphData.isEmpty() -> Text("이번 달에는 지출이 없어요", style = Typography.titleMedium)
+                graphData.isEmpty() -> {
+                    Text("이번 달에는 지출이 없어요", style = Typography.titleMedium)
+                    Spacer(Modifier.height(20.dp))
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text("${dateData[1]}월", style = Typography.titleMedium)
+                        Spacer(Modifier.width(10.dp))
+                        Text("${dateData[0]}", style = Typography.bodyMedium)
+                        Spacer(Modifier.width(10.dp))
+                        IconButton(
+                            onClick = { viewModel.showDialog() },
+                            modifier = Modifier.size(20.dp).align(Alignment.Bottom)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowDown,
+                                contentDescription = "datePicker",
+                                tint = Color.DarkGray
+                            )
+                        }
+                        Spacer(Modifier.weight(1f))
+                        IconButton(
+                            onClick = { viewModel.previousMonth() },
+                            modifier = Modifier.size(20.dp).align(Alignment.Bottom)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowLeft,
+                                contentDescription = "previous month",
+                                tint = Color.DarkGray
+                            )
+                        }
+                        IconButton(
+                            onClick = { viewModel.nextMonth() },
+                            modifier = Modifier.size(20.dp).align(Alignment.Bottom)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowRight,
+                                contentDescription = "next month",
+                                tint = Color.DarkGray
+                            )
+                        }
+                    }
+                }
                 else -> {
                     Text("이번 달 중 가장 지출이 많았던 날은", style = Typography.titleMedium)
                     Row {
@@ -116,8 +176,11 @@ fun GraphScreen(navHostController: NavHostController) {
                     Spacer(Modifier.height(20.dp))
                     Text("이번 달 가장 컸던 지출", style = Typography.titleMedium)
                     Spacer(Modifier.height(10.dp))
-                    HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
-                    SpendListItemComponent(maxData)
+                    SpendListItemComponent(maxData) {
+                        navHostController.navigate(
+                            Screen.ExpenseDetailScreen.createRoute(maxData?.id ?: "")
+                        )
+                    }
                 }
             }
             val dialogState = rememberDatePickerState()

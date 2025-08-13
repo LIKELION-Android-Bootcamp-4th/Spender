@@ -55,7 +55,8 @@ fun ExpenseContent(
     if (isSheetOpen) {
         ModalBottomSheet(
             onDismissRequest = { isSheetOpen = false },
-            sheetState = sheetState
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.background
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(
@@ -107,9 +108,17 @@ fun ExpenseContent(
                 TextButton(onClick = { viewModel.onDateDialogVisibilityChange(false) }) {
                     Text("취소")
                 }
-            }
+            },
+            colors = DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.background
+            )
         ) {
-            DatePicker(state = datePickerState)
+            DatePicker(
+                state = datePickerState,
+                colors = DatePickerDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
+            )
         }
     }
 
@@ -159,8 +168,6 @@ fun ExpenseContent(
                 )
             )
         }
-
-        Spacer(Modifier.height(12.dp))
 
         HorizontalDivider(color = Color(0xFFF0F2F5))
 
@@ -349,30 +356,36 @@ class NumberCommaTransformation : VisualTransformation {
             return TransformedText(text, OffsetMapping.Identity)
         }
 
-        val formattedText = try {
-            val number = originalText.toLong()
-            DecimalFormat("#,###").format(number)
-        } catch (e: NumberFormatException) {
-            return TransformedText(text, OffsetMapping.Identity)
+        val numberText = originalText.filter { it.isDigit() }
+        if (numberText.isEmpty()) {
+            return TransformedText(AnnotatedString(""), OffsetMapping.Identity)
         }
+
+        val number = numberText.toLongOrNull() ?: return TransformedText(text, OffsetMapping.Identity)
+        val formattedText = DecimalFormat("#,###").format(number)
 
         val offsetMapping = object : OffsetMapping {
             override fun originalToTransformed(offset: Int): Int {
-                val commas = formattedText.count { it == ',' }
-                return offset + commas
+                val originalSub = originalText.take(offset)
+                val commasBefore = originalSub.count { !it.isDigit() }
+                val digitsBefore = originalSub.count { it.isDigit() }
+
+                var transformedOffset = 0
+                var digitCount = 0
+                for (char in formattedText) {
+                    if (digitCount == digitsBefore) break
+                    if (char.isDigit()) {
+                        digitCount++
+                    }
+                    transformedOffset++
+                }
+                return transformedOffset
             }
 
             override fun transformedToOriginal(offset: Int): Int {
-                val commas = formattedText.substring(0, offset).count { it == ',' }
-                return offset - commas
+                return formattedText.take(offset).count { it.isDigit() }
             }
         }
         return TransformedText(AnnotatedString(formattedText), offsetMapping)
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun ExpenseRegistrationScreenPreview() {
-//    ExpenseRegistrationScreen()
-//}

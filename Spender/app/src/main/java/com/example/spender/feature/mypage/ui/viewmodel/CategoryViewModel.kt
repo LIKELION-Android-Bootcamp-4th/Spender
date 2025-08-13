@@ -1,4 +1,4 @@
-package com.example.spender.feature.mypage.ui
+package com.example.spender.feature.mypage.ui.viewmodel
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -7,9 +7,9 @@ import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.feature.mypage.data.repository.CategoryRepository
 import com.example.spender.feature.mypage.domain.model.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
@@ -20,9 +20,9 @@ class CategoryViewModel @Inject constructor(
     val categories = _categories.asStateFlow()
 
     private val categoryColors = listOf(
-        Color(0xFFF07463), Color(0xFF3182F6), Color(0xFFBF7F5C), Color(0xFF8C637C),
-        Color(0xFFFFC107), Color(0xFFA86EF4), Color(0xFFF48AE6), Color(0xFF95C8C5),
-        Color(0xFF4EAA07), Color(0xFF33F2CB)
+        Color(0xFF0FC9BA), Color(0xFF199DF0), Color(0xFF6378EC), Color(0xFFA17FF0),
+        Color(0xFFD47DF0), Color(0xFFFF6EC7), Color(0xFFFF7F65), Color(0xFFF5A562),
+        Color(0xFFF7D66C), Color(0xFFB8E986)
     )
 
     fun loadCategories(type: String) {

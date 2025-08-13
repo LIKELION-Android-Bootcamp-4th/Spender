@@ -8,6 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -17,6 +18,7 @@ import com.example.spender.core.ui.LoadingScreen
 import com.example.spender.feature.report.ui.component.EmptyReport
 import com.example.spender.feature.report.ui.component.ReportContent
 import com.example.spender.feature.report.ui.component.ReportTopAppBar
+import com.example.spender.feature.report.ui.component.YearPickerDialog
 import com.github.mikephil.charting.animation.ChartAnimator
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
@@ -36,8 +38,10 @@ fun ReportListScreen(
     val barValues = reports.map { it.totalExpense.toFloat() }
     val barLabels = reports.map { it.month.substring(5) + "월" }
 
+    var showYearDialog by remember { mutableStateOf(false) }
+
     val listState = rememberLazyListState()
-    var selectedIndex by remember { mutableStateOf(-1) }
+    var selectedIndex by remember { mutableIntStateOf(-1) }
 
     LaunchedEffect(selectedIndex) {
         if (selectedIndex >= 0) listState.animateScrollToItem(selectedIndex)
@@ -54,7 +58,7 @@ fun ReportListScreen(
         topBar = {
             ReportTopAppBar(year = year, onPrev = viewModel::goToPreviousYear, onNext = {
                 if (year < currentYear) viewModel.goToNextYear()
-            })
+            }, onYearClick = { showYearDialog = true })
         },
         content = { padding ->
             when{
@@ -79,6 +83,18 @@ fun ReportListScreen(
             }
         }
     )
+
+    if (showYearDialog) {
+        YearPickerDialog(
+            currentYear = currentYear,
+            selectedYear = year,
+            onYearSelected = {
+                viewModel.setYear(it)
+                showYearDialog = false
+            },
+            onDismiss = { showYearDialog = false }
+        )
+    }
 }
 
 // 막대 그래프 둥글게 처리

@@ -4,28 +4,30 @@ import android.util.Log
 import com.example.spender.core.data.remote.expense.ExpenseDto
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
 import java.util.Calendar
 
 // 총 지출 금액을 가져옴.
-fun getTotalExpense(): Int {
+suspend fun getTotalExpense(): Int {
     val uid = getFirebaseAuth()
-    var total = 0
-    try {
-        val ref = getFirebaseRef().document(uid!!).collection("expense")
-        ref.get().addOnSuccessListener { document ->
-            for (doc in document.documents) {
-                total += doc.data?.get("amount")?.toString()?.toInt() ?: 0
-            }
+    return try {
+        val ref = getFirebaseRef().document(uid!!).collection("expenses")
+        val document = ref.get().await()
+
+        var total = 0
+        for (doc in document.documents) {
+            total += doc.data?.get("amount")?.toString()?.toInt() ?: 0
         }
+        Log.d("Home", "TotalBudget: $total")
+        total
     } catch (e: Exception) {
-        Log.d("Home / TotalBudget", "total budget error")
-        return 0
+        Log.e("Home / TotalBudget", "total budget error: ${e.message}")
+        0
     }
-    return total
 }
 
 // 예산 소진 비율'만' 가져옴. 비율이 위험한지 아닌지는 따로 비즈니스 로직 필요
-fun getExpenseRate(): Int {
+suspend fun getExpenseRate(): Float {
     val uid = getFirebaseAuth()
 
     val startOfMonth = Calendar.getInstance().apply {
@@ -44,64 +46,72 @@ fun getExpenseRate(): Int {
         set(Calendar.MILLISECOND, 999)
     }
 
-    var budget = 1
-    var expense = 0
-
-    try {
+    return try {
         val budgetRef = getFirebaseRef().document(uid!!).collection("budgets")
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .limit(1)
         val expenseRef = getFirebaseRef().document(uid).collection("expenses")
-            .orderBy("createdAt", Query.Direction.DESCENDING)
             .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfMonth.time))
             .whereLessThanOrEqualTo("createdAt", Timestamp(endOfMonth.time))
 
-        budgetRef.get().addOnSuccessListener { document ->
-            for (doc in document) {
-                budget = doc.data["amount"].toString().toInt()
-                break
-            }
+        val budgetDocument = budgetRef.get().await()
+        val expenseDocument = expenseRef.get().await()
+
+        var budget = 1
+        var expense = 0
+
+        for (doc in budgetDocument) {
+            budget = doc.data["amount"].toString().toInt()
+            break
         }
 
-        expenseRef.get().addOnSuccessListener { document ->
-            for (doc in document) {
-                expense += doc.data["amount"].toString().toInt()
-            }
+        for (doc in expenseDocument) {
+            expense += doc.data["amount"].toString().toInt()
         }
 
-        val rate = (((expense.toDouble()) / (budget.toDouble())) * 100).toInt()
-        return rate
+        Log.d("Home", "getExpenseRate expense: $expense")
+        Log.d("Home", "getExpenseRate budget: $budget")
+
+        val rate = if (budget > 0) {
+            (expense.toDouble() / budget.toDouble() * 100).toFloat()
+        } else {
+            0f
+        }
+
+        Log.d("Home", "getExpenseRate: $rate")
+        rate
     } catch (e: Exception) {
-        Log.d("Home / ExpenseRate", "Expense rate error")
-        return 0
+        Log.e("Home / ExpenseRate", "Expense rate error: ${e.message}")
+        0f
     }
 }
 
 // 최근 5개 소비 가져옴. 단, 이전 달의 소비 기록이어도 가져오게 되어 있음.
-fun getExpenseListForHome(): MutableList<ExpenseDto> {
+suspend fun getExpenseListForHome(): List<ExpenseDto> {
     val uid = getFirebaseAuth()
-    val expenses = mutableListOf<ExpenseDto>()
-    try {
-        val ref = getFirebaseRef().document(uid!!).collection("expenses")
+    return try {
+        val document = getFirebaseRef().document(uid!!).collection("expenses")
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .limit(5)
             .get()
-            .addOnSuccessListener { document ->
-                for (doc in document) {
-                    val data = doc.data
-                    // 디스플레이용. 필수 정보만 넣고 나머지는 안 가져옴
-                    val expense = ExpenseDto(
-                        amount = data["amount"].toString().toInt(),
-                        title = data["title"].toString(),
-                        date = data["date"] as Timestamp,
-                        categoryId = data["categoryId"].toString(),
-                        createdAt = data["createdAt"] as Timestamp
-                    )
-                    expenses.add(expense)
-                }
-            }
+            .await()
+
+        val expenses = mutableListOf<ExpenseDto>()
+        for (doc in document) {
+            val data = doc.data
+            val expense = ExpenseDto(
+                id = doc.id,
+                amount = data["amount"].toString().toInt(),
+                title = data["title"].toString(),
+                date = data["date"] as Timestamp,
+                categoryId = data["categoryId"].toString(),
+                createdAt = data["createdAt"] as Timestamp
+            )
+            expenses.add(expense)
+        }
+        expenses
     } catch (e: Exception) {
-        Log.d("Home / RecentExpenses", "Expense list error")
+        Log.e("Home / RecentExpenses", "Expense list error: ${e.message}")
+        emptyList()
     }
-    return expenses
 }

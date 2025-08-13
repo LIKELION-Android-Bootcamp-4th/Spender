@@ -1,23 +1,23 @@
 package com.example.spender.feature.mypage.ui
 
-import android.content.ClipData.Item
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomLongButton
 import com.example.spender.core.ui.CustomTopAppBar
@@ -27,8 +27,13 @@ import com.example.spender.ui.theme.Typography
 
 @Composable
 fun BudgetScreen(navHostController: NavHostController) {
-    val viewModel: OnboardingViewModel = viewModel()
-    val budget = 1000000 // TODO: 서버에서 가져온 값으로 교체
+    val context = LocalContext.current
+    val viewModel: OnboardingViewModel = hiltViewModel()
+    val budget = viewModel.budget
+
+    LaunchedEffect(Unit) {
+        viewModel.loadBudget()
+    }
 
     Scaffold(
         topBar = {
@@ -66,7 +71,7 @@ fun BudgetScreen(navHostController: NavHostController) {
 
                     BudgetInputField(
                         budget = budget,
-                        onBudgetChange = { viewModel.onBudgetGet(it) },
+                        onBudgetChange = { viewModel.updateBudget(it) },
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -74,10 +79,19 @@ fun BudgetScreen(navHostController: NavHostController) {
                 CustomLongButton(
                     text = "설정",
                     onClick = {
-                        // TODO : 예산 설정 로직
+                        viewModel.saveBudget { success ->
+                            if (success) {
+                                Toast.makeText(context, "예산이 설정되었습니다.", Toast.LENGTH_SHORT).show()
+                                Log.d("Budget", "저장 성공")
+                                navHostController.popBackStack()
+                            } else {
+                                Log.d("Budget", "저장 실패")
+                            }
+                        }
                     },
                     modifier = Modifier
-                        .fillMaxWidth().height(56.dp),
+                        .fillMaxWidth()
+                        .height(56.dp),
                 )
             }
         }

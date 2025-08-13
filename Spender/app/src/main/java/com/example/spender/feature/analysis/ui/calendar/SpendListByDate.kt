@@ -1,6 +1,7 @@
 package com.example.spender.feature.analysis.ui.calendar
 
 import android.icu.text.DecimalFormat
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,15 +21,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.spender.core.data.remote.expense.ExpenseDto
 import com.example.spender.feature.analysis.domain.model.CalendarItemData
 import com.example.spender.feature.analysis.domain.model.SpendListItemData
 import com.example.spender.feature.analysis.ui.SpendListItemComponent
+import com.example.spender.feature.home.ui.component.RecentItem
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.navigation.Screen
 
 @Composable
-fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: MutableList<ExpenseDto>) { //캘린더 하단 지출 리스트
+fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: List<ExpenseDto>, navHostController: NavHostController) { //캘린더 하단 지출 리스트
     val itemData = mutableListOf<SpendListItemData>()
     for (data in list) {
         itemData.add(SpendListItemData(
@@ -54,13 +58,19 @@ fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: MutableList<Expe
         }
         Spacer(Modifier.height(10.dp))
         LazyColumn {
-            itemsIndexed(list) { index, item ->
-                SpendListItemComponent(item)
-                if (index != itemData.lastIndex) {
-                    Spacer(Modifier.height(5.dp))
-                    HorizontalDivider(thickness = 1.dp, color = Color.LightGray)
-                    Spacer(Modifier.height(5.dp))
-                }
+            itemsIndexed(list) { _, item ->
+                SpendListItemComponent(item, {
+                    if (item.amount > 0) {
+                        navHostController.navigate(
+                            Screen.IncomeDetailScreen.createRoute(item.id)
+                        )
+                    } else {
+                        navHostController.navigate(
+                            Screen.ExpenseDetailScreen.createRoute(item.id)
+                        )
+                    }
+                })
+                Spacer(Modifier.height(8.dp))
             }
         }
     }

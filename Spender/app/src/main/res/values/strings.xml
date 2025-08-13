@@ -1,15 +1,19 @@
 <resources>
-    <string name="app_name">Spender</string>
+    <string name="app_name">꽉잡아 지출이</string>
     <string name="tab_home">홈</string>
     <string name="tab_analysis">통계</string>
     <string name="tab_mypage">마이페이지</string>
     <string name="tab_report">리포트</string>
 
     <string-array name="onboarding_title">
-        <item>우리앱자랑을여기에써야하는데뭘써야할지모르겠네요</item>
-        <item>한달 예산은 얼마인가요?</item>
-        <item>이제 시작해봅시다.</item>
+        <item>한 달 예산, 지출이와 함께 지켜봅시다.</item>
+        <item>한 달 예산은 얼마인가요?</item>
+        <item>이제 시작할 수 있어요.</item>
     </string-array>
+
+    <string name="budgets_green">계획대로 소비 중이에요!</string>
+    <string name="budgets_yellow">이대로라면 예산을 초과할 것 같아요!</string>
+    <string name="budgets_red">예산 초과! 지출을 줄여야 해요!</string>
 
     <string name="default_web_client_id">1073077761870-is2da6dro8u2rqgqt56m6hl1rccq9nqh.apps.googleusercontent.com</string>
     <string name="naver_client_id">btOnE17uFYFcVX7H36Tm</string>

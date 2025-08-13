@@ -1,9 +1,8 @@
-package com.example.spender.feature.home.ui
+package com.example.spender.feature.home.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -22,6 +21,7 @@ import com.example.spender.ui.theme.LightSurface
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.PointRedColor
 
+@Suppress("UnusedBoxWithConstraintsScope")
 @Composable
 fun BudgetProgressBar(
     percentage: Float,
@@ -37,13 +37,15 @@ fun BudgetProgressBar(
             containerColor = LightSurface
         ),
     ) {
-        BoxWithConstraints(
-            modifier = Modifier.fillMaxWidth().padding(top = 40.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 40.dp, start = 16.dp, end = 16.dp)
         ) {
-            val barWidth = maxWidth
-            val bubbleOffset = (barWidth * percentage.coerceIn(0f, 1f)) - 24.dp
+            BoxWithConstraints {
+                val barWidth = maxWidth
+                val bubbleOffset = (barWidth * percentage.coerceIn(0f, 1f)) - 24.dp
 
-            Box {
                 // 말풍선
                 Box(
                     modifier = Modifier
@@ -51,7 +53,7 @@ fun BudgetProgressBar(
                             x = bubbleOffset.coerceIn(0.dp, barWidth - 48.dp),
                             y = (-32).dp
                         )
-                        .zIndex(1f) // 말풍선이 위에 오도록
+                        .zIndex(1f)
                 ) {
                     BubbleWithText(percentText, backgroundColor = highlightColor)
                 }
@@ -80,8 +82,6 @@ fun BudgetProgressBar(
                     )
                 }
             }
-
-
         }
     }
 }

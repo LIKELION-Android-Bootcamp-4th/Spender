@@ -25,13 +25,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.R
 import com.example.spender.core.data.remote.auth.LoginType
 import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.core.data.service.login
 import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
+import com.example.spender.feature.onboarding.data.OnboardingPref
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 import com.example.spender.ui.theme.navigation.Screen
@@ -44,7 +45,7 @@ fun GoogleLogin(
     navController: NavHostController
 ) {
 
-    val viewModel: AuthViewModel = viewModel()
+    val viewModel: AuthViewModel = hiltViewModel()
     val googleToken = stringResource(id = R.string.default_web_client_id)
     val context = LocalContext.current
 
@@ -55,11 +56,18 @@ fun GoogleLogin(
             Log.d("Login", "Google SignIn Success!")
             login(FirebaseAuth.getInstance().currentUser, LoginType.GOOGLE.type)
             Log.d("Login", getFirebaseAuth() ?: "failed")
-            navController.navigate(Screen.MainScreen.route) {
-                popUpTo(Screen.AuthScreen.route) {
-                    inclusive = true
+
+            val onboardingShown = OnboardingPref.wasShown(context)
+            if (onboardingShown) {
+                navController.navigate(Screen.MainScreen.route) {
+                    popUpTo(Screen.AuthScreen.route) { inclusive = true }
+                }
+            } else {
+                navController.navigate(Screen.OnboardingScreen.route) {
+                    popUpTo(Screen.AuthScreen.route) { inclusive = true }
                 }
             }
+
         }
     }
 

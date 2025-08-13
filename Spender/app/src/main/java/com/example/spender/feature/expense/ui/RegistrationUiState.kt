@@ -22,8 +22,11 @@ data class RegistrationUiState(
 
     // 정기 지출 상태
     val title: String = "",
-    val recurrence: String = "매월 28일",
+    val recurrence: String = "매월 반복",
+    val dayOfMonth: Int = 28,
+    val isRepeatSheetVisible: Boolean = false,
 
     // 영수증 인식 상태
-    val isOcrDialogVisible: Boolean = false
+    val isOcrDialogVisible: Boolean = false,
+    val isLoading: Boolean = false
 )
