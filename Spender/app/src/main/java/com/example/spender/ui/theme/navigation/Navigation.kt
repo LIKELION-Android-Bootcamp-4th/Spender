@@ -12,6 +12,7 @@ import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.auth.AuthScreen
 import com.example.spender.feature.expense.ui.ExpenseRegistrationParentScreen
 import com.example.spender.feature.expense.ui.expensedetail.ExpenseDetailScreen
+import com.example.spender.feature.expense.ui.ocrresult.OcrResultScreen
 import com.example.spender.feature.expense.ui.recurringexpensedetail.RecurringExpenseDetailScreen
 import com.example.spender.feature.home.HomeScreen
 import com.example.spender.feature.home.ui.NotificationListScreen
@@ -107,6 +108,12 @@ fun SpenderNavigation(
                 navController,
                 selectedTabIndex ?: 1
             )
+        }
+        composable(Screen.OcrResultScreen.route) { backStackEntry ->
+            val title = backStackEntry.arguments?.getString("title") ?: ""
+            val amount = backStackEntry.arguments?.getString("amount") ?: ""
+            val date = backStackEntry.arguments?.getString("date") ?: ""
+            OcrResultScreen(navController, title, amount, date)
         }
 
         composable(Screen.BudgetScreen.route) {

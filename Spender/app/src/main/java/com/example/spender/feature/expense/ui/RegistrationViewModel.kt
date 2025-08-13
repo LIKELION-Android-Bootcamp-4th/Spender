@@ -19,18 +19,29 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import android.util.Base64
+import android.util.Log
+import java.util.*
+import com.example.spender.BuildConfig
+import com.example.spender.core.data.service.OcrApiService
+import com.example.spender.feature.expense.data.remote.OcrImageRequest
+import com.example.spender.feature.expense.data.remote.OcrRequest
+import retrofit2.HttpException
+import java.text.SimpleDateFormat
 import java.util.Date
 
 sealed class RegistrationEvent {
     data class ShowToast(val message: String) : RegistrationEvent()
     data object NavigateBack : RegistrationEvent()
+    data class OcrSuccess(val title: String, val amount: String, val date: String) : RegistrationEvent()
 }
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     private val expenseRepository: ExpenseRepository,
     private val categoryRepository: CategoryRepository,
-    private val regularExpenseRepository: RegularExpenseRepository
+    private val regularExpenseRepository: RegularExpenseRepository,
+    private val ocrApiService: OcrApiService,
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(RegistrationUiState())
@@ -134,7 +145,7 @@ class RegistrationViewModel @Inject constructor(
         if (isSuccess) {
             _eventFlow.emit(RegistrationEvent.ShowToast("저장되었습니다"))
             clearInputs()
-//            _eventFlow.emit(RegistrationEvent.NavigateBack)
+            _eventFlow.emit(RegistrationEvent.NavigateBack)
         } else {
             _eventFlow.emit(RegistrationEvent.ShowToast("저장에 실패했습니다."))
         }
@@ -162,7 +173,7 @@ class RegistrationViewModel @Inject constructor(
         if (regularExpenseRepository.addRegularExpense(userId, regularExpenseDto)) {
             _eventFlow.emit(RegistrationEvent.ShowToast("정기 지출이 등록되었습니다"))
             clearInputs()
-//            _eventFlow.emit(RegistrationEvent.NavigateBack)
+            _eventFlow.emit(RegistrationEvent.NavigateBack)
         } else {
             _eventFlow.emit(RegistrationEvent.ShowToast("저장에 실패했습니다."))
         }
@@ -182,6 +193,55 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
+    fun analyzeReceipt(imageByteArray: ByteArray, format: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                val base64Image = Base64.encodeToString(imageByteArray, Base64.NO_WRAP)
+                val request = OcrRequest(
+                    requestId = UUID.randomUUID().toString(),
+                    images = listOf(OcrImageRequest(format = format, data = base64Image))
+                )
+
+                val response = ocrApiService.analyzeReceipt(
+                    secretKey = BuildConfig.NAVER_OCR_CLIENT_SECRET,
+                    request = request
+                )
+
+                val result = response.images.firstOrNull()?.receipt?.result
+                Log.d("OCR_RESULT_RAW", "Store: ${result?.storeInfo?.name?.text}, Price: ${result?.totalPrice?.price?.text}, Date: ${result?.paymentInfo?.date?.text}")
+
+                if (response.images.firstOrNull()?.inferResult == "SUCCESS") {
+                    val title = result?.storeInfo?.name?.text ?: "인식 실패"
+
+                    val amountString = result?.totalPrice?.price?.text ?: "0"
+                    val amount = amountString.replace(Regex("[^0-9]"), "")
+
+                    val dateString = result?.paymentInfo?.date?.text ?: ""
+                    val parsedDate = parseOcrDate(dateString)
+                    val formattedDateString = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA).format(parsedDate)
+
+                    _eventFlow.emit(RegistrationEvent.ShowToast("인식 완료!!"))
+
+                    Log.d("OCR_RESULT_PARSED", "Title: $title, Amount: $amount, Date: $formattedDateString")
+
+                    _eventFlow.emit(RegistrationEvent.OcrSuccess(title, amount, formattedDateString))
+                } else {
+                    _eventFlow.emit(RegistrationEvent.ShowToast("영수증 인식에 실패했습니다."))
+                }
+            } catch (e: HttpException) {
+                val errorBody = e.response()?.errorBody()?.string()
+                Log.e("OCR_API_ERROR", "HTTP Error: ${e.code()}, Body: $errorBody")
+                _eventFlow.emit(RegistrationEvent.ShowToast("오류 발생: ${e.code()} - 서버 응답을 확인하세요."))
+            } catch (e: Exception) {
+                Log.e("OCR_API_ERROR", "OCR 분석 중 오류 발생", e)
+                _eventFlow.emit(RegistrationEvent.ShowToast("오류가 발생했습니다: ${e.message}"))
+            } finally {
+                _uiState.update { it.copy(isLoading = false) }
+            }
+        }
+    }
+
     fun onDateSelected(timestamp: Long?) {
         timestamp ?: return
         _uiState.update { it.copy(date = Date(timestamp)) }
@@ -194,4 +254,22 @@ class RegistrationViewModel @Inject constructor(
     fun setInitialTabIndex(index: Int) {
         _uiState.update { it.copy(selectedTabIndex = index) }
     }
+}
+
+private fun parseOcrDate(dateString: String): Date {
+    // OCR이 인식할 수 있는 여러 날짜 형식을 시도
+    val formats = listOf(
+        "yyyy-MM-dd",
+        "yyyy.MM.dd",
+        "yyyy/MM/dd"
+    )
+    for (format in formats) {
+        try {
+            val cleanedDateString = dateString.replace(Regex("[^0-9./-]"), "")
+            return SimpleDateFormat(format, Locale.KOREA).parse(cleanedDateString) ?: Date()
+        } catch (e: Exception) {
+
+        }
+    }
+    return Date()
 }
