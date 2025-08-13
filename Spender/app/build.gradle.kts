@@ -107,4 +107,7 @@ dependencies {
     implementation("androidx.glance:glance-material3:1.1.1")
     // For interop APIs with Material 2
     implementation("androidx.glance:glance-material:1.1.1")
+
+    // coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }
