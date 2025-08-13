@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.spender.MainScreen
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.auth.AuthScreen
@@ -36,7 +37,12 @@ fun SpenderNavigation(
         navController = navController,
         startDestination = startDestination
     ) {
-        composable(Screen.MainScreen.route) {
+        composable(
+            route = Screen.MainScreen.route,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "spender://home"
+            })
+        ) {
             MainScreen(navController)
         }
         composable(Screen.OnboardingScreen.route) {
@@ -80,13 +86,13 @@ fun SpenderNavigation(
         composable(Screen.IncomeDetailScreen.route) { backStackEntry ->
             val incomeId = backStackEntry.arguments?.getString("incomeId")
             if (incomeId != null) {
-                IncomeDetailScreen(navController , incomeId = incomeId)
+                IncomeDetailScreen(navController, incomeId = incomeId)
             }
         }
         composable(Screen.RegularExpenseDetailScreen.route) { backStackEntry ->
             val regularExpenseId = backStackEntry.arguments?.getString("regularExpenseId")
             if (regularExpenseId != null) {
-                RecurringExpenseDetailScreen(navController , regularExpenseId = regularExpenseId)
+                RecurringExpenseDetailScreen(navController, regularExpenseId = regularExpenseId)
             }
         }
         composable(

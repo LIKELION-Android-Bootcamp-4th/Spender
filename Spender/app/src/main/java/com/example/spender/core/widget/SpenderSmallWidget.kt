@@ -1,6 +1,8 @@
 package com.example.spender.core.widget
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -9,8 +11,6 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
-import androidx.glance.action.actionStartActivity
-import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -29,15 +29,18 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
+import com.example.spender.MainActivity
 import com.example.spender.R
-import com.example.spender.core.widget.component.BudgetProgressBarGlance
 import com.example.spender.core.data.service.getExpenseRate
+import com.example.spender.core.widget.component.BudgetProgressBarGlance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
+import androidx.core.net.toUri
+import androidx.glance.LocalContext
+import androidx.glance.appwidget.action.actionStartActivity
+import androidx.glance.action.clickable
 
 class SpenderSmallWidget : GlanceAppWidget() {
-
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val percent0to100 = withContext(Dispatchers.IO) {
             runCatching { getExpenseRate() }.getOrElse { 0f }
@@ -53,6 +56,17 @@ class SpenderSmallWidget : GlanceAppWidget() {
         }
     }
 }
+
+private fun deepLinkToHomeIntent(context: Context): Intent =
+    Intent(context, MainActivity::class.java).apply {
+        action = Intent.ACTION_VIEW
+        data = "spender://home".toUri()
+        addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
+    }
 
 
 @Composable
@@ -73,7 +87,8 @@ private fun SpenderSmallWidgetContent(
                 .height(133.dp)
                 .width(133.dp)
                 .padding(horizontal = 10.dp)
-                .background(ColorProvider(Color.White)),
+                .background(ColorProvider(Color.White))
+                .clickable(onClick = actionStartActivity(deepLinkToHomeIntent(context = LocalContext.current))),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -92,7 +107,6 @@ private fun SpenderSmallWidgetContent(
 
                     Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium))
                 }
-                Spacer(GlanceModifier.height(0.dp))
 
                 BudgetProgressBarGlance(progress01 = percent)
 
@@ -100,11 +114,13 @@ private fun SpenderSmallWidgetContent(
 
                 Text(percentText, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp))
 
-                Spacer(GlanceModifier.height(0.dp))
-
                 Text(
                     text = "예산 대비 지출",
-                    style = TextStyle(fontWeight = FontWeight.Normal, color = ColorProvider(Color(0x80222836)), fontSize = 13.sp)
+                    style = TextStyle(
+                        fontWeight = FontWeight.Normal,
+                        color = ColorProvider(Color(0x80222836)),
+                        fontSize = 13.sp
+                    )
                 )
 
             }
