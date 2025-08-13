@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 private val DarkColorScheme = darkColorScheme(
     primary = DarkModePointColor,
     onPrimary = WhiteColor,
+    primaryContainer = DarkModeSelectedColor,
     secondary = DarkModePointColor,
     onSecondary = WhiteColor,
     tertiary= DarkModeTabColor,
@@ -28,6 +29,7 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = PointColor,
     onPrimary = WhiteColor,
+    primaryContainer = SelectedColor,
     secondary = PointColor,
     onSecondary = WhiteColor,
     tertiary= TabColor,

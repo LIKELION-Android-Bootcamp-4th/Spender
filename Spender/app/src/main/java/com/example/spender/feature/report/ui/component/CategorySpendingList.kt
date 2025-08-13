@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,7 +45,7 @@ fun CategorySpendingList(categories : List<CategoryUiModel>) {
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(text = category.label, style = Typography.bodyMedium)
-                    Text(text = " ${category.percentage.toInt()}%", style = Typography.bodySmall, color = LightFontColor)
+                    Text(text = "   ${category.percentage.toInt()}%", style = Typography.bodySmall, color = MaterialTheme.colorScheme.onTertiary)
                 }
 
                 Text(text = "${category.amount.toCurrency()} 원", style = Typography.bodyMedium)

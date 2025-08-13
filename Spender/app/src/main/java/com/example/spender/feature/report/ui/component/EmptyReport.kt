@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,13 +39,13 @@ fun EmptyReport(paddingValues: PaddingValues){
             Text(
                 text = "등록된 리포트가 없어요.",
                 style = Typography.bodyLarge,
-                color = LightFontColor
+                color = MaterialTheme.colorScheme.onTertiary
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "지출을 등록하면 자동으로 리포트가 생성돼요!",
                 style = Typography.bodyMedium,
-                color = LightFontColor
+                color = MaterialTheme.colorScheme.onTertiary
             )
             Spacer(modifier = Modifier.height(40.dp))
         }
