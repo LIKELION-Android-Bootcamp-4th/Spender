@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -44,6 +43,7 @@ import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.res.painterResource
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,49 +92,77 @@ fun OcrContent(
             Toast.makeText(context, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
         }
     }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 영수증 인식하기 카드
-        Card(
+        Column(
             modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .aspectRatio(1.5f)
-                .clickable(enabled = !uiState.isLoading) {
-                    viewModel.onOcrDialogVisibilityChange(true)
-                },
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+                .fillMaxWidth()
+                .padding(horizontal = 48.dp, vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+            Text(
+                text = "최대한 바르게 펴진 문서를 기울임 없이,",
+                style = Typography.titleSmall,
+            )
+            Text(
+                text = "영역에 가득 차도록 인식해 주십시오.",
+                style = Typography.bodyMedium,
+            )
+            Spacer(Modifier.height(12.dp))
+
+            Text(
+                text = "접힘, 구겨짐, 빛 반사, 그늘로 인해",
+                style = Typography.titleSmall,
+            )
+            Text(
+                text = "글자가 잘 보이지 않으면 정확한 값을 추출할 수 없습니다.",
+                style = Typography.bodyMedium,
+            )
+        }
+        Spacer(Modifier.height(12.dp))
+
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            // 영수증 인식하기 카드
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .aspectRatio(1.5f)
+                    .clickable(enabled = !uiState.isLoading) {
+                        viewModel.onOcrDialogVisibilityChange(true)
+                    },
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
-                Text(
-                    text = "영수증 인식하기",
-                    style = Typography.titleMedium
-                )
-                Spacer(Modifier.height(16.dp))
-                Icon(
-                    imageVector = Icons.Default.AddCircle,
-                    contentDescription = "영수증 인식",
-                    modifier = Modifier.size(80.dp),
-                    tint = PointColor
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "영수증 인식하기",
+                        style = Typography.titleMedium
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    Icon(
+                        painter = painterResource(id = com.example.spender.R.drawable.ic_receipt),
+                        contentDescription = "영수증 인식",
+                        modifier = Modifier.size(80.dp),
+                        tint = PointColor
+                    )
+                }
+            }
+            if (uiState.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(64.dp),
+                    color = PointColor,
+                    strokeWidth = 5.dp
                 )
             }
-        }
-        if (uiState.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(64.dp),
-                color = PointColor,
-                strokeWidth = 5.dp
-            )
         }
     }
     if (uiState.isOcrDialogVisible) {
