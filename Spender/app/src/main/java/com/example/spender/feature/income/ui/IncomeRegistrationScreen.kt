@@ -73,6 +73,7 @@ import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.WhiteColor
 import com.example.spender.ui.theme.navigation.Screen
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -204,10 +205,8 @@ fun IncomeRegistrationScreen(
                 Text(
                     "수입 등록",
                     modifier = Modifier.padding(vertical = 6.dp),
-                    fontSize = 20.sp,
-                    fontFamily = NotoSansFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White
+                    style = Typography.titleMedium,
+                    color = WhiteColor
                 )
             }
         },
@@ -358,12 +357,12 @@ fun IncomeRegistrationScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(260.dp),
+                        .height(240.dp),
                     placeholder = {
                         Text(
                             "메모",
+                            style = Typography.bodySmall,
                             color = MaterialTheme.colorScheme.onTertiary,
-                            fontSize = 14.sp
                         )
                     },
                     shape = RoundedCornerShape(12.dp),
