@@ -27,5 +27,6 @@ data class RegistrationUiState(
     val isRepeatSheetVisible: Boolean = false,
 
     // 영수증 인식 상태
-    val isOcrDialogVisible: Boolean = false
+    val isOcrDialogVisible: Boolean = false,
+    val isLoading: Boolean = false
 )

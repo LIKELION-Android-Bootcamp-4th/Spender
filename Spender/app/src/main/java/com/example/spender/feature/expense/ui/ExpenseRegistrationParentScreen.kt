@@ -39,6 +39,8 @@ import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.navigation.Screen
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,9 +63,18 @@ fun ExpenseRegistrationParentScreen(
                 is RegistrationEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
-//                is RegistrationEvent.NavigateBack -> {
-//                    navHostController.popBackStack() //이전화면으로 돌아가기
-//                }
+                is RegistrationEvent.OcrSuccess -> {
+                    val encodedTitle = URLEncoder.encode(event.title, StandardCharsets.UTF_8.toString())
+                    val encodedAmount = URLEncoder.encode(event.amount, StandardCharsets.UTF_8.toString())
+                    val encodedDate = URLEncoder.encode(event.date, StandardCharsets.UTF_8.toString())
+
+                    navHostController.navigate(
+                        Screen.OcrResultScreen.createRoute(encodedTitle, encodedAmount, encodedDate)
+                    )
+                }
+                is RegistrationEvent.NavigateBack -> {
+                    navHostController.popBackStack() //이전화면으로 돌아가기
+                }
                 else -> {}
             }
         }

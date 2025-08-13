@@ -25,6 +25,11 @@ sealed class Screen(val route: String) {
         fun createRoute(selectedTabIndex: Int) = "expense_registration/$selectedTabIndex"
     }
 
+    object OcrResultScreen : Screen("ocr_result/{title}/{amount}/{date}") {
+        fun createRoute(title: String, amount: String, date: String) =
+            "ocr_result/$title/$amount/$date"
+    }
+
     object BudgetScreen : Screen("budget")
     object IncomeCategoryScreen : Screen("income_category")
     object ExpenseCategoryScreen : Screen("expense_category")
