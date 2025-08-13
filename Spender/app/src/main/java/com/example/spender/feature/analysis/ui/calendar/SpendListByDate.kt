@@ -44,13 +44,13 @@ fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: List<ExpenseDto>
     Column {
         Row(verticalAlignment = Alignment.Bottom) {
             Text(text = when(dayOfWeek) {
-                0 -> "일요일"
-                1 -> "월요일"
-                2 -> "화요일"
-                3 -> "수요일"
-                4 -> "목요일"
-                5 -> "금요일"
-                6 -> "토요일"
+                0 -> "토요일"
+                1 -> "일요일"
+                2 -> "월요일"
+                3 -> "화요일"
+                4 -> "수요일"
+                5 -> "목요일"
+                6 -> "금요일"
                 else -> ""
             }, style = Typography.titleMedium)
             Spacer(Modifier.width(10.dp))
