@@ -9,13 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.spender.core.common.util.toCurrency
-import com.example.spender.ui.theme.LightSurface
 import com.example.spender.ui.theme.PointRedColor
 import com.example.spender.ui.theme.Typography
 
@@ -32,7 +32,7 @@ fun RecentItem(
             .clickable { onClick() },
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = LightSurface,
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
     ) {
         Row(
@@ -45,20 +45,19 @@ fun RecentItem(
             Text(
                 text = title,
                 style = Typography.bodyMedium,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                color = MaterialTheme.colorScheme.onSurface
             )
             Row {
                 Text(
                     text = "- ${amount.toCurrency()}",
-                    style = Typography.titleSmall.copy(
-                        color = PointRedColor
-                    )
+                    style = Typography.titleSmall,
+                    color = MaterialTheme.colorScheme.error
                 )
                 Text(
                     text = " 원",
-                    style = Typography.titleSmall.copy(
-                        color = PointRedColor
-                    )
+                    style = Typography.titleSmall,
+                    color = MaterialTheme.colorScheme.error
                 )
             }
         }

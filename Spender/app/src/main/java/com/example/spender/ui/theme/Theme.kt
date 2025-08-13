@@ -22,6 +22,7 @@ private val DarkColorScheme = darkColorScheme(
     surface = DarkModeLightSurface,
     onSurface = DarkModeDefaultFontColor,
     outline = DarkModeTabColor,
+    error = PointRedColor
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -36,6 +37,7 @@ private val LightColorScheme = lightColorScheme(
     surface = LightSurface,
     onSurface = DefaultFontColor,
     outline = TabColor,
+    error = PointRedColor
 )
 
 @Composable

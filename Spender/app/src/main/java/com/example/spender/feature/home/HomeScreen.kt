@@ -12,7 +12,9 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,7 +31,6 @@ import com.example.spender.core.data.service.getTotalExpense
 import com.example.spender.feature.home.ui.BudgeProgress
 import com.example.spender.feature.home.ui.RecentTransactionsSection
 import com.example.spender.feature.home.ui.TotalExpenseCard
-import com.example.spender.ui.theme.LightPointColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,10 +60,13 @@ fun HomeScreen(navHostController: NavHostController) {
                             imageVector = Icons.Rounded.Notifications,
                             contentDescription = "알림 보기",
                             modifier = Modifier.size(28.dp),
-                            tint = LightPointColor
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                ),
                 windowInsets = WindowInsets(0, 0, 0, 0)
             )
         },
