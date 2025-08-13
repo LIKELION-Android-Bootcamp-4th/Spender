@@ -96,32 +96,7 @@ fun OcrContent(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 48.dp, vertical = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "최대한 바르게 펴진 문서를 기울임 없이,",
-                style = Typography.titleSmall,
-            )
-            Text(
-                text = "영역에 가득 차도록 인식해 주십시오.",
-                style = Typography.bodyMedium,
-            )
-            Spacer(Modifier.height(12.dp))
-
-            Text(
-                text = "접힘, 구겨짐, 빛 반사, 그늘로 인해",
-                style = Typography.titleSmall,
-            )
-            Text(
-                text = "글자가 잘 보이지 않으면 정확한 값을 추출할 수 없습니다.",
-                style = Typography.bodyMedium,
-            )
-        }
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(100.dp))
 
         Box(
             contentAlignment = Alignment.Center
@@ -163,6 +138,24 @@ fun OcrContent(
                     strokeWidth = 5.dp
                 )
             }
+        }
+        Spacer(Modifier.height(12.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 34.dp, vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "• 최대한 바르게 펴진 문서를 기울임 없이, 영역에 가득 차도록 인식해 주십시오.",
+                style = Typography.labelMedium,
+            )
+            Spacer(Modifier.height(12.dp))
+
+            Text(
+                text = "• 접힘, 구겨짐, 빛 반사, 그늘로 인해 글자가 잘 보이지 않으면 정확한 값을 추출할 수 없습니다.",
+                style = Typography.labelMedium,
+            )
         }
     }
     if (uiState.isOcrDialogVisible) {
