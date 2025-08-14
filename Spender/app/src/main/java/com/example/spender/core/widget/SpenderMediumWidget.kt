@@ -2,22 +2,22 @@ package com.example.spender.core.widget
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
-import androidx.glance.GlanceId
-import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.provideContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
+import androidx.glance.ColorFilter
+import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.action.clickable
+import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
+import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
@@ -30,6 +30,7 @@ import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
+import androidx.glance.layout.width
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -39,6 +40,7 @@ import com.example.spender.R
 import com.example.spender.core.data.service.getExpenseRate
 import com.example.spender.core.widget.component.BudgetProgressBarGlance
 import com.example.spender.core.widget.component.WidgetButton
+import com.example.spender.ui.theme.LightPointColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -93,7 +95,6 @@ fun SpenderMediumWidgetContent(
         verticalAlignment = Alignment.CenterVertically,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
@@ -117,6 +118,17 @@ fun SpenderMediumWidgetContent(
                     )
 
                     Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium))
+
+                    Spacer(GlanceModifier.width(55.dp))
+
+                    Image(
+                        provider = ImageProvider(android.R.drawable.ic_popup_sync),
+                        contentDescription = "새로고침",
+                        modifier = GlanceModifier
+                            .size(20.dp)
+                            .clickable(onClick = actionRunCallback(RefreshExpenseAction::class.java)),
+                        colorFilter = ColorFilter.tint(ColorProvider(LightPointColor))
+                    )
                 }
 
                 Spacer(GlanceModifier.height(10.dp))

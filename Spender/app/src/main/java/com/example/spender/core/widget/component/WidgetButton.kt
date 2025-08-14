@@ -43,7 +43,7 @@ fun WidgetButton(
             text = text,
             style = TextStyle(
                 color = ColorProvider(Color.White),
-                fontSize = 16.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.Bold
             )
         )

@@ -35,9 +35,12 @@ import com.example.spender.core.widget.component.BudgetProgressBarGlance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
+import androidx.glance.ColorFilter
 import androidx.glance.LocalContext
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.action.clickable
+import androidx.glance.appwidget.action.actionRunCallback
+import com.example.spender.ui.theme.LightPointColor
 
 class SpenderSmallWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -105,6 +108,17 @@ private fun SpenderSmallWidgetContent(
                     )
 
                     Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium, fontSize = 13.sp))
+
+                    Spacer(GlanceModifier.width(15.dp))
+
+                    Image(
+                        provider = ImageProvider(android.R.drawable.ic_popup_sync),
+                        contentDescription = "새로고침",
+                        modifier = GlanceModifier
+                            .size(17.dp)
+                            .clickable(onClick = actionRunCallback(RefreshExpenseAction::class.java)),
+                        colorFilter = ColorFilter.tint(ColorProvider(LightPointColor))
+                    )
                 }
 
                 Spacer(GlanceModifier.height(5.dp))
