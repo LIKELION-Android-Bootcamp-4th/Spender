@@ -67,7 +67,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="spender" android:host="expense_registration" />
             </intent-filter>
-
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
