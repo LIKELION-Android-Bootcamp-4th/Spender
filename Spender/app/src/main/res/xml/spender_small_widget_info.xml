@@ -10,6 +10,6 @@
     android:minResizeHeight="100dp"
     android:updatePeriodMillis="86400000"
     android:description="@string/spender_small_widget_description"
-    android:resizeMode="horizontal|vertical"
+    android:resizeMode="none"
     android:initialLayout="@layout/glance_default_loading_layout">
 </appwidget-provider>
