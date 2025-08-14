@@ -16,13 +16,13 @@ import com.example.spender.ui.theme.Typography
 
 @Composable
 fun TotalSpendingSection(totalExpense: Int, totalBudget: Int) {
-    val color = if(totalExpense < totalBudget) PointColor else PointRedColor
+//    val color = if(totalExpense < totalBudget) PointColor else PointRedColor
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .border(
                 width = 1.dp,
-                color = color,
+                color = PointColor,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(vertical = 16.dp),

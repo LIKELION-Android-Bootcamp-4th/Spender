@@ -1,11 +1,16 @@
 package com.example.spender.ui.theme.navigation
 
+import android.content.Intent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
+import com.example.spender.MainActivity
 import com.example.spender.MainScreen
 import com.example.spender.feature.analysis.AnalysisScreen
 import com.example.spender.feature.auth.AuthScreen
@@ -33,11 +38,18 @@ fun SpenderNavigation(
     navController: NavHostController,
     startDestination: String
 ) {
+    HandleDeepLink(navController)
+
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        composable(Screen.MainScreen.route) {
+        composable(
+            route = Screen.MainScreen.route,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "spender://home"
+            })
+        ) {
             MainScreen(navController)
         }
         composable(Screen.OnboardingScreen.route) {
@@ -81,13 +93,13 @@ fun SpenderNavigation(
         composable(Screen.IncomeDetailScreen.route) { backStackEntry ->
             val incomeId = backStackEntry.arguments?.getString("incomeId")
             if (incomeId != null) {
-                IncomeDetailScreen(navController , incomeId = incomeId)
+                IncomeDetailScreen(navController, incomeId = incomeId)
             }
         }
         composable(Screen.RegularExpenseDetailScreen.route) { backStackEntry ->
             val regularExpenseId = backStackEntry.arguments?.getString("regularExpenseId")
             if (regularExpenseId != null) {
-                RecurringExpenseDetailScreen(navController , regularExpenseId = regularExpenseId)
+                RecurringExpenseDetailScreen(navController, regularExpenseId = regularExpenseId)
             }
         }
         composable(
@@ -95,7 +107,12 @@ fun SpenderNavigation(
             listOf(navArgument("selectedTabIndex") {
                 type = NavType.IntType
                 defaultValue = 1
-            })
+            },),
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "spender://expense_registration"
+                }
+            )
         ) { backStackEntry ->
             val selectedTabIndex = backStackEntry.arguments?.getInt("selectedTabIndex")
             ExpenseRegistrationParentScreen(
@@ -134,5 +151,22 @@ fun SpenderNavigation(
         composable(Screen.IncomeRegistrationScreen.route) {
             IncomeRegistrationScreen(navController)
         }
+    }
+}
+
+@Composable
+private fun HandleDeepLink(navController: NavHostController) {
+    val activity = androidx.activity.compose.LocalActivity.current as? MainActivity
+
+    // 앱이 꺼진 상태에서 시작(콜드 스타트)
+    LaunchedEffect(Unit) {
+        activity?.intent?.let { navController.handleDeepLink(it) }
+    }
+
+    // 앱이 켜져 있는 상태에서 새 Intent 도착(onNewIntent)
+    DisposableEffect(Unit) {
+        val cb: (Intent) -> Unit = { intent -> navController.handleDeepLink(intent) }
+        activity?.onNewIntentCallback = cb
+        onDispose { activity?.onNewIntentCallback = null }
     }
 }

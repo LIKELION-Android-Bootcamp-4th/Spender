@@ -21,7 +21,7 @@ class MyApplication: Application(){
             clientName = getString(R.string.app_name)
         )
 
-//        var keyHash = Utility.getKeyHash(this)
-//        Log.i("GlobalApplication", "$keyHash")
+        var keyHash = Utility.getKeyHash(this)
+        Log.i("GlobalApplication", "$keyHash")
     }
 }
