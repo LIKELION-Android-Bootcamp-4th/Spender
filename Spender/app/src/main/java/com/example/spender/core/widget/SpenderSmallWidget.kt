@@ -6,13 +6,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
+import androidx.glance.action.ActionParameters
+import androidx.glance.action.actionParametersOf
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
@@ -32,20 +41,12 @@ import com.example.spender.MainActivity
 import com.example.spender.R
 import com.example.spender.core.data.service.getExpenseRate
 import com.example.spender.core.widget.component.BudgetProgressBarGlance
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import androidx.core.net.toUri
-import androidx.glance.ColorFilter
-import androidx.glance.LocalContext
-import androidx.glance.appwidget.action.actionStartActivity
-import androidx.glance.action.clickable
-import androidx.glance.appwidget.action.actionRunCallback
-import androidx.glance.color.ColorProvider
 import com.example.spender.core.widget.component.RefreshExpenseAction
 import com.example.spender.ui.theme.DarkModeBackground
 import com.example.spender.ui.theme.DarkModeDefaultFontColor
-import com.example.spender.ui.theme.DarkModeLightFontColor
 import com.example.spender.ui.theme.LightPointColor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class SpenderSmallWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -121,7 +122,12 @@ private fun SpenderSmallWidgetContent(
                         contentDescription = "새로고침",
                         modifier = GlanceModifier
                             .size(17.dp)
-                            .clickable(onClick = actionRunCallback(RefreshExpenseAction::class.java)),
+                            .clickable(
+                                onClick = actionRunCallback(
+                                    RefreshExpenseAction::class.java,
+                                    actionParametersOf(RefreshExpenseAction.KeyWidget to "small")
+                                )
+                            ),
                         colorFilter = ColorFilter.tint(ColorProvider(LightPointColor))
                     )
                 }

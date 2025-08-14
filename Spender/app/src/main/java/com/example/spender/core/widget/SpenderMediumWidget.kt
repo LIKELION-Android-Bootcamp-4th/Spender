@@ -13,6 +13,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.action.actionParametersOf
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionRunCallback
@@ -120,7 +121,13 @@ fun SpenderMediumWidgetContent(
                         modifier = GlanceModifier.size(45.dp)
                     )
 
-                    Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium, color = ColorProvider(day = Color.Black, night = Color.White)))
+                    Text(
+                        "지출이",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Medium,
+                            color = ColorProvider(day = Color.Black, night = Color.White)
+                        )
+                    )
 
                     Spacer(GlanceModifier.width(55.dp))
 
@@ -129,7 +136,12 @@ fun SpenderMediumWidgetContent(
                         contentDescription = "새로고침",
                         modifier = GlanceModifier
                             .size(20.dp)
-                            .clickable(onClick = actionRunCallback(RefreshExpenseAction::class.java)),
+                            .clickable(
+                                onClick = actionRunCallback(
+                                    RefreshExpenseAction::class.java,
+                                    actionParametersOf(RefreshExpenseAction.KeyWidget to "medium")
+                                )
+                            ),
                         colorFilter = ColorFilter.tint(ColorProvider(LightPointColor))
                     )
                 }
@@ -140,7 +152,14 @@ fun SpenderMediumWidgetContent(
 
                 Spacer(GlanceModifier.height(10.dp))
 
-                Text(percentText, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = ColorProvider(day = Color.Black, night = Color.White)))
+                Text(
+                    percentText,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = ColorProvider(day = Color.Black, night = Color.White)
+                    )
+                )
 
                 Spacer(GlanceModifier.height(5.dp))
 
