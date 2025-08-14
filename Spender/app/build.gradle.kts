@@ -48,11 +48,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     buildFeatures {
         buildConfig = true
@@ -117,4 +120,14 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    // For AppWidgets support
+    implementation("androidx.glance:glance-appwidget:1.1.1")
+    // For interop APIs with Material 3
+    implementation("androidx.glance:glance-material3:1.1.1")
+    // For interop APIs with Material 2
+    implementation("androidx.glance:glance-material:1.1.1")
+
+    // coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }
