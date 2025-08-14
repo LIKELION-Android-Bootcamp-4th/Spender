@@ -1,6 +1,7 @@
 const functions = require("firebase-functions/v1");
+const admin = require("firebase-admin");
 
-functions.pubsub
+module.exports = functions.pubsub
     .schedule('0 0 * * *')
     .timeZone('Asia/Seoul')
     .onRun(async () => {

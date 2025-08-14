@@ -1,6 +1,7 @@
 const functions = require("firebase-functions/v1");
+const admin = require("firebase-admin");
 
-functions.firestore
+module.exports = functions.firestore
     .document(`users/{userId}/regular_expenses/{regularExpenseId}`)
     .onCreate(async (snap, context) => {
         const data = snap.data();
