@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.spender.feature.mypage.domain.model.Category
+import com.example.spender.ui.theme.DefaultFontColor
+import com.example.spender.ui.theme.LightPointColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
@@ -54,7 +56,7 @@ fun CategoryEditDialog(
     Dialog(onDismissRequest = onDismiss) {
         Card(
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
         ) {
             Column(
                 modifier = Modifier.padding(
@@ -78,7 +80,7 @@ fun CategoryEditDialog(
                         placeholder = {
                             Text(
                                 "카테고리 이름을 입력해주세요",
-                                color = Color.Gray,
+                                color = MaterialTheme.colorScheme.onTertiary,
                                 fontSize = 14.sp
                             )
                         },
@@ -86,7 +88,7 @@ fun CategoryEditDialog(
                         colors = TextFieldDefaults.colors(
                             unfocusedContainerColor = Color.Transparent,
                             focusedContainerColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.LightGray,
+                            unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                             focusedIndicatorColor = PointColor
                         ),
                         textStyle = Typography.titleMedium
@@ -100,10 +102,15 @@ fun CategoryEditDialog(
                     Button(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+                        colors = ButtonDefaults.buttonColors(containerColor = LightPointColor),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("취소", style = Typography.bodySmall, fontWeight = FontWeight.Bold)
+                        Text(
+                            "취소",
+                            style = Typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = DefaultFontColor
+                        )
                     }
                     Button(
                         onClick = { if (text.isNotBlank()) onConfirm(text) },
@@ -136,7 +143,7 @@ fun CategoryDeleteDialog(
     Dialog(onDismissRequest = onDismiss) {
         Card(
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
         ) {
             Column(
                 modifier = Modifier.padding(
@@ -173,10 +180,10 @@ fun CategoryDeleteDialog(
                     Button(
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+                        colors = ButtonDefaults.buttonColors(containerColor = LightPointColor),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("취소", style = Typography.bodySmall, fontWeight = FontWeight.Bold)
+                        Text("취소", style = Typography.bodySmall, fontWeight = FontWeight.Bold, color = DefaultFontColor)
                     }
                     Button(
                         onClick = onConfirm,

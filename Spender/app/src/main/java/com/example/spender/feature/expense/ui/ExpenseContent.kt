@@ -135,7 +135,13 @@ fun ExpenseContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 40.dp, vertical = 16.dp),
-                placeholder = { Text("지출을 입력하세요", fontSize = 14.sp, color = Color.Gray) },
+                placeholder = {
+                    Text(
+                        "지출을 입력하세요",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onTertiary
+                    )
+                },
                 trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 visualTransformation = NumberCommaTransformation(),
@@ -148,8 +154,8 @@ fun ExpenseContent(
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
-                    unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                    focusedIndicatorColor = MaterialTheme.colorScheme.primary
+                    unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                 )
             )
 
@@ -158,18 +164,25 @@ fun ExpenseContent(
                 value = uiState.title,
                 onValueChange = { viewModel.onTitleChange(it) },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("지출 내용을 입력하세요", fontSize = 16.sp, color = Color.Gray) },
+                placeholder = {
+                    Text(
+                        "지출 내용을 입력하세요",
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onTertiary
+                    )
+                },
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 18.sp),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.LightGray
+                    unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                 )
             )
         }
 
-        HorizontalDivider(color = Color(0xFFF0F2F5))
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
         // 카테고리
         Column(
@@ -198,7 +211,7 @@ fun ExpenseContent(
             }
         }
 
-        HorizontalDivider(color = Color(0xFFF0F2F5))
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
         Column(
             modifier = Modifier
@@ -227,12 +240,12 @@ fun ExpenseContent(
                 Icon(
                     imageVector = Icons.Default.DateRange,
                     contentDescription = "날짜 선택",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
 
-        HorizontalDivider(color = Color(0xFFF0F2F5))
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
         // 감정 태그
         Column(modifier = Modifier.padding(horizontal = 34.dp, vertical = 24.dp)) {
@@ -248,7 +261,7 @@ fun ExpenseContent(
             )
         }
 
-        HorizontalDivider(color = Color(0xFFF0F2F5))
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
         // 메모
         Column(modifier = Modifier.padding(horizontal = 34.dp, vertical = 24.dp)) {
@@ -262,18 +275,19 @@ fun ExpenseContent(
                 onValueChange = { viewModel.onMemoChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp),
+                    .height(240.dp),
                 placeholder = {
                     Text(
                         "메모",
-                        color = Color.Gray,
+                        style = Typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onTertiary,
                         fontSize = 14.sp
                     )
                 },
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = Color(0xFFE0E0E0)
+                    focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
                 )
             )
         }
@@ -325,13 +339,13 @@ fun EmotionTagGroup(
                 label = {
                     Text(
                         text = emotion.name,
-                        color = if (isSelected) Color.White else Color.Black.copy(alpha = 0.8f)
+                        color = if (isSelected) Color.White else MaterialTheme.colorScheme.onPrimary
                     )
                 },
                 shape = RoundedCornerShape(30),
                 colors = FilterChipDefaults.filterChipColors(
-                    containerColor = Color.White,
-                    labelColor = Color.Black.copy(alpha = 0.8f),
+                    containerColor = MaterialTheme.colorScheme.background,
+                    labelColor = MaterialTheme.colorScheme.onPrimary,
                     selectedContainerColor = PointColor,
                     selectedLabelColor = Color.White
                 ),
@@ -340,7 +354,7 @@ fun EmotionTagGroup(
                 } else {
                     BorderStroke(
                         width = 1.dp,
-                        color = Color.LightGray
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                 }
             )
@@ -361,7 +375,8 @@ class NumberCommaTransformation : VisualTransformation {
             return TransformedText(AnnotatedString(""), OffsetMapping.Identity)
         }
 
-        val number = numberText.toLongOrNull() ?: return TransformedText(text, OffsetMapping.Identity)
+        val number =
+            numberText.toLongOrNull() ?: return TransformedText(text, OffsetMapping.Identity)
         val formattedText = DecimalFormat("#,###").format(number)
 
         val offsetMapping = object : OffsetMapping {

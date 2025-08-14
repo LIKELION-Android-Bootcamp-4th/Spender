@@ -29,6 +29,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -196,10 +197,10 @@ private fun CategoryRow(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
                 modifier = Modifier
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.background)
                     .border(
                         width = 1.dp,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.tertiary,
                         shape = RoundedCornerShape(4.dp)
                     )
             ) {
@@ -221,7 +222,7 @@ private fun CategoryRow(
                         .height(34.dp)
                         .width(120.dp),
                 )
-                HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp), color = Color.Gray)
+                HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp), color = MaterialTheme.colorScheme.tertiary)
                 DropdownMenuItem(
                     text = {
                         Text(

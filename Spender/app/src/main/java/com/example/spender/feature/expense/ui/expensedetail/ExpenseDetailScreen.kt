@@ -200,7 +200,7 @@ fun ExpenseDetailScreen(
             ) {
                 CustomShortButton(
                     "삭제",
-                    Color.LightGray,
+                    MaterialTheme.colorScheme.secondary,
                     onClick = {viewModel.deleteExpense()},
                     modifier = Modifier.weight(1f)
                 )
@@ -212,7 +212,7 @@ fun ExpenseDetailScreen(
                 )
             }
         },
-        containerColor = Color.White
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -230,7 +230,7 @@ fun ExpenseDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 40.dp, vertical = 16.dp),
-                    placeholder = { Text("지출을 입력하세요", fontSize = 14.sp, color = Color.Gray) },
+                    placeholder = { Text("지출을 입력하세요", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
                     trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = NumberCommaTransformation(),
@@ -253,20 +253,20 @@ fun ExpenseDetailScreen(
                     value = uiState.title,
                     onValueChange = { viewModel.onTitleChange(it) },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("지출 내용을 입력하세요", fontSize = 16.sp, color = Color.Gray) },
+                    placeholder = { Text("지출 내용을 입력하세요", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
                     singleLine = true,
                     textStyle = TextStyle(fontSize = 18.sp),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.LightGray
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline
                     )
                 )
             }
 
             Spacer(Modifier.height(12.dp))
 
-            HorizontalDivider(color = Color(0xFFF0F2F5))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
 
             // 카테고리
             Column(
@@ -294,7 +294,7 @@ fun ExpenseDetailScreen(
                     Spacer(Modifier.weight(1f))
                 }
             }
-            HorizontalDivider(color = Color(0xFFF0F2F5))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
 
             Column(
                 modifier = Modifier
@@ -323,11 +323,11 @@ fun ExpenseDetailScreen(
                     Icon(
                         imageVector = Icons.Default.DateRange,
                         contentDescription = "날짜 선택",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
-            HorizontalDivider(color = Color(0xFFF0F2F5))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
 
             // 감정 태그
             Column(modifier = Modifier.padding(horizontal = 34.dp, vertical = 24.dp)) {
@@ -343,7 +343,7 @@ fun ExpenseDetailScreen(
                 )
             }
 
-            HorizontalDivider(color = Color(0xFFF0F2F5))
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
 
             // 메모
             Column(modifier = Modifier.padding(horizontal = 34.dp, vertical = 24.dp)) {
@@ -361,18 +361,18 @@ fun ExpenseDetailScreen(
                     placeholder = {
                         Text(
                             "메모",
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             fontSize = 14.sp
                         )
                     },
                     textStyle = TextStyle(
-                        color = BlackColor,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontSize = 16.sp,
                     ),
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = Color(0xFFE0E0E0)
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
                     )
                 )
             }

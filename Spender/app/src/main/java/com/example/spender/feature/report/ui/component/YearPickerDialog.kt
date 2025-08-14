@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +36,7 @@ fun YearPickerDialog(
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(12.dp),
-            color = Color.White
+            color = MaterialTheme.colorScheme.surface
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -72,7 +73,7 @@ fun YearPickerDialog(
                                 style = Typography.bodyLarge.copy(
                                     fontWeight = if (year == tempYear) FontWeight.Bold else FontWeight.Normal
                                 ),
-                                color = if (year == tempYear) PointColor else Color.Black
+                                color = if (year == tempYear) PointColor else MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }

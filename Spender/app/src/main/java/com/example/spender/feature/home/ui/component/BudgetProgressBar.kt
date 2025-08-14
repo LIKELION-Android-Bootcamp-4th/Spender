@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.example.spender.ui.theme.LightSurface
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.PointRedColor
 
@@ -34,7 +34,7 @@ fun BudgetProgressBar(
             .height(108.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = LightSurface
+            containerColor = MaterialTheme.colorScheme.surface
         ),
     ) {
         Box(
@@ -71,7 +71,7 @@ fun BudgetProgressBar(
                             .fillMaxWidth()
                             .height(16.dp)
                             .clip(RoundedCornerShape(100))
-                            .background(Color(0xFFF0F0F0))
+                            .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
                     )
                     Box(
                         modifier = Modifier

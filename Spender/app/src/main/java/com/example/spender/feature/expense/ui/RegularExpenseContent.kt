@@ -175,7 +175,13 @@ fun RecurringExpenseContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 40.dp, vertical = 16.dp),
-                placeholder = { Text("지출을 입력하세요", fontSize = 14.sp, color = Color.Gray) },
+                placeholder = {
+                    Text(
+                        "지출을 입력하세요",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onTertiary
+                    )
+                },
                 trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 visualTransformation = NumberCommaTransformation(),
@@ -189,8 +195,8 @@ fun RecurringExpenseContent(
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
-                    unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                    focusedIndicatorColor = MaterialTheme.colorScheme.primary
+                    unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                 )
             )
             // 내용 입력
@@ -198,18 +204,25 @@ fun RecurringExpenseContent(
                 value = uiState.title,
                 onValueChange = { viewModel.onTitleChange(it) },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("정기지출 내용을 입력하세요", fontSize = 16.sp, color = Color.Gray) },
+                placeholder = {
+                    Text(
+                        "정기지출 내용을 입력하세요",
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                },
                 singleLine = true,
                 textStyle = TextStyle(fontSize = 18.sp),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.LightGray
+                    unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                 )
             )
         }
 
-        HorizontalDivider(color = Color(0xFFF0F2F5))
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
         // 카테고리
         Column(
@@ -238,7 +251,7 @@ fun RecurringExpenseContent(
             }
         }
 
-        HorizontalDivider(color = Color(0xFFF0F2F5))
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
         //시작 일
         Column(
@@ -268,12 +281,12 @@ fun RecurringExpenseContent(
                 Icon(
                     imageVector = Icons.Default.DateRange,
                     contentDescription = "날짜 선택",
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
 
-        HorizontalDivider(color = Color(0xFFF0F2F5))
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
         // 반복 날짜
         Column(
@@ -302,7 +315,7 @@ fun RecurringExpenseContent(
             }
         }
 
-        HorizontalDivider(color = Color(0xFFF0F2F5))
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
 
         // 메모
@@ -317,18 +330,18 @@ fun RecurringExpenseContent(
                 onValueChange = { viewModel.onMemoChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(260.dp),
+                    .height(240.dp),
                 placeholder = {
                     Text(
                         "메모",
-                        color = Color.Gray,
-                        fontSize = 14.sp
+                        style = Typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onTertiary,
                     )
                 },
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = Color(0xFFE0E0E0)
+                    focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
                 )
             )
         }

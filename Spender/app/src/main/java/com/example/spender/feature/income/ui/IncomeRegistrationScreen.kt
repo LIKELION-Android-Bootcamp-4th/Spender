@@ -73,6 +73,7 @@ import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.WhiteColor
 import com.example.spender.ui.theme.navigation.Screen
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -94,10 +95,11 @@ fun IncomeRegistrationScreen(
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
-            when(event) {
+            when (event) {
                 is RegistrationEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
+
                 else -> {}
             }
         }
@@ -203,14 +205,12 @@ fun IncomeRegistrationScreen(
                 Text(
                     "수입 등록",
                     modifier = Modifier.padding(vertical = 6.dp),
-                    fontSize = 20.sp,
-                    fontFamily = NotoSansFamily,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White
+                    style = Typography.titleMedium,
+                    color = WhiteColor
                 )
             }
         },
-        containerColor = Color.White
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -228,7 +228,13 @@ fun IncomeRegistrationScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 40.dp, vertical = 16.dp),
-                    placeholder = { Text("수입을 입력하세요", fontSize = 14.sp, color = Color.Gray) },
+                    placeholder = {
+                        Text(
+                            "수입을 입력하세요",
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
+                    },
                     trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = NumberCommaTransformation(),
@@ -242,8 +248,8 @@ fun IncomeRegistrationScreen(
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.primary
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
                 // 내용 입력
@@ -253,18 +259,25 @@ fun IncomeRegistrationScreen(
                         viewModel.onTitleChange(it)
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("수입 내용을 입력하세요", fontSize = 16.sp, color = Color.Gray) },
+                    placeholder = {
+                        Text(
+                            "수입 내용을 입력하세요",
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
+                    },
                     singleLine = true,
                     textStyle = TextStyle(fontSize = 18.sp),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.LightGray
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
             }
 
-            HorizontalDivider(color = Color(0xFFF0F2F5))
+            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
             // 카테고리
             Column(
@@ -293,7 +306,7 @@ fun IncomeRegistrationScreen(
                 }
             }
 
-            HorizontalDivider(color = Color(0xFFF0F2F5))
+            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
             //날짜
             Column(
@@ -323,12 +336,12 @@ fun IncomeRegistrationScreen(
                     Icon(
                         imageVector = Icons.Default.DateRange,
                         contentDescription = "날짜 선택",
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
 
-            HorizontalDivider(color = Color(0xFFF0F2F5))
+            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
             // 메모
             Column(modifier = Modifier.padding(horizontal = 34.dp, vertical = 24.dp)) {
@@ -344,18 +357,18 @@ fun IncomeRegistrationScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(260.dp),
+                        .height(240.dp),
                     placeholder = {
                         Text(
                             "메모",
-                            color = Color.Gray,
-                            fontSize = 14.sp
+                            style = Typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onTertiary,
                         )
                     },
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = Color(0xFFE0E0E0)
+                        focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
             }

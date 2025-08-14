@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -56,7 +57,7 @@ fun ReportContent(
             .fillMaxSize()
             .padding(paddingValues)
             .padding(top = 0.dp)
-            .background(color = LightBackgroundColor)
+            .background(color = MaterialTheme.colorScheme.background)
     ) {
         MonthlySpendingBarChart(
             values = barValues,
@@ -105,7 +106,7 @@ fun MonthlySpendingBarChart(
             .fillMaxWidth()
             .height(240.dp)
             .background(
-                color = Color.White,
+                color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp)
             )
             .padding(top = 24.dp)
