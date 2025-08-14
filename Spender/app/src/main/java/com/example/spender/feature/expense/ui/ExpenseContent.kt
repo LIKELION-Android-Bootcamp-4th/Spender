@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.feature.expense.domain.model.Emotion
 import com.example.spender.feature.mypage.domain.model.Category
+import com.example.spender.ui.theme.BlackColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 import kotlinx.coroutines.launch
@@ -339,7 +340,7 @@ fun EmotionTagGroup(
                 label = {
                     Text(
                         text = emotion.name,
-                        color = if (isSelected) Color.White else MaterialTheme.colorScheme.onPrimary
+                        color = if (isSelected) Color.White else BlackColor
                     )
                 },
                 shape = RoundedCornerShape(30),
