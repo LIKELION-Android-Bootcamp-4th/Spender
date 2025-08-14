@@ -18,11 +18,6 @@
     <string name="spender_small_widget_description">예산 대비 지출을 확입합니다.</string>
     <string name="spender_medium_widget_description">예산 대비 지출을 확인하고 지출을 바로 등록합니다.</string>
 
-
     <string name="default_web_client_id">1073077761870-is2da6dro8u2rqgqt56m6hl1rccq9nqh.apps.googleusercontent.com</string>
-    <string name="naver_client_id">btOnE17uFYFcVX7H36Tm</string>
-    <string name="naver_client_secret">lVwABQpwoF</string>
-    <string name="kakao_app_key">05bd03f6530f0a6819b1e37e5b7765fc</string>
-    <string name="kakao_redirect_url">kakao05bd03f6530f0a6819b1e37e5b7765fc</string>
 
 </resources>
