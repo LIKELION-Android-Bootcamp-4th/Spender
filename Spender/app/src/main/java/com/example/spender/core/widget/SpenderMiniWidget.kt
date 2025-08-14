@@ -17,16 +17,16 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 
-class SpenderLargeWidget : GlanceAppWidget() {
+class SpenderMiniWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            SpenderLargeWidgetContent()
+            SpenderMiniWidgetContent()
         }
     }
 }
 
 @Composable
-fun SpenderLargeWidgetContent(){
+fun SpenderMiniWidgetContent(){
     Column(
         modifier = GlanceModifier
             .fillMaxSize()

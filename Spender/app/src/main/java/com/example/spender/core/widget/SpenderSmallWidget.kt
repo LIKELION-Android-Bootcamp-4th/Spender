@@ -140,7 +140,7 @@ private fun SpenderSmallWidgetContent(
                     text = "예산 대비 지출",
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
-                        color = ColorProvider(day = Color(0x80222836), night = DarkModeDefaultFontColor),
+                        color = ColorProvider(day = LightPointColor, night = DarkModeDefaultFontColor),
                         fontSize = 12.sp
                     )
                 )
