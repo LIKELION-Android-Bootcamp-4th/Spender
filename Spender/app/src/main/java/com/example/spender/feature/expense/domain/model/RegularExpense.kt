@@ -1,5 +1,6 @@
 package com.example.spender.feature.expense.domain.model
 
+import com.google.firebase.firestore.PropertyName
 import java.util.Date
 
 data class RegularExpense(
@@ -8,7 +9,7 @@ data class RegularExpense(
     val title: String = "",
     val memo: String = "",
     val categoryId: String = "",
-    val firstPaymentDate: Date = Date(),
+    val first_payment_date: Date = Date(),
     val repeatCycle: String = "MONTHLY", // "매월"
     val day: Int = 28
 )

@@ -5,6 +5,7 @@ import com.example.spender.feature.expense.data.remote.RegularExpenseDto
 import com.example.spender.feature.expense.domain.model.RegularExpense
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.util.Date
 import javax.inject.Inject
 
 class RegularExpenseRepository @Inject constructor() {
@@ -24,7 +25,9 @@ class RegularExpenseRepository @Inject constructor() {
         return try {
             val document = usersCollection.document(userId).collection("regular_expenses").document(regularExpenseId).get().await()
             document.toObject(RegularExpense::class.java)?.copy(id = document.id)
-        } catch (e: Exception) { null }
+        } catch (e: Exception) {
+            null
+        }
     }
 
     suspend fun updateRegularExpense(userId: String, regularExpenseId: String, dto: RegularExpenseDto): Boolean {
