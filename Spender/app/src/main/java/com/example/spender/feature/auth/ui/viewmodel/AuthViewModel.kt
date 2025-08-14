@@ -11,9 +11,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.spender.core.data.remote.auth.LoginType
 import com.example.spender.core.data.service.FcmTokenRegistrar
+import com.example.spender.core.data.service.getFirebaseAuth
+import com.example.spender.core.data.service.login
 import com.example.spender.feature.auth.data.AuthPrefs
 import com.example.spender.feature.auth.domain.AuthRepository
 import com.example.spender.feature.onboarding.data.OnboardingPref
+import com.example.spender.ui.theme.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.Firebase
@@ -31,7 +34,7 @@ class AuthViewModel @Inject constructor(
     application: Application,
     private val authRepository: AuthRepository
 ) : AndroidViewModel(application) {
-    
+
     private val _isFailState = mutableStateOf(false)
     val isFailState: State<Boolean> = _isFailState
 
@@ -41,7 +44,7 @@ class AuthViewModel @Inject constructor(
     fun googleLogin(
         context: Context,
         activityResult: ActivityResult,
-        onSuccess: () -> Unit
+        navController: NavController
     ) {
         try {
             _isLoading.value = true
@@ -60,7 +63,7 @@ class AuthViewModel @Inject constructor(
                         val app = context.applicationContext as android.app.Application
                         FcmTokenRegistrar.handleAfterLogin(app)
 
-                        onSuccess()
+                        handleGoogleLoginSuccess(context, navController)
                         _isLoading.value = false
                     } else {
                         _isFailState.value = true
@@ -72,6 +75,25 @@ class AuthViewModel @Inject constructor(
             _isFailState.value = true
             Log.d("Login", "Google SignIn failed! ${e.message}")
             _isLoading.value = false
+        }
+    }
+
+    private fun handleGoogleLoginSuccess(context: Context, navController: NavController) {
+        Log.d("Login", "Google SignIn Success!")
+        login(FirebaseAuth.getInstance().currentUser, LoginType.GOOGLE.type)
+        Log.d("Login", getFirebaseAuth() ?: "failed")
+
+        val currentUser = Firebase.auth.currentUser
+
+        val onboardingShown = OnboardingPref.wasShown(context)
+        if (onboardingShown) {
+            navController.navigate(Screen.MainScreen.route) {
+                popUpTo(Screen.AuthScreen.route) { inclusive = true }
+            }
+        } else {
+            navController.navigate(Screen.OnboardingScreen.route) {
+                popUpTo(Screen.AuthScreen.route) { inclusive = true }
+            }
         }
     }
 
