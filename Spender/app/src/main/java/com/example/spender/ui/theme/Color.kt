@@ -18,6 +18,7 @@ val PointColor = Color(0xFF3182F6)
 val DefaultFontColor = Color(0xFF222836)
 val LightFontColor = Color(0xFF7E8287)
 val SelectedColor = Color(0xFF96bff9)
+val LightGray = Color(0xFFCCCCCC)
 
 // 다크모드 색상
 val DarkModeBackground = Color(0xFF333B50)
