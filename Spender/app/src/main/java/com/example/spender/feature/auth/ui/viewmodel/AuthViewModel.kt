@@ -20,8 +20,10 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -80,6 +82,7 @@ class AuthViewModel @Inject constructor(
                 authRepository.naverLogin(context)
                 AuthPrefs.setLoginType(getApplication(), LoginType.NAVER)
                 Log.d("Login", "Naver Login Success!")
+
                 val currentUser = Firebase.auth.currentUser
                 val userMap: Map<String, Any?>? = currentUser?.let {
                     mapOf(
@@ -89,13 +92,15 @@ class AuthViewModel @Inject constructor(
                         "photoUrl" to it.photoUrl?.toString()
                     )
                 }
+                Log.d("Login", "naver User : $userMap")
 
-                Log.d("Login", "naver User : ${userMap.toString()}")
-
-                navController.navigate(
-                    if (OnboardingPref.wasShown(getApplication())) "main"
-                    else "onboarding") {
-                    popUpTo("auth") { inclusive = true }
+                if (currentUser != null) {
+                    val budgetsExist = checkBudgetsCollectionExists(currentUser.uid)
+                    navController.navigate(
+                        if (budgetsExist) "main" else "onboarding"
+                    ) {
+                        popUpTo("auth") { inclusive = true }
+                    }
                 }
             } catch (e: Exception) {
                 Log.e("Login", "Naver Login Fail", e)
@@ -104,6 +109,7 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
+
 
     fun kakaoLogin(context: Context, navController: NavController) {
         viewModelScope.launch {
@@ -123,13 +129,16 @@ class AuthViewModel @Inject constructor(
                 }
                 Log.d("Login", "kakao User : ${userMap.toString()}")
 
-                navController.navigate(
-                    if (OnboardingPref.wasShown(getApplication())) "main"
-                    else "onboarding") {
-                    popUpTo("auth") { inclusive = true }
+                if (currentUser != null) {
+                    val budgetsExist = checkBudgetsCollectionExists(currentUser.uid)
+                    navController.navigate(
+                        if (budgetsExist) "main" else "onboarding"
+                    ) {
+                        popUpTo("auth") { inclusive = true }
+                    }
                 }
             } catch (e: Exception) {
-                Log.e("Login", "Kakao Login Fail", e)
+                Log.e("Login", "Naver Login Fail", e)
             } finally {
                 _isLoading.value = false
             }
@@ -154,4 +163,23 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
+
+    // budgets 컬렉션이 있는지 확인
+    suspend fun checkBudgetsCollectionExists(uid: String): Boolean {
+        return try {
+            val snapshot = Firebase.firestore
+                .collection("users")
+                .document(uid)
+                .collection("budgets")
+                .limit(1)
+                .get()
+                .await()
+
+            !snapshot.isEmpty
+        } catch (e: Exception) {
+            Log.e("Firestore", "Error checking budgets collection", e)
+            false
+        }
+    }
+
 }
