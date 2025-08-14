@@ -35,6 +35,39 @@ android {
             "NAVER_OCR_CLIENT_SECRET",
             localProperties.getProperty("NAVER_OCR_CLIENT_SECRET")
         )
+
+        buildConfigField(
+            "String",
+            "DEFAULT_WEB_CLIENT_ID",
+            localProperties.getProperty("DEFAULT_WEB_CLIENT_ID")
+        )
+
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_ID",
+            localProperties.getProperty("NAVER_CLIENT_ID")
+        )
+
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_SECRET",
+            localProperties.getProperty("NAVER_CLIENT_SECRET")
+        )
+
+        buildConfigField(
+            "String",
+            "KAKAO_APP_KEY",
+            localProperties.getProperty("KAKAO_APP_KEY")
+        )
+
+        buildConfigField(
+            "String",
+            "KAKAO_REDIRECT_URL",
+            localProperties.getProperty("KAKAO_REDIRECT_URL")
+        )
+
+        manifestPlaceholders["KAKAO_REDIRECT_SCHEME"] = localProperties.getProperty("KAKAO_REDIRECT_URL")?.replace("\"", "") ?: ""
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

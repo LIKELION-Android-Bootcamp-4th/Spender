@@ -81,7 +81,7 @@
 
                 <data
                     android:host="oauth"
-                    android:scheme="@string/kakao_redirect_url" />
+                    android:scheme="${KAKAO_REDIRECT_SCHEME}" />
             </intent-filter>
         </activity>
         <provider

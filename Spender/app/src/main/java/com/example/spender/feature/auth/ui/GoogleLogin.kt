@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.spender.BuildConfig
 import com.example.spender.R
 import com.example.spender.core.data.remote.auth.LoginType
 import com.example.spender.core.data.service.getFirebaseAuth
@@ -46,14 +47,16 @@ fun GoogleLogin(
 ) {
 
     val viewModel: AuthViewModel = hiltViewModel()
-    val googleToken = stringResource(id = R.string.default_web_client_id)
+    val googleToken = BuildConfig.DEFAULT_WEB_CLIENT_ID
     val context = LocalContext.current
 
+//
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         viewModel.googleLogin(context, result) {
             Log.d("Login", "Google SignIn Success!")
+            Log.d("CLIENT_ID_DEBUG", "BuildConfig raw: '$googleToken'")
             login(FirebaseAuth.getInstance().currentUser, LoginType.GOOGLE.type)
             Log.d("Login", getFirebaseAuth() ?: "failed")
 
