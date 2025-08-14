@@ -55,7 +55,7 @@ class RegularExpenseDetailViewModel @Inject constructor(
                         amount = expense.amount.toString(),
                         title = expense.title,
                         memo = expense.memo,
-                        firstPaymentDate = expense.firstPaymentDate,
+                        firstPaymentDate = expense.first_payment_date,
                         categoryId = expense.categoryId,
                         categoryName = category?.name ?: "미분류",
                         dayOfMonth = expense.day,
