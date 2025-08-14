@@ -87,7 +87,7 @@ fun AnalysisScreen(navHostController: NavHostController) {
             }
         }
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         TabContent(selectedTabIndex, navHostController)
     }
