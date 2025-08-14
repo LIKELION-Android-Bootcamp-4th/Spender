@@ -1,11 +1,11 @@
-package com.example.spender.core.widget
+package com.example.spender.core.widget.component
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.glance.GlanceId
 import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
+import com.example.spender.core.widget.SpenderMediumWidget
 
 class RefreshExpenseAction : ActionCallback {
     override suspend fun onAction(

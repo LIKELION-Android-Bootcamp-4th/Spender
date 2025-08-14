@@ -40,6 +40,11 @@ import androidx.glance.LocalContext
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.color.ColorProvider
+import com.example.spender.core.widget.component.RefreshExpenseAction
+import com.example.spender.ui.theme.DarkModeBackground
+import com.example.spender.ui.theme.DarkModeDefaultFontColor
+import com.example.spender.ui.theme.DarkModeLightFontColor
 import com.example.spender.ui.theme.LightPointColor
 
 class SpenderSmallWidget : GlanceAppWidget() {
@@ -89,7 +94,7 @@ private fun SpenderSmallWidgetContent(
                 .height(133.dp)
                 .width(133.dp)
                 .padding(10.dp)
-                .background(ColorProvider(Color.White))
+                .background(ColorProvider(day = Color.White, night = DarkModeBackground))
                 .clickable(onClick = actionStartActivity(deepLinkToHome(context = LocalContext.current))),
             contentAlignment = Alignment.TopStart
         ) {
@@ -107,7 +112,7 @@ private fun SpenderSmallWidgetContent(
                         modifier = GlanceModifier.size(35.dp)
                     )
 
-                    Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium, fontSize = 13.sp))
+                    Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium, fontSize = 13.sp, color = ColorProvider(day = Color.Black, night = DarkModeDefaultFontColor)))
 
                     Spacer(GlanceModifier.width(15.dp))
 
@@ -127,7 +132,7 @@ private fun SpenderSmallWidgetContent(
 
                 Spacer(GlanceModifier.height(5.dp))
 
-                Text(percentText, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp))
+                Text(percentText, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = ColorProvider(day = Color.Black, night = DarkModeDefaultFontColor)))
 
                 Spacer(GlanceModifier.height(5.dp))
 
@@ -135,7 +140,7 @@ private fun SpenderSmallWidgetContent(
                     text = "예산 대비 지출",
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
-                        color = ColorProvider(Color(0x80222836)),
+                        color = ColorProvider(day = Color(0x80222836), night = DarkModeDefaultFontColor),
                         fontSize = 12.sp
                     )
                 )

@@ -19,6 +19,7 @@ import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
@@ -39,7 +40,9 @@ import com.example.spender.MainActivity
 import com.example.spender.R
 import com.example.spender.core.data.service.getExpenseRate
 import com.example.spender.core.widget.component.BudgetProgressBarGlance
+import com.example.spender.core.widget.component.RefreshExpenseAction
 import com.example.spender.core.widget.component.WidgetButton
+import com.example.spender.ui.theme.DarkModeBackground
 import com.example.spender.ui.theme.LightPointColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -99,7 +102,7 @@ fun SpenderMediumWidgetContent(
             modifier = GlanceModifier
                 .fillMaxSize()
                 .padding(horizontal = 13.dp, vertical = 9.dp)
-                .background(ColorProvider(Color.White))
+                .background(ColorProvider(day = Color.White, night = DarkModeBackground))
                 .clickable(onClick = actionStartActivity(deepLinkToHome(context = LocalContext.current))),
             contentAlignment = Alignment.TopStart
         ) {
@@ -117,7 +120,7 @@ fun SpenderMediumWidgetContent(
                         modifier = GlanceModifier.size(45.dp)
                     )
 
-                    Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium))
+                    Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium, color = ColorProvider(day = Color.Black, night = Color.White)))
 
                     Spacer(GlanceModifier.width(55.dp))
 
@@ -137,7 +140,7 @@ fun SpenderMediumWidgetContent(
 
                 Spacer(GlanceModifier.height(10.dp))
 
-                Text(percentText, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp))
+                Text(percentText, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = ColorProvider(day = Color.Black, night = Color.White)))
 
                 Spacer(GlanceModifier.height(5.dp))
 
@@ -145,7 +148,7 @@ fun SpenderMediumWidgetContent(
                     text = "예산 대비 지출",
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
-                        color = ColorProvider(Color(0x80222836)),
+                        color = ColorProvider(day = Color(0x80222836), night = Color.White),
                         fontSize = 13.sp
                     )
                 )
