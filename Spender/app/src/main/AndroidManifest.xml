@@ -31,6 +31,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/spender_small_widget_info" />
         </receiver>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
+
         <receiver android:name=".core.widget.SpenderMediumReceiverWidget"
             android:exported="true">
             <intent-filter>
