@@ -275,7 +275,7 @@ fun ExpenseContent(
                 onValueChange = { viewModel.onMemoChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(240.dp),
+                    .height(120.dp),
                 placeholder = {
                     Text(
                         "메모",
@@ -339,13 +339,13 @@ fun EmotionTagGroup(
                 label = {
                     Text(
                         text = emotion.name,
-                        color = if (isSelected) Color.White else MaterialTheme.colorScheme.onPrimary
+                        color = if (isSelected) Color.White else MaterialTheme.colorScheme.onBackground
                     )
                 },
                 shape = RoundedCornerShape(30),
                 colors = FilterChipDefaults.filterChipColors(
                     containerColor = MaterialTheme.colorScheme.background,
-                    labelColor = MaterialTheme.colorScheme.onPrimary,
+                    labelColor = MaterialTheme.colorScheme.onBackground,
                     selectedContainerColor = PointColor,
                     selectedLabelColor = Color.White
                 ),
