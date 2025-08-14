@@ -15,8 +15,6 @@ import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.core.data.service.login
 import com.example.spender.feature.auth.data.AuthPrefs
 import com.example.spender.feature.auth.domain.AuthRepository
-import com.example.spender.feature.onboarding.data.OnboardingPref
-import com.example.spender.ui.theme.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.Firebase
@@ -84,15 +82,24 @@ class AuthViewModel @Inject constructor(
         Log.d("Login", getFirebaseAuth() ?: "failed")
 
         val currentUser = Firebase.auth.currentUser
+        val userMap: Map<String, Any?>? = currentUser?.let {
+            mapOf(
+                "uid" to it.uid,
+                "email" to it.email,
+                "name" to it.displayName,
+                "photoUrl" to it.photoUrl?.toString()
+            )
+        }
+        Log.d("Login", "google User : $userMap")
 
-        val onboardingShown = OnboardingPref.wasShown(context)
-        if (onboardingShown) {
-            navController.navigate(Screen.MainScreen.route) {
-                popUpTo(Screen.AuthScreen.route) { inclusive = true }
-            }
-        } else {
-            navController.navigate(Screen.OnboardingScreen.route) {
-                popUpTo(Screen.AuthScreen.route) { inclusive = true }
+        if (currentUser != null) {
+            viewModelScope.launch {
+                val budgetsExist = checkBudgetsCollectionExists(currentUser.uid)
+                navController.navigate(
+                    if (budgetsExist) "main" else "onboarding"
+                ) {
+                    popUpTo("auth") { inclusive = true }
+                }
             }
         }
     }
