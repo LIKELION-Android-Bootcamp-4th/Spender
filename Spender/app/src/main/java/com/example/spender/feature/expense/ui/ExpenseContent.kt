@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.feature.expense.domain.model.Emotion
 import com.example.spender.feature.mypage.domain.model.Category
+import com.example.spender.ui.theme.BlackColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 import kotlinx.coroutines.launch
@@ -275,7 +276,7 @@ fun ExpenseContent(
                 onValueChange = { viewModel.onMemoChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp),
+                    .height(240.dp),
                 placeholder = {
                     Text(
                         "메모",
@@ -339,13 +340,13 @@ fun EmotionTagGroup(
                 label = {
                     Text(
                         text = emotion.name,
-                        color = if (isSelected) Color.White else MaterialTheme.colorScheme.onBackground
+                        color = if (isSelected) Color.White else BlackColor
                     )
                 },
                 shape = RoundedCornerShape(30),
                 colors = FilterChipDefaults.filterChipColors(
                     containerColor = MaterialTheme.colorScheme.background,
-                    labelColor = MaterialTheme.colorScheme.onBackground,
+                    labelColor = MaterialTheme.colorScheme.onPrimary,
                     selectedContainerColor = PointColor,
                     selectedLabelColor = Color.White
                 ),
