@@ -18,16 +18,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -37,7 +34,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -66,7 +62,7 @@ import com.example.spender.feature.expense.ui.NumberCommaTransformation
 import com.example.spender.feature.expense.ui.RegistrationEvent
 import com.example.spender.feature.expense.ui.RepeatDaySelectionSheet
 import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
-import com.example.spender.ui.theme.BlackColor
+import com.example.spender.ui.theme.LightPointColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.navigation.Screen
@@ -95,6 +91,7 @@ fun RecurringExpenseDetailScreen(
                 is RegistrationEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
+
                 is RegistrationEvent.NavigateBack -> {
                     navHostController.popBackStack()
                 }
@@ -218,14 +215,14 @@ fun RecurringExpenseDetailScreen(
             ) {
                 CustomShortButton(
                     "삭제",
-                    MaterialTheme.colorScheme.secondary,
-                    onClick = {viewModel.deleteRegularExpense()},
+                    backgroundColor = LightPointColor,
+                    onClick = { viewModel.deleteRegularExpense() },
                     modifier = Modifier.weight(1f)
                 )
                 CustomShortButton(
                     "수정",
                     PointColor,
-                    onClick = {viewModel.updateRegularExpense()},
+                    onClick = { viewModel.updateRegularExpense() },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -248,7 +245,13 @@ fun RecurringExpenseDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 40.dp, vertical = 16.dp),
-                    placeholder = { Text("지출을 입력하세요", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
+                    placeholder = {
+                        Text(
+                            "지출을 입력하세요",
+                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
+                    },
                     trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = NumberCommaTransformation(),
@@ -261,8 +264,8 @@ fun RecurringExpenseDetailScreen(
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.primary
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
                 // 내용 입력
@@ -272,17 +275,24 @@ fun RecurringExpenseDetailScreen(
                         viewModel.onTitleChange(it)
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("정기지출 내용을 입력하세요", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
+                    placeholder = {
+                        Text(
+                            "정기지출 내용을 입력하세요",
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
+                    },
                     singleLine = true,
                     textStyle = TextStyle(fontSize = 18.sp),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
             }
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
             // 카테고리
             Column(
@@ -311,7 +321,7 @@ fun RecurringExpenseDetailScreen(
                 }
             }
 
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
             //시작 일
             Column(
@@ -346,7 +356,7 @@ fun RecurringExpenseDetailScreen(
                 }
             }
 
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
             // 반복
             Column(
@@ -375,7 +385,7 @@ fun RecurringExpenseDetailScreen(
                 }
             }
 
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
 
             // 메모
@@ -387,25 +397,25 @@ fun RecurringExpenseDetailScreen(
                 Spacer(Modifier.height(30.dp))
                 OutlinedTextField(
                     value = uiState.memo,
-                    onValueChange = {viewModel.onMemoChange(it)},
+                    onValueChange = { viewModel.onMemoChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(260.dp),
+                        .height(120.dp),
                     placeholder = {
                         Text(
                             "메모",
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            color = MaterialTheme.colorScheme.tertiary,
                             fontSize = 14.sp
                         )
                     },
                     textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onTertiary,
+                        fontSize = 14.sp,
                     ),
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                        focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
             }

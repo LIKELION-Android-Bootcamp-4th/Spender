@@ -3,7 +3,9 @@ package com.example.spender.feature.report.ui.component
 import android.graphics.Canvas
 import android.graphics.RectF
 import android.view.ViewGroup
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.mikephil.charting.animation.ChartAnimator
 import com.github.mikephil.charting.charts.HorizontalBarChart
@@ -22,6 +24,8 @@ fun EmotionBarChart(
     values: List<Float>,
     colors: List<Int>
 ) {
+    val labelColor = MaterialTheme.colorScheme.onBackground.toArgb()
+
     AndroidView(factory = { context ->
         HorizontalBarChart(context).apply {
             layoutParams = ViewGroup.LayoutParams(
@@ -43,6 +47,11 @@ fun EmotionBarChart(
                 granularity = 1f
                 valueFormatter = IndexAxisValueFormatter(labels)
                 textSize = 14f
+                textColor = labelColor
+            }
+
+            axisRight.apply {
+                textColor = labelColor
             }
 
         }
