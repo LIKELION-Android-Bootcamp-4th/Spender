@@ -17,7 +17,4 @@
 
     <string name="spender_small_widget_description">예산 대비 지출을 확입합니다.</string>
     <string name="spender_medium_widget_description">예산 대비 지출을 확인하고 지출을 바로 등록합니다.</string>
-
-    <string name="default_web_client_id">1073077761870-is2da6dro8u2rqgqt56m6hl1rccq9nqh.apps.googleusercontent.com</string>
-
 </resources>
