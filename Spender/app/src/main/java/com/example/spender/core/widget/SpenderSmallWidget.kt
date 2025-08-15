@@ -6,13 +6,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
+import androidx.glance.action.ActionParameters
+import androidx.glance.action.actionParametersOf
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
@@ -32,15 +41,12 @@ import com.example.spender.MainActivity
 import com.example.spender.R
 import com.example.spender.core.data.service.getExpenseRate
 import com.example.spender.core.widget.component.BudgetProgressBarGlance
+import com.example.spender.core.widget.component.RefreshExpenseAction
+import com.example.spender.ui.theme.DarkModeBackground
+import com.example.spender.ui.theme.DarkModeDefaultFontColor
+import com.example.spender.ui.theme.LightPointColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import androidx.core.net.toUri
-import androidx.glance.ColorFilter
-import androidx.glance.LocalContext
-import androidx.glance.appwidget.action.actionStartActivity
-import androidx.glance.action.clickable
-import androidx.glance.appwidget.action.actionRunCallback
-import com.example.spender.ui.theme.LightPointColor
 
 class SpenderSmallWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -89,7 +95,7 @@ private fun SpenderSmallWidgetContent(
                 .height(133.dp)
                 .width(133.dp)
                 .padding(10.dp)
-                .background(ColorProvider(Color.White))
+                .background(ColorProvider(day = Color.White, night = DarkModeBackground))
                 .clickable(onClick = actionStartActivity(deepLinkToHome(context = LocalContext.current))),
             contentAlignment = Alignment.TopStart
         ) {
@@ -107,7 +113,7 @@ private fun SpenderSmallWidgetContent(
                         modifier = GlanceModifier.size(35.dp)
                     )
 
-                    Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium, fontSize = 13.sp))
+                    Text("지출이", style = TextStyle(fontWeight = FontWeight.Medium, fontSize = 13.sp, color = ColorProvider(day = Color.Black, night = DarkModeDefaultFontColor)))
 
                     Spacer(GlanceModifier.width(15.dp))
 
@@ -116,7 +122,12 @@ private fun SpenderSmallWidgetContent(
                         contentDescription = "새로고침",
                         modifier = GlanceModifier
                             .size(17.dp)
-                            .clickable(onClick = actionRunCallback(RefreshExpenseAction::class.java)),
+                            .clickable(
+                                onClick = actionRunCallback(
+                                    RefreshExpenseAction::class.java,
+                                    actionParametersOf(RefreshExpenseAction.KeyWidget to "small")
+                                )
+                            ),
                         colorFilter = ColorFilter.tint(ColorProvider(LightPointColor))
                     )
                 }
@@ -127,7 +138,7 @@ private fun SpenderSmallWidgetContent(
 
                 Spacer(GlanceModifier.height(5.dp))
 
-                Text(percentText, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp))
+                Text(percentText, style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp, color = ColorProvider(day = Color.Black, night = DarkModeDefaultFontColor)))
 
                 Spacer(GlanceModifier.height(5.dp))
 
@@ -135,7 +146,7 @@ private fun SpenderSmallWidgetContent(
                     text = "예산 대비 지출",
                     style = TextStyle(
                         fontWeight = FontWeight.Normal,
-                        color = ColorProvider(Color(0x80222836)),
+                        color = ColorProvider(day = LightPointColor, night = DarkModeDefaultFontColor),
                         fontSize = 12.sp
                     )
                 )
