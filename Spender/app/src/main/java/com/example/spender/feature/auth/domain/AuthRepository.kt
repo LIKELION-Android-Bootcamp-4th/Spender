@@ -12,6 +12,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.kakao.sdk.user.UserApiClient
 import com.navercorp.nid.NaverIdLoginSDK
 import kotlinx.coroutines.tasks.await
@@ -91,7 +93,7 @@ class AuthRepository @Inject constructor(
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user?.uid ?: throw Exception("No authenticated user")
 
-        getFirebaseRef().document(uid).delete().await()
+        deleteAllUserData(uid)
 
         try {
             user.delete().await()
@@ -125,6 +127,48 @@ class AuthRepository @Inject constructor(
             else -> {}
         }
         AuthPrefs.clear(context)
+    }
+
+    private suspend fun deleteAllUserData(uid: String) {
+        val db = FirebaseFirestore.getInstance()
+        val userDocRef = db.collection("users").document(uid)
+
+        try {
+            val subcollections = listOf(
+                "categories",
+                "expenses",
+                "incomes",
+                "regular_expenses",
+                "reports",
+                "budgets",
+                "notifications"
+            )
+
+            subcollections.forEach { collectionName ->
+                deleteSubcollection(userDocRef.collection(collectionName))
+            }
+            userDocRef.delete().await()
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    private suspend fun deleteSubcollection(collectionRef: CollectionReference) {
+        try {
+            val documents = collectionRef.get().await()
+
+            val batches = documents.documents.chunked(500)
+
+            batches.forEach { batch ->
+                val writeBatch = FirebaseFirestore.getInstance().batch()
+                batch.forEach { document ->
+                    writeBatch.delete(document.reference)
+                }
+                writeBatch.commit().await()
+            }
+        } catch (e: Exception) {
+            throw e
+        }
     }
 
 }
