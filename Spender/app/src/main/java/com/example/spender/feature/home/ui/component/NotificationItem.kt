@@ -1,6 +1,7 @@
 package com.example.spender.feature.home.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -10,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.spender.R
 import com.example.spender.feature.home.domain.Notification
 import com.example.spender.feature.home.domain.NotificationType
@@ -19,7 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
-fun NotificationItem(notification: Notification) {
+fun NotificationItem(notification: Notification, rootNavController: NavHostController) {
     val dateText = remember(notification.date) {
         SimpleDateFormat("M월 d일", Locale.KOREA).format(notification.date)
     }
@@ -28,6 +31,36 @@ fun NotificationItem(notification: Notification) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 12.dp)
+            .clickable {
+                if (notification.route != null) {
+                    when {
+                        notification.route.startsWith("report_detail/") -> {
+                            rootNavController.navigate(
+                                notification.route
+                            )
+                        }
+
+                        notification.route == "analysis" -> {
+                            rootNavController.navigate(
+                                notification.route
+                            )
+                        }
+
+                        notification.route == "home" -> {
+                            rootNavController.navigate(
+                                notification.route
+                            )
+                        }
+
+                        else -> {
+                            // 예외 처리 또는 홈 이동
+                            rootNavController.navigate(
+                                com.example.spender.ui.theme.navigation.BottomNavigationItem.Home.route
+                            )
+                        }
+                    }
+                }
+            }
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
