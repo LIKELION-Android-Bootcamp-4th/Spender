@@ -31,6 +31,7 @@ import com.example.spender.core.data.service.getTotalExpense
 import com.example.spender.feature.home.ui.BudgeProgress
 import com.example.spender.feature.home.ui.RecentTransactionsSection
 import com.example.spender.feature.home.ui.TotalExpenseCard
+import com.example.spender.ui.theme.LightPointColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +61,7 @@ fun HomeScreen(navHostController: NavHostController) {
                             imageVector = Icons.Rounded.Notifications,
                             contentDescription = "알림 보기",
                             modifier = Modifier.size(28.dp),
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = LightPointColor
                         )
                     }
                 },
