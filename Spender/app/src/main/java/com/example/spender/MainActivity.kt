@@ -99,6 +99,12 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(rootNavHostController: NavHostController) {
     val bottomBarNavController = rememberNavController()
     var isFabMenuExpanded by remember { mutableStateOf(false) }
+
+    HandlePushNavigation(
+        rootNavController = rootNavHostController,
+        bottomNavController = bottomBarNavController
+    )
+
     Scaffold(
         floatingActionButton = {
             Box(
@@ -207,20 +213,24 @@ private fun HandlePushNavigation(
     fun navigateByExtras(intent: Intent) {
         val route = intent.getStringExtra("route") ?: return
         val month = intent.getStringExtra("month")
-        val regularExpenseName = intent.getStringExtra("regularExpenseName")
 
         // 탭 이동
-        when (route) {
-            "home" -> bottomNavController.navigate(BottomNavigationItem.Home.route)
-            "stats" -> bottomNavController.navigate(BottomNavigationItem.Analysis.route)
-            "reports" -> bottomNavController.navigate(BottomNavigationItem.Report.route)
-        }
+        when {
+            route == "home" -> bottomNavController.navigate(BottomNavigationItem.Home.route)
 
-        // 선택: 리포트 상세 바로 열기 (month가 왔을 때)
-        if (route == "reports" && month != null) {
-            rootNavController.navigate(
-                com.example.spender.ui.theme.navigation.Screen.ReportDetail.createRoute(month)
-            )
+            route == "analysis" -> bottomNavController.navigate(BottomNavigationItem.Analysis.route)
+
+            route.startsWith("report_detail/") -> {
+                val extractedMonth = route.removePrefix("report_detail/")
+                bottomNavController.navigate(BottomNavigationItem.Report.route)
+
+                // 약간의 delay 후 상세화면 진입 (선택)
+                rootNavController.navigate(
+                    Screen.ReportDetail.createRoute(extractedMonth)
+                )
+            }
+
+            else -> bottomNavController.navigate(BottomNavigationItem.Home.route) // fallback
         }
 
         // 중복 처리 방지를 위해 extras 제거

@@ -19,6 +19,7 @@ fun NotificationDto.toDomain(id: String): Notification? {
         title = title,
         content = content,
         date = date,
-        type = typeEnum
+        type = typeEnum,
+        route = route
     )
 }

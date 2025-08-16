@@ -10,5 +10,7 @@ data class NotificationDto (
 
     @get:PropertyName("notificationType")
     @set:PropertyName("notificationType")
-    var type: String = ""
+    var type: String = "",
+
+    val route: String = ""
 )

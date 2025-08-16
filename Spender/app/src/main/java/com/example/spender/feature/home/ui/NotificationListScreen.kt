@@ -62,7 +62,8 @@ fun NotificationListScreen(
                         //     SimpleDateFormat("M월 d일", Locale.KOREA).format(n.date)
                         // }
                         NotificationItem(
-                            notification = n
+                            notification = n,
+                            rootNavController = navHostController
                             // , dateText = dateText
                             // , onClick = { viewModel.markAsRead(n.id) }  // 읽음 처리 쓰면 추가
                         )
