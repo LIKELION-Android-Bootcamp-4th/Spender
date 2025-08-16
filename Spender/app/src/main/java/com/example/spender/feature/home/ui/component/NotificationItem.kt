@@ -20,7 +20,6 @@ import java.util.Locale
 
 @Composable
 fun NotificationItem(notification: Notification) {
-    // Date -> String 변환
     val dateText = remember(notification.date) {
         SimpleDateFormat("M월 d일", Locale.KOREA).format(notification.date)
     }
@@ -56,8 +55,13 @@ fun NotificationItem(notification: Notification) {
                 ) {
                     Text(
                         text = notification.title,
-                        style = Typography.titleSmall
+                        style = Typography.titleSmall,
+                        modifier = Modifier.weight(1f),
+                        softWrap = true
                     )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
                     Text(
                         text = dateText,
                         style = Typography.labelMedium,
