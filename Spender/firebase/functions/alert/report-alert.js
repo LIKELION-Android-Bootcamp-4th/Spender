@@ -46,8 +46,8 @@ module.exports = functions.pubsub
       saveJobs.push(
         addNotification(uid, {
           type: "REPORT_ALERT",
-          title: `${month.split("-")[1]}월 지출 리포트가 생성되었어요!`,
-          content: `${month} 리포트를 확인해보세요.`,
+          title: `${month.split("-")[1]}월 지출 리포트가 도착했어요!`,
+          content: `눌러서 이번 달 리포트를 확인해보세요`,
           extra: { route: "reports", month }
         }).catch(err => console.error("REPORT save error", uid, err))
       );
