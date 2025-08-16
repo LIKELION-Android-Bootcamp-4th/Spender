@@ -15,6 +15,8 @@
     <string name="budgets_yellow">이대로라면 예산을 초과할 것 같아요!</string>
     <string name="budgets_red">예산 초과! 지출을 줄여야 해요!</string>
 
+    <string name="shortcut_expense_short">지출 등록</string>
+    <string name="shortcut_expense_long">지출을 바로 등록합니다.</string>
     <string name="spender_small_widget_description">예산 대비 지출을 확입합니다.</string>
     <string name="spender_medium_widget_description">예산 대비 지출을 확인하고 지출을 바로 등록합니다.</string>
 </resources>
