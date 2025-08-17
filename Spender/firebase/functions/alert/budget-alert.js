@@ -78,6 +78,7 @@ module.exports = functions.pubsub
               type: "BUDGET_ALERT",
               title,
               content,
+              isRead: false,
               extra: { route: "home" }
             }).catch(err => console.error("BUDGET save error", uid, err))
           );

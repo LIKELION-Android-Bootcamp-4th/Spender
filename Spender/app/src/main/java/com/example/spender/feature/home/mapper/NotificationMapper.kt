@@ -20,6 +20,7 @@ fun NotificationDto.toDomain(id: String): Notification? {
         content = content,
         date = date,
         type = typeEnum,
-        route = route
+        route = route,
+        isRead = isRead
     )
 }

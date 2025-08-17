@@ -45,4 +45,11 @@ class NotificationListViewModel @Inject constructor(
             )
         }
     }
+
+    fun markAllAsRead(){
+        viewModelScope.launch {
+            repository.markAllAsRead()
+                .onFailure { _error.value = it.message }
+        }
+    }
 }

@@ -65,6 +65,7 @@ module.exports = functions.pubsub
          type: "REMINDER_ALERT",
          title,
          content,
+         isRead: false,
          extra: { route: "analysis" }
        }).catch(err => console.error("REMINDER save error", uid, err))
      );
