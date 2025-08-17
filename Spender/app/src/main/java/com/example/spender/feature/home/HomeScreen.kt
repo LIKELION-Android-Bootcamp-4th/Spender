@@ -1,5 +1,6 @@
 package com.example.spender.feature.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -50,7 +51,7 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
     var recentExpenses by remember { mutableStateOf<List<ExpenseDto>>(emptyList()) }
     val hasUnread by viewModel.hasUnread
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(hasUnread) {
         totalExpense = getTotalExpense()
         percentage = getExpenseRate()
         recentExpenses = getExpenseListForHome()
