@@ -118,7 +118,7 @@ fun MainScreen(rootNavHostController: NavHostController) {
                 contentColor = WhiteColor,
                 modifier = Modifier
                     .offset(y = 50.dp)
-                    .size(72.dp)
+                    .size(65.dp)
             ) {
                 Icon(
                     imageVector = if (isFabMenuExpanded) Icons.Filled.Close else Icons.Filled.Add,
