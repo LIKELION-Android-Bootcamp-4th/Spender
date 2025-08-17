@@ -78,7 +78,7 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                                 Box(
                                     modifier = Modifier
                                         .size(8.dp)
-                                        .offset(x = (-2).dp, y = 2.dp)
+                                        .offset(x = 2.dp, y = 0.dp)
                                         .clip(CircleShape)
                                         .background(Color.Red)
                                 )

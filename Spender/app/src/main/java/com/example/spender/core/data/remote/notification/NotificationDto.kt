@@ -13,5 +13,5 @@ data class NotificationDto (
     var type: String = "",
 
     val route: String = "",
-    val isRead: Boolean
+    val isRead: Boolean = false
 )
