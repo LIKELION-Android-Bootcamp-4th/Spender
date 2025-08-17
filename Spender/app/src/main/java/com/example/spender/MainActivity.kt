@@ -19,8 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -121,9 +121,9 @@ fun MainScreen(rootNavHostController: NavHostController) {
                     .size(65.dp)
             ) {
                 Icon(
-                    imageVector = if (isFabMenuExpanded) Icons.Filled.Close else Icons.Filled.Add,
+                    imageVector = if (isFabMenuExpanded) Icons.Rounded.Close else Icons.Rounded.Add,
                     contentDescription = "Add Expense",
-                    modifier = if (isFabMenuExpanded) Modifier.size(44.dp) else Modifier.size(50.dp),
+                    modifier = if (isFabMenuExpanded) Modifier.size(43.dp) else Modifier.size(50.dp),
                     tint = WhiteColor
                 )
             }
