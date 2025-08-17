@@ -10,16 +10,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import com.example.spender.R
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -50,6 +54,7 @@ import com.example.spender.feature.mypage.domain.model.Category
 import com.example.spender.feature.mypage.ui.viewmodel.CategoryViewModel
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.WhiteColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,13 +89,14 @@ fun IncomeCategoryScreen(
                     currentCategory = null
                     showEditDialog = true
                 },
-                containerColor = Color.White,
-                shape = CircleShape
+                containerColor = PointColor,
+                shape = RoundedCornerShape(72.dp),
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_floating_add),
+                    imageVector = if (showEditDialog) Icons.Filled.Close else Icons.Filled.Add,
                     contentDescription = "카테고리 추가",
-                    tint = PointColor,
+                    modifier = if (showEditDialog) Modifier.size(35.dp) else Modifier.size(40.dp),
+                    tint = WhiteColor,
                 )
             }
         },
