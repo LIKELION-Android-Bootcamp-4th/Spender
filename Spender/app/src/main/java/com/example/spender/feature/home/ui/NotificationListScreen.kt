@@ -12,11 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import com.example.spender.core.common.util.getRelativeTimeString
 import com.example.spender.core.ui.CustomTopAppBar
@@ -36,14 +40,26 @@ fun NotificationListScreen(
     val items by viewModel.notifications
     val error by viewModel.error
 
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val currentViewModel by rememberUpdatedState(viewModel)
+    val currentHomeViewModel by rememberUpdatedState(homeViewModel)
+
     LaunchedEffect(Unit) {
         viewModel.load()
     }
 
     DisposableEffect(Unit) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                currentViewModel.markAllAsRead()
+                currentHomeViewModel.checkUnreadNotifications()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
         onDispose {
-            viewModel.markAllAsRead()
-            homeViewModel.checkUnreadNotifications()
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
