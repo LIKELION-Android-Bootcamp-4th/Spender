@@ -1,9 +1,6 @@
 package com.example.spender.feature.mypage.ui
 
 import android.widget.Toast
-import com.example.spender.R
-import com.example.spender.feature.mypage.ui.component.CategoryEditDialog
-import com.example.spender.feature.mypage.ui.component.CategoryDeleteDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,6 +19,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,9 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -52,9 +49,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.feature.mypage.domain.model.Category
+import com.example.spender.feature.mypage.ui.component.CategoryDeleteDialog
+import com.example.spender.feature.mypage.ui.component.CategoryEditDialog
 import com.example.spender.feature.mypage.ui.viewmodel.CategoryViewModel
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.WhiteColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,13 +95,14 @@ fun ExpenseCategoryScreen(
                         showEditDialog = true
                     }
                 },
-                containerColor = Color.White,
-                shape = CircleShape
+                containerColor = PointColor,
+                shape = RoundedCornerShape(72.dp),
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_floating_add),
+                    imageVector = if (showEditDialog) Icons.Rounded.Close else Icons.Rounded.Add,
                     contentDescription = "카테고리 추가",
-                    tint = PointColor,
+                    modifier = if (showEditDialog) Modifier.size(35.dp) else Modifier.size(40.dp),
+                    tint = WhiteColor,
                 )
             }
         },
