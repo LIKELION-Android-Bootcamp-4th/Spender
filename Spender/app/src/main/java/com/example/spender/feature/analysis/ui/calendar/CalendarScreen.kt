@@ -88,17 +88,18 @@ fun CalendarScreen(navHostController: NavHostController) {
                 SpendListByDate(
                     viewModel.nowMonth,
                     viewModel.nowDay,
-                    (viewModel.now.get(Calendar.DAY_OF_WEEK) + viewModel.now.get(Calendar.DATE) + 2) % 7,
+                    (viewModel.now.get(Calendar.DAY_OF_WEEK)) % 7,
                     dailyList,
                     navHostController
                 )
             } else {
                 calendar.set(Calendar.YEAR, selectionState[0])
                 calendar.set(Calendar.MONTH, selectionState[1])
+                calendar.set(Calendar.DATE, selectionState[2])
                 SpendListByDate(
                     selectionState[1],
                     selectionState[2],
-                    (calendar.get(Calendar.DAY_OF_WEEK) + selectionState[2] + 1) % 7,
+                    (calendar.get(Calendar.DAY_OF_WEEK)) % 7,
                     dailyList,
                     navHostController
                 )
