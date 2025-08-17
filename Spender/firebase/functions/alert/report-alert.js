@@ -48,6 +48,7 @@ module.exports = functions.pubsub
           type: "REPORT_ALERT",
           title: `${month.split("-")[1]}월 지출 리포트가 도착했어요!`,
           content: `눌러서 이번 달 리포트를 확인해보세요`,
+          isRead: false,
            extra: { route: `report_detail/${month}`, month }
         }).catch(err => console.error("REPORT save error", uid, err))
       );
