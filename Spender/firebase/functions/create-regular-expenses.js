@@ -23,7 +23,7 @@ module.exports = functions.firestore
             await admin.firestore()
                 .collection(`users/${userId}/expenses`)
                 .add({
-                    date: data.first_payment_date,
+                    date: admin.firestore.FieldValue.serverTimestamp(),
                     createdAt: admin.firestore.FieldValue.serverTimestamp(),
                     amount: data.amount,
                     title: data.title,

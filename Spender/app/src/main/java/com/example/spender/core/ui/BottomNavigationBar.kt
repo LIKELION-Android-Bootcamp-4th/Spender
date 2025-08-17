@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
@@ -97,6 +98,7 @@ fun RowScope.BottomAppBarItem(
         Icon(
             imageVector = icon,
             contentDescription = null,
+            modifier = Modifier.size(25.dp),
             tint = if (selected) DarkPointColor else LightPointColor
         )
         Text(
