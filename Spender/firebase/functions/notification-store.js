@@ -25,6 +25,7 @@ async function addNotification(uid, p) {
     notificationType: p.type,
     title: p.title,
     content: p.content,
+    isRead: p.isRead,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
     expireAt: sevenDaysFromNow(),
     ...(p.extra || {})
