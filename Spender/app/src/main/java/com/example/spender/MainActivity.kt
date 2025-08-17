@@ -2,28 +2,28 @@ package com.example.spender
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -39,22 +39,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.spender.core.ui.BottomNavigationBar
 import com.example.spender.feature.analysis.AnalysisScreen
-import com.example.spender.feature.expense.ui.ExpenseRegistrationParentScreen
 import com.example.spender.feature.home.HomeScreen
-import com.example.spender.feature.income.ui.IncomeRegistrationScreen
 import com.example.spender.feature.mypage.MypageScreen
-import com.example.spender.feature.onboarding.data.OnboardingPref
 import com.example.spender.feature.report.ui.list.ReportListScreen
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.SpenderTheme
@@ -83,7 +80,6 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = Screen.SplashScreen.route
                 )
-
             }
         }
     }
@@ -100,6 +96,13 @@ fun MainScreen(rootNavHostController: NavHostController) {
     val bottomBarNavController = rememberNavController()
     var isFabMenuExpanded by remember { mutableStateOf(false) }
 
+    val navBackStackEntry by bottomBarNavController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    LaunchedEffect(currentRoute) {
+        isFabMenuExpanded = false
+    }
+
     HandlePushNavigation(
         rootNavController = rootNavHostController,
         bottomNavController = bottomBarNavController
@@ -107,67 +110,27 @@ fun MainScreen(rootNavHostController: NavHostController) {
 
     Scaffold(
         floatingActionButton = {
-            Box(
-                contentAlignment = Alignment.Center,
+            FloatingActionButton(
+                onClick = { isFabMenuExpanded = !isFabMenuExpanded },
+                shape = RoundedCornerShape(72.dp),
+                elevation = FloatingActionButtonDefaults.elevation(0.dp),
+                containerColor = PointColor,
+                contentColor = WhiteColor,
+                modifier = Modifier
+                    .offset(y = 50.dp)
+                    .size(65.dp)
             ) {
-                FloatingActionButton(
-                    onClick = { isFabMenuExpanded = true },
-                    shape = RoundedCornerShape(72.dp),
-                    elevation = FloatingActionButtonDefaults.elevation(0.dp),
-                    containerColor = WhiteColor,
-                    contentColor = Color.Unspecified,
-                    modifier = Modifier
-                        .offset(y = 50.dp)
-                        .size(72.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_floating_add),
-                        contentDescription = "Add Expense",
-                        modifier = Modifier.fillMaxSize(),
-                    )
-                }
-                DropdownMenu(
-                    expanded = isFabMenuExpanded,
-                    onDismissRequest = { isFabMenuExpanded = false },
-                    offset = DpOffset(x = (-20).dp, y = (45).dp),
-                    modifier = Modifier
-                        .background(PointColor)
-                ) {
-                    DropdownMenuItem(
-                        text = {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text("수입 등록", color = Color.White)
-                            }
-                        },
-                        onClick = {
-                            rootNavHostController.navigate(Screen.IncomeRegistrationScreen.route)
-                            isFabMenuExpanded = false
-                        }
-                    )
-                    HorizontalDivider(color = Color.White)
-                    DropdownMenuItem(
-                        text = {
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text("지출 등록", color = Color.White)
-                            }
-                        },
-                        onClick = {
-                            rootNavHostController.navigate("expense_registration/1")
-                            isFabMenuExpanded = false
-                        }
-                    )
-                }
+                Icon(
+                    imageVector = if (isFabMenuExpanded) Icons.Rounded.Close else Icons.Rounded.Add,
+                    contentDescription = "Add Expense",
+                    modifier = if (isFabMenuExpanded) Modifier.size(43.dp) else Modifier.size(50.dp),
+                    tint = WhiteColor
+                )
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
         bottomBar = {
-            Box( // 상단 모서리 둥글게 처리
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
@@ -180,27 +143,99 @@ fun MainScreen(rootNavHostController: NavHostController) {
             ) {
                 BottomNavigationBar(bottomBarNavController)
             }
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController = bottomBarNavController,
-            startDestination = BottomNavigationItem.Home.route,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(BottomNavigationItem.Home.route) {
-                HomeScreen(rootNavHostController)
+        },
+        content = { innerPadding ->
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (isFabMenuExpanded) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .zIndex(0.5f)
+                            .background(Color.Transparent)
+                            .clickable {
+                                isFabMenuExpanded = false
+                            }
+                    )
+                }
+
+                NavHost(
+                    navController = bottomBarNavController,
+                    startDestination = BottomNavigationItem.Home.route,
+                    modifier = Modifier.padding(innerPadding)
+                ) {
+                    composable(BottomNavigationItem.Home.route) {
+                        HomeScreen(rootNavHostController)
+                    }
+                    composable(BottomNavigationItem.Analysis.route) {
+                        AnalysisScreen(rootNavHostController)
+                    }
+                    composable(BottomNavigationItem.Report.route) {
+                        ReportListScreen(rootNavHostController)
+                    }
+                    composable(BottomNavigationItem.Mypage.route) {
+                        MypageScreen(rootNavHostController)
+                    }
+                }
+
+                if (isFabMenuExpanded) {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .offset(y = (-155).dp)
+                            .zIndex(1f)
+                    ) {
+                        // 수입 등록
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp, vertical = 6.dp)
+                                .width(120.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(PointColor)
+                                .clickable {
+                                    rootNavHostController.navigate(Screen.IncomeRegistrationScreen.route)
+                                    isFabMenuExpanded = false
+                                }
+                                .padding(vertical = 12.dp)
+                        ) {
+                            Text(
+                                text = "수입 등록",
+                                style = Typography.bodyMedium.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 16.sp
+                                ),
+                                color = Color.White,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+
+                        // 지출 등록
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp, vertical = 6.dp)
+                                .width(120.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(PointColor)
+                                .clickable {
+                                    rootNavHostController.navigate("expense_registration/1")
+                                    isFabMenuExpanded = false
+                                }
+                                .padding(vertical = 12.dp)
+                        ) {
+                            Text(
+                                text = "지출 등록",
+                                style = Typography.bodyMedium.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 16.sp
+                                ),
+                                color = Color.White,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    }
+                }
             }
-            composable(BottomNavigationItem.Analysis.route) {
-                AnalysisScreen(rootNavHostController)
-            }
-            composable(BottomNavigationItem.Report.route) {
-                ReportListScreen(rootNavHostController)
-            }
-            composable(BottomNavigationItem.Mypage.route) {
-                MypageScreen(rootNavHostController)
-            }
-        }
-    }
+        },
+    )
 }
 
 @Composable
@@ -212,29 +247,22 @@ private fun HandlePushNavigation(
 
     fun navigateByExtras(intent: Intent) {
         val route = intent.getStringExtra("route") ?: return
-        val month = intent.getStringExtra("month")
 
         // 탭 이동
         when {
             route == "home" -> bottomNavController.navigate(BottomNavigationItem.Home.route)
-
             route == "analysis" -> bottomNavController.navigate(BottomNavigationItem.Analysis.route)
-
             route.startsWith("report_detail/") -> {
                 val extractedMonth = route.removePrefix("report_detail/")
                 bottomNavController.navigate(BottomNavigationItem.Report.route)
-
-                // 약간의 delay 후 상세화면 진입 (선택)
                 rootNavController.navigate(
                     Screen.ReportDetail.createRoute(extractedMonth)
                 )
             }
-
-            else -> bottomNavController.navigate(BottomNavigationItem.Home.route) // fallback
+            else -> bottomNavController.navigate(BottomNavigationItem.Home.route)
         }
 
-        // 중복 처리 방지를 위해 extras 제거
-        intent.replaceExtras(android.os.Bundle())
+        intent.replaceExtras(Bundle())
     }
 
     // 앱이 꺼진 상태에서 시작(콜드스타트)
@@ -249,20 +277,3 @@ private fun HandlePushNavigation(
         onDispose { activity.onNewIntentCallback = null }
     }
 }
-
-
-//@Composable
-//fun Greeting(name: String, modifier: Modifier = Modifier) {
-//    Text(
-//        text = "Hello $name!",
-//        modifier = modifier
-//    )
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    SpenderTheme {
-//        Greeting("Android")
-//    }
-//}
