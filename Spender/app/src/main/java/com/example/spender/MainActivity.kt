@@ -123,7 +123,7 @@ fun MainScreen(rootNavHostController: NavHostController) {
                 Icon(
                     imageVector = if (isFabMenuExpanded) Icons.Filled.Close else Icons.Filled.Add,
                     contentDescription = "Add Expense",
-                    modifier = if (isFabMenuExpanded) Modifier.size(43.dp) else Modifier.size(50.dp),
+                    modifier = if (isFabMenuExpanded) Modifier.size(44.dp) else Modifier.size(50.dp),
                     tint = WhiteColor
                 )
             }
@@ -187,8 +187,8 @@ fun MainScreen(rootNavHostController: NavHostController) {
                         // 수입 등록
                         Box(
                             modifier = Modifier
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
-                                .width(115.dp)
+                                .padding(horizontal = 8.dp, vertical = 6.dp)
+                                .width(120.dp)
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(PointColor)
                                 .clickable {
@@ -201,7 +201,7 @@ fun MainScreen(rootNavHostController: NavHostController) {
                                 text = "수입 등록",
                                 style = Typography.bodyMedium.copy(
                                     fontWeight = FontWeight.SemiBold,
-                                    fontSize = 15.sp
+                                    fontSize = 16.sp
                                 ),
                                 color = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
@@ -211,8 +211,8 @@ fun MainScreen(rootNavHostController: NavHostController) {
                         // 지출 등록
                         Box(
                             modifier = Modifier
-                                .padding(horizontal = 8.dp, vertical = 4.dp)
-                                .width(115.dp)
+                                .padding(horizontal = 8.dp, vertical = 6.dp)
+                                .width(120.dp)
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(PointColor)
                                 .clickable {
@@ -225,7 +225,7 @@ fun MainScreen(rootNavHostController: NavHostController) {
                                 text = "지출 등록",
                                 style = Typography.bodyMedium.copy(
                                     fontWeight = FontWeight.SemiBold,
-                                    fontSize = 15.sp
+                                    fontSize = 16.sp
                                 ),
                                 color = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
