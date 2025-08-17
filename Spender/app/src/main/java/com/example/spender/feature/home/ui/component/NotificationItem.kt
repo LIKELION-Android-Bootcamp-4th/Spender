@@ -22,10 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
-fun NotificationItem(notification: Notification, rootNavController: NavHostController) {
-    val dateText = remember(notification.date) {
-        SimpleDateFormat("M월 d일", Locale.KOREA).format(notification.date)
-    }
+fun NotificationItem(notification: Notification, rootNavController: NavHostController, dateText : String) {
 
     Column(
         modifier = Modifier
@@ -75,7 +72,7 @@ fun NotificationItem(notification: Notification, rootNavController: NavHostContr
             Image(
                 painter = painterResource(id = imageResId),
                 contentDescription = "알림 이미지",
-                modifier = Modifier.size(50.dp),
+                modifier = Modifier.size(40.dp),
                 contentScale = ContentScale.Crop
             )
 
@@ -93,7 +90,7 @@ fun NotificationItem(notification: Notification, rootNavController: NavHostContr
                         softWrap = true
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
 
                     Text(
                         text = dateText,

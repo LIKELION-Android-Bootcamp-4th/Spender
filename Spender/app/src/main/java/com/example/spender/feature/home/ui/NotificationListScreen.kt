@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.spender.core.common.util.getRelativeTimeString
 import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.feature.home.ui.component.NotificationItem
 import com.example.spender.ui.theme.LightFontColor
@@ -62,15 +63,11 @@ fun NotificationListScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(items, key = { it.id }) { n ->
-                        // NotificationItem이 날짜 문자열을 받는다면 아래 주석을 해제해서 전달하세요.
-                        // val dateText = remember(n.date) {
-                        //     SimpleDateFormat("M월 d일", Locale.KOREA).format(n.date)
-                        // }
+
                         NotificationItem(
                             notification = n,
-                            rootNavController = navHostController
-                            // , dateText = dateText
-                            // , onClick = { viewModel.markAsRead(n.id) }  // 읽음 처리 쓰면 추가
+                            rootNavController = navHostController,
+                            dateText = getRelativeTimeString(n.date)
                         )
                     }
                     item {
