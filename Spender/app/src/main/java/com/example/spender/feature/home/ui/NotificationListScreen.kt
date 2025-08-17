@@ -9,17 +9,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.common.util.getRelativeTimeString
 import com.example.spender.core.ui.CustomTopAppBar
+import com.example.spender.core.ui.LoadingScreen
 import com.example.spender.feature.home.ui.component.NotificationItem
 import com.example.spender.ui.theme.LightFontColor
+import com.example.spender.ui.theme.LightReportHighlightColor
 import com.example.spender.ui.theme.Typography
 
 @Composable
@@ -34,9 +38,15 @@ fun NotificationListScreen(
 
     LaunchedEffect(Unit) {
         viewModel.load()
-        viewModel.markAllAsRead()
-        homeViewModel.checkUnreadNotifications()
     }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.markAllAsRead()
+            homeViewModel.checkUnreadNotifications()
+        }
+    }
+
 
     Scaffold(
         topBar = {
@@ -53,17 +63,16 @@ fun NotificationListScreen(
         }
     ) { padding ->
         when {
-            isLoading -> Text("불러오는 중...", Modifier.padding(padding).padding(24.dp))
+            isLoading -> LoadingScreen()
             error != null -> Text("오류: $error", Modifier.padding(padding).padding(24.dp))
             else -> {
                 LazyColumn(
                     modifier = Modifier
                         .padding(padding)
-                        .padding(horizontal = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                        .padding(horizontal = 0.dp),
+                    verticalArrangement = Arrangement.spacedBy(0.dp)
                 ) {
                     items(items, key = { it.id }) { n ->
-
                         NotificationItem(
                             notification = n,
                             rootNavController = navHostController,

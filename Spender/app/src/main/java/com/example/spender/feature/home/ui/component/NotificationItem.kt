@@ -1,6 +1,7 @@
 package com.example.spender.feature.home.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
@@ -8,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -17,44 +19,48 @@ import com.example.spender.R
 import com.example.spender.feature.home.domain.Notification
 import com.example.spender.feature.home.domain.NotificationType
 import com.example.spender.ui.theme.LightFontColor
+import com.example.spender.ui.theme.LightReportHighlightColor
 import com.example.spender.ui.theme.Typography
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
-fun NotificationItem(notification: Notification, rootNavController: NavHostController, dateText : String) {
-
+fun NotificationItem(
+    notification: Notification,
+    rootNavController: NavHostController,
+    dateText: String
+) {
+    val backgroundColor = if (!notification.isRead) LightReportHighlightColor else Color.White
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp)
+            .background(backgroundColor)
+            .padding(vertical = 15.dp, horizontal = 20.dp)
             .clickable {
-                if (notification.route != null) {
-                    when {
-                        notification.route.startsWith("report_detail/") -> {
-                            rootNavController.navigate(
-                                notification.route
-                            )
-                        }
+                when {
+                    notification.route.startsWith("report_detail/") -> {
+                        rootNavController.navigate(
+                            notification.route
+                        )
+                    }
 
-                        notification.route == "analysis" -> {
-                            rootNavController.navigate(
-                                notification.route
-                            )
-                        }
+                    notification.route == "analysis" -> {
+                        rootNavController.navigate(
+                            notification.route
+                        )
+                    }
 
-                        notification.route == "home" -> {
-                            rootNavController.navigate(
-                                notification.route
-                            )
-                        }
+                    notification.route == "home" -> {
+                        rootNavController.navigate(
+                            notification.route
+                        )
+                    }
 
-                        else -> {
-                            // 예외 처리 또는 홈 이동
-                            rootNavController.navigate(
-                                com.example.spender.ui.theme.navigation.BottomNavigationItem.Home.route
-                            )
-                        }
+                    else -> {
+                        // 예외 처리 또는 홈 이동
+                        rootNavController.navigate(
+                            com.example.spender.ui.theme.navigation.BottomNavigationItem.Home.route
+                        )
                     }
                 }
             }
