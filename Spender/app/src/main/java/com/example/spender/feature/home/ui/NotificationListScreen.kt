@@ -24,13 +24,18 @@ import com.example.spender.ui.theme.Typography
 @Composable
 fun NotificationListScreen(
     navHostController: NavHostController,
+    homeViewModel: HomeViewModel,
     viewModel: NotificationListViewModel = hiltViewModel()
 ) {
     val isLoading by viewModel.isLoading
     val items by viewModel.notifications
     val error by viewModel.error
 
-    LaunchedEffect(Unit) { viewModel.load() }
+    LaunchedEffect(Unit) {
+        viewModel.load()
+        viewModel.markAllAsRead()
+        homeViewModel.checkUnreadNotifications()
+    }
 
     Scaffold(
         topBar = {

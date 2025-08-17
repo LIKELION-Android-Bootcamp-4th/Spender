@@ -12,5 +12,6 @@ data class NotificationDto (
     @set:PropertyName("notificationType")
     var type: String = "",
 
-    val route: String = ""
+    val route: String = "",
+    val isRead: Boolean
 )
