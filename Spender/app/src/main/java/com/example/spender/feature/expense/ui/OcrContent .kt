@@ -133,11 +133,22 @@ fun OcrContent(
                 }
             }
             if (uiState.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(64.dp),
-                    color = PointColor,
-                    strokeWidth = 5.dp
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(64.dp),
+                        color = PointColor,
+                        strokeWidth = 5.dp
+                    )
+                    Spacer(Modifier.height(120.dp))
+                    Text(
+                        text = "영수증 인식중...",
+                        style = Typography.titleMedium,
+                        color = PointColor
+                    )
+                }
             }
         }
         Spacer(Modifier.height(12.dp))
