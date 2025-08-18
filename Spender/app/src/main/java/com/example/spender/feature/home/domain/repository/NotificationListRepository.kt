@@ -31,4 +31,20 @@ class NotificationListRepository @Inject constructor(
         }
         items
     }
+
+    suspend fun markAllAsRead(): Result<Unit> = runCatching {
+        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+
+        val snapshot = firestore.collection("users")
+            .document(uid)
+            .collection("notifications")
+            .whereEqualTo("isRead", false)
+            .get()
+            .await()
+
+        snapshot.documents.forEach { doc ->
+            doc.reference.update("isRead", true).await()
+        }
+    }
+
 }

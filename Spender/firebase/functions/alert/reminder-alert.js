@@ -32,30 +32,43 @@ module.exports = functions.pubsub
 
       if (regSnap.empty) continue;
 
-      regSnap.forEach(reDoc => {
-        const re = reDoc.data();
-        const name = re.title || re.name || "정기지출";
+      // 정기지출 title 리스트 수집
+      const titles = regSnap.docs.map(doc => doc.data().title ?? "정기지출");
 
-        // 1) 푸시 전송
-        sendJobs.push(
-          sendDataOnly(token, payloadReminder(name)).catch(err => {
+      // 최대 3개까지만 노출 + 나머지는 요약
+      const MAX_VISIBLE = 3;
+      const visibleTitles = titles.slice(0, MAX_VISIBLE);
+      const hiddenCount = titles.length - visibleTitles.length;
+
+      let titleList = visibleTitles.join(", ");
+      if (hiddenCount > 0) {
+        titleList += ` 외 ${hiddenCount}건`;
+      }
+
+      // 알림 제목/내용 생성
+      const title = `오늘은 정기지출 ${titles.length}건이 있어요`;
+      const content = `오늘 정기지출: ${titleList}`;
+
+      // 1) FCM 발송
+      sendJobs.push(
+        sendDataOnly(token, payloadReminder(title, content)).catch(err => {
             console.error("REMINDER send error", uid, err);
             if (err?.errorInfo?.code === "messaging/registration-token-not-registered") {
-              return userDoc.ref.update({ fcmToken: admin.firestore.FieldValue.delete() });
+             return userDoc.ref.update({ fcmToken: admin.firestore.FieldValue.delete() });
             }
-          })
-        );
+        })
+      );
 
-        // 2) 알림 문서 저장 (모아보기 + TTL)
-        saveJobs.push(
-          addNotification(uid, {
-            type: "REMINDER_ALERT",
-            title: `오늘은 ${name} 정기지출이 있는 날이에요!`,
-            content: "정기지출 내역을 확인해보세요.",
-            extra: { route: "stats", regularExpenseName: name }
-          }).catch(err => console.error("REMINDER save error", uid, err))
-        );
-      });
+      // 2) 알림 저장
+      saveJobs.push(
+       addNotification(uid, {
+         type: "REMINDER_ALERT",
+         title,
+         content,
+         isRead: false,
+         extra: { route: "analysis" }
+       }).catch(err => console.error("REMINDER save error", uid, err))
+     );
     }
 
     await Promise.allSettled(sendJobs);

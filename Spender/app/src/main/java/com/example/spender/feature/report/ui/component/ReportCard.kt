@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.core.common.util.formatToManWon
 import com.example.spender.feature.report.domain.model.Report
+import com.example.spender.ui.theme.DarkReportHighlightColor
+import com.example.spender.ui.theme.LightReportHighlightColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
@@ -116,8 +119,13 @@ fun ReportSummaryCardHorizontal(
 //    val borderStroke = if (isHighlighted) BorderStroke(0.dp, LightPointColor) else null
 //    val elevation = if (isHighlighted) 60.dp else 2.dp
 
+    val isDark = isSystemInDarkTheme()
+
     val backgroundColor by animateColorAsState(
-        if (isHighlighted) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+        if (isHighlighted) {
+            if(isDark) DarkReportHighlightColor else LightReportHighlightColor
+        }
+            else MaterialTheme.colorScheme.surface
     )
     // CFE0F9
     // D8E6FB

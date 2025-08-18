@@ -7,7 +7,9 @@ data class Notification(
     val title: String,
     val content: String,
     val date: Date,
-    val type: NotificationType
+    val type: NotificationType,
+    val route: String,
+    val isRead: Boolean
 )
 
 enum class NotificationType {

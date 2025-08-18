@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -75,7 +76,7 @@ fun SpenderNavigation(
         }
 
         composable(Screen.NotificationListScreen.route) {
-            NotificationListScreen(navController)
+            NotificationListScreen(navHostController = navController, homeViewModel = hiltViewModel())
         }
 
         composable(Screen.ReportDetail.route) { backStackEntry ->
@@ -104,10 +105,12 @@ fun SpenderNavigation(
         }
         composable(
             Screen.ExpenseRegistrationScreen.route,
-            listOf(navArgument("selectedTabIndex") {
-                type = NavType.IntType
-                defaultValue = 1
-            },),
+            listOf(
+                navArgument("selectedTabIndex") {
+                    type = NavType.IntType
+                    defaultValue = 1
+                },
+            ),
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "spender://expense_registration"
