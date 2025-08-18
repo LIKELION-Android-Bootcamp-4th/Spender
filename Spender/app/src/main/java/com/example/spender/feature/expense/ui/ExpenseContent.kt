@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -122,7 +123,6 @@ fun ExpenseContent(
             )
         }
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -140,7 +140,7 @@ fun ExpenseContent(
                     Text(
                         "지출을 입력하세요",
                         fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onTertiary
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                 },
                 trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
@@ -169,7 +169,7 @@ fun ExpenseContent(
                     Text(
                         "지출 내용을 입력하세요",
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onTertiary
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                 },
                 singleLine = true,

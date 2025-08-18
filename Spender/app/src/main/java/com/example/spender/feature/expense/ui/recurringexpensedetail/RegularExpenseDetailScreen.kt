@@ -249,7 +249,7 @@ fun RecurringExpenseDetailScreen(
                         Text(
                             "지출을 입력하세요",
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onTertiary
+                            color = MaterialTheme.colorScheme.tertiary
                         )
                     },
                     trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
@@ -279,7 +279,7 @@ fun RecurringExpenseDetailScreen(
                         Text(
                             "정기지출 내용을 입력하세요",
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onTertiary
+                            color = MaterialTheme.colorScheme.tertiary
                         )
                     },
                     singleLine = true,

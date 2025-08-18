@@ -104,10 +104,10 @@ private fun NotificationSettingRow(
             colors = SwitchDefaults.colors(
                 uncheckedThumbColor = Color.White, // 오프 동그라미 색
                 uncheckedTrackColor = Color(0xFFD9D9D9), // 오프 배경 색
-                uncheckedBorderColor = MaterialTheme.colorScheme.tertiary,
+                uncheckedBorderColor = MaterialTheme.colorScheme.background,
                 checkedThumbColor = Color.White,   // 온 동그라미 색
                 checkedTrackColor = PointColor,   // 온 배경
-                checkedBorderColor = MaterialTheme.colorScheme.tertiary,
+                checkedBorderColor = MaterialTheme.colorScheme.background,
             ),
             modifier = Modifier.scale(1.2f),
             thumbContent = {

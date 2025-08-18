@@ -231,7 +231,7 @@ fun IncomeDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 40.dp, vertical = 16.dp),
-                    placeholder = { Text("수입을 입력하세요", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
+                    placeholder = { Text("수입을 입력하세요", fontSize = 14.sp, color = MaterialTheme.colorScheme.tertiary) },
                     trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = NumberCommaTransformation(),
@@ -254,7 +254,7 @@ fun IncomeDetailScreen(
                     value = uiState.title,
                     onValueChange = {viewModel.onTitleChange(it)},
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("수입 내용을 입력하세요", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
+                    placeholder = { Text("수입 내용을 입력하세요", fontSize = 16.sp, color = MaterialTheme.colorScheme.tertiary) },
                     singleLine = true,
                     textStyle = TextStyle(fontSize = 18.sp),
                     colors = TextFieldDefaults.colors(
