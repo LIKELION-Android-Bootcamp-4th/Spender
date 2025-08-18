@@ -76,7 +76,7 @@ fun AuthScreen(navController: NavHostController) {
                     tint = Color.Unspecified,
                     modifier = Modifier.size(screenWidth * 0.8f),
                 )
-                Spacer(Modifier.height(72.dp))
+                Spacer(Modifier.weight(1f))
                 GoogleLogin(navController)
                 Spacer(Modifier.height(24.dp))
                 NaverLogin(navController)
