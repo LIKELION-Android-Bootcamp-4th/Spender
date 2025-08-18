@@ -5,10 +5,12 @@ import com.example.spender.feature.expense.data.remote.OcrResponse
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Url
 
 interface OcrApiService {
-    @POST("custom/v1/45107/dbd70982eab31f5fe9359fc9eca09ff78dc4112aab8ce4beaf993016e30b6325/document/receipt")
+    @POST
     suspend fun analyzeReceipt(
+        @Url url: String,
         @Header("X-OCR-SECRET") secretKey: String,
         @Body request: OcrRequest
     ): OcrResponse

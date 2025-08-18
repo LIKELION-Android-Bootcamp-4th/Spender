@@ -14,4 +14,5 @@ data class ExpenseDetailUiState(
     val categoryName: String = "",
     val isDatePickerDialogVisible: Boolean = false,
     val emotions: List<Emotion> = emptyList(),
+    val imageUrl: String? = null,
 )

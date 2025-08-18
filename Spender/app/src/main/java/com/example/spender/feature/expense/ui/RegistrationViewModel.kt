@@ -1,5 +1,6 @@
 package com.example.spender.feature.expense.ui
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spender.core.data.service.getFirebaseAuth
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import android.util.Base64
 import android.util.Log
 import java.util.*
@@ -26,6 +28,8 @@ import com.example.spender.BuildConfig
 import com.example.spender.core.data.service.OcrApiService
 import com.example.spender.feature.expense.data.remote.OcrImageRequest
 import com.example.spender.feature.expense.data.remote.OcrRequest
+import com.google.firebase.Firebase
+import com.google.firebase.storage.storage
 import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -113,7 +117,6 @@ class RegistrationViewModel @Inject constructor(
     fun onRepeatSheetVisibilityChange(isVisible: Boolean) {
         _uiState.update { it.copy(isRepeatSheetVisible = isVisible) }
     }
-
     fun onRegisterClick() {
         viewModelScope.launch {
             when (_uiState.value.selectedTabIndex) {
@@ -122,14 +125,28 @@ class RegistrationViewModel @Inject constructor(
             }
         }
     }
+    fun onImageSelected(uri: Uri) {
+        _uiState.update { it.copy(selectedImageUri = uri) }
+    }
     //지출등록
     private suspend fun registerExpense() {
+        _uiState.update { it.copy(isUploading = true) }
         val userId = getFirebaseAuth() ?: return
         val currentState = _uiState.value
+        var imageUrl: String? = null
 
         if (currentState.amount.isBlank() || currentState.categoryId.isBlank()) {
             _eventFlow.emit(RegistrationEvent.ShowToast("금액과 카테고리는 필수 항목입니다."))
             return
+        }
+
+        if (currentState.selectedImageUri != null) {
+            imageUrl = uploadImageToStorage(userId, currentState.selectedImageUri)
+            if (imageUrl == null) {
+                _eventFlow.emit(RegistrationEvent.ShowToast("이미지 업로드에 실패했습니다."))
+                _uiState.update { it.copy(isUploading = false) }
+                return
+            }
         }
 
         val expenseDto = ExpenseDto(
@@ -138,7 +155,8 @@ class RegistrationViewModel @Inject constructor(
             memo = currentState.memo,
             date = Timestamp(currentState.date),
             categoryId = currentState.categoryId,
-            emotion = currentState.selectedEmotion?.id ?: emotionsList.first().id
+            emotion = currentState.selectedEmotion?.id ?: emotionsList.first().id,
+            imageUrl = imageUrl ?: ""
         )
 
         val isSuccess = expenseRepository.addExpense(userId, expenseDto)
@@ -149,6 +167,7 @@ class RegistrationViewModel @Inject constructor(
         } else {
             _eventFlow.emit(RegistrationEvent.ShowToast("저장에 실패했습니다."))
         }
+        _uiState.update { it.copy(isUploading = false) }
     }
 
     private suspend fun registerRecurringExpense() {
@@ -179,6 +198,19 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
+    private suspend fun uploadImageToStorage(userId: String, uri: Uri): String? {
+        return try {
+            val storageRef = Firebase.storage.reference
+            val imageRef = storageRef.child("expenses/${userId}/${System.currentTimeMillis()}.jpg")
+
+            imageRef.putFile(uri).await()
+            imageRef.downloadUrl.await().toString()
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+
     // 지출등록 후 필드 초기화
     private fun clearInputs() {
         _uiState.update {
@@ -188,7 +220,8 @@ class RegistrationViewModel @Inject constructor(
                 memo = "",
                 category = "카테고리 선택",
                 categoryId = "",
-                selectedEmotion = emotionsList.first()
+                selectedEmotion = emotionsList.first(),
+                selectedImageUri = null
             )
         }
     }
@@ -204,6 +237,7 @@ class RegistrationViewModel @Inject constructor(
                 )
 
                 val response = ocrApiService.analyzeReceipt(
+                    url = BuildConfig.NAVER_OCR_API_URL,
                     secretKey = BuildConfig.NAVER_OCR_CLIENT_SECRET,
                     request = request
                 )

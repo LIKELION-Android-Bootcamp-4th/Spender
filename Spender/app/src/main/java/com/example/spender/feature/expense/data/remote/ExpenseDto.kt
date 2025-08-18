@@ -10,5 +10,6 @@ data class ExpenseDto(
     val date: Timestamp = Timestamp.now(),
     val categoryId: String = "",
     val emotion: String = "",
+    val imageUrl: String? = null,
     val createdAt: FieldValue = FieldValue.serverTimestamp()
 )
