@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,6 +31,9 @@ import com.example.spender.ui.theme.WhiteColor
 fun AuthScreen(navController: NavHostController) {
     val viewModel: AuthViewModel = hiltViewModel()
     val isLoading by viewModel.isLoading
+
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
 
     Box(
         modifier = Modifier
@@ -49,7 +53,7 @@ fun AuthScreen(navController: NavHostController) {
                     painter = painterResource(id = R.drawable.auth_image),
                     contentDescription = null,
                     tint = Color.Unspecified,
-                    modifier = Modifier.size(400.dp),
+                    modifier = Modifier.size(screenWidth * 0.8f),
                 )
                 Spacer(Modifier.height(88.dp))
                 GoogleLogin(navController)
