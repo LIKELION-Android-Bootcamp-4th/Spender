@@ -104,7 +104,6 @@ suspend fun getExpenseListForHome(): List<ExpenseDto> {
         }
         expenses
     } catch (e: Exception) {
-        Log.e("Home / RecentExpenses", "Expense list error: ${e.message}")
         emptyList()
     }
 }

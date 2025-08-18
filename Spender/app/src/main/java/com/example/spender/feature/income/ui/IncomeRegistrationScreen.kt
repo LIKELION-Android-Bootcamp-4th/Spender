@@ -363,12 +363,3 @@ fun IncomeRegistrationScreen(
 
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun IncomeRegistrationScreenPreview() {
-//    SpenderTheme {
-//        IncomeRegistrationScreen()
-//    }
-//}

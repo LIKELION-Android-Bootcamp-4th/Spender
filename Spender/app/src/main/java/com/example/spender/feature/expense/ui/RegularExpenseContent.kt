@@ -366,9 +366,3 @@ fun RepeatDaySelectionSheet(onDaySelected: (Int) -> Unit) {
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun RecurringExpenseRegistrationScreenPreview() {
-//    RecurringExpenseRegistrationScreen()
-//}

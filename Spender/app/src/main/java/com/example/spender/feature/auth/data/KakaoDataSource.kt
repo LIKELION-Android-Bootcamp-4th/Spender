@@ -13,7 +13,6 @@ class KakaoDataSource @Inject constructor() {
     suspend fun signIn(context: Context): String = suspendCancellableCoroutine { cont ->
         UserApiClient.instance.loginWithKakaoAccount(context) { token, error ->
             if (error != null) {
-                Log.e("Login", "Kakao SignIn Error! ${error.message}", error)
                 cont.resumeWithException(error)
             } else if (token != null) {
                 cont.resume(token.accessToken, null)

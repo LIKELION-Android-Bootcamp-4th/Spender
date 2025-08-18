@@ -213,11 +213,3 @@ private fun createTempImageUri(context: Context): Uri {
     val tempFile = File(context.cacheDir, "temp_receipt.jpg")
     return FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.provider", tempFile)
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun OcrRegistrationScreenPreview() {
-//    SpenderTheme {
-//        OcrRegistrationScreen()
-//    }
-//}

@@ -175,7 +175,6 @@ class AuthViewModel @Inject constructor(
                 authRepository.withdrawUser(context)
                 onSuccess()
             } catch (e: Exception) {
-                Log.e("Withdraw", "Unlink Failed", e)
                 onError(e.message ?: "error")
             }
         }
@@ -194,7 +193,6 @@ class AuthViewModel @Inject constructor(
 
             !snapshot.isEmpty
         } catch (e: Exception) {
-            Log.e("Firestore", "Error checking budgets collection", e)
             false
         }
     }
