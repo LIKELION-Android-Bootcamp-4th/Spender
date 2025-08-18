@@ -74,7 +74,9 @@ class IncomeDetailViewModel @Inject constructor(
     }
 
     fun onAmountChange(amount: String) {
-        _uiState.update { it.copy(amount = amount.filter { c -> c.isDigit() }) }
+        if (amount.length <= 10) {
+            _uiState.update { it.copy(amount = amount.filter { char -> char.isDigit() }) }
+        }
     }
 
     fun onTitleChange(title: String) {
