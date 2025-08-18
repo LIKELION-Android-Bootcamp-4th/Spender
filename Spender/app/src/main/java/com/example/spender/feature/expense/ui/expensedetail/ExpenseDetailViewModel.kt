@@ -121,32 +121,16 @@ class ExpenseDetailViewModel @Inject constructor(
         timestamp ?: return
         _uiState.update { it.copy(date = Date(timestamp)) }
     }
+
     fun onImageSelected(uri: Uri) {
         _uiState.update { it.copy(imageUrl = uri.toString()) }
     }
 
-//    fun updateExpense() {
-//        viewModelScope.launch {
-//            val userId = getFirebaseAuth() ?: return@launch
-//            val currentState = _uiState.value
-//
-//            val expenseDto = ExpenseDto(
-//                amount = currentState.amount.toLongOrNull() ?: 0L,
-//                title = currentState.title,
-//                memo = currentState.memo,
-//                date = Timestamp(currentState.date),
-//                categoryId = currentState.categoryId,
-//                emotion = currentState.selectedEmotion?.id ?: ""
-//            )
-//
-//            if (expenseRepository.updateExpense(userId, expenseId, expenseDto)) {
-//                _eventFlow.emit(RegistrationEvent.ShowToast("수정되었습니다"))
-//                _eventFlow.emit(RegistrationEvent.NavigateBack)
-//            } else {
-//                _eventFlow.emit(RegistrationEvent.ShowToast("수정에 실패했습니다."))
-//            }
-//        }
-//    }
+    fun onImageSelectionCancelled() {
+        _uiState.update { it.copy(imageUrl = null) }
+    }
+
+
 fun updateExpense() {
     viewModelScope.launch {
         val userId = getFirebaseAuth() ?: return@launch

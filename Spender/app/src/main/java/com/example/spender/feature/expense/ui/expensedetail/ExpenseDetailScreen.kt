@@ -4,6 +4,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,12 +21,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
@@ -33,6 +35,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -56,7 +59,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -71,9 +73,11 @@ import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.feature.expense.ui.EmotionTagGroup
 import com.example.spender.feature.expense.ui.NumberCommaTransformation
 import com.example.spender.feature.expense.ui.RegistrationEvent
+import com.example.spender.ui.theme.BlackColor
 import com.example.spender.ui.theme.LightPointColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import com.example.spender.ui.theme.WhiteColor
 import com.example.spender.ui.theme.navigation.Screen
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -118,7 +122,6 @@ fun ExpenseDetailScreen(
         }
     }
 
-    //바텀시트
     if (isSheetOpen) {
         ModalBottomSheet(
             onDismissRequest = { isSheetOpen = false },
@@ -165,7 +168,6 @@ fun ExpenseDetailScreen(
         }
     }
 
-    //날짜 선택 다이얼로그
     if (uiState.isDatePickerDialogVisible) {
         DatePickerDialog(
             onDismissRequest = { viewModel.onDateDialogVisibilityChange(false) },
@@ -233,7 +235,7 @@ fun ExpenseDetailScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                //지출 내용
+
                 TextField(
                     value = uiState.title,
                     onValueChange = { viewModel.onTitleChange(it) },
@@ -261,7 +263,6 @@ fun ExpenseDetailScreen(
             HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                // 금액 입력
                 TextField(
                     value = uiState.amount,
                     onValueChange = { viewModel.onAmountChange(it) },
@@ -291,7 +292,6 @@ fun ExpenseDetailScreen(
 
             HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
-            // 카테고리
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -352,7 +352,6 @@ fun ExpenseDetailScreen(
             }
             HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
-            // 감정 태그
             Column(modifier = Modifier.padding(horizontal = 34.dp, vertical = 24.dp)) {
                 Text(
                     "감정 태그",
@@ -368,7 +367,6 @@ fun ExpenseDetailScreen(
 
             HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
 
-            // 메모
             Column(modifier = Modifier.padding(horizontal = 34.dp, vertical = 24.dp)) {
                 Text(
                     "메모",
@@ -411,20 +409,40 @@ fun ExpenseDetailScreen(
                 Spacer(Modifier.height(16.dp))
 
                 if (uiState.imageUrl != null) {
-                    AsyncImage(
-                        model = uiState.imageUrl,
-                        contentDescription = "첨부된 사진",
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(300.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .clickable { galleryLauncher.launch("image/*") },
-                    )
+                            .height(240.dp)
+                    ) {
+                        AsyncImage(
+                            model = uiState.imageUrl,
+                            contentDescription = "첨부된 사진",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp))
+                                .clickable { galleryLauncher.launch("image/*") },
+                        )
+                        IconButton(
+                            onClick = { viewModel.onImageSelectionCancelled() },
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(8.dp)
+                                .size(32.dp)
+                                .background(BlackColor.copy(alpha = 0.5f), CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "사진 선택 취소",
+                                tint = WhiteColor,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
                 } else {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(80.dp)
+                            .height(240.dp)
                             .border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.outline,

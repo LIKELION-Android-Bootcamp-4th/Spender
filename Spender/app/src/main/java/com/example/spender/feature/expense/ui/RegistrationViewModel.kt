@@ -113,12 +113,23 @@ class RegistrationViewModel @Inject constructor(
     fun onOcrDialogVisibilityChange(isVisible: Boolean) {
         _uiState.update { it.copy(isOcrDialogVisible = isVisible) }
     }
+
     fun onRepeatDaySelected(day: Int) {
         _uiState.update { it.copy(dayOfMonth = day) }
     }
+
     fun onRepeatSheetVisibilityChange(isVisible: Boolean) {
         _uiState.update { it.copy(isRepeatSheetVisible = isVisible) }
     }
+
+    fun onImageSelected(uri: Uri) {
+        _uiState.update { it.copy(selectedImageUri = uri) }
+    }
+
+    fun onImageSelectionCancelled() {
+        _uiState.update { it.copy(selectedImageUri = null) }
+    }
+
     fun onRegisterClick() {
         viewModelScope.launch {
             when (_uiState.value.selectedTabIndex) {
@@ -127,9 +138,7 @@ class RegistrationViewModel @Inject constructor(
             }
         }
     }
-    fun onImageSelected(uri: Uri) {
-        _uiState.update { it.copy(selectedImageUri = uri) }
-    }
+
     //지출등록
     private suspend fun registerExpense() {
         _uiState.update { it.copy(isUploading = true) }
@@ -143,6 +152,7 @@ class RegistrationViewModel @Inject constructor(
         }
 
         if (currentState.selectedImageUri != null) {
+            _eventFlow.emit(RegistrationEvent.ShowToast("이미지 업로드 중..."))
             imageUrl = uploadImageToStorage(userId, currentState.selectedImageUri)
             if (imageUrl == null) {
                 _eventFlow.emit(RegistrationEvent.ShowToast("이미지 업로드에 실패했습니다."))
