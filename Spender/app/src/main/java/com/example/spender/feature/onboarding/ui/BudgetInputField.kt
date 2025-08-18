@@ -70,7 +70,8 @@ fun BudgetInputField(
             Spacer(Modifier.width(8.dp))
             Text(
                 "원",
-                style = Typography.titleLarge
+                style = Typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
 

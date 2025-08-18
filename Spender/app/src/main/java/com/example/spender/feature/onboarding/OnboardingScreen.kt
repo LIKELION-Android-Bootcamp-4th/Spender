@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -81,6 +82,7 @@ fun OnboardingScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 24.dp, vertical = 32.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -92,13 +94,14 @@ fun OnboardingScreen(
             Text(
                 text = titles[currentPage],
                 style = Typography.titleLarge,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             if (currentPage == 0) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "똑똑한 소비 습관을 만들기 위해 \n지출이는 아래와 같이 도와줘요!",
+                    text = "똑똑한 소비 습관을 만들기 위해 \n지출이는 아래와 같이 도와줄 거예요!",
                     style = Typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onTertiary,
                     textAlign = TextAlign.Center
