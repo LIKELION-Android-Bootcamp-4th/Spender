@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.spender.ui.theme.LightFontColor
+import com.example.spender.ui.theme.LightGray
 
 @Composable
 fun Section(
@@ -17,9 +19,8 @@ fun Section(
     items: List<MyPageItemType>,
     onItemClick: (MyPageItemType) -> Unit
 ) {
-    Column(modifier = Modifier.padding(vertical = 12.dp, horizontal = 30.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 30.dp).padding(top = 20.dp)) {
         Text(title, color = MaterialTheme.colorScheme.onTertiary, style = MaterialTheme.typography.titleSmall, fontSize = 16.sp)
-        Spacer(modifier = Modifier.height(10.dp))
         items.forEach { item ->
             MyPageItem(item = item, onClick = { onItemClick(item) })
         }
