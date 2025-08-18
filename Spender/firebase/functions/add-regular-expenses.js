@@ -10,8 +10,8 @@ module.exports = functions.pubsub
         const usersSnap = await db.collection('users').get();
 
         const today = new Date();
-        const todayDay = today.getDate();
         today.setHours(0, 0, 0, 0);
+        const todayDay = today.getDate() + 1;
 
         for (const userDoc of usersSnap.docs) {
             const userId = userDoc.id;
@@ -20,7 +20,7 @@ module.exports = functions.pubsub
             for (const regularDoc of regularSnap.docs) {
                 const data = regularDoc.data();
 
-                if (data.day === todayDay) {
+                if (data.day == todayDay) {
                     await db.collection(`users/${userId}/expenses`).add({
                         date: admin.firestore.FieldValue.serverTimestamp(),
                         createdAt: admin.firestore.FieldValue.serverTimestamp(),
