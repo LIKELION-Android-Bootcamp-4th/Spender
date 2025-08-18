@@ -2,7 +2,6 @@ package com.example.spender.feature.report.ui.list
 
 import android.graphics.Canvas
 import android.graphics.RectF
-import android.util.Log
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -51,7 +50,7 @@ fun ReportListScreen(
     LaunchedEffect(year) {
         FirebaseAuth.getInstance().currentUser?.let {
             viewModel.loadReports(year)
-        } ?: Log.w("ReportScreen", "사용자 정보 없음")
+        }
     }
 
     Scaffold(

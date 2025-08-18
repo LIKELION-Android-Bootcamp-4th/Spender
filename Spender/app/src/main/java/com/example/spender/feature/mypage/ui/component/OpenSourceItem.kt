@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.glance.text.FontWeight
 import com.example.spender.feature.mypage.domain.model.OpenSourceLicense
 import com.example.spender.ui.theme.Typography
 

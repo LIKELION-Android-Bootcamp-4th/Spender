@@ -29,7 +29,6 @@ import com.example.spender.feature.mypage.ui.viewmodel.NotificationSettingsViewM
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationScreen(
     navHostController: NavHostController,

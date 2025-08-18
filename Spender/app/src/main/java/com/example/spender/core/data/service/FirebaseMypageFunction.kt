@@ -1,6 +1,5 @@
 package com.example.spender.core.data.service
 
-import android.util.Log
 import com.example.spender.core.data.remote.category.CategoryDto
 import com.example.spender.core.data.remote.category.CategoryType
 import com.example.spender.core.data.remote.expense.ExpenseDto
@@ -34,7 +33,6 @@ fun getOutcomeCategories(): MutableList<CategoryDto> {
             }
         }
     } catch (e: Exception) {
-        Log.d("Mypage / Categories", "categories list error")
     }
 
     return categories
@@ -62,7 +60,6 @@ fun getIncomeCategories(): MutableList<CategoryDto> {
             }
         }
     } catch (e: Exception) {
-        Log.d("Mypage / Categories", "categories list error")
     }
 
     return categories
@@ -91,7 +88,6 @@ fun getRegularExpense(): MutableList<RegularExpenseDto> {
             }
         }
     } catch (e: Exception) {
-        Log.d("Mypage / RegularExpense", "regular expense list error")
     }
 
     return regularExpenses
@@ -107,7 +103,6 @@ fun setRegularExpense(regularExpense: RegularExpenseDto) {
         val ref = getFirebaseRef().document(uid!!).collection("regular_expenses").document()
         ref.set(regularExpense)
     } catch (e: Exception) {
-        Log.d("Mypage / new RegularExpense", "new regular expense error")
     }
 }
 
@@ -120,7 +115,6 @@ fun setExpense(expenseDto: ExpenseDto) {
         val ref = getFirebaseRef().document(uid!!).collection("expenses").document()
         ref.set(expenseDto)
     } catch (e: Exception) {
-        Log.d("Mypage / new Expense", "new expense error")
     }
 }
 
@@ -140,7 +134,6 @@ fun setIncome(incomeDto: ExpenseDto) {
         )
         ref.set(income)
     } catch (e: Exception) {
-        Log.d("Mypage / new Income", "new income error")
     }
 }
 
@@ -151,7 +144,6 @@ fun setCategory(category: CategoryDto) {
         val ref = getFirebaseRef().document(uid!!).collection("categories").document()
         ref.set(category)
     } catch (e: Exception) {
-        Log.d("Mypage / new category", "new category error")
     }
 }
 
@@ -167,7 +159,6 @@ fun setUserBudget(budget: Int) {
         )
         ref.set(budgetInfo)
     } catch (e: Exception) {
-        Log.d("Onboarding / Budget", "budget set incomplete - is uid available?")
     }
 }
 
@@ -179,7 +170,6 @@ fun editRegularExpense(regularExpense: RegularExpenseDto, id: String) {
         val ref = getFirebaseRef().document(uid!!).collection("regular_expenses").document(id)
         ref.set(regularExpense)
     } catch (e: Exception) {
-        Log.d("Mypage / edit RegularExpense", "edit regular expense error")
     }
 }
 
@@ -190,7 +180,6 @@ fun editExpense(expense: ExpenseDto, id: String) {
         val ref = getFirebaseRef().document(uid!!).collection("expenses").document(id)
         ref.set(expense)
     } catch (e: Exception) {
-        Log.d("Mypage / edit Expense", "edit expense error")
     }
 }
 
@@ -209,7 +198,6 @@ fun editIncome(incomeDto: ExpenseDto, id: String) {
         )
         ref.set(income)
     } catch (e: Exception) {
-        Log.d("Mypage / edit Income", "edit income error")
     }
 }
 
@@ -220,6 +208,5 @@ fun editCategory(category: CategoryDto, id: String) {
         val ref = getFirebaseRef().document(uid!!).collection("categories").document(id)
         ref.set(category)
     } catch (e: Exception) {
-        Log.d("Mypage / edit category", "edit category error")
     }
 }

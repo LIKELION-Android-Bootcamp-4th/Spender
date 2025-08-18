@@ -15,7 +15,6 @@ class IncomeRepository @Inject constructor() {
             usersCollection.document(userId).collection("incomes").add(income).await()
             true
         } catch (e: Exception) {
-            Log.w("Firestore", "수입 등록 실패", e)
             false
         }
     }

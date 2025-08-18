@@ -16,11 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.spender.core.common.util.toCurrency
 import com.example.spender.feature.report.ui.model.CategoryUiModel
-import com.example.spender.ui.theme.LightFontColor
 import com.example.spender.ui.theme.Typography
 
 @Composable

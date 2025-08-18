@@ -1,7 +1,7 @@
 package com.example.spender.feature.income.data.remote
 
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 
 data class IncomeDto(
     val amount: Long = 0,

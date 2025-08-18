@@ -1,6 +1,5 @@
 package com.example.spender.feature.expense.domain.model
 
-import com.google.firebase.firestore.PropertyName
 import java.util.Date
 
 data class RegularExpense(

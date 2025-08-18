@@ -36,7 +36,6 @@ sealed class Screen(val route: String) {
     object RegularExpenseScreen : Screen("regular_expense")
     object NotificationScreen : Screen("notification")
     object OpenSourceScreen: Screen("open_source")
-//    object ExpenseRegistrationScreen : Screen("expense_registration")
     object IncomeRegistrationScreen : Screen("income_registration")
 
 }

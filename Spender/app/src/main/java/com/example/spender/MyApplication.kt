@@ -28,10 +28,9 @@ class MyApplication : Application() {
     }
 
     private fun setupShortcuts(context: Context) {
-        // 지출 등록으로 바로 가는 단축키 (딥링크: spender://expense_registration)
         val expenseShortcut = ShortcutInfoCompat.Builder(context, "shortcut_expense_add_dynamic")
-            .setShortLabel(context.getString(R.string.shortcut_expense_short)) // "지출 등록"
-            .setLongLabel(context.getString(R.string.shortcut_expense_long))   // "지출을 바로 등록합니다."
+            .setShortLabel(context.getString(R.string.shortcut_expense_short))
+            .setLongLabel(context.getString(R.string.shortcut_expense_long))
             .setIcon(IconCompat.createWithResource(context, R.drawable.spender_happy))
             .setIntent(
                 Intent(
@@ -41,10 +40,6 @@ class MyApplication : Application() {
             )
             .build()
 
-        // 정의한 목록으로 교체(덮어쓰기). 필요하면 여러 개 넣어도 됨.
         ShortcutManagerCompat.setDynamicShortcuts(context, listOf(expenseShortcut))
-
-        // (옵션) 이후 상황에 따라 갱신하고 싶을 땐 setDynamicShortcuts/disableShortcuts 등을 적절히 재호출
-        // 주의: OS 쿼터(보통 24h 내 10회) 있으니 잦은 업데이트는 피하기
     }
 }

@@ -1,13 +1,11 @@
 package com.example.spender.feature.auth.domain
 
 import android.content.Context
-import android.util.Log
 import com.example.spender.core.data.remote.auth.LoginType
-import com.example.spender.core.data.service.getFirebaseRef
 import com.example.spender.feature.auth.data.AuthPrefs
 import com.example.spender.feature.auth.data.FirebaseAuthDataSource
-import com.example.spender.feature.auth.data.NaverDataSource
 import com.example.spender.feature.auth.data.KakaoDataSource
+import com.example.spender.feature.auth.data.NaverDataSource
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -29,13 +27,11 @@ class AuthRepository @Inject constructor(
 
     suspend fun naverLogin(context: Context) {
         val accessToken = naverDataSource.signIn(context)
-        Log.d("Login", "naver token : $accessToken")
         signInWithCustomToken("naverCustomAuth", accessToken)
     }
 
     suspend fun kakaoLogin(context: Context) {
         val accessToken = kakaoDataSource.signIn(context)
-        Log.d("Login", "kakao token : $accessToken")
         signInWithCustomToken("kakaoCustomAuth", accessToken)
     }
 
@@ -43,12 +39,9 @@ class AuthRepository @Inject constructor(
         val result = firebaseAuthDataSource.requestCustomToken(functionName, accessToken).await()
         val customToken = (result.data as Map<*, *>)["token"] as String
 
-        Log.d("Login", "signInWithCustomToken token : $customToken")
         try {
             val authResult = firebaseAuthDataSource.signInWithCustomToken(customToken).await()
-            Log.d("Login", "signInWithCustomToken success: ${authResult.user?.uid}")
         } catch (e: Exception) {
-            Log.e("Login", "signInWithCustomToken failed", e)
             throw e
         }
     }
@@ -58,16 +51,13 @@ class AuthRepository @Inject constructor(
             LoginType.KAKAO -> {
                 UserApiClient.instance.logout { error ->
                     if (error != null) {
-                        Log.e("Logout", "Kakao Logout failed", error)
                     } else {
-                        Log.d("Logout", "Kakao Logout success!")
                     }
                 }
             }
 
             LoginType.NAVER -> {
                 NaverIdLoginSDK.logout()
-                Log.d("Logout", "Naver Logout success!")
             }
 
             LoginType.GOOGLE -> {
@@ -75,12 +65,10 @@ class AuthRepository @Inject constructor(
                     context,
                     GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
                 ).signOut().addOnCompleteListener {
-                    Log.d("Logout", "Google Logout success!")
                 }
             }
 
             else -> {
-                Log.d("Logout", "No login type found")
             }
         }
 
@@ -97,7 +85,6 @@ class AuthRepository @Inject constructor(
 
         try {
             user.delete().await()
-            Log.d("Withdraw", "Firebase user deleted")
         } catch (e: FirebaseAuthRecentLoginRequiredException) {
             throw Exception("재인증이 필요합니다.")
         }
@@ -106,9 +93,7 @@ class AuthRepository @Inject constructor(
             LoginType.KAKAO -> {
                 UserApiClient.instance.unlink { error ->
                     if (error != null) {
-                        Log.e("Withdraw", "Kakao Unlink Failed", error)
                     } else {
-                        Log.d("Withdraw", "Kakao Unlink Success!")
                     }
                 }
             }

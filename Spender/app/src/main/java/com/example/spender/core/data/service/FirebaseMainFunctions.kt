@@ -18,10 +18,8 @@ suspend fun getTotalExpense(): Int {
         for (doc in document.documents) {
             total += doc.data?.get("amount")?.toString()?.toInt() ?: 0
         }
-        Log.d("Home", "TotalBudget: $total")
         total
     } catch (e: Exception) {
-        Log.e("Home / TotalBudget", "total budget error: ${e.message}")
         0
     }
 }
@@ -69,19 +67,14 @@ suspend fun getExpenseRate(): Float {
             expense += doc.data["amount"].toString().toInt()
         }
 
-        Log.d("Home", "getExpenseRate expense: $expense")
-        Log.d("Home", "getExpenseRate budget: $budget")
-
         val rate = if (budget > 0) {
             (expense.toDouble() / budget.toDouble() * 100).toFloat()
         } else {
             0f
         }
 
-        Log.d("Home", "getExpenseRate: $rate")
         rate
     } catch (e: Exception) {
-        Log.e("Home / ExpenseRate", "Expense rate error: ${e.message}")
         0f
     }
 }
@@ -111,7 +104,6 @@ suspend fun getExpenseListForHome(): List<ExpenseDto> {
         }
         expenses
     } catch (e: Exception) {
-        Log.e("Home / RecentExpenses", "Expense list error: ${e.message}")
         emptyList()
     }
 }

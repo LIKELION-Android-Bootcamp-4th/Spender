@@ -1,6 +1,5 @@
 package com.example.spender.feature.report.domain.repository
 
-import android.util.Log
 import com.example.spender.core.data.remote.report.CategoryTotalDto
 import com.example.spender.core.data.remote.report.EmotionTotalDto
 import com.example.spender.core.data.remote.report.ReportDetailDto
@@ -16,10 +15,7 @@ class ReportRepository @Inject constructor(
     private val auth: FirebaseAuth
 ) {
     suspend fun getReportList(year: Int) = runCatching {
-        Log.d("ReportRepo", "getReportList() 실행됨, year=$year")
-
         val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
-        Log.d("ReportRepo", "UID 확인용: $uid")
 
         val querySnapshot = firestore.collection("users")
             .document(uid)
@@ -39,7 +35,6 @@ class ReportRepository @Inject constructor(
                     totalBudget  = (data["totalBudget"] as? Number)?.toInt() ?: 0
                 )
             } catch (e: Exception) {
-                Log.e("ReportRepo", "getReportList 매핑 실패: ${e.message}", e)
                 null
             }
         }

@@ -1,9 +1,14 @@
 package com.example.spender.feature.expense.ui
 
+import android.util.Base64
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spender.BuildConfig
+import com.example.spender.core.data.service.OcrApiService
 import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.feature.expense.data.remote.ExpenseDto
+import com.example.spender.feature.expense.data.remote.OcrImageRequest
+import com.example.spender.feature.expense.data.remote.OcrRequest
 import com.example.spender.feature.expense.data.remote.RegularExpenseDto
 import com.example.spender.feature.expense.data.repository.ExpenseRepository
 import com.example.spender.feature.expense.data.repository.RegularExpenseRepository
@@ -13,22 +18,17 @@ import com.example.spender.feature.mypage.domain.model.Category
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import android.util.Base64
-import android.util.Log
-import java.util.*
-import com.example.spender.BuildConfig
-import com.example.spender.core.data.service.OcrApiService
-import com.example.spender.feature.expense.data.remote.OcrImageRequest
-import com.example.spender.feature.expense.data.remote.OcrRequest
 import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
+import java.util.UUID
+import javax.inject.Inject
 
 sealed class RegistrationEvent {
     data class ShowToast(val message: String) : RegistrationEvent()
@@ -209,7 +209,6 @@ class RegistrationViewModel @Inject constructor(
                 )
 
                 val result = response.images.firstOrNull()?.receipt?.result
-                Log.d("OCR_RESULT_RAW", "Store: ${result?.storeInfo?.name?.text}, Price: ${result?.totalPrice?.price?.text}, Date: ${result?.paymentInfo?.date?.text}")
 
                 if (response.images.firstOrNull()?.inferResult == "SUCCESS") {
                     val title = result?.storeInfo?.name?.text ?: "인식 실패"
@@ -223,7 +222,6 @@ class RegistrationViewModel @Inject constructor(
 
                     _eventFlow.emit(RegistrationEvent.ShowToast("인식 완료!!"))
 
-                    Log.d("OCR_RESULT_PARSED", "Title: $title, Amount: $amount, Date: $formattedDateString")
 
                     _eventFlow.emit(RegistrationEvent.OcrSuccess(title, amount, formattedDateString))
                 } else {
@@ -231,10 +229,8 @@ class RegistrationViewModel @Inject constructor(
                 }
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
-                Log.e("OCR_API_ERROR", "HTTP Error: ${e.code()}, Body: $errorBody")
                 _eventFlow.emit(RegistrationEvent.ShowToast("오류 발생: ${e.code()} - 서버 응답을 확인하세요."))
             } catch (e: Exception) {
-                Log.e("OCR_API_ERROR", "OCR 분석 중 오류 발생", e)
                 _eventFlow.emit(RegistrationEvent.ShowToast("오류가 발생했습니다: ${e.message}"))
             } finally {
                 _uiState.update { it.copy(isLoading = false) }

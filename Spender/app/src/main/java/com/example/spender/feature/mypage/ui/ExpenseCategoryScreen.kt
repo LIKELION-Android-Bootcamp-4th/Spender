@@ -56,7 +56,6 @@ import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseCategoryScreen(
     navHostController: NavHostController,
