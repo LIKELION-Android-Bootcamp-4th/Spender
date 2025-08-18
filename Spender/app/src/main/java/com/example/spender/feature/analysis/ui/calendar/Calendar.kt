@@ -143,7 +143,7 @@ fun Calendar(data: List<CalendarItemData>, onClick: (Int) -> Unit, selection: Li
                     fontSize = 8.sp,
                     color = when {
                         item.expense > 0 && item.today -> Color.White
-                        item.expense > 0 -> MaterialTheme.colorScheme.onSurface
+                        item.expense > 0 -> Color.Blue
                         item.expense < 0 -> Color.Red
                         else -> MaterialTheme.colorScheme.onSurface
                     }
