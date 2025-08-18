@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.text.filter
 
 @HiltViewModel
 class OcrResultViewModel @Inject constructor(
@@ -73,14 +74,39 @@ class OcrResultViewModel @Inject constructor(
     }
 
     // 이벤트 핸들러
-    fun onAmountChange(amount: String) { _uiState.update { it.copy(amount = amount) } }
-    fun onTitleChange(title: String) { _uiState.update { it.copy(title = title) } }
-    fun onMemoChange(memo: String) { _uiState.update { it.copy(memo = memo) } }
-    fun onCategorySelected(category: Category) { _uiState.update { it.copy(categoryName = category.name, categoryId = category.id) } }
-    fun onEmotionSelected(emotion: Emotion) { _uiState.update { it.copy(selectedEmotion = emotion) } }
-    fun onDateSelected(timestamp: Long?) { timestamp?.let { _uiState.update { state -> state.copy(date = Date(it)) } } }
-    fun onCategorySheetVisibilityChange(isVisible: Boolean) { _uiState.update { it.copy(isCategorySheetVisible = isVisible) } }
-    fun onDateDialogVisibilityChange(isVisible: Boolean) { _uiState.update { it.copy(isDatePickerDialogVisible = isVisible) } }
+    fun onAmountChange(amount: String) {
+        if (amount.length <= 10) {
+            _uiState.update { it.copy(amount = amount.filter { char -> char.isDigit() }) }
+        }
+    }
+
+    fun onTitleChange(title: String) {
+        _uiState.update { it.copy(title = title) }
+    }
+
+    fun onMemoChange(memo: String) {
+        _uiState.update { it.copy(memo = memo) }
+    }
+
+    fun onCategorySelected(category: Category) {
+        _uiState.update { it.copy(categoryName = category.name, categoryId = category.id) }
+    }
+
+    fun onEmotionSelected(emotion: Emotion) {
+        _uiState.update { it.copy(selectedEmotion = emotion) }
+    }
+
+    fun onDateSelected(timestamp: Long?) {
+        timestamp?.let { _uiState.update { state -> state.copy(date = Date(it)) } }
+    }
+
+    fun onCategorySheetVisibilityChange(isVisible: Boolean) {
+        _uiState.update { it.copy(isCategorySheetVisible = isVisible) }
+    }
+
+    fun onDateDialogVisibilityChange(isVisible: Boolean) {
+        _uiState.update { it.copy(isDatePickerDialogVisible = isVisible) }
+    }
 
     fun onRegisterClick() {
         viewModelScope.launch {

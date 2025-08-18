@@ -165,33 +165,23 @@ fun RecurringExpenseContent(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
-            // 금액 입력
+        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+            //지출 내용
             TextField(
-                value = uiState.amount,
-                onValueChange = {
-                    viewModel.onAmountChange(it)
-                },
+                value = uiState.title,
+                onValueChange = { viewModel.onTitleChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 40.dp, vertical = 16.dp),
+                    .padding(horizontal = 30.dp, vertical = 16.dp),
                 placeholder = {
                     Text(
-                        "지출을 입력하세요",
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.tertiary
+                        "정기지출 제목을 입력하세요",
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
                 },
-                trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                visualTransformation = NumberCommaTransformation(),
                 singleLine = true,
-                textStyle = TextStyle(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Start
-                ),
-
+                textStyle = Typography.titleMedium,
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
@@ -199,20 +189,30 @@ fun RecurringExpenseContent(
                     focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                 )
             )
-            // 내용 입력
+        }
+
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
+
+        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+            // 금액 입력
             TextField(
-                value = uiState.title,
-                onValueChange = { viewModel.onTitleChange(it) },
-                modifier = Modifier.fillMaxWidth(),
+                value = uiState.amount,
+                onValueChange = { viewModel.onAmountChange(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp, vertical = 16.dp),
                 placeholder = {
                     Text(
-                        "정기지출 내용을 입력하세요",
+                        "지출을 입력하세요",
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.tertiary
+                        color = MaterialTheme.colorScheme.onTertiary
                     )
                 },
+                trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                visualTransformation = NumberCommaTransformation(),
                 singleLine = true,
-                textStyle = TextStyle(fontSize = 18.sp),
+                textStyle = Typography.titleMedium,
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
@@ -336,8 +336,10 @@ fun RecurringExpenseContent(
                         "메모",
                         style = Typography.bodySmall,
                         color = MaterialTheme.colorScheme.onTertiary,
+                        fontSize = 14.sp
                     )
                 },
+                textStyle = Typography.bodyMedium,
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.tertiary,
