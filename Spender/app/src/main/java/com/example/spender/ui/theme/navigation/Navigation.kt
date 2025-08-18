@@ -28,6 +28,7 @@ import com.example.spender.feature.mypage.ui.BudgetScreen
 import com.example.spender.feature.mypage.ui.ExpenseCategoryScreen
 import com.example.spender.feature.mypage.ui.IncomeCategoryScreen
 import com.example.spender.feature.mypage.ui.NotificationScreen
+import com.example.spender.feature.mypage.ui.OpenSourceScreen
 import com.example.spender.feature.mypage.ui.RegularExpenseScreen
 import com.example.spender.feature.onboarding.OnboardingScreen
 import com.example.spender.feature.report.ui.detail.ReportDetailScreen
@@ -147,6 +148,9 @@ fun SpenderNavigation(
         }
         composable(Screen.NotificationScreen.route) {
             NotificationScreen(navController)
+        }
+        composable(Screen.OpenSourceScreen.route){
+            OpenSourceScreen(navController)
         }
 //        composable(Screen.ExpenseRegistrationScreen.route) {
 //            ExpenseRegistrationParentScreen(navController)
