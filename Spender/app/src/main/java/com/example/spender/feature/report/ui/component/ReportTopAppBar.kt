@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -59,12 +58,6 @@ fun ReportTopAppBar(year: Int, onPrev: () -> Unit, onNext: () -> Unit, onYearCli
                     )
                 }
             }
-        },
-        actions = {
-//            IconButton(onClick = { // TODO: 캘린더
-//            }) {
-//                Icon(Icons.Default.DateRange, contentDescription = "캘린더")
-//            }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.background

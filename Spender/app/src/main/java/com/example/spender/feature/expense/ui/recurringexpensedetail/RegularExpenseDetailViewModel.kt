@@ -7,7 +7,6 @@ import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.feature.expense.data.remote.RegularExpenseDto
 import com.example.spender.feature.expense.data.repository.RegularExpenseRepository
 import com.example.spender.feature.expense.ui.RegistrationEvent
-import com.example.spender.feature.income.data.remote.IncomeDto
 import com.example.spender.feature.mypage.data.repository.CategoryRepository
 import com.example.spender.feature.mypage.domain.model.Category
 import com.google.firebase.Timestamp

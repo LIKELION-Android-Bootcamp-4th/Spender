@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.spender.MainActivity
 import com.example.spender.R
@@ -16,12 +15,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import dagger.hilt.android.HiltAndroidApp
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d("FCM", "새 FCM 토큰: $token")
 
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         if (uid == null) {
@@ -33,13 +30,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .collection("users")
             .document(uid)
             .set(mapOf("fcmToken" to token), SetOptions.merge())
-            .addOnSuccessListener { Log.d("FCM", "토큰 Firestore 저장 성공") }
-            .addOnFailureListener { e -> Log.e("FCM", "토큰 Firestore 저장 실패", e) }
+            .addOnSuccessListener { }
+            .addOnFailureListener { }
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        Log.d("FCM", "메시지 수신됨: ${remoteMessage.data}")
 
         // 데이터 페이로드
         val data = remoteMessage.data

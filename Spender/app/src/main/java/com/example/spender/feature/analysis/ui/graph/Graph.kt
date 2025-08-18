@@ -1,7 +1,6 @@
 package com.example.spender.feature.analysis.ui.graph
 
 import android.icu.text.DecimalFormat
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,11 +19,11 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.example.spender.feature.analysis.domain.model.CalendarItemData
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.formatter.ValueFormatter
 
 @Composable

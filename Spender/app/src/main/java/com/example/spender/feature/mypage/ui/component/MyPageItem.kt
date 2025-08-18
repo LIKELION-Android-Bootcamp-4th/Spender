@@ -22,7 +22,7 @@ fun MyPageItem(item: MyPageItemType, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(vertical = 15.dp),
+            .padding(top = 25.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(item.icon, contentDescription = item.title, modifier = Modifier.size(24.dp), tint = MaterialTheme.colorScheme.onBackground)

@@ -1,7 +1,5 @@
 package com.example.spender.feature.mypage.ui
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -81,11 +79,8 @@ fun BudgetScreen(navHostController: NavHostController) {
                     onClick = {
                         viewModel.saveBudget { success ->
                             if (success) {
-                                Toast.makeText(context, "예산이 설정되었습니다.", Toast.LENGTH_SHORT).show()
-                                Log.d("Budget", "저장 성공")
                                 navHostController.popBackStack()
                             } else {
-                                Log.d("Budget", "저장 실패")
                             }
                         }
                     },

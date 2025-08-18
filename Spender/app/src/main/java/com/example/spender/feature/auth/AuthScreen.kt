@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -19,14 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.R
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.spender.feature.auth.ui.GoogleLogin
 import com.example.spender.feature.auth.ui.KakaoLogin
 import com.example.spender.feature.auth.ui.NaverLogin
 import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
-import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 
 @Composable

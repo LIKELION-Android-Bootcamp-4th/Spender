@@ -1,0 +1,134 @@
+[
+  {
+    "title": "androidx (core, lifecycle, compose 등)",
+    "version": "1.12.0 (varies by module)",
+    "url": "https://developer.android.com/jetpack/androidx",
+    "content": "Licensed under the Apache License, Version 2.0. See the official documentation for details."
+  },
+  {
+    "title": "Material3",
+    "version": "1.2.1",
+    "url": "https://github.com/material-components/material-components-android",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Firebase (auth, firestore, functions 등)",
+    "version": "BoM 34.0.0",
+    "url": "https://github.com/firebase/firebase-android-sdk",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Google Play Services (auth, ads, base)",
+    "version": "22.0.0 (varies by module)",
+    "url": "https://developers.google.com/android/guides/overview",
+    "content": "Licensed under the Apache License, Version 2.0. See the official documentation for license details."
+  },
+  {
+    "title": "Androidx Datastore",
+    "version": "1.1.0",
+    "url": "https://developer.android.com/topic/libraries/architecture/datastore",
+    "content": "Licensed under the Apache License, Version 2.0. See the official documentation for details."
+  },
+  {
+    "title": "Dagger Hilt",
+    "version": "2.56.2",
+    "url": "https://github.com/google/dagger",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Hilt Navigation Compose",
+    "version": "1.2.0",
+    "url": "https://developer.android.com/jetpack/compose/libraries",
+    "content": "Licensed under the Apache License, Version 2.0. See the official documentation for details."
+  },
+  {
+    "title": "Kakao SDK (v2-all)",
+    "version": "2.20.1",
+    "url": "https://developers.kakao.com/docs/latest/en/android/getting-started",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Naver OAuth",
+    "version": "5.10.0",
+    "url": "https://github.com/naver/naveridlogin-sdk-android",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Retrofit2",
+    "version": "2.9.0",
+    "url": "https://github.com/square/retrofit",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Gson Converter",
+    "version": "2.12.0",
+    "url": "https://github.com/square/retrofit/tree/master/retrofit-converters/gson",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Kotlinx Serialization Converter",
+    "version": "1.0.0",
+    "url": "https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Kotlinx Serialization JSON",
+    "version": "1.6.0",
+    "url": "https://github.com/Kotlin/kotlinx.serialization",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "OkHttp Logging Interceptor",
+    "version": "4.11.0",
+    "url": "https://github.com/square/okhttp",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "MPAndroidChart",
+    "version": "3.1.0",
+    "url": "https://github.com/PhilJay/MPAndroidChart",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Coil Compose",
+    "version": "2.6.0",
+    "url": "https://github.com/coil-kt/coil",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Jetpack Glance",
+    "version": "1.1.1",
+    "url": "https://developer.android.com/jetpack/compose/glance",
+    "content": "Licensed under the Apache License, Version 2.0. See the official documentation for details."
+  },
+  {
+    "title": "Kotlin Coroutines Core",
+    "version": "1.7.3",
+    "url": "https://github.com/Kotlin/kotlinx.coroutines",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "OpenAI Node SDK",
+    "version": "4.27.0",
+    "url": "https://github.com/openai/openai-node",
+    "content": "Licensed under the MIT License. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Firebase Functions (Node.js)",
+    "version": "4.4.1",
+    "url": "https://github.com/firebase/firebase-functions",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Firebase Admin (Node.js)",
+    "version": "11.10.1",
+    "url": "https://github.com/firebase/firebase-admin-node",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Dotenv",
+    "version": "16.4.5",
+    "url": "https://github.com/motdotla/dotenv",
+    "content": "Licensed under the BSD 2-Clause License. See the LICENSE file in the repository."
+  }
+]

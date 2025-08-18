@@ -1,6 +1,5 @@
 package com.example.spender.feature.mypage.data.repository
 
-import android.util.Log
 import com.example.spender.core.data.remote.notification.NotificationSettingsDto
 import com.example.spender.core.data.remote.notification.NotificationSettingsField
 import com.google.firebase.auth.FirebaseAuth

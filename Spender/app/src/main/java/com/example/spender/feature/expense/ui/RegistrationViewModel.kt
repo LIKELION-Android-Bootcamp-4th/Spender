@@ -1,10 +1,15 @@
 package com.example.spender.feature.expense.ui
 
 import android.net.Uri
+import android.util.Base64
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.spender.BuildConfig
+import com.example.spender.core.data.service.OcrApiService
 import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.feature.expense.data.remote.ExpenseDto
+import com.example.spender.feature.expense.data.remote.OcrImageRequest
+import com.example.spender.feature.expense.data.remote.OcrRequest
 import com.example.spender.feature.expense.data.remote.RegularExpenseDto
 import com.example.spender.feature.expense.data.repository.ExpenseRepository
 import com.example.spender.feature.expense.data.repository.RegularExpenseRepository
@@ -14,25 +19,22 @@ import com.example.spender.feature.mypage.domain.model.Category
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import android.util.Base64
 import android.util.Log
 import java.util.*
-import com.example.spender.BuildConfig
-import com.example.spender.core.data.service.OcrApiService
-import com.example.spender.feature.expense.data.remote.OcrImageRequest
-import com.example.spender.feature.expense.data.remote.OcrRequest
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
+import java.util.UUID
+import javax.inject.Inject
 
 sealed class RegistrationEvent {
     data class ShowToast(val message: String) : RegistrationEvent()

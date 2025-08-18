@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.spender.R
-import com.example.spender.ui.theme.LightFontColor
 import com.example.spender.ui.theme.Typography
 
 @Composable

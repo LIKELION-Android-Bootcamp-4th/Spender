@@ -1,14 +1,12 @@
 package com.example.spender.feature.report.ui.list
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spender.feature.report.mapper.ReportMapper
 import com.example.spender.feature.report.domain.model.Report
 import com.example.spender.feature.report.domain.repository.ReportRepository
-import com.google.firebase.auth.FirebaseAuth
+import com.example.spender.feature.report.mapper.ReportMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.launch

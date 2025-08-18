@@ -1,6 +1,5 @@
 package com.example.spender.feature.report.ui.component
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,9 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
-import com.example.spender.ui.theme.Typography
-import androidx.core.graphics.toColorInt
 import com.example.spender.feature.report.ui.model.EmotionUiModel
+import com.example.spender.ui.theme.Typography
 
 @Composable
 fun EmotionTagSection(

@@ -2,7 +2,6 @@ package com.example.spender.feature.auth.ui
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.example.spender.ui.theme.GooglePointColor
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -28,6 +27,7 @@ import androidx.navigation.NavHostController
 import com.example.spender.BuildConfig
 import com.example.spender.R
 import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
+import com.example.spender.ui.theme.GooglePointColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
 import com.google.android.gms.auth.api.signin.GoogleSignIn
