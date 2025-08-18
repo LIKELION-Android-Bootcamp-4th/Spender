@@ -6,13 +6,16 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,6 +33,7 @@ import com.example.spender.R
 import com.example.spender.core.ui.CustomLongButton
 import com.example.spender.feature.onboarding.data.OnboardingPref
 import com.example.spender.feature.onboarding.ui.BudgetInputField
+import com.example.spender.feature.onboarding.ui.FirstPage
 import com.example.spender.feature.onboarding.ui.PageIndicator
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.navigation.Screen
@@ -78,6 +82,7 @@ fun OnboardingScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 24.dp, vertical = 32.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -89,11 +94,31 @@ fun OnboardingScreen(
             Text(
                 text = titles[currentPage],
                 style = Typography.titleLarge,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground
             )
 
+            if (currentPage == 0) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "똑똑한 소비 습관을 만들기 위해 \n지출이는 아래와 같이 도와줄 거예요!",
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(88.dp))
+                FirstPage()
+            }
+
             if (currentPage == 1) {
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "지출이가 예산 관리도 도와드릴게요!",
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(88.dp))
                 BudgetInputField(
                     budget = budget,
                     onBudgetChange = { viewModel.updateBudget(it) },
