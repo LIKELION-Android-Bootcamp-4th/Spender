@@ -35,6 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomDialog
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
 import com.example.spender.feature.mypage.ui.component.MyPageItemType
 import com.example.spender.feature.mypage.ui.component.Section
@@ -50,11 +54,8 @@ fun MypageScreen(
     val context = LocalContext.current
     val user by mypageViewModel.user.collectAsState()
 
-//    val viewModel: AuthViewModel = hiltViewModel()
-
     var showWithdrawDialog by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }
-//    val userName = "이름"
 
     val onItemClick: (MyPageItemType) -> Unit = { item ->
         when (item) {
@@ -82,7 +83,7 @@ fun MypageScreen(
             userName = user.displayName,
             iconRes = user.providerIcon
         )
-
+//        AdMobBanner()
         //HorizontalDivider()
 
         Section(
@@ -95,7 +96,6 @@ fun MypageScreen(
             ),
             onItemClick = onItemClick
         )
-
         //HorizontalDivider()
 
 
@@ -108,8 +108,8 @@ fun MypageScreen(
             ),
             onItemClick = onItemClick
         )
-
-        AdBanner()
+        AdMobBanner()
+//        AdBanner()
     }
 
     if (showWithdrawDialog) {
@@ -157,6 +157,26 @@ fun MypageScreen(
     }
 
 }
+@Composable
+fun AdMobBanner() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 28.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        AndroidView(
+            modifier = Modifier.fillMaxWidth(),
+            factory = { context ->
+                AdView(context).apply {
+                    setAdSize(AdSize.BANNER)
+                    adUnitId = "ca-app-pub-3940256099942544/6300978111"
+                    loadAd(AdRequest.Builder().build())
+                }
+            }
+        )
+    }
+}
 
 @Composable
 fun UserInfoSection(userName: String, iconRes: Int?) {
@@ -184,17 +204,17 @@ fun UserInfoSection(userName: String, iconRes: Int?) {
     }
 }
 
-@Composable
-fun AdBanner() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 28.dp)
-            .height(50.dp)
-            .background(Color.LightGray, RoundedCornerShape(8.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("광고 시간 나면")
-    }
-}
+//@Composable
+//fun AdBanner() {
+//    Box(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(horizontal = 28.dp)
+//            .height(50.dp)
+//            .background(Color.LightGray, RoundedCornerShape(8.dp)),
+//        contentAlignment = Alignment.Center
+//    ) {
+//        Text("광고 시간 나면")
+//    }
+//}
 
