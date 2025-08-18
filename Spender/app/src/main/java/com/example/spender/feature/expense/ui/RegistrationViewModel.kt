@@ -209,7 +209,6 @@ class RegistrationViewModel @Inject constructor(
                 )
 
                 val result = response.images.firstOrNull()?.receipt?.result
-                Log.d("OCR_RESULT_RAW", "Store: ${result?.storeInfo?.name?.text}, Price: ${result?.totalPrice?.price?.text}, Date: ${result?.paymentInfo?.date?.text}")
 
                 if (response.images.firstOrNull()?.inferResult == "SUCCESS") {
                     val title = result?.storeInfo?.name?.text ?: "인식 실패"
@@ -223,7 +222,6 @@ class RegistrationViewModel @Inject constructor(
 
                     _eventFlow.emit(RegistrationEvent.ShowToast("인식 완료!!"))
 
-                    Log.d("OCR_RESULT_PARSED", "Title: $title, Amount: $amount, Date: $formattedDateString")
 
                     _eventFlow.emit(RegistrationEvent.OcrSuccess(title, amount, formattedDateString))
                 } else {
@@ -231,10 +229,8 @@ class RegistrationViewModel @Inject constructor(
                 }
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
-                Log.e("OCR_API_ERROR", "HTTP Error: ${e.code()}, Body: $errorBody")
                 _eventFlow.emit(RegistrationEvent.ShowToast("오류 발생: ${e.code()} - 서버 응답을 확인하세요."))
             } catch (e: Exception) {
-                Log.e("OCR_API_ERROR", "OCR 분석 중 오류 발생", e)
                 _eventFlow.emit(RegistrationEvent.ShowToast("오류가 발생했습니다: ${e.message}"))
             } finally {
                 _uiState.update { it.copy(isLoading = false) }

@@ -51,7 +51,7 @@ fun ReportListScreen(
     LaunchedEffect(year) {
         FirebaseAuth.getInstance().currentUser?.let {
             viewModel.loadReports(year)
-        } ?: Log.w("ReportScreen", "사용자 정보 없음")
+        }
     }
 
     Scaffold(

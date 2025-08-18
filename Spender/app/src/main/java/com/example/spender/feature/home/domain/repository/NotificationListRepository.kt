@@ -26,7 +26,6 @@ class NotificationListRepository @Inject constructor(
             .await()
 
         val items = querySnapshot.documents.mapNotNull { docSnap ->
-            Log.d("NotificationRepo", "docId=${docSnap.id}, raw=${docSnap.data}")
             docSnap.toObject(NotificationDto::class.java)?.toDomain(docSnap.id)
         }
         items

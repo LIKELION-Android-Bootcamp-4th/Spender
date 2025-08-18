@@ -29,7 +29,6 @@ fun login(user: FirebaseUser?, provider: String) {
             }
         }
     } else {
-        Log.d("Login", "user not found")
     }
 }
 

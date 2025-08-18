@@ -53,7 +53,6 @@ class GraphRepository @Inject constructor(
                 createdAt = Timestamp.now()
             ) }.minByOrNull { it.amount }
         } catch (e: Exception) {
-            Log.d("Analysis / Max Expense", "Max Expense error")
             return null
         }
     }
@@ -101,7 +100,6 @@ class GraphRepository @Inject constructor(
             }
             return dailySum
         } catch (e: Exception) {
-            Log.d("Analysis / Daily Sum List", "Daily expense error")
         }
         return dailySum
     }

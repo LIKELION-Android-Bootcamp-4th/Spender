@@ -57,7 +57,6 @@ class CalendarRepository @Inject constructor(
                 )
             }.toMutableList()
         } catch (e: Exception) {
-            Log.d("Analysis / ExpenseList", "Expense list error")
             mutableListOf()
         }
     }
@@ -105,7 +104,6 @@ class CalendarRepository @Inject constructor(
                 )
             }.toMutableList()
         } catch (e: Exception) {
-            Log.d("Analysis / IncomeList", "Income list error")
             mutableListOf()
         }
     }
@@ -155,7 +153,6 @@ class CalendarRepository @Inject constructor(
                 )
             }.toMutableList()
         } catch (e: Exception) {
-            Log.d("Analysis / Expense Daily List", "Expense list error")
             mutableListOf()
         }
 
@@ -180,7 +177,6 @@ class CalendarRepository @Inject constructor(
                 )
             }.toMutableList())
         } catch (e: Exception) {
-            Log.d("Analysis / Income Daily List", "Income list error")
         }
 
         dataList.sortByDescending { it.createdAt }

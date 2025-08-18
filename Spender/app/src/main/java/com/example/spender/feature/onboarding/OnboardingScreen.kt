@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,8 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.spender.feature.onboarding.ui.OnboardingViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +31,7 @@ import com.example.spender.core.ui.CustomLongButton
 import com.example.spender.feature.onboarding.data.OnboardingPref
 import com.example.spender.feature.onboarding.ui.BudgetInputField
 import com.example.spender.feature.onboarding.ui.FirstPage
+import com.example.spender.feature.onboarding.ui.OnboardingViewModel
 import com.example.spender.feature.onboarding.ui.PageIndicator
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.navigation.Screen
@@ -50,15 +48,12 @@ fun OnboardingScreen(
     val context = LocalContext.current
 
     val onComplete: (Boolean) -> Unit = { isGranted ->
-        Log.d("푸시 알림 설정 동의", "결과: $isGranted")
         saveDefaultNotificationSettingsToFirestore(isGranted)
 
         viewModel.saveBudget { success ->
             if (success) {
                 Toast.makeText(context, "당신의 소비습관, 지출이가 꽉 잡아줄게요!", Toast.LENGTH_SHORT).show()
-                Log.d("Budget", "저장 성공")
             } else {
-                Log.d("Budget", "저장 실패")
             }
         }
 
@@ -170,9 +165,7 @@ fun saveDefaultNotificationSettingsToFirestore(enabled: Boolean) {
         .document(uid)
         .set(settingsMap, SetOptions.merge())
         .addOnSuccessListener {
-            Log.d("Firestore", "알림 설정 초기화 완료 (enabled=$enabled)")
         }
         .addOnFailureListener{
-            Log.d("Firestore", "알림 설정 초기화 실패", it)
         }
 }

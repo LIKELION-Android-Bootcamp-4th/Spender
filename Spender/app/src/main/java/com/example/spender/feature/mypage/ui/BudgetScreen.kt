@@ -81,11 +81,8 @@ fun BudgetScreen(navHostController: NavHostController) {
                     onClick = {
                         viewModel.saveBudget { success ->
                             if (success) {
-                                Toast.makeText(context, "예산이 설정되었습니다.", Toast.LENGTH_SHORT).show()
-                                Log.d("Budget", "저장 성공")
                                 navHostController.popBackStack()
                             } else {
-                                Log.d("Budget", "저장 실패")
                             }
                         }
                     },

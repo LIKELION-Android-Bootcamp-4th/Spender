@@ -65,21 +65,17 @@ class AuthViewModel @Inject constructor(
                         _isLoading.value = false
                     } else {
                         _isFailState.value = true
-                        Log.d("Login", "Firebase SignIn failed! ${task.exception} ")
                         _isLoading.value = false
                     }
                 }
         } catch (e: Exception) {
             _isFailState.value = true
-            Log.d("Login", "Google SignIn failed! ${e.message}")
             _isLoading.value = false
         }
     }
 
     private fun handleGoogleLoginSuccess(context: Context, navController: NavController) {
-        Log.d("Login", "Google SignIn Success!")
         login(FirebaseAuth.getInstance().currentUser, LoginType.GOOGLE.type)
-        Log.d("Login", getFirebaseAuth() ?: "failed")
 
         val currentUser = Firebase.auth.currentUser
         val userMap: Map<String, Any?>? = currentUser?.let {
@@ -90,7 +86,6 @@ class AuthViewModel @Inject constructor(
                 "photoUrl" to it.photoUrl?.toString()
             )
         }
-        Log.d("Login", "google User : $userMap")
 
         if (currentUser != null) {
             viewModelScope.launch {
@@ -110,7 +105,6 @@ class AuthViewModel @Inject constructor(
                 _isLoading.value = true
                 authRepository.naverLogin(context)
                 AuthPrefs.setLoginType(getApplication(), LoginType.NAVER)
-                Log.d("Login", "Naver Login Success!")
 
                 val currentUser = Firebase.auth.currentUser
                 val userMap: Map<String, Any?>? = currentUser?.let {
@@ -121,7 +115,6 @@ class AuthViewModel @Inject constructor(
                         "photoUrl" to it.photoUrl?.toString()
                     )
                 }
-                Log.d("Login", "naver User : $userMap")
 
                 if (currentUser != null) {
                     val budgetsExist = checkBudgetsCollectionExists(currentUser.uid)
@@ -132,7 +125,6 @@ class AuthViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                Log.e("Login", "Naver Login Fail", e)
             } finally {
                 _isLoading.value = false
             }
@@ -146,7 +138,6 @@ class AuthViewModel @Inject constructor(
                 _isLoading.value = true
                 authRepository.kakaoLogin(context)
                 AuthPrefs.setLoginType(getApplication(), LoginType.KAKAO)
-                Log.d("Login", "Kakao Login Success!")
                 val currentUser = Firebase.auth.currentUser
                 val userMap: Map<String, Any?>? = currentUser?.let {
                     mapOf(
@@ -156,7 +147,6 @@ class AuthViewModel @Inject constructor(
                         "photoUrl" to it.photoUrl?.toString()
                     )
                 }
-                Log.d("Login", "kakao User : ${userMap.toString()}")
 
                 if (currentUser != null) {
                     val budgetsExist = checkBudgetsCollectionExists(currentUser.uid)
@@ -167,7 +157,6 @@ class AuthViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                Log.e("Login", "Naver Login Fail", e)
             } finally {
                 _isLoading.value = false
             }
