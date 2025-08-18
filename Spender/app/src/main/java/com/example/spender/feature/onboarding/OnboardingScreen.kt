@@ -50,8 +50,8 @@ fun OnboardingScreen(
         saveDefaultNotificationSettingsToFirestore(isGranted)
 
         viewModel.saveBudget { success ->
-            if (success) { // TODO : 알림 설정을 하고 나서 예산 뜨니까 이상함 -> 토스트 뺄까요...?
-                Toast.makeText(context, "예산이 설정되었습니다.", Toast.LENGTH_SHORT).show()
+            if (success) {
+                Toast.makeText(context, "당신의 소비습관, 지출이가 꽉 잡아줄게요!", Toast.LENGTH_SHORT).show()
                 Log.d("Budget", "저장 성공")
             } else {
                 Log.d("Budget", "저장 실패")
@@ -108,7 +108,7 @@ fun OnboardingScreen(
             onClick = {
                 if (currentPage < 2) {
                     viewModel.onNext()
-                } else { // TODO: 콜백 처리?!?!
+                } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         val granted = androidx.core.content.ContextCompat.checkSelfPermission(
                             context, Manifest.permission.POST_NOTIFICATIONS
