@@ -7,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +19,6 @@ import com.example.spender.R
 import com.example.spender.feature.splash.ui.SplashViewModel
 import com.example.spender.feature.splash.ui.SplashViewModel.SplashUiState
 import com.example.spender.ui.theme.navigation.Screen
-import androidx.compose.runtime.getValue
 
 @Composable
 fun SplashScreen(

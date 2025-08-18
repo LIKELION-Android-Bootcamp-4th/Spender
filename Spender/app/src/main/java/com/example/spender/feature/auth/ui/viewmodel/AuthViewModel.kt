@@ -11,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.spender.core.data.remote.auth.LoginType
 import com.example.spender.core.data.service.FcmTokenRegistrar
-import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.core.data.service.login
 import com.example.spender.feature.auth.data.AuthPrefs
 import com.example.spender.feature.auth.domain.AuthRepository
@@ -22,8 +21,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
-import kotlinx.coroutines.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 

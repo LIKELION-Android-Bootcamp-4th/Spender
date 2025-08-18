@@ -1,16 +1,13 @@
 package com.example.spender.feature.analysis.ui.graph
 
 import android.icu.util.Calendar
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spender.core.data.remote.expense.ExpenseDto
 import com.example.spender.feature.analysis.domain.model.CalendarItemData
 import com.example.spender.feature.analysis.domain.repository.GraphRepository
-import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow

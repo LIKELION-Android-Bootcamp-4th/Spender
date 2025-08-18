@@ -1,6 +1,5 @@
 package com.example.spender.feature.report.domain.repository
 
-import android.util.Log
 import com.example.spender.core.data.remote.report.CategoryTotalDto
 import com.example.spender.core.data.remote.report.EmotionTotalDto
 import com.example.spender.core.data.remote.report.ReportDetailDto

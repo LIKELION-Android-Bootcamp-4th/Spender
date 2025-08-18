@@ -1,6 +1,5 @@
 package com.example.spender.feature.expense.data.repository
 
-import android.util.Log
 import com.example.spender.feature.expense.data.remote.ExpenseDto
 import com.example.spender.feature.expense.domain.model.Expense
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,7 +15,6 @@ class ExpenseRepository @Inject constructor() {
             usersCollection.document(userId).collection("expenses").add(expense).await()
             true
         } catch (e: Exception) {
-            Log.w("Firestore", "지출 등록 실패", e)
             false
         }
     }

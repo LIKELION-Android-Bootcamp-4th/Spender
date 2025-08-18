@@ -7,5 +7,4 @@ data class ReportDetailDto (
     val month: String,
     val byCategory: List<CategoryTotalDto>,
     val byEmotion: List<EmotionTotalDto>,
-//    val createdAt: Timestamp
 )

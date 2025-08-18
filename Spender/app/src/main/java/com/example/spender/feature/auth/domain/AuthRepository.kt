@@ -1,13 +1,11 @@
 package com.example.spender.feature.auth.domain
 
 import android.content.Context
-import android.util.Log
 import com.example.spender.core.data.remote.auth.LoginType
-import com.example.spender.core.data.service.getFirebaseRef
 import com.example.spender.feature.auth.data.AuthPrefs
 import com.example.spender.feature.auth.data.FirebaseAuthDataSource
-import com.example.spender.feature.auth.data.NaverDataSource
 import com.example.spender.feature.auth.data.KakaoDataSource
+import com.example.spender.feature.auth.data.NaverDataSource
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth

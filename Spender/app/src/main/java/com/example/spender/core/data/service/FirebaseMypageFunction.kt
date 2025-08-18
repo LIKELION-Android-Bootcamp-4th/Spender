@@ -1,6 +1,5 @@
 package com.example.spender.core.data.service
 
-import android.util.Log
 import com.example.spender.core.data.remote.category.CategoryDto
 import com.example.spender.core.data.remote.category.CategoryType
 import com.example.spender.core.data.remote.expense.ExpenseDto

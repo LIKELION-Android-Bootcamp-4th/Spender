@@ -14,7 +14,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,7 +26,6 @@ import com.example.spender.core.ui.CustomTopAppBar
 import com.example.spender.core.ui.LoadingScreen
 import com.example.spender.feature.home.ui.component.NotificationItem
 import com.example.spender.ui.theme.LightFontColor
-import com.example.spender.ui.theme.LightReportHighlightColor
 import com.example.spender.ui.theme.Typography
 
 @Composable

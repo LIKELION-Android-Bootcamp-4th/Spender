@@ -43,7 +43,6 @@ import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
 // 추가/수정 다이얼로그
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryEditDialog(
     isEditing: Boolean,

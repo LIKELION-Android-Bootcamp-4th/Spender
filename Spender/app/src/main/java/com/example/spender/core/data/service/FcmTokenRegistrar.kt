@@ -1,7 +1,6 @@
 package com.example.spender.core.data.service
 
 import android.app.Application
-import android.util.Log
 import com.example.spender.core.data.local.FcmTokenStore
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth

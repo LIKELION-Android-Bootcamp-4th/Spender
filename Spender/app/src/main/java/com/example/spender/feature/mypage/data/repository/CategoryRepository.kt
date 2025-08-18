@@ -2,12 +2,11 @@ package com.example.spender.feature.mypage.data.repository
 
 import com.example.spender.core.common.toColor
 import com.example.spender.feature.mypage.domain.model.Category
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-
 
 class CategoryRepository @Inject constructor(){
     private val usersCollection = FirebaseFirestore.getInstance().collection("users")

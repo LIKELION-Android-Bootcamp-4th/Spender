@@ -1,6 +1,5 @@
 package com.example.spender.feature.analysis.domain.repository
 
-import android.util.Log
 import com.example.spender.core.data.remote.expense.ExpenseDto
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth

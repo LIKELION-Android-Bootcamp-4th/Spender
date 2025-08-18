@@ -4,9 +4,9 @@ import android.content.Context
 import android.util.Log
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resumeWithException
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.resumeWithException
 
 @Singleton
 class KakaoDataSource @Inject constructor() {

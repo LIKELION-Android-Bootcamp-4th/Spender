@@ -1,24 +1,13 @@
 package com.example.spender.feature.mypage.ui.component
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.automirrored.outlined.Logout
-import androidx.compose.material.icons.automirrored.outlined.ViewList
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.PersonRemove
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.outlined.AddBox
 import androidx.compose.material.icons.outlined.Create
-import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.IndeterminateCheckBox
-import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.PersonRemove
-import androidx.compose.material.icons.outlined.ViewList
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class MyPageItemType(val title: String, val icon: ImageVector) {

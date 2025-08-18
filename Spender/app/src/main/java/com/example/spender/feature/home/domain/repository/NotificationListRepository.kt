@@ -1,8 +1,6 @@
 package com.example.spender.feature.home.domain.repository
 
-import android.util.Log
 import com.example.spender.core.data.remote.notification.NotificationDto
-import com.example.spender.feature.home.domain.Notification
 import com.example.spender.feature.home.mapper.toDomain
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
