@@ -221,46 +221,59 @@ fun IncomeDetailScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ){
-            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                //수입 내용
+                TextField(
+                    value = uiState.title,
+                    onValueChange = { viewModel.onTitleChange(it) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp, vertical = 16.dp),
+                    placeholder = {
+                        Text(
+                            "수입 제목을 입력하세요",
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
+                    },
+                    singleLine = true,
+                    textStyle = Typography.titleMedium,
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
+                    )
+                )
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
+
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                 // 금액 입력
                 TextField(
                     value = uiState.amount,
-                    onValueChange = {
-                        viewModel.onAmountChange(it)
-                    },
+                    onValueChange = { viewModel.onAmountChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 40.dp, vertical = 16.dp),
-                    placeholder = { Text("수입을 입력하세요", fontSize = 14.sp, color = MaterialTheme.colorScheme.tertiary) },
+                        .padding(horizontal = 30.dp, vertical = 16.dp),
+                    placeholder = {
+                        Text(
+                            "수입을 입력하세요",
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
+                    },
                     trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = NumberCommaTransformation(),
                     singleLine = true,
-                    textStyle = TextStyle(
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Start
-                    ),
-
+                    textStyle = Typography.titleMedium,
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.primary
-                    )
-                )
-                // 내용 입력
-                TextField(
-                    value = uiState.title,
-                    onValueChange = {viewModel.onTitleChange(it)},
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("수입 내용을 입력하세요", fontSize = 16.sp, color = MaterialTheme.colorScheme.tertiary) },
-                    singleLine = true,
-                    textStyle = TextStyle(fontSize = 18.sp),
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
             }
@@ -340,25 +353,23 @@ fun IncomeDetailScreen(
                 Spacer(Modifier.height(30.dp))
                 OutlinedTextField(
                     value = uiState.memo,
-                    onValueChange = {viewModel.onMemoChange(it)},
+                    onValueChange = { viewModel.onMemoChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(260.dp),
+                        .height(240.dp),
                     placeholder = {
                         Text(
                             "메모",
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            style = Typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onTertiary,
                             fontSize = 14.sp
                         )
                     },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 16.sp,
-                    ),
+                    textStyle = Typography.bodyMedium,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                        focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
             }

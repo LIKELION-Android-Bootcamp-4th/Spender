@@ -87,7 +87,9 @@ class ExpenseDetailViewModel @Inject constructor(
 
     // 이벤트 핸들러
     fun onAmountChange(amount: String) {
-        _uiState.update { it.copy(amount = amount) }
+        if (amount.length <= 10) {
+            _uiState.update { it.copy(amount = amount.filter { char -> char.isDigit() }) }
+        }
     }
 
     fun onMemoChange(memo: String) {
