@@ -4,14 +4,10 @@ package com.e1i3.spender.feature.home.domain.repository
 import com.e1i3.spender.core.data.remote.friend.FriendDetailDto
 import com.e1i3.spender.core.data.remote.report.CategoryTotalDto
 import com.e1i3.spender.core.data.remote.report.EmotionTotalDto
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import jakarta.inject.Inject
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -59,7 +55,7 @@ class FriendDetailRepository @Inject constructor(
         for (doc in expensesSnapshot) {
             val amount = (doc.get("amount") as? Number)?.toInt() ?: continue
             val categoryId = doc.get("categoryId") as? String ?: "unknown"
-            val emotionId = doc.get("emotionId") as? String
+            val emotionId = doc.get("emotion") as? String
 
             totalExpense += amount
 

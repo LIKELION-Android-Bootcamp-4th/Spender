@@ -12,6 +12,7 @@ import com.e1i3.spender.feature.home.domain.model.Friend
 import com.e1i3.spender.feature.home.ui.model.FriendDetailUiModel
 import com.e1i3.spender.feature.report.domain.model.CategoryTotal
 import com.e1i3.spender.feature.report.domain.model.EmotionTotal
+import com.e1i3.spender.feature.report.mapper.emotionLabelMap
 import com.e1i3.spender.feature.report.mapper.toUiModel
 import com.e1i3.spender.feature.report.ui.model.CategoryUiModel
 import com.e1i3.spender.feature.report.ui.model.EmotionUiModel
@@ -59,7 +60,7 @@ fun FriendDetailDto.toUiModel(): FriendDetailUiModel {
         topCategoryName = topCategory?.categoryName,
         categoryChartData = categoryChartData,
 
-        topEmotionName = topEmotion?.emotionId,
+        topEmotionName = topEmotion?.emotionId.let { emotionLabelMap[it] },
         emotionChartData = emotionChartData
     )
 }
