@@ -68,9 +68,10 @@ class FriendRepository @Inject constructor(
         val uid = auth.currentUser?.uid
         val codeSearch = codesCollection.document(code).get().await()
         if (!codeSearch.exists()) return "코드가 잘못되었습니다. 다시 확인해주세요."
-        if ((codeSearch.data?.get("expiredAt") as Timestamp).toDate().after(Date())) return "코드가 만료되었습니다."
+        if ((codeSearch.data?.get("expiredAt") as Timestamp).toDate().before(Timestamp.now().toDate())) return "코드가 만료되었습니다."
         val friendId = codeSearch.data?.get("userId").toString()
         if (friendId.isEmpty()) return "사용자를 찾을 수 없습니다. 코드를 확인해주세요."
+        if (friendId == uid) return "자신은 친구로 추가할 수 없습니다."
         val friendDoc = usersCollection.document(friendId).get().await()
         if (!friendDoc.exists()) return "사용자를 찾을 수 없습니다. 코드를 확인해주세요."
         val myDoc = usersCollection.document(uid!!).collection("friends").document(friendId).get().await()
@@ -89,7 +90,7 @@ class FriendRepository @Inject constructor(
                 "connectedAt" to Timestamp.now()
             )
         )
-        return ""
+        return "친구 추가에 성공했습니다."
     }
 
     private fun generateCode(): String {

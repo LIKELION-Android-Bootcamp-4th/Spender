@@ -54,11 +54,15 @@ class FriendViewModel @Inject constructor(
 
     fun addFriend(showMessage: (msg: String) -> Unit) {
         viewModelScope.launch {
-            if (yourCode.value.trim().length < 8 || Regex("[^A-Z0-9]").containsMatchIn(yourCode.value.trim())) {
-                showMessage("올바르지 않은 코드입니다.")
+            if (yourCode.value.trim().length != 8 || Regex("[^A-Z0-9]").containsMatchIn(yourCode.value.trim())) {
+                showMessage("코드는 8자의 알파벳 대문자와 숫자로 이루어져 있습니다.")
                 return@launch
             }
             showMessage(repository.addFriend(yourCode.value))
         }
+    }
+
+    fun clear() {
+        _yourCode.update { "" }
     }
 }

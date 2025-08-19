@@ -141,11 +141,8 @@ fun FriendAddScreen(
                 Button(
                     onClick = {
                         viewModel.addFriend { msg ->
-                            if (msg.isNotEmpty()) {
-                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-                            } else {
-                                navHostController.popBackStack()
-                            }
+                            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                            if (msg == "친구 추가에 성공했습니다.") viewModel.clear()
                         }
                     },
                     modifier = Modifier
