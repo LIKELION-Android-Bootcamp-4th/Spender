@@ -1,5 +1,6 @@
 package com.e1i3.spender.feature.home.domain.repository
 
+import com.e1i3.spender.feature.home.domain.model.Friend
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -40,5 +41,19 @@ class HomeRepository @Inject constructor(
                 val hasUnread = snapshot?.isEmpty == false
                 onChange(hasUnread)
             }
+    }
+
+    suspend fun getFriendList() = runCatching {
+        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+
+        val snapshot = firestore.collection("users")
+            .document(uid)
+            .collection("friends")
+            .get()
+            .await()
+
+        snapshot.documents.map { doc ->
+
+        }
     }
 }
