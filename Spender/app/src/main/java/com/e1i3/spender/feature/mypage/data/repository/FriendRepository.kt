@@ -82,14 +82,14 @@ class FriendRepository @Inject constructor(
                 "status" to "FRIENDS",
                 "connectedAt" to Timestamp.now()
             )
-        )
+        ).await()
 
-        usersCollection.document(uid).collection("friend").document(friendId).set(
+        usersCollection.document(uid).collection("friends").document(friendId).set(
             mapOf(
                 "status" to "FRIENDS",
                 "connectedAt" to Timestamp.now()
             )
-        )
+        ).await()
         return "친구 추가에 성공했습니다."
     }
 
