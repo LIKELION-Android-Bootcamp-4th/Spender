@@ -130,7 +130,7 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(friendList){ friend ->
-                            FriendItem(friend = friend)
+                            FriendItem(navHostController = navHostController, friend = friend)
                         }
                     }
                 }

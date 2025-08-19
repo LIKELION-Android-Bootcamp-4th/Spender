@@ -20,6 +20,7 @@ import com.e1i3.spender.feature.expense.ui.expensedetail.ExpenseDetailScreen
 import com.e1i3.spender.feature.expense.ui.ocrresult.OcrResultScreen
 import com.e1i3.spender.feature.expense.ui.recurringexpensedetail.RecurringExpenseDetailScreen
 import com.e1i3.spender.feature.home.HomeScreen
+import com.e1i3.spender.feature.home.ui.FriendDetailScreen
 import com.e1i3.spender.feature.home.ui.NotificationListScreen
 import com.e1i3.spender.feature.income.ui.IncomeRegistrationScreen
 import com.e1i3.spender.feature.income.ui.incomedetail.IncomeDetailScreen
@@ -75,7 +76,9 @@ fun SpenderNavigation(
         composable(BottomNavigationItem.Mypage.route) {
             MypageScreen(navController)
         }
-
+        composable(Screen.FriendDetailScreen.route) {
+            FriendDetailScreen(navHostController = navController)
+        }
         composable(Screen.NotificationListScreen.route) {
             NotificationListScreen(navHostController = navController, homeViewModel = hiltViewModel())
         }
