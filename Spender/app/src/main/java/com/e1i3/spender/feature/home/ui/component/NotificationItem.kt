@@ -22,8 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.e1i3.spender.R
-import com.e1i3.spender.feature.home.domain.Notification
-import com.e1i3.spender.feature.home.domain.NotificationType
+import com.e1i3.spender.feature.home.domain.model.Notification
+import com.e1i3.spender.feature.home.domain.model.NotificationType
 import com.e1i3.spender.ui.theme.LightFontColor
 import com.e1i3.spender.ui.theme.LightReportHighlightColor
 import com.e1i3.spender.ui.theme.Typography

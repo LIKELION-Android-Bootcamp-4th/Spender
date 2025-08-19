@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.AddBox
 import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.IndeterminateCheckBox
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.material.icons.outlined.PersonRemove
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -18,4 +19,5 @@ sealed class MyPageItemType(val title: String, val icon: ImageVector) {
     object Notification : MyPageItemType("알림 설정", Icons.Outlined.Notifications)
     object Withdraw : MyPageItemType("회원 탈퇴", Icons.Outlined.PersonRemove)
     object Logout : MyPageItemType("로그아웃", Icons.AutoMirrored.Outlined.Logout)
+    object AddFriend : MyPageItemType("친구추가", Icons.Outlined.PersonAdd)
 }
