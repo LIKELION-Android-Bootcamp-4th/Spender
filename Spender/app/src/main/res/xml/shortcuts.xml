@@ -8,6 +8,6 @@
         android:shortcutLongLabel="@string/shortcut_expense_long">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="com.example.spender.MainActivity" />
+            android:targetClass="com.e1i3.spender.MainActivity" />
     </shortcut>
 </shortcuts>
