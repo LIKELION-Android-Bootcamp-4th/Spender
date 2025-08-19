@@ -74,6 +74,8 @@ fun MypageScreen(
             MyPageItemType.Logout -> {
                 showLogoutDialog = true
             }
+
+            MyPageItemType.AddFriend -> navHostController.navigate("add_friend")
         }
     }
 
@@ -93,7 +95,8 @@ fun MypageScreen(
                 MyPageItemType.IncomeCategory,
                 MyPageItemType.ExpenseCategory,
                 MyPageItemType.Budget,
-                MyPageItemType.RegularExpense
+                MyPageItemType.RegularExpense,
+                MyPageItemType.AddFriend
             ),
             onItemClick = onItemClick
         )
