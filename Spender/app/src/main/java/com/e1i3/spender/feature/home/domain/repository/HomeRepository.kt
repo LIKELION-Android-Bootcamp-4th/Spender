@@ -1,9 +1,12 @@
 package com.e1i3.spender.feature.home.domain.repository
 
+import com.e1i3.spender.core.data.remote.friend.FriendListDto
 import com.e1i3.spender.feature.home.domain.model.Friend
+import com.e1i3.spender.feature.home.mapper.toDomain
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.toObject
 import jakarta.inject.Inject
 import kotlinx.coroutines.tasks.await
 
@@ -52,8 +55,9 @@ class HomeRepository @Inject constructor(
             .get()
             .await()
 
-        snapshot.documents.map { doc ->
-
+        snapshot.documents.mapNotNull { doc ->
+            val dto = doc.toObject(FriendListDto::class.java)
+            dto?.toDomain(userId = doc.id)
         }
     }
 }

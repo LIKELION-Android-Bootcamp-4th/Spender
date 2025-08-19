@@ -58,40 +58,17 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
     var percentage by remember { mutableStateOf(0f) }
     var recentExpenses by remember { mutableStateOf<List<ExpenseDto>>(emptyList()) }
     val hasUnread by viewModel.hasUnread
+    val friendList by viewModel.friendList
+
+    LaunchedEffect(Unit) {
+        viewModel.getFriendList()
+    }
 
     LaunchedEffect(hasUnread) {
         totalExpense = getTotalExpense()
         percentage = getExpenseRate()
         recentExpenses = getExpenseListForHome()
     }
-
-    val friendList = listOf(
-        Friend(
-            userId = "user1",
-            nickname = "지출이1",
-            profileUrl = "https://randomuser.me/api/portraits/men/1.jpg",
-            status = "FRIENDS",
-        ),
-        Friend(
-            userId = "user2",
-            nickname = "지출이2",
-            profileUrl = "https://randomuser.me/api/portraits/women/2.jpg",
-            status = "FRIENDS",
-        ),
-        Friend(
-            userId = "user3",
-            nickname = "지출이3",
-            profileUrl = "https://randomuser.me/api/portraits/men/3.jpg",
-            status = "FRIENDS",
-        ),
-        Friend(
-            userId = "user4",
-            nickname = "지출이4",
-            profileUrl = "https://randomuser.me/api/portraits/women/4.jpg",
-            status = "FRIENDS",
-        )
-    )
-
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
