@@ -1,9 +1,11 @@
 package com.e1i3.spender.feature.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,9 +31,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.e1i3.spender.R
 import com.e1i3.spender.core.data.remote.expense.ExpenseDto
 import com.e1i3.spender.core.data.service.getExpenseListForHome
 import com.e1i3.spender.core.data.service.getExpenseRate
@@ -58,7 +63,15 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
+                modifier = Modifier.height(80.dp),
+                navigationIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ci_temp),
+                        contentDescription = "프로필 이미지",
+                        modifier = Modifier.size(100.dp)
+                    )
+                },
                 title = { },
                 actions = {
                     IconButton(
@@ -101,6 +114,8 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                     .padding(padding)
                     .padding(horizontal = 5.dp),
             ) {
+
+
                 item {
                     TotalExpenseCard(totalExpense = totalExpense)
                 }
