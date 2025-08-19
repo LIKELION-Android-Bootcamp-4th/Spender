@@ -25,8 +25,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import android.util.Log
-import java.util.*
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import retrofit2.HttpException
@@ -255,7 +253,6 @@ class RegistrationViewModel @Inject constructor(
                 )
 
                 val result = response.images.firstOrNull()?.receipt?.result
-                Log.d("OCR_RESULT_RAW", "Store: ${result?.storeInfo?.name?.text}, Price: ${result?.totalPrice?.price?.text}, Date: ${result?.paymentInfo?.date?.text}")
 
                 if (response.images.firstOrNull()?.inferResult == "SUCCESS") {
                     val title = result?.storeInfo?.name?.text ?: "인식 실패"
@@ -269,18 +266,14 @@ class RegistrationViewModel @Inject constructor(
 
                     _eventFlow.emit(RegistrationEvent.ShowToast("인식 완료!!"))
 
-                    Log.d("OCR_RESULT_PARSED", "Title: $title, Amount: $amount, Date: $formattedDateString")
-
                     _eventFlow.emit(RegistrationEvent.OcrSuccess(title, amount, formattedDateString))
                 } else {
                     _eventFlow.emit(RegistrationEvent.ShowToast("영수증 인식에 실패했습니다."))
                 }
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
-                Log.e("OCR_API_ERROR", "HTTP Error: ${e.code()}, Body: $errorBody")
                 _eventFlow.emit(RegistrationEvent.ShowToast("오류 발생: ${e.code()} - 서버 응답을 확인하세요."))
             } catch (e: Exception) {
-                Log.e("OCR_API_ERROR", "OCR 분석 중 오류 발생", e)
                 _eventFlow.emit(RegistrationEvent.ShowToast("오류가 발생했습니다: ${e.message}"))
             } finally {
                 _uiState.update { it.copy(isLoading = false) }
