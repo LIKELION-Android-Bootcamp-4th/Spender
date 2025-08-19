@@ -1,5 +1,6 @@
 package com.e1i3.spender.feature.mypage.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,19 +17,58 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.e1i3.spender.R
 import com.e1i3.spender.feature.mypage.ui.component.CircularImage
 import com.e1i3.spender.feature.mypage.ui.component.EditButton
+import com.e1i3.spender.feature.mypage.ui.component.EditNicknameDialog
+import com.e1i3.spender.feature.mypage.ui.viewmodel.MypageViewModel
 import com.e1i3.spender.ui.theme.Typography
 
 @Composable
 fun ProfileSection(nickName: String) {
-    val nickname = nickName
+    var showEditNickNameAlert by remember { mutableStateOf(false) }
+    val viewModel: MypageViewModel = hiltViewModel()
+    val context = LocalContext.current
+
+    val user by viewModel.user.collectAsState()
+    val updateNicknameState by viewModel.updateNicknameState.collectAsState()
+
+    val currentNickname = when {
+        user.displayNickname.isNotBlank() && user.displayNickname != "사용자" -> user.displayNickname
+        nickName.isNotBlank() -> nickName
+        else -> "사용자"
+    }
+
+    LaunchedEffect(updateNicknameState) {
+        when (updateNicknameState) {
+            is MypageViewModel.UpdateNicknameState.Success -> {
+                Toast.makeText(context, "닉네임이 변경되었어요!", Toast.LENGTH_SHORT).show()
+                showEditNickNameAlert = false
+            }
+
+            is MypageViewModel.UpdateNicknameState.Error -> {
+                val errorMessage =
+                    (updateNicknameState as MypageViewModel.UpdateNicknameState.Error).message
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+
+            is MypageViewModel.UpdateNicknameState.Loading -> {}
+            else -> {}
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -93,12 +133,12 @@ fun ProfileSection(nickName: String) {
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = nickname,
+                        text = currentNickname,
                         style = Typography.titleMedium,
                         modifier = Modifier.weight(1f)
                     )
                     IconButton(
-                        onClick = {}, //TODO: 수정 다이얼로그
+                        onClick = { showEditNickNameAlert = true },
                         modifier = Modifier.size(24.dp)
                     ) {
                         Icon(
@@ -120,5 +160,21 @@ fun ProfileSection(nickName: String) {
                 )
             }
         }
+    }
+
+    if (showEditNickNameAlert) {
+        EditNicknameDialog(
+            title = "닉네임 변경",
+            user = user,
+            onDismiss = {
+                if (updateNicknameState !is MypageViewModel.UpdateNicknameState.Loading) {
+                    showEditNickNameAlert = false
+                }
+            },
+            onConfirm = { newNickname ->
+                viewModel.updateNickname(newNickname)
+            },
+            isLoading = updateNicknameState is MypageViewModel.UpdateNicknameState.Loading
+        )
     }
 }
