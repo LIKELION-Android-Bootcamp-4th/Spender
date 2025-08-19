@@ -38,6 +38,12 @@ android {
 
         buildConfigField(
             "String",
+            "NAVER_OCR_API_URL",
+            localProperties.getProperty("NAVER_OCR_API_URL")
+        )
+
+        buildConfigField(
+            "String",
             "DEFAULT_WEB_CLIENT_ID",
             localProperties.getProperty("DEFAULT_WEB_CLIENT_ID")
         )
@@ -138,6 +144,8 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.android.gms:play-services-base:18.3.0")
     implementation("androidx.datastore:datastore-preferences:1.1.7")
+    implementation("com.google.firebase:firebase-storage-ktx:21.0.1")
+
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.56.2")
@@ -166,4 +174,6 @@ dependencies {
 
     //Google AdMob
     implementation("com.google.android.gms:play-services-ads:23.1.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 }
