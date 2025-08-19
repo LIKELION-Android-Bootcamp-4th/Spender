@@ -33,6 +33,7 @@ import com.e1i3.spender.ui.theme.Typography
 @Composable
 fun BudgeProgress(
     percentage: Float,
+    nickname: String = "",
     navHostController: NavHostController,
     showSetBudgetButton: Boolean = true,
     showNickname: Boolean = false,
@@ -54,7 +55,7 @@ fun BudgeProgress(
             .padding(16.dp),
     ) {
         if(showNickname){
-            Text("xxx 님은", style = Typography.titleMedium)
+            Text("${nickname}님은", style = Typography.titleMedium)
         }
 
         Row(

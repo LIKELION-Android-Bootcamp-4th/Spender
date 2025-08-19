@@ -21,15 +21,18 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.e1i3.spender.feature.home.domain.model.Friend
 import com.e1i3.spender.ui.theme.Typography
+import com.e1i3.spender.ui.theme.navigation.Screen
 
 @Composable
-fun FriendItem(navHostController: NavHostController, friend: Friend){
+fun FriendItem(navHostController: NavHostController, friend: Friend) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .width(64.dp)
-            .clickable{
-                navHostController.navigate("friend_detail/${friend.userId}")
+            .clickable {
+                navHostController.navigate(
+                    Screen.FriendDetailScreen.createRoute(friend.userId)
+                )
             }
     ) {
         val painter: Painter = rememberAsyncImagePainter(
@@ -39,7 +42,9 @@ fun FriendItem(navHostController: NavHostController, friend: Friend){
         Image(
             painter = painter,
             contentDescription = "${friend.nickname}의 프로필",
-            modifier = Modifier.size(60.dp).clip(CircleShape),
+            modifier = Modifier
+                .size(60.dp)
+                .clip(CircleShape),
             contentScale = ContentScale.Crop
         )
 

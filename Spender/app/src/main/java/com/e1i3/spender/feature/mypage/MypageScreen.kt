@@ -210,7 +210,7 @@ fun UserInfoSection(userName: String, iconRes: Int?) {
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Text("$userName 님", style = MaterialTheme.typography.titleMedium)
+        Text("${userName}님", style = MaterialTheme.typography.titleMedium)
     }
 }
 
