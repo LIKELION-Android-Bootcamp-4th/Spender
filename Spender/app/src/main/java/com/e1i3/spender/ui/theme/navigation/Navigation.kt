@@ -26,6 +26,7 @@ import com.e1i3.spender.feature.income.ui.incomedetail.IncomeDetailScreen
 import com.e1i3.spender.feature.mypage.MypageScreen
 import com.e1i3.spender.feature.mypage.ui.BudgetScreen
 import com.e1i3.spender.feature.mypage.ui.ExpenseCategoryScreen
+import com.e1i3.spender.feature.mypage.ui.FriendAddScreen
 import com.e1i3.spender.feature.mypage.ui.IncomeCategoryScreen
 import com.e1i3.spender.feature.mypage.ui.NotificationScreen
 import com.e1i3.spender.feature.mypage.ui.OpenSourceScreen
@@ -157,6 +158,9 @@ fun SpenderNavigation(
 //        }
         composable(Screen.IncomeRegistrationScreen.route) {
             IncomeRegistrationScreen(navController)
+        }
+        composable(Screen.FriendAddScreen.route) {
+            FriendAddScreen(navController)
         }
     }
 }
