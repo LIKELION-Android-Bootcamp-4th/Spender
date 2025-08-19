@@ -20,11 +20,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.spender"
+    namespace = "com.e1i3.spender"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.spender"
+        applicationId = "com.e1i3.spender"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
