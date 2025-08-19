@@ -2,7 +2,9 @@ package com.e1i3.spender.feature.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -10,10 +12,11 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notifications
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,10 +43,12 @@ import com.e1i3.spender.core.data.remote.expense.ExpenseDto
 import com.e1i3.spender.core.data.service.getExpenseListForHome
 import com.e1i3.spender.core.data.service.getExpenseRate
 import com.e1i3.spender.core.data.service.getTotalExpense
+import com.e1i3.spender.feature.home.domain.model.Friend
 import com.e1i3.spender.feature.home.ui.BudgeProgress
-import com.e1i3.spender.feature.home.ui.HomeViewModel
+import com.e1i3.spender.feature.home.ui.viewModel.HomeViewModel
 import com.e1i3.spender.feature.home.ui.RecentTransactionsSection
 import com.e1i3.spender.feature.home.ui.TotalExpenseCard
+import com.e1i3.spender.feature.home.ui.component.FriendItem
 import com.e1i3.spender.ui.theme.LightPointColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,6 +64,34 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
         percentage = getExpenseRate()
         recentExpenses = getExpenseListForHome()
     }
+
+    val friendList = listOf(
+        Friend(
+            userId = "user1",
+            nickname = "지출이1",
+            profileUrl = "https://randomuser.me/api/portraits/men/1.jpg",
+            status = "FRIENDS",
+        ),
+        Friend(
+            userId = "user2",
+            nickname = "지출이2",
+            profileUrl = "https://randomuser.me/api/portraits/women/2.jpg",
+            status = "FRIENDS",
+        ),
+        Friend(
+            userId = "user3",
+            nickname = "지출이3",
+            profileUrl = "https://randomuser.me/api/portraits/men/3.jpg",
+            status = "FRIENDS",
+        ),
+        Friend(
+            userId = "user4",
+            nickname = "지출이4",
+            profileUrl = "https://randomuser.me/api/portraits/women/4.jpg",
+            status = "FRIENDS",
+        )
+    )
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -114,7 +147,16 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                     .padding(padding)
                     .padding(horizontal = 5.dp),
             ) {
-
+                item {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(friendList){ friend ->
+                            FriendItem(friend = friend)
+                        }
+                    }
+                }
 
                 item {
                     TotalExpenseCard(totalExpense = totalExpense)

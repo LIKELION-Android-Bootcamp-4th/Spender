@@ -25,6 +25,8 @@ import com.e1i3.spender.core.common.util.getRelativeTimeString
 import com.e1i3.spender.core.ui.CustomTopAppBar
 import com.e1i3.spender.core.ui.LoadingScreen
 import com.e1i3.spender.feature.home.ui.component.NotificationItem
+import com.e1i3.spender.feature.home.ui.viewModel.HomeViewModel
+import com.e1i3.spender.feature.home.ui.viewModel.NotificationListViewModel
 import com.e1i3.spender.ui.theme.LightFontColor
 import com.e1i3.spender.ui.theme.Typography
 

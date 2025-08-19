@@ -1,4 +1,4 @@
-package com.e1i3.spender.feature.home.ui
+package com.e1i3.spender.feature.home.ui.viewModel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
