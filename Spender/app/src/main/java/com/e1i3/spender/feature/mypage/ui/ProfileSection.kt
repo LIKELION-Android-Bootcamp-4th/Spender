@@ -28,6 +28,8 @@ import com.e1i3.spender.ui.theme.Typography
 
 @Composable
 fun ProfileSection() {
+    val nickname = "임시 닉네임"
+
     Column(
         modifier = Modifier
     ) {
@@ -87,24 +89,23 @@ fun ProfileSection() {
             Spacer(Modifier.width(16.dp))
 
             Column {
-
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
-                        text = "닉네임 들어갈 곳 추후 변경",
+                        text = nickname,
                         style = Typography.titleMedium,
                         modifier = Modifier.weight(1f)
                     )
                     IconButton(
                         onClick = {}, //TODO: 수정 다이얼로그
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(24.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "닉네임 수정",
                             tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }
