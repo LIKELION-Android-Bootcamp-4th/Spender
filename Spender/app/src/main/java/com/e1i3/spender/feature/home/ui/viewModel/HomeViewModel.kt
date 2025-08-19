@@ -1,9 +1,10 @@
-package com.e1i3.spender.feature.home.ui
+package com.e1i3.spender.feature.home.ui.viewModel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.e1i3.spender.feature.home.domain.model.Friend
 import com.e1i3.spender.feature.home.domain.repository.HomeRepository
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,9 @@ class HomeViewModel @Inject constructor(
 
     private var listenerRegistered = false
     private var listenerRegistration: ListenerRegistration? = null
+
+    private val _friendList = mutableStateOf<List<Friend>>(emptyList())
+    val friendList: State<List<Friend>> = _friendList
 
     init {
         checkUnreadNotifications()
@@ -52,4 +56,12 @@ class HomeViewModel @Inject constructor(
         listenerRegistration?.remove()
     }
 
+    fun getFriendList(){
+        viewModelScope.launch {
+            repository.getFriendList()
+                .onSuccess { list ->
+                    _friendList.value = list
+                }
+        }
+    }
 }

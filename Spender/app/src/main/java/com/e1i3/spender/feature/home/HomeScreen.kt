@@ -1,23 +1,29 @@
 package com.e1i3.spender.feature.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Notifications
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,17 +35,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.e1i3.spender.R
 import com.e1i3.spender.core.data.remote.expense.ExpenseDto
 import com.e1i3.spender.core.data.service.getExpenseListForHome
 import com.e1i3.spender.core.data.service.getExpenseRate
 import com.e1i3.spender.core.data.service.getTotalExpense
+import com.e1i3.spender.feature.home.domain.model.Friend
 import com.e1i3.spender.feature.home.ui.BudgeProgress
-import com.e1i3.spender.feature.home.ui.HomeViewModel
+import com.e1i3.spender.feature.home.ui.viewModel.HomeViewModel
 import com.e1i3.spender.feature.home.ui.RecentTransactionsSection
 import com.e1i3.spender.feature.home.ui.TotalExpenseCard
+import com.e1i3.spender.feature.home.ui.component.FriendItem
 import com.e1i3.spender.ui.theme.LightPointColor
 import com.e1i3.spender.ui.theme.navigation.Screen
 
@@ -50,6 +60,11 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
     var percentage by remember { mutableStateOf(0f) }
     var recentExpenses by remember { mutableStateOf<List<ExpenseDto>>(emptyList()) }
     val hasUnread by viewModel.hasUnread
+    val friendList by viewModel.friendList
+
+    LaunchedEffect(Unit) {
+        viewModel.getFriendList()
+    }
 
     LaunchedEffect(hasUnread) {
         totalExpense = getTotalExpense()
@@ -60,7 +75,15 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
+                modifier = Modifier.height(80.dp),
+                navigationIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ci_temp),
+                        contentDescription = "프로필 이미지",
+                        modifier = Modifier.size(100.dp)
+                    )
+                },
                 title = { },
                 actions = {
                     IconButton(
@@ -116,6 +139,17 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                     .padding(padding)
                     .padding(horizontal = 5.dp),
             ) {
+                item {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 15.dp, vertical = 10.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(friendList){ friend ->
+                            FriendItem(friend = friend)
+                        }
+                    }
+                }
+
                 item {
                     TotalExpenseCard(totalExpense = totalExpense)
                 }
