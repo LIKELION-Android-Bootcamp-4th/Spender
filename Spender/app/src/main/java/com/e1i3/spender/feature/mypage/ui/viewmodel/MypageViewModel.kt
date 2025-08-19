@@ -33,6 +33,7 @@ class MypageViewModel @Inject constructor() : ViewModel() {
                     val provider = document.getString("provider")
                     val name = document.getString("name")
                     val email = document.getString("email")
+                    val nickname = document.getString("nickname")
 
                     val iconRes = when (provider) {
                         "google" -> R.drawable.google_icon
@@ -46,9 +47,21 @@ class MypageViewModel @Inject constructor() : ViewModel() {
                         else -> name ?: "사용자"
                     }
 
+                    val displayEmail = when (provider) {
+                        "kakao" -> email ?: "사용자"
+                        else -> email ?: "사용자"
+                    }
+
+                    val displayNickname = when (provider) {
+                        "kakao" -> nickname ?: "사용자"
+                        else -> nickname ?: "사용자"
+                    }
+
                     _user.value = User(
                         displayName = displayName,
-                        providerIcon = iconRes
+                        displayEmail = displayEmail,
+                        providerIcon = iconRes,
+                        displayNickname = displayNickname
                     )
                 }
             }

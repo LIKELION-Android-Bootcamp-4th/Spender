@@ -27,8 +27,8 @@ import com.e1i3.spender.feature.mypage.ui.component.EditButton
 import com.e1i3.spender.ui.theme.Typography
 
 @Composable
-fun ProfileSection() {
-    val nickname = "임시 닉네임"
+fun ProfileSection(nickName: String) {
+    val nickname = nickName
 
     Column(
         modifier = Modifier

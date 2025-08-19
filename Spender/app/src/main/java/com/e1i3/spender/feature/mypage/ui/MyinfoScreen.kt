@@ -10,14 +10,22 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.core.ui.CustomTopAppBar
+import com.e1i3.spender.feature.mypage.ui.viewmodel.MypageViewModel
 
 @Composable
 fun MyinfoScreen(
-    navHostController: NavHostController) {
+    navHostController: NavHostController,
+    mypageViewModel: MypageViewModel = hiltViewModel(),
+) {
+    val user by mypageViewModel.user.collectAsState()
+
     Scaffold(
         topBar = {
             CustomTopAppBar(
@@ -33,7 +41,7 @@ fun MyinfoScreen(
                     .padding(padding)
                     .padding(horizontal = 24.dp, vertical = 8.dp),
             ) {
-                ProfileSection()
+                ProfileSection(nickName = user.displayNickname)
                 Spacer(Modifier.height(64.dp))
                 Divider(
                     modifier = Modifier.fillMaxWidth(),
@@ -41,7 +49,7 @@ fun MyinfoScreen(
                     thickness = 1.dp,
                 )
                 Spacer(Modifier.height(32.dp))
-                AccountInfoSection()
+                AccountInfoSection(userName = user.displayName, userEmail = user.displayEmail, iconRes = user.providerIcon)
             }
         }
     )

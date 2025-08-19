@@ -6,14 +6,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,9 +20,10 @@ import com.e1i3.spender.R
 import com.e1i3.spender.ui.theme.Typography
 
 @Composable
-fun AccountInfoSection() {
-    val name = "이다영"
-    val email = "jah06114@naver.com"
+fun AccountInfoSection(userName: String, userEmail: String, iconRes: Int?) {
+    val name = userName
+    val email = userEmail
+    val iconRes = iconRes
 
     Column(
         modifier = Modifier
@@ -83,11 +83,14 @@ fun AccountInfoSection() {
                 style = Typography.titleMedium,
                 modifier = Modifier.weight(1f)
             )
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "소셜 로그인 프로바이더",
-                modifier = Modifier.size(20.dp)
-            )
+            if (iconRes != null) {
+                Icon(
+                    painter = painterResource(id = iconRes),
+                    contentDescription = "소셜 로그인 아이콘",
+                    modifier = Modifier.size(24.dp),
+                    tint = Color.Unspecified
+                )
+            }
         }
     }
 }
