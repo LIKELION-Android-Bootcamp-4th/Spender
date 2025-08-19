@@ -27,10 +27,10 @@ fun MyinfoScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(horizontal = 24.dp, vertical = 32.dp),
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
-
+                ProfileSection()
             }
         }
     )

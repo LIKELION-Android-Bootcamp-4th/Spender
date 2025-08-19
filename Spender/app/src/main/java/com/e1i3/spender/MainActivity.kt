@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
 
                 SpenderNavigation(
                     navController = navController,
-                    startDestination = Screen.SplashScreen.route
+                    startDestination = Screen.MyinfoScreen.route
                 )
             }
         }
