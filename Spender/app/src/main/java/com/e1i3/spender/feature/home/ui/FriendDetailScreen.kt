@@ -104,7 +104,7 @@ fun FriendDetailScreen(
                                 CategoryPieChart(
                                     labels = friend.categoryChartData.map { it.label },
                                     values = friend.categoryChartData.map { it.percentage },
-                                    colors = friend.categoryChartData.map { it.color.value.toInt() })
+                                    colors = friend.categoryChartData.map { it.color.toArgb()  })
                                 Spacer(modifier = Modifier.height(40.dp))
                             }
 

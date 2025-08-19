@@ -1,6 +1,8 @@
 package com.e1i3.spender.feature.home.mapper
 
 import androidx.compose.ui.graphics.Color
+import androidx.core.graphics.toColor
+import androidx.core.graphics.toColorInt
 import com.e1i3.spender.core.common.toColor
 import com.e1i3.spender.core.data.remote.friend.FriendDetailDto
 import com.e1i3.spender.core.data.remote.friend.FriendListDto
@@ -35,7 +37,7 @@ fun CategoryTotalDto.toDomain(): CategoryTotal {
         categoryId = this.categoryId,
         categoryName = this.categoryName,
         totalPrice = this.totalPrice,
-        color = this.colorHex.toColor()
+        color = Color(this.colorHex.toColorInt())
     )
 }
 
