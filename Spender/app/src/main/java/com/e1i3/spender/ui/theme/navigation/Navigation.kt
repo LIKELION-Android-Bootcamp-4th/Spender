@@ -21,6 +21,7 @@ import com.e1i3.spender.feature.expense.ui.ocrresult.OcrResultScreen
 import com.e1i3.spender.feature.expense.ui.recurringexpensedetail.RecurringExpenseDetailScreen
 import com.e1i3.spender.feature.home.HomeScreen
 import com.e1i3.spender.feature.home.ui.NotificationListScreen
+import com.e1i3.spender.feature.home.ui.SearchScreen
 import com.e1i3.spender.feature.income.ui.IncomeRegistrationScreen
 import com.e1i3.spender.feature.income.ui.incomedetail.IncomeDetailScreen
 import com.e1i3.spender.feature.mypage.MypageScreen
@@ -56,6 +57,9 @@ fun SpenderNavigation(
         }
         composable(Screen.OnboardingScreen.route) {
             OnboardingScreen(navController)
+        }
+        composable(Screen.SearchScreen.route) {
+            SearchScreen(navController)
         }
         composable(Screen.AuthScreen.route) {
             AuthScreen(navController)
