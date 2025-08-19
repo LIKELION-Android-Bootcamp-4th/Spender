@@ -6,8 +6,9 @@ sealed class Screen(val route: String) {
     object OnboardingScreen : Screen("onboarding")
     object SplashScreen : Screen("splash")
 
-    object FriendDetailScreen: Screen("friend_detail")
-
+    object FriendDetailScreen: Screen("friend_detail/{friendId}"){
+        fun createRoute(friendId: String) = "friend_detail/$friendId"
+    }
     object NotificationListScreen: Screen("notification_list")
 
     object ReportDetail : Screen("report_detail/{month}") {

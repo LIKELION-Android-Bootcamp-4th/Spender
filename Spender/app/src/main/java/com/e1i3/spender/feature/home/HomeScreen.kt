@@ -135,6 +135,8 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                     }
                 }
 
+                // TODO: 티어 추가하기
+
                 item {
                     TotalExpenseCard(totalExpense = totalExpense)
                 }

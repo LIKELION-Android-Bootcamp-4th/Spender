@@ -76,8 +76,11 @@ fun SpenderNavigation(
         composable(BottomNavigationItem.Mypage.route) {
             MypageScreen(navController)
         }
-        composable(Screen.FriendDetailScreen.route) {
-            FriendDetailScreen(navHostController = navController)
+        composable(Screen.FriendDetailScreen.route) { backStackEntry ->
+            val friendId = backStackEntry.arguments?.getString("friendId")
+            if (friendId != null) {
+                FriendDetailScreen(navHostController = navController, friendId)
+            }
         }
         composable(Screen.NotificationListScreen.route) {
             NotificationListScreen(navHostController = navController, homeViewModel = hiltViewModel())

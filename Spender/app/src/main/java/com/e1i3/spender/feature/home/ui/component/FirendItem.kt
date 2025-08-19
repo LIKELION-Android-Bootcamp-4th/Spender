@@ -29,8 +29,7 @@ fun FriendItem(navHostController: NavHostController, friend: Friend){
         modifier = Modifier
             .width(64.dp)
             .clickable{
-                // TODO: 친구 상세 화면으로 이동
-                navHostController.navigate("friend_detail")
+                navHostController.navigate("friend_detail/${friend.userId}")
             }
     ) {
         val painter: Painter = rememberAsyncImagePainter(
