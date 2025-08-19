@@ -1,6 +1,5 @@
 package com.example.spender.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -12,32 +11,42 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = DarkModePointColor,
+    onPrimary = WhiteColor,
+    primaryContainer = DarkModeSelectedColor,
+    secondary = DarkModePointColor,
+    onSecondary = WhiteColor,
+    tertiary= DarkModeTabColor,
+    onTertiary= DarkModeLightFontColor,
+    background = DarkModeBackground,
+    onBackground = DarkModeDefaultFontColor,
+    surface = DarkModeLightSurface,
+    onSurface = DarkModeDefaultFontColor,
+    outline = DarkModeTabColor,
+    error = PointRedColor,
+
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = PointColor,
+    onPrimary = WhiteColor,
+    primaryContainer = SelectedColor,
+    secondary = LightGray,
+    onSecondary = WhiteColor,
+    tertiary= TabColor,
+    onTertiary= LightFontColor,
+    background = WhiteColor,
+    onBackground = DefaultFontColor,
+    surface = LightSurface,
+    onSurface = DefaultFontColor,
+    outline = TabColor,
+    error = PointRedColor
 )
 
 @Composable
 fun SpenderTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
