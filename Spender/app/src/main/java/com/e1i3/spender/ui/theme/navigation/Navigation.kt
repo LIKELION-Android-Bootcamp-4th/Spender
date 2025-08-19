@@ -27,6 +27,7 @@ import com.e1i3.spender.feature.mypage.MypageScreen
 import com.e1i3.spender.feature.mypage.ui.BudgetScreen
 import com.e1i3.spender.feature.mypage.ui.ExpenseCategoryScreen
 import com.e1i3.spender.feature.mypage.ui.IncomeCategoryScreen
+import com.e1i3.spender.feature.mypage.ui.MyinfoScreen
 import com.e1i3.spender.feature.mypage.ui.NotificationScreen
 import com.e1i3.spender.feature.mypage.ui.OpenSourceScreen
 import com.e1i3.spender.feature.mypage.ui.RegularExpenseScreen
@@ -75,7 +76,9 @@ fun SpenderNavigation(
         composable(BottomNavigationItem.Mypage.route) {
             MypageScreen(navController)
         }
-
+        composable(Screen.MyinfoScreen.route) {
+            MyinfoScreen(navController)
+        }
         composable(Screen.NotificationListScreen.route) {
             NotificationListScreen(navHostController = navController, homeViewModel = hiltViewModel())
         }
