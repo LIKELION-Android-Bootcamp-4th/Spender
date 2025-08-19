@@ -1,7 +1,10 @@
 package com.example.spender.feature.expense.ui
 
+import android.Manifest
 import android.content.Context
 import android.net.Uri
+import android.webkit.MimeTypeMap
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -16,12 +19,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -29,22 +33,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.example.spender.BuildConfig
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
+import com.example.spender.BuildConfig
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
-import android.Manifest
-import android.webkit.MimeTypeMap
-import android.widget.Toast
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.res.painterResource
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -133,11 +130,22 @@ fun OcrContent(
                 }
             }
             if (uiState.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(64.dp),
-                    color = PointColor,
-                    strokeWidth = 5.dp
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(64.dp),
+                        color = PointColor,
+                        strokeWidth = 5.dp
+                    )
+                    Spacer(Modifier.height(120.dp))
+                    Text(
+                        text = "영수증 인식중...",
+                        style = Typography.titleMedium,
+                        color = PointColor
+                    )
+                }
             }
         }
         Spacer(Modifier.height(12.dp))
@@ -205,11 +213,3 @@ private fun createTempImageUri(context: Context): Uri {
     val tempFile = File(context.cacheDir, "temp_receipt.jpg")
     return FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.provider", tempFile)
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun OcrRegistrationScreenPreview() {
-//    SpenderTheme {
-//        OcrRegistrationScreen()
-//    }
-//}

@@ -11,12 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.spender.ui.theme.PointColor
-import com.example.spender.ui.theme.PointRedColor
 import com.example.spender.ui.theme.Typography
 
 @Composable
 fun TotalSpendingSection(totalExpense: Int, totalBudget: Int) {
-//    val color = if(totalExpense < totalBudget) PointColor else PointRedColor
     Box(
         modifier = Modifier
             .fillMaxWidth()

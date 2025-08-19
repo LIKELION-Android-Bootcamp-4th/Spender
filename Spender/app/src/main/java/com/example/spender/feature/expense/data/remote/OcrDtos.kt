@@ -2,51 +2,6 @@ package com.example.spender.feature.expense.data.remote
 
 import kotlinx.serialization.Serializable
 
-//@Serializable
-//data class OcrRequest(
-//    val version: String = "V2",
-//    val requestId: String,
-//    val timestamp: Long = System.currentTimeMillis(),
-//    val images: List<OcrImageRequest>
-//)
-//
-//@Serializable
-//data class OcrImageRequest(
-//    val format: String,
-//    val name: String = "receipt",
-//    val data: String
-//)
-//
-//@Serializable
-//data class OcrResponse(val images: List<OcrImage>)
-//
-//@Serializable
-//data class OcrImage(
-//    val receipt: OcrReceipt?,
-//    val inferResult: String,
-//)
-//
-//@Serializable
-//data class OcrReceipt(val result: OcrResult?)
-//
-//@Serializable
-//data class OcrResult(
-//    val storeInfo: StoreInfo?,
-//    val paymentInfo: PaymentInfo?,
-//    val totalPrice: TotalPrice?
-//)
-//
-//@Serializable
-//data class StoreInfo(val name: OcrField?)
-//
-//@Serializable
-//data class PaymentInfo(val date: OcrField?)
-//
-//@Serializable
-//data class TotalPrice(val price: OcrField?)
-//
-//@Serializable
-//data class OcrField(val text: String)
 @Serializable
 data class OcrRequest(
     val version: String = "V2",

@@ -1,7 +1,6 @@
 package com.example.spender.feature.analysis.ui.calendar
 
 import android.icu.util.Calendar
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf

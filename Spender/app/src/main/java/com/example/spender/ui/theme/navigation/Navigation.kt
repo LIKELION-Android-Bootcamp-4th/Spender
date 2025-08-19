@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -27,6 +28,7 @@ import com.example.spender.feature.mypage.ui.BudgetScreen
 import com.example.spender.feature.mypage.ui.ExpenseCategoryScreen
 import com.example.spender.feature.mypage.ui.IncomeCategoryScreen
 import com.example.spender.feature.mypage.ui.NotificationScreen
+import com.example.spender.feature.mypage.ui.OpenSourceScreen
 import com.example.spender.feature.mypage.ui.RegularExpenseScreen
 import com.example.spender.feature.onboarding.OnboardingScreen
 import com.example.spender.feature.report.ui.detail.ReportDetailScreen
@@ -75,7 +77,7 @@ fun SpenderNavigation(
         }
 
         composable(Screen.NotificationListScreen.route) {
-            NotificationListScreen(navController)
+            NotificationListScreen(navHostController = navController, homeViewModel = hiltViewModel())
         }
 
         composable(Screen.ReportDetail.route) { backStackEntry ->
@@ -104,10 +106,12 @@ fun SpenderNavigation(
         }
         composable(
             Screen.ExpenseRegistrationScreen.route,
-            listOf(navArgument("selectedTabIndex") {
-                type = NavType.IntType
-                defaultValue = 1
-            },),
+            listOf(
+                navArgument("selectedTabIndex") {
+                    type = NavType.IntType
+                    defaultValue = 1
+                },
+            ),
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "spender://expense_registration"
@@ -144,6 +148,9 @@ fun SpenderNavigation(
         }
         composable(Screen.NotificationScreen.route) {
             NotificationScreen(navController)
+        }
+        composable(Screen.OpenSourceScreen.route){
+            OpenSourceScreen(navController)
         }
 //        composable(Screen.ExpenseRegistrationScreen.route) {
 //            ExpenseRegistrationParentScreen(navController)

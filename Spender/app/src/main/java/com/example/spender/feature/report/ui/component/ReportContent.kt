@@ -20,14 +20,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import com.example.spender.core.common.util.formatToManWon
 import com.example.spender.feature.report.domain.model.Report
 import com.example.spender.feature.report.ui.list.RoundedVerticalBarChartRenderer
-import com.example.spender.ui.theme.LightBackgroundColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.navigation.Screen
 import com.github.mikephil.charting.charts.BarChart
@@ -101,6 +100,8 @@ fun MonthlySpendingBarChart(
     labels: List<String>,
     onBarClick: (Int) -> Unit
 ) {
+    val labelColor = MaterialTheme.colorScheme.onBackground.toArgb()
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -132,7 +133,7 @@ fun MonthlySpendingBarChart(
                         setDrawGridLines(false)
                         granularity = 1f
                         valueFormatter = IndexAxisValueFormatter(labels)
-                        textColor = android.graphics.Color.BLACK
+                        textColor = labelColor
                     }
 
                     axisLeft.isEnabled = false

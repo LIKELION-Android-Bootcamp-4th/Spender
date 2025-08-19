@@ -22,6 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spender"
         android:name=".MyApplication">
+        <meta-data
+            android:name="android.app.shortcuts"
+            android:resource="@xml/shortcuts" />
         <receiver android:name=".core.widget.SpenderSmallReceiverWidget"
             android:exported="true">
             <intent-filter>
@@ -31,6 +34,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/spender_small_widget_info" />
         </receiver>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
+
         <receiver android:name=".core.widget.SpenderMediumReceiverWidget"
             android:exported="true">
             <intent-filter>
@@ -39,15 +46,6 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/spender_medium_widget_info" />
-        </receiver>
-        <receiver android:name=".core.widget.SpenderLargeReceiverWidget"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/spender_large_widget_info" />
         </receiver>
 
         <service
@@ -67,6 +65,12 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="spender" android:host="expense_registration" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
@@ -80,7 +84,7 @@
 
                 <data
                     android:host="oauth"
-                    android:scheme="@string/kakao_redirect_url" />
+                    android:scheme="${KAKAO_REDIRECT_SCHEME}" />
             </intent-filter>
         </activity>
         <provider

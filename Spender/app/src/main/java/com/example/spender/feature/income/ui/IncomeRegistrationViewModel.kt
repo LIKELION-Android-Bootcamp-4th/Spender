@@ -47,7 +47,9 @@ class IncomeRegistrationViewModel @Inject constructor(
 
     // 이벤트 핸들러
     fun onAmountChange(amount: String) {
-        _uiState.update { it.copy(amount = amount.filter { c -> c.isDigit() }) }
+        if (amount.length <= 10) {
+            _uiState.update { it.copy(amount = amount.filter { char -> char.isDigit() }) }
+        }
     }
 
     fun onTitleChange(title: String) {
@@ -94,6 +96,7 @@ class IncomeRegistrationViewModel @Inject constructor(
             if (isSuccess) {
                 _eventFlow.emit(RegistrationEvent.ShowToast("저장되었습니다"))
                 clearInputs()
+                _eventFlow.emit(RegistrationEvent.NavigateBack)
             } else {
                 _eventFlow.emit(RegistrationEvent.ShowToast("저장에 실패했습니다."))
             }

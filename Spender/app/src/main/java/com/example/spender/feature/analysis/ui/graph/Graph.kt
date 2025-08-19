@@ -1,7 +1,6 @@
 package com.example.spender.feature.analysis.ui.graph
 
 import android.icu.text.DecimalFormat
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -19,11 +19,11 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.example.spender.feature.analysis.domain.model.CalendarItemData
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.formatter.ValueFormatter
 
 @Composable
@@ -34,7 +34,7 @@ fun LineChart(sampleData: List<CalendarItemData>) {
         val avg = graphData.sumOf { it.expense } / 31
 
         val data = mutableListOf<CalendarItemData>()
-        for (i in 1 .. 31) {
+        for (i in 1..31) {
             val graph = graphData.filter { it.day == i }
             if (graph.isNotEmpty()) {
                 data.add(graph.first())
@@ -43,7 +43,8 @@ fun LineChart(sampleData: List<CalendarItemData>) {
             data.add(CalendarItemData(i, 0))
         }
 
-        val dataSet = LineDataSet(data.map { Entry(it.day.toFloat(), it.expense.toFloat()) }.toList(), "지출")
+        val dataSet =
+            LineDataSet(data.map { Entry(it.day.toFloat(), it.expense.toFloat()) }.toList(), "지출")
         dataSet.apply {
             lineWidth = 2f
             color = PointColor.toArgb()
@@ -52,6 +53,8 @@ fun LineChart(sampleData: List<CalendarItemData>) {
             setDrawCircles(false)
             mode = LineDataSet.Mode.LINEAR
         }
+
+        val labelColor = MaterialTheme.colorScheme.onBackground.toArgb()
 
         AndroidView(
             modifier = Modifier
@@ -75,6 +78,7 @@ fun LineChart(sampleData: List<CalendarItemData>) {
                             }
                         }
                         setDrawGridLines(false)
+                        textColor = labelColor
                     }
                     axisLeft.apply {
                         setDrawGridLines(true)
@@ -85,6 +89,7 @@ fun LineChart(sampleData: List<CalendarItemData>) {
                                 else "${value.toInt() / 10000}만원"
                             }
                         }
+                        textColor = labelColor
                     }
                     axisRight.isEnabled = false
                 }

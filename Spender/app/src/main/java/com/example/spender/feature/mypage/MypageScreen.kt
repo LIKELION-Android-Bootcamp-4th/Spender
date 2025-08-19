@@ -13,13 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material3.Divider
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,7 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomDialog
@@ -39,6 +38,11 @@ import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
 import com.example.spender.feature.mypage.ui.component.MyPageItemType
 import com.example.spender.feature.mypage.ui.component.Section
 import com.example.spender.feature.mypage.ui.viewmodel.MypageViewModel
+import com.example.spender.ui.theme.LightFontColor
+import com.example.spender.ui.theme.Typography
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 
 
 @Composable
@@ -83,8 +87,6 @@ fun MypageScreen(
             iconRes = user.providerIcon
         )
 
-        //HorizontalDivider()
-
         Section(
             title = "가계부",
             items = listOf(
@@ -96,8 +98,7 @@ fun MypageScreen(
             onItemClick = onItemClick
         )
 
-        //HorizontalDivider()
-
+        Spacer(modifier = Modifier.height(10.dp))
 
         Section(
             title = "설정",
@@ -109,7 +110,19 @@ fun MypageScreen(
             onItemClick = onItemClick
         )
 
-        AdBanner()
+        TextButton(
+            onClick = {
+                navHostController.navigate("open_source")
+            }
+        ) {
+            Text(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                text = "오픈소스 라이선스 보기",
+                style = Typography.bodyMedium.copy(textDecoration = TextDecoration.Underline, color = LightFontColor)
+            )
+        }
+
+        AdMobBanner()
     }
 
     if (showWithdrawDialog) {
@@ -159,6 +172,28 @@ fun MypageScreen(
 }
 
 @Composable
+fun AdMobBanner() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        AndroidView(
+            modifier = Modifier.fillMaxWidth(),
+            factory = { context ->
+                AdView(context).apply {
+                    setAdSize(AdSize.BANNER)
+                    adUnitId = "ca-app-pub-3940256099942544/6300978111"
+                    loadAd(AdRequest.Builder().build())
+                }
+            }
+        )
+    }
+}
+
+
+@Composable
 fun UserInfoSection(userName: String, iconRes: Int?) {
     Row(
         modifier = Modifier
@@ -166,11 +201,6 @@ fun UserInfoSection(userName: String, iconRes: Int?) {
             .padding(vertical = 28.dp, horizontal = 28.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-//        Icon(
-//            Icons.Default.AccountCircle,
-//            contentDescription = null,
-//            modifier = Modifier.size(24.dp)
-//        ) // TODO : 소셜 로그인에 맞는 이미지로 교체
         if (iconRes != null) {
             Icon(
                 painter = painterResource(id = iconRes),

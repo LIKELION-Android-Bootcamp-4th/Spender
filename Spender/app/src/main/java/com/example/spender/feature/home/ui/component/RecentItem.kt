@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.spender.core.common.util.toCurrency
-import com.example.spender.ui.theme.PointRedColor
 import com.example.spender.ui.theme.Typography
 
 @Composable

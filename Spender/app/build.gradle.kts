@@ -35,6 +35,45 @@ android {
             "NAVER_OCR_CLIENT_SECRET",
             localProperties.getProperty("NAVER_OCR_CLIENT_SECRET")
         )
+
+        buildConfigField(
+            "String",
+            "NAVER_OCR_API_URL",
+            localProperties.getProperty("NAVER_OCR_API_URL")
+        )
+
+        buildConfigField(
+            "String",
+            "DEFAULT_WEB_CLIENT_ID",
+            localProperties.getProperty("DEFAULT_WEB_CLIENT_ID")
+        )
+
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_ID",
+            localProperties.getProperty("NAVER_CLIENT_ID")
+        )
+
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_SECRET",
+            localProperties.getProperty("NAVER_CLIENT_SECRET")
+        )
+
+        buildConfigField(
+            "String",
+            "KAKAO_APP_KEY",
+            localProperties.getProperty("KAKAO_APP_KEY")
+        )
+
+        buildConfigField(
+            "String",
+            "KAKAO_REDIRECT_URL",
+            localProperties.getProperty("KAKAO_REDIRECT_URL")
+        )
+
+        manifestPlaceholders["KAKAO_REDIRECT_SCHEME"] = localProperties.getProperty("KAKAO_REDIRECT_URL")?.replace("\"", "") ?: ""
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -105,6 +144,8 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.android.gms:play-services-base:18.3.0")
     implementation("androidx.datastore:datastore-preferences:1.1.7")
+    implementation("com.google.firebase:firebase-storage-ktx:21.0.1")
+
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.56.2")
@@ -130,4 +171,9 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil-compose:2.6.0")
+
+    //Google AdMob
+    implementation("com.google.android.gms:play-services-ads:23.1.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 }

@@ -16,13 +16,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.feature.expense.domain.model.RegularExpense
-import com.example.spender.ui.theme.LightFontColor
 import com.example.spender.ui.theme.PointColor
-import com.example.spender.ui.theme.TabColor
 import com.example.spender.ui.theme.Typography
 
 @Composable

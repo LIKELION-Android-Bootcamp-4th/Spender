@@ -1,6 +1,5 @@
 package com.example.spender.feature.analysis.domain.repository
 
-import android.util.Log
 import com.example.spender.core.data.remote.expense.ExpenseDto
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -57,7 +56,6 @@ class CalendarRepository @Inject constructor(
                 )
             }.toMutableList()
         } catch (e: Exception) {
-            Log.d("Analysis / ExpenseList", "Expense list error")
             mutableListOf()
         }
     }
@@ -105,7 +103,6 @@ class CalendarRepository @Inject constructor(
                 )
             }.toMutableList()
         } catch (e: Exception) {
-            Log.d("Analysis / IncomeList", "Income list error")
             mutableListOf()
         }
     }
@@ -155,7 +152,6 @@ class CalendarRepository @Inject constructor(
                 )
             }.toMutableList()
         } catch (e: Exception) {
-            Log.d("Analysis / Expense Daily List", "Expense list error")
             mutableListOf()
         }
 
@@ -180,7 +176,6 @@ class CalendarRepository @Inject constructor(
                 )
             }.toMutableList())
         } catch (e: Exception) {
-            Log.d("Analysis / Income Daily List", "Income list error")
         }
 
         dataList.sortByDescending { it.createdAt }

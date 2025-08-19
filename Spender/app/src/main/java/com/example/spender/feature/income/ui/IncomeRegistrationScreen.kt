@@ -1,10 +1,8 @@
 package com.example.spender.feature.income.ui
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,28 +10,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -43,7 +36,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -58,19 +50,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.spender.feature.expense.ui.RegistrationEvent
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomTopAppBar
-import com.example.spender.feature.expense.ui.NumberCommaTransformation
 import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
-import com.example.spender.ui.theme.NotoSansFamily
+import com.example.spender.feature.expense.ui.NumberCommaTransformation
+import com.example.spender.feature.expense.ui.RegistrationEvent
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
@@ -218,33 +207,23 @@ fun IncomeRegistrationScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
-                // 금액 입력
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                //수입 내용
                 TextField(
-                    value = uiState.amount,
-                    onValueChange = {
-                        viewModel.onAmountChange(it)
-                    },
+                    value = uiState.title,
+                    onValueChange = { viewModel.onTitleChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 40.dp, vertical = 16.dp),
+                        .padding(horizontal = 30.dp, vertical = 16.dp),
                     placeholder = {
                         Text(
-                            "수입을 입력하세요",
-                            fontSize = 14.sp,
+                            "수입 제목을 입력하세요",
+                            fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.onTertiary
                         )
                     },
-                    trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    visualTransformation = NumberCommaTransformation(),
                     singleLine = true,
-                    textStyle = TextStyle(
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Start
-                    ),
-
+                    textStyle = Typography.titleMedium,
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
@@ -252,22 +231,30 @@ fun IncomeRegistrationScreen(
                         focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
-                // 내용 입력
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
+
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                // 금액 입력
                 TextField(
-                    value = uiState.title,
-                    onValueChange = {
-                        viewModel.onTitleChange(it)
-                    },
-                    modifier = Modifier.fillMaxWidth(),
+                    value = uiState.amount,
+                    onValueChange = { viewModel.onAmountChange(it) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp, vertical = 16.dp),
                     placeholder = {
                         Text(
-                            "수입 내용을 입력하세요",
+                            "수입을 입력하세요",
                             fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.onTertiary
                         )
                     },
+                    trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    visualTransformation = NumberCommaTransformation(),
                     singleLine = true,
-                    textStyle = TextStyle(fontSize = 18.sp),
+                    textStyle = Typography.titleMedium,
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
@@ -352,9 +339,7 @@ fun IncomeRegistrationScreen(
                 Spacer(Modifier.height(30.dp))
                 OutlinedTextField(
                     value = uiState.memo,
-                    onValueChange = {
-                        viewModel.onMemoChange(it)
-                    },
+                    onValueChange = { viewModel.onMemoChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(240.dp),
@@ -363,8 +348,10 @@ fun IncomeRegistrationScreen(
                             "메모",
                             style = Typography.bodySmall,
                             color = MaterialTheme.colorScheme.onTertiary,
+                            fontSize = 14.sp
                         )
                     },
+                    textStyle = Typography.bodyMedium,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.tertiary,
@@ -376,12 +363,3 @@ fun IncomeRegistrationScreen(
 
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun IncomeRegistrationScreenPreview() {
-//    SpenderTheme {
-//        IncomeRegistrationScreen()
-//    }
-//}

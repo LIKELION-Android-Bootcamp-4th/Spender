@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -28,7 +29,6 @@ import com.example.spender.feature.mypage.ui.viewmodel.NotificationSettingsViewM
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationScreen(
     navHostController: NavHostController,
@@ -103,10 +103,10 @@ private fun NotificationSettingRow(
             colors = SwitchDefaults.colors(
                 uncheckedThumbColor = Color.White, // 오프 동그라미 색
                 uncheckedTrackColor = Color(0xFFD9D9D9), // 오프 배경 색
-                uncheckedBorderColor = Color.White,
+                uncheckedBorderColor = MaterialTheme.colorScheme.background,
                 checkedThumbColor = Color.White,   // 온 동그라미 색
                 checkedTrackColor = PointColor,   // 온 배경
-                checkedBorderColor = Color.White,
+                checkedBorderColor = MaterialTheme.colorScheme.background,
             ),
             modifier = Modifier.scale(1.2f),
             thumbContent = {

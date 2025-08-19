@@ -7,7 +7,6 @@ import com.example.spender.core.data.service.getFirebaseAuth
 import com.example.spender.feature.expense.data.remote.RegularExpenseDto
 import com.example.spender.feature.expense.data.repository.RegularExpenseRepository
 import com.example.spender.feature.expense.ui.RegistrationEvent
-import com.example.spender.feature.income.data.remote.IncomeDto
 import com.example.spender.feature.mypage.data.repository.CategoryRepository
 import com.example.spender.feature.mypage.domain.model.Category
 import com.google.firebase.Timestamp
@@ -55,7 +54,7 @@ class RegularExpenseDetailViewModel @Inject constructor(
                         amount = expense.amount.toString(),
                         title = expense.title,
                         memo = expense.memo,
-                        firstPaymentDate = expense.firstPaymentDate,
+                        firstPaymentDate = expense.first_payment_date,
                         categoryId = expense.categoryId,
                         categoryName = category?.name ?: "미분류",
                         dayOfMonth = expense.day,
@@ -76,7 +75,9 @@ class RegularExpenseDetailViewModel @Inject constructor(
     }
 
     fun onAmountChange(amount: String) {
-        _uiState.update { it.copy(amount = amount) }
+        if (amount.length <= 10) {
+            _uiState.update { it.copy(amount = amount.filter { char -> char.isDigit() }) }
+        }
     }
 
     fun onTitleChange(title: String) {

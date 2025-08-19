@@ -1,10 +1,8 @@
 package com.example.spender.feature.report.ui.detail
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,7 +53,7 @@ fun ReportDetailScreen(
                     TotalSpendingSection(totalExpense = report.totalExpense, totalBudget = report.totalBudget)
                 }
 
-                // 예산 대비 지출 TODO : 시간 남으면 피그마처럼 초과되는 부분만 빨간색으로 되도록 수정
+                // 예산 대비 지출
                 item {
                     BudgetProgressSection(totalExpense = report.totalExpense, totalBudget = report.totalBudget)
                 }

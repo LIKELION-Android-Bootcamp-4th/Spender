@@ -23,14 +23,15 @@ private val DarkColorScheme = darkColorScheme(
     surface = DarkModeLightSurface,
     onSurface = DarkModeDefaultFontColor,
     outline = DarkModeTabColor,
-    error = PointRedColor
+    error = PointRedColor,
+
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = PointColor,
     onPrimary = WhiteColor,
     primaryContainer = SelectedColor,
-    secondary = PointColor,
+    secondary = LightGray,
     onSecondary = WhiteColor,
     tertiary= TabColor,
     onTertiary= LightFontColor,

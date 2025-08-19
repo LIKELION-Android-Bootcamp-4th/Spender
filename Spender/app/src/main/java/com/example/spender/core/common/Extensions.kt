@@ -1,5 +1,7 @@
 package com.example.spender.core.common
 
+import android.content.Context
+import androidx.annotation.RawRes
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.toColorInt
 
@@ -19,4 +21,11 @@ fun String.toColor(): Color {
     } catch (e: IllegalArgumentException) {
         Color.Gray
     }
+}
+
+//txt읽기
+fun readRawTextFile(context: Context, @RawRes resId: Int): String {
+    return context.resources.openRawResource(resId)
+        .bufferedReader()
+        .use { it.readText() }
 }

@@ -18,17 +18,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -38,7 +35,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -53,22 +49,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.spender.core.ui.CustomTopAppBar
+import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
 import com.example.spender.feature.expense.ui.EmotionTagGroup
 import com.example.spender.feature.expense.ui.NumberCommaTransformation
 import com.example.spender.feature.expense.ui.RegistrationEvent
-import com.example.spender.feature.expense.ui.RegistrationUiState
-import com.example.spender.feature.expense.ui.RegistrationViewModel
-import com.example.spender.feature.expense.ui.CategoryBottomSheetItem
-import com.example.spender.ui.theme.BlackColor
 import com.example.spender.ui.theme.NotoSansFamily
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
@@ -230,46 +221,59 @@ fun OcrResultScreen(
                 )
             }
 
-            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                //지출 내용
+                TextField(
+                    value = uiState.title,
+                    onValueChange = { viewModel.onTitleChange(it) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 30.dp, vertical = 16.dp),
+                    placeholder = {
+                        Text(
+                            "지출 제목을 입력하세요",
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
+                    },
+                    singleLine = true,
+                    textStyle = Typography.titleMedium,
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
+                    )
+                )
+            }
+
+            HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
+
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                 // 금액 입력
                 TextField(
                     value = uiState.amount,
-                    onValueChange = {
-                        viewModel.onAmountChange(it)
-                    },
+                    onValueChange = { viewModel.onAmountChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 40.dp, vertical = 16.dp),
-                    placeholder = { Text("지출을 입력하세요", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
+                        .padding(horizontal = 30.dp, vertical = 16.dp),
+                    placeholder = {
+                        Text(
+                            "지출을 입력하세요",
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
+                    },
                     trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     visualTransformation = NumberCommaTransformation(),
                     singleLine = true,
-                    textStyle = TextStyle(
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Start
-                    ),
+                    textStyle = Typography.titleMedium,
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color.Transparent,
                         focusedContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                        focusedIndicatorColor = MaterialTheme.colorScheme.primary
-                    )
-                )
-
-                // 지출내용 입력
-                TextField(
-                    value = uiState.title,
-                    onValueChange = { viewModel.onTitleChange(it) },
-                    modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("지출 내용을 입력하세요", fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)) },
-                    singleLine = true,
-                    textStyle = TextStyle(fontSize = 18.sp),
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
             }
@@ -367,22 +371,20 @@ fun OcrResultScreen(
                     onValueChange = { viewModel.onMemoChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(120.dp),
+                        .height(240.dp),
                     placeholder = {
                         Text(
                             "메모",
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            style = Typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onTertiary,
                             fontSize = 14.sp
                         )
                     },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = 16.sp,
-                    ),
+                    textStyle = Typography.bodyMedium,
                     shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                        focusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
                     )
                 )
             }

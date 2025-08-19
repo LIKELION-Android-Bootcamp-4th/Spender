@@ -6,7 +6,7 @@
     <string name="tab_report">리포트</string>
 
     <string-array name="onboarding_title">
-        <item>한 달 예산, 지출이와 함께 지켜봅시다.</item>
+        <item>꽉잡아 지출이</item>
         <item>한 달 예산은 얼마인가요?</item>
         <item>이제 시작할 수 있어요.</item>
     </string-array>
@@ -15,14 +15,8 @@
     <string name="budgets_yellow">이대로라면 예산을 초과할 것 같아요!</string>
     <string name="budgets_red">예산 초과! 지출을 줄여야 해요!</string>
 
+    <string name="shortcut_expense_short">지출 등록</string>
+    <string name="shortcut_expense_long">지출을 바로 등록합니다.</string>
     <string name="spender_small_widget_description">예산 대비 지출을 확입합니다.</string>
     <string name="spender_medium_widget_description">예산 대비 지출을 확인하고 지출을 바로 등록합니다.</string>
-
-
-    <string name="default_web_client_id">1073077761870-is2da6dro8u2rqgqt56m6hl1rccq9nqh.apps.googleusercontent.com</string>
-    <string name="naver_client_id">btOnE17uFYFcVX7H36Tm</string>
-    <string name="naver_client_secret">lVwABQpwoF</string>
-    <string name="kakao_app_key">05bd03f6530f0a6819b1e37e5b7765fc</string>
-    <string name="kakao_redirect_url">kakao05bd03f6530f0a6819b1e37e5b7765fc</string>
-
 </resources>

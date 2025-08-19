@@ -1,9 +1,7 @@
 package com.example.spender.feature.auth.ui
 
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.example.spender.ui.theme.GooglePointColor
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -22,53 +20,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.spender.BuildConfig
 import com.example.spender.R
-import com.example.spender.core.data.remote.auth.LoginType
-import com.example.spender.core.data.service.getFirebaseAuth
-import com.example.spender.core.data.service.login
 import com.example.spender.feature.auth.ui.viewmodel.AuthViewModel
-import com.example.spender.feature.onboarding.data.OnboardingPref
+import com.example.spender.ui.theme.GooglePointColor
 import com.example.spender.ui.theme.Typography
 import com.example.spender.ui.theme.WhiteColor
-import com.example.spender.ui.theme.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun GoogleLogin(
     navController: NavHostController
 ) {
-
     val viewModel: AuthViewModel = hiltViewModel()
-    val googleToken = stringResource(id = R.string.default_web_client_id)
+    val googleToken = BuildConfig.DEFAULT_WEB_CLIENT_ID
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        viewModel.googleLogin(context, result) {
-            Log.d("Login", "Google SignIn Success!")
-            login(FirebaseAuth.getInstance().currentUser, LoginType.GOOGLE.type)
-            Log.d("Login", getFirebaseAuth() ?: "failed")
-
-            val onboardingShown = OnboardingPref.wasShown(context)
-            if (onboardingShown) {
-                navController.navigate(Screen.MainScreen.route) {
-                    popUpTo(Screen.AuthScreen.route) { inclusive = true }
-                }
-            } else {
-                navController.navigate(Screen.OnboardingScreen.route) {
-                    popUpTo(Screen.AuthScreen.route) { inclusive = true }
-                }
-            }
-
-        }
+        viewModel.googleLogin(context, result, navController)
     }
 
     Card(
@@ -87,7 +63,6 @@ fun GoogleLogin(
                 .build()
 
             val googleSignInClient = GoogleSignIn.getClient(context, gso)
-
             val signInIntent = googleSignInClient.signInIntent
             launcher.launch(signInIntent)
         }

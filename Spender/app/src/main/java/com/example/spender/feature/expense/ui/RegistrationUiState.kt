@@ -1,5 +1,6 @@
 package com.example.spender.feature.expense.ui
 
+import android.net.Uri
 import com.example.spender.feature.expense.domain.model.Emotion
 import java.util.Date
 
@@ -19,6 +20,9 @@ data class RegistrationUiState(
     // 직접 지출 상태
     val selectedEmotion: Emotion? = null,
     val emotions: List<Emotion> = emptyList(),
+
+    val selectedImageUri: Uri? = null,
+    val isUploading: Boolean = false,
 
     // 정기 지출 상태
     val title: String = "",

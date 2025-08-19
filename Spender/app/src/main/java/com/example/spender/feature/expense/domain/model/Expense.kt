@@ -9,5 +9,6 @@ data class Expense(
     val memo: String = "",
     val date: Date = Date(),
     val categoryId: String = "",
-    val emotion: String = ""
+    val emotion: String = "",
+    val imageUrl: String? = null
 )

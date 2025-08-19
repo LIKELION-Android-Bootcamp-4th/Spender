@@ -34,7 +34,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.feature.analysis.domain.model.CalendarItemData
-import com.example.spender.ui.theme.DefaultFontColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.TabColor
 import com.example.spender.ui.theme.Typography
@@ -144,7 +143,7 @@ fun Calendar(data: List<CalendarItemData>, onClick: (Int) -> Unit, selection: Li
                     fontSize = 8.sp,
                     color = when {
                         item.expense > 0 && item.today -> Color.White
-                        item.expense > 0 -> MaterialTheme.colorScheme.onSurface
+                        item.expense > 0 -> Color.Blue
                         item.expense < 0 -> Color.Red
                         else -> MaterialTheme.colorScheme.onSurface
                     }

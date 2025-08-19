@@ -1,6 +1,5 @@
 package com.example.spender.feature.analysis.ui.calendar
 
-import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,17 +21,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.spender.ui.theme.PointColor
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -88,17 +83,18 @@ fun CalendarScreen(navHostController: NavHostController) {
                 SpendListByDate(
                     viewModel.nowMonth,
                     viewModel.nowDay,
-                    (viewModel.now.get(Calendar.DAY_OF_WEEK) + viewModel.now.get(Calendar.DATE) + 2) % 7,
+                    (viewModel.now.get(Calendar.DAY_OF_WEEK)) % 7,
                     dailyList,
                     navHostController
                 )
             } else {
                 calendar.set(Calendar.YEAR, selectionState[0])
                 calendar.set(Calendar.MONTH, selectionState[1])
+                calendar.set(Calendar.DATE, selectionState[2])
                 SpendListByDate(
                     selectionState[1],
                     selectionState[2],
-                    (calendar.get(Calendar.DAY_OF_WEEK) + selectionState[2] + 1) % 7,
+                    (calendar.get(Calendar.DAY_OF_WEEK)) % 7,
                     dailyList,
                     navHostController
                 )

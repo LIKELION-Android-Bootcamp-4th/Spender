@@ -1,8 +1,6 @@
 package com.example.spender.feature.home.domain.repository
 
-import android.util.Log
 import com.example.spender.core.data.remote.notification.NotificationDto
-import com.example.spender.feature.home.domain.Notification
 import com.example.spender.feature.home.mapper.toDomain
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,9 +24,24 @@ class NotificationListRepository @Inject constructor(
             .await()
 
         val items = querySnapshot.documents.mapNotNull { docSnap ->
-            Log.d("NotificationRepo", "docId=${docSnap.id}, raw=${docSnap.data}")
             docSnap.toObject(NotificationDto::class.java)?.toDomain(docSnap.id)
         }
         items
     }
+
+    suspend fun markAllAsRead(): Result<Unit> = runCatching {
+        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+
+        val snapshot = firestore.collection("users")
+            .document(uid)
+            .collection("notifications")
+            .whereEqualTo("isRead", false)
+            .get()
+            .await()
+
+        snapshot.documents.forEach { doc ->
+            doc.reference.update("isRead", true).await()
+        }
+    }
+
 }

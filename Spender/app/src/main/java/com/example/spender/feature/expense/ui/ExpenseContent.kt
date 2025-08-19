@@ -1,7 +1,11 @@
 package com.example.spender.feature.expense.ui
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -26,17 +32,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.spender.feature.expense.domain.model.Emotion
 import com.example.spender.feature.mypage.domain.model.Category
+import com.example.spender.ui.theme.BlackColor
 import com.example.spender.ui.theme.PointColor
 import com.example.spender.ui.theme.Typography
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
+import coil.compose.AsyncImage
+import com.example.spender.ui.theme.WhiteColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +60,14 @@ fun ExpenseContent(
     var isSheetOpen by remember { mutableStateOf(false) }
     val expenseCategories by viewModel.expenseCategories.collectAsState()
     val datePickerState = rememberDatePickerState()
+
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            viewModel.onImageSelected(it)
+        }
+    }
 
     //바텀시트
     if (isSheetOpen) {
@@ -121,36 +139,28 @@ fun ExpenseContent(
             )
         }
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
-            // 금액 입력
+        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+            //지출 내용
             TextField(
-                value = uiState.amount,
-                onValueChange = { viewModel.onAmountChange(it) },
+                value = uiState.title,
+                onValueChange = { viewModel.onTitleChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 40.dp, vertical = 16.dp),
+                    .padding(horizontal = 30.dp, vertical = 16.dp),
                 placeholder = {
                     Text(
-                        "지출을 입력하세요",
-                        fontSize = 14.sp,
+                        "지출 제목을 입력하세요",
+                        fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.onTertiary
                     )
                 },
-                trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                visualTransformation = NumberCommaTransformation(),
                 singleLine = true,
-                textStyle = TextStyle(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Start
-                ),
+                textStyle = Typography.titleMedium,
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
@@ -158,21 +168,30 @@ fun ExpenseContent(
                     focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
                 )
             )
+        }
 
-            //지출 내용
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
+
+        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+            // 금액 입력
             TextField(
-                value = uiState.title,
-                onValueChange = { viewModel.onTitleChange(it) },
-                modifier = Modifier.fillMaxWidth(),
+                value = uiState.amount,
+                onValueChange = { viewModel.onAmountChange(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 30.dp, vertical = 16.dp),
                 placeholder = {
                     Text(
-                        "지출 내용을 입력하세요",
+                        "지출을 입력하세요",
                         fontSize = 16.sp,
                         color = MaterialTheme.colorScheme.onTertiary
                     )
                 },
+                trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                visualTransformation = NumberCommaTransformation(),
                 singleLine = true,
-                textStyle = TextStyle(fontSize = 18.sp),
+                textStyle = Typography.titleMedium,
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
@@ -284,12 +303,79 @@ fun ExpenseContent(
                         fontSize = 14.sp
                     )
                 },
+                textStyle = Typography.bodyMedium,
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.tertiary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
                 )
             )
+        }
+
+        HorizontalDivider(color = MaterialTheme.colorScheme.tertiary)
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 34.dp, vertical = 24.dp)
+        ) {
+            Text(
+                "사진",
+                style = Typography.titleSmall
+            )
+            Spacer(Modifier.height(16.dp))
+
+            if (uiState.selectedImageUri != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(240.dp)
+                ) {
+                    AsyncImage(
+                        model = uiState.selectedImageUri,
+                        contentDescription = "첨부된 사진",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(12.dp))
+                            .clickable { galleryLauncher.launch("image/*") },
+                    )
+                    IconButton(
+                        onClick = { viewModel.onImageSelectionCancelled() },
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                            .size(32.dp)
+                            .background(BlackColor.copy(alpha = 0.5f), CircleShape)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "사진 선택 취소",
+                            tint = WhiteColor,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(240.dp)
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outline,
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .clickable { galleryLauncher.launch("image/*") },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "사진 추가",
+                        modifier = Modifier.size(40.dp),
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    )
+                }
+            }
         }
     }
 }
@@ -339,7 +425,7 @@ fun EmotionTagGroup(
                 label = {
                     Text(
                         text = emotion.name,
-                        color = if (isSelected) Color.White else MaterialTheme.colorScheme.onPrimary
+                        color = if (isSelected) Color.White else BlackColor
                     )
                 },
                 shape = RoundedCornerShape(30),
