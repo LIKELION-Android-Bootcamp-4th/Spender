@@ -1,4 +1,4 @@
-package com.e1i3.spender.feature.home.domain
+package com.e1i3.spender.feature.home.domain.model
 
 import java.util.Date
 
