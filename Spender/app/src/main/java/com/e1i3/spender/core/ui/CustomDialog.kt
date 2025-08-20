@@ -32,7 +32,7 @@ fun CustomDialog(
     title: String,
     content: String = "",
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Card(
@@ -43,7 +43,7 @@ fun CustomDialog(
                 modifier = Modifier.padding(
                     top = 24.dp,
                     start = 28.dp,
-                    end = 24.dp,
+                    end = 28.dp,
                     bottom = 14.dp
                 ),
             ) {
