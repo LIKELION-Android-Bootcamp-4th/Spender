@@ -79,16 +79,16 @@ class FriendRepository @Inject constructor(
 
         val myUserInfo = usersCollection.document(uid).get().await()
         val myNickName = myUserInfo.data?.get("nickname").toString()
-        val myProfileUrl = myUserInfo.data?.get("profileUrl").toString()
+        val myProfileUrl = myUserInfo.data?.get("photoUrl").toString()
         val friendNickName = friendDoc.data?.get("nickname").toString()
-        val friendProfileUrl = friendDoc.data?.get("profileUrl").toString()
+        val friendProfileUrl = friendDoc.data?.get("photoUrl").toString()
 
         usersCollection.document(friendId).collection("friends").document(uid).set(
             mapOf(
                 "status" to "FRIENDS",
                 "connectedAt" to Timestamp.now(),
                 "nickname" to myNickName,
-                "profileUrl" to myProfileUrl
+                "photoUrl" to myProfileUrl
             )
         ).await()
 
@@ -97,7 +97,7 @@ class FriendRepository @Inject constructor(
                 "status" to "FRIENDS",
                 "connectedAt" to Timestamp.now(),
                 "nickname" to friendNickName,
-                "profileUrl" to friendProfileUrl
+                "photoUrl" to friendProfileUrl
             )
         ).await()
         return "친구 추가에 성공했습니다."
