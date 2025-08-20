@@ -44,6 +44,7 @@ fun RecentTransactionsSection(
                 title = expense.title,
                 amount = expense.amount,
                 type = "EXPENSE",
+                date = expense.date.toDate(),
                 onClick = {
                     navHostController.navigate(
                         Screen.ExpenseDetailScreen.createRoute(expense.id)

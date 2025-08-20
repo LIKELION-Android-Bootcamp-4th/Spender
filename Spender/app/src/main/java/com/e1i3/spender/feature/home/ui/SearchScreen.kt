@@ -131,6 +131,7 @@ fun SearchScreen(
                         title = transaction.title,
                         amount = transaction.amount.toInt(),
                         type = transaction.type,
+                        date = transaction.date,
                         onClick = {
                             val route = if (transaction.type == "EXPENSE") {
                                 Screen.ExpenseDetailScreen.createRoute(transaction.id)

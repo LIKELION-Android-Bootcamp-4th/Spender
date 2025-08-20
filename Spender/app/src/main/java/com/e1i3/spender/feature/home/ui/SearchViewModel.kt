@@ -43,11 +43,11 @@ class SearchViewModel @Inject constructor(
 
             val results = if (_uiState.value.selectedTabIndex == 0) {
                 expenseRepository.searchExpenses(userId, query).map {
-                    Transaction(it.id, it.title, it.amount, "EXPENSE")
+                    Transaction(it.id, it.title, it.amount, "EXPENSE", it.date)
                 }
             } else {
                 incomeRepository.searchIncomes(userId, query).map {
-                    Transaction(it.id, it.title, it.amount, "INCOME")
+                    Transaction(it.id, it.title, it.amount, "INCOME", it.date)
                 }
             }
             _uiState.update { it.copy(searchResults = results) }
