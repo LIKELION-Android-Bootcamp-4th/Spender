@@ -7,6 +7,7 @@
 
     <string-array name="onboarding_title">
         <item>꽉잡아 지출이</item>
+        <item>뭐라고 불러드리면 될까요?</item>
         <item>한 달 예산은 얼마인가요?</item>
         <item>이제 시작할 수 있어요.</item>
     </string-array>

@@ -22,6 +22,9 @@ class OnboardingViewModel @Inject constructor(
     var budget by mutableStateOf(0)
         private set
 
+    var nickname by mutableStateOf("")
+        private set
+
     fun onNext() {
         _currentPage.value += 1
     }
@@ -34,6 +37,10 @@ class OnboardingViewModel @Inject constructor(
 
     fun updateBudget(newBudget: Int) {
         budget = newBudget
+    }
+
+    fun updateNickname(newNickname: String) {
+        nickname = newNickname
     }
 
     fun saveBudget(onComplete: (Boolean) -> Unit) {
