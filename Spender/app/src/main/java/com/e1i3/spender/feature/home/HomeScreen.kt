@@ -28,6 +28,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,20 +46,19 @@ import com.e1i3.spender.core.data.remote.expense.ExpenseDto
 import com.e1i3.spender.core.data.service.getExpenseListForHome
 import com.e1i3.spender.core.data.service.getExpenseRate
 import com.e1i3.spender.core.data.service.getTotalExpense
-import com.e1i3.spender.feature.home.domain.model.Friend
 import com.e1i3.spender.feature.home.ui.BudgeProgress
-import com.e1i3.spender.feature.home.ui.viewModel.HomeViewModel
 import com.e1i3.spender.feature.home.ui.RecentTransactionsSection
 import com.e1i3.spender.feature.home.ui.TotalExpenseCard
 import com.e1i3.spender.feature.home.ui.component.FriendItem
+import com.e1i3.spender.feature.home.ui.viewModel.HomeViewModel
 import com.e1i3.spender.ui.theme.LightPointColor
 import com.e1i3.spender.ui.theme.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
-    var totalExpense by remember { mutableStateOf(0) }
-    var percentage by remember { mutableStateOf(0f) }
+    var totalExpense by remember { mutableIntStateOf(0) }
+    var percentage by remember { mutableFloatStateOf(0f) }
     var recentExpenses by remember { mutableStateOf<List<ExpenseDto>>(emptyList()) }
     val hasUnread by viewModel.hasUnread
     val friendList by viewModel.friendList
@@ -145,7 +146,7 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(friendList){ friend ->
-                            FriendItem(navHostController = navHostController, friend = friend)
+                            FriendItem(navHostController = navHostController, friend = friend, viewModel = viewModel)
                         }
                     }
                 }

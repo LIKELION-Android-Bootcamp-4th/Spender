@@ -1,6 +1,5 @@
 package com.e1i3.spender.feature.home.domain.repository
 
-
 import com.e1i3.spender.core.data.remote.friend.FriendDetailDto
 import com.e1i3.spender.core.data.remote.report.CategoryTotalDto
 import com.e1i3.spender.core.data.remote.report.EmotionTotalDto
