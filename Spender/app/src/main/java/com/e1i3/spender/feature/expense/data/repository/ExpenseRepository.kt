@@ -41,4 +41,19 @@ class ExpenseRepository @Inject constructor() {
             true
         } catch (e: Exception) { false }
     }
+
+    suspend fun searchExpenses(userId: String, query: String): List<Expense> {
+        return try {
+            val snapshot = usersCollection.document(userId).collection("expenses")
+                .whereGreaterThanOrEqualTo("title", query)
+                .whereLessThanOrEqualTo("title", query + "\uf8ff")
+                .get().await()
+
+            snapshot.documents.mapNotNull { document ->
+                document.toObject(Expense::class.java)?.copy(id = document.id)
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
 }
