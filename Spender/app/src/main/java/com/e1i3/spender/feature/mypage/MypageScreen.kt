@@ -13,7 +13,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -54,11 +57,8 @@ fun MypageScreen(
     val context = LocalContext.current
     val user by mypageViewModel.user.collectAsState()
 
-//    val viewModel: AuthViewModel = hiltViewModel()
-
     var showWithdrawDialog by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }
-//    val userName = "이름"
 
     val onItemClick: (MyPageItemType) -> Unit = { item ->
         when (item) {
@@ -74,6 +74,8 @@ fun MypageScreen(
             MyPageItemType.Logout -> {
                 showLogoutDialog = true
             }
+
+            MyPageItemType.AddFriend -> navHostController.navigate("add_friend")
         }
     }
 
@@ -84,7 +86,8 @@ fun MypageScreen(
     ) {
         UserInfoSection(
             userName = user.displayName,
-            iconRes = user.providerIcon
+            iconRes = user.providerIcon,
+            navHostController = navHostController
         )
 
         Section(
@@ -93,7 +96,8 @@ fun MypageScreen(
                 MyPageItemType.IncomeCategory,
                 MyPageItemType.ExpenseCategory,
                 MyPageItemType.Budget,
-                MyPageItemType.RegularExpense
+                MyPageItemType.RegularExpense,
+                MyPageItemType.AddFriend
             ),
             onItemClick = onItemClick
         )
@@ -194,7 +198,11 @@ fun AdMobBanner() {
 
 
 @Composable
-fun UserInfoSection(userName: String, iconRes: Int?) {
+fun UserInfoSection(
+    userName: String,
+    iconRes: Int?,
+    navHostController: NavHostController
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -210,7 +218,16 @@ fun UserInfoSection(userName: String, iconRes: Int?) {
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Text("${userName}님", style = MaterialTheme.typography.titleMedium)
+        Text("$userName 님", style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.width(16.dp))
+        IconButton(onClick = {navHostController.navigate("myinfo")}) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "프로필 수정",
+                modifier = Modifier.size(24.dp),
+                tint = MaterialTheme.colorScheme.onTertiary
+            )
+        }
     }
 }
 

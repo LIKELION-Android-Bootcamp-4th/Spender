@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -50,6 +51,7 @@ import com.e1i3.spender.feature.home.ui.RecentTransactionsSection
 import com.e1i3.spender.feature.home.ui.TotalExpenseCard
 import com.e1i3.spender.feature.home.ui.component.FriendItem
 import com.e1i3.spender.ui.theme.LightPointColor
+import com.e1i3.spender.ui.theme.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,6 +86,19 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                 },
                 title = { },
                 actions = {
+                    IconButton(
+                        onClick = {
+                            navHostController.navigate(Screen.SearchScreen.route)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "검색",
+                            modifier = Modifier.size(28.dp),
+                            tint = LightPointColor
+                        )
+                    }
+
                     IconButton(
                         onClick = {
                             navHostController.navigate("notification_list")

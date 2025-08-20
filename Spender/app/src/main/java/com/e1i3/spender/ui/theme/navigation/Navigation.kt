@@ -1,7 +1,6 @@
 package com.e1i3.spender.ui.theme.navigation
 
 import android.content.Intent
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -23,12 +22,15 @@ import com.e1i3.spender.feature.expense.ui.recurringexpensedetail.RecurringExpen
 import com.e1i3.spender.feature.home.HomeScreen
 import com.e1i3.spender.feature.home.ui.FriendDetailScreen
 import com.e1i3.spender.feature.home.ui.NotificationListScreen
+import com.e1i3.spender.feature.home.ui.SearchScreen
 import com.e1i3.spender.feature.income.ui.IncomeRegistrationScreen
 import com.e1i3.spender.feature.income.ui.incomedetail.IncomeDetailScreen
 import com.e1i3.spender.feature.mypage.MypageScreen
 import com.e1i3.spender.feature.mypage.ui.BudgetScreen
 import com.e1i3.spender.feature.mypage.ui.ExpenseCategoryScreen
+import com.e1i3.spender.feature.mypage.ui.FriendAddScreen
 import com.e1i3.spender.feature.mypage.ui.IncomeCategoryScreen
+import com.e1i3.spender.feature.mypage.ui.MyinfoScreen
 import com.e1i3.spender.feature.mypage.ui.NotificationScreen
 import com.e1i3.spender.feature.mypage.ui.OpenSourceScreen
 import com.e1i3.spender.feature.mypage.ui.RegularExpenseScreen
@@ -59,6 +61,9 @@ fun SpenderNavigation(
         composable(Screen.OnboardingScreen.route) {
             OnboardingScreen(navController)
         }
+        composable(Screen.SearchScreen.route) {
+            SearchScreen(navController)
+        }
         composable(Screen.AuthScreen.route) {
             AuthScreen(navController)
         }
@@ -76,6 +81,9 @@ fun SpenderNavigation(
         }
         composable(BottomNavigationItem.Mypage.route) {
             MypageScreen(navController)
+        }
+        composable(Screen.MyinfoScreen.route) {
+            MyinfoScreen(navController)
         }
         composable(Screen.FriendDetailScreen.route) { backStackEntry ->
             val friendId = backStackEntry.arguments?.getString("friendId")
@@ -164,6 +172,9 @@ fun SpenderNavigation(
 //        }
         composable(Screen.IncomeRegistrationScreen.route) {
             IncomeRegistrationScreen(navController)
+        }
+        composable(Screen.FriendAddScreen.route) {
+            FriendAddScreen(navController)
         }
     }
 }

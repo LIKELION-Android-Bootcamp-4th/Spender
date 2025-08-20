@@ -16,12 +16,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.e1i3.spender.core.common.util.toCurrency
+import com.e1i3.spender.ui.theme.PointColor
 import com.e1i3.spender.ui.theme.Typography
 
 @Composable
 fun RecentItem(
     title: String,
     amount: Int,
+    type: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -48,15 +50,26 @@ fun RecentItem(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Row {
+                val amountText = if (type == "INCOME") {
+                    "+ ${amount.toCurrency()}"
+                } else {
+                    "- ${amount.toCurrency()}"
+                }
+                val amountColor = if (type == "INCOME") {
+                    PointColor
+                } else {
+                    MaterialTheme.colorScheme.error
+                }
+
                 Text(
-                    text = "- ${amount.toCurrency()}",
+                    text = amountText,
                     style = Typography.titleSmall,
-                    color = MaterialTheme.colorScheme.error
+                    color = amountColor
                 )
                 Text(
                     text = " 원",
                     style = Typography.titleSmall,
-                    color = MaterialTheme.colorScheme.error
+                    color = amountColor
                 )
             }
         }
