@@ -130,5 +130,11 @@
     "version": "16.4.5",
     "url": "https://github.com/motdotla/dotenv",
     "content": "Licensed under the BSD 2-Clause License. See the LICENSE file in the repository."
+  },
+  {
+    "title": "Compressor",
+    "version": "3.0.1",
+    "url": "https://github.com/zetbaitsu/Compressor",
+    "content": "Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository."
   }
 ]
