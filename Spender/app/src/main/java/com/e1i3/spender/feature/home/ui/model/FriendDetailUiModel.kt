@@ -5,7 +5,7 @@ import com.e1i3.spender.feature.report.ui.model.CategoryUiModel
 import com.e1i3.spender.feature.report.ui.model.EmotionUiModel
 
 data class FriendDetailUiModel(
-    val nickname: String = "",
+    var nickname: String = "알 수 없음",
     val budgetProgress: Float = 0f,
 
     val topCategoryName: String? = null,

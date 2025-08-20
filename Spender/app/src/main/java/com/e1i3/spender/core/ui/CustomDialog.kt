@@ -30,8 +30,9 @@ import com.e1i3.spender.ui.theme.Typography
 @Composable
 fun CustomDialog(
     title: String,
+    content: String = "",
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
 ) {
     Dialog(onDismissRequest = onDismiss) {
         Card(
@@ -42,17 +43,27 @@ fun CustomDialog(
                 modifier = Modifier.padding(
                     top = 24.dp,
                     start = 28.dp,
-                    end = 24.dp,
+                    end = 28.dp,
                     bottom = 14.dp
                 ),
             ) {
+                Spacer(Modifier.height(15.dp))
                 Text(
                     text = title,
                     style = Typography.titleMedium,
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center
                 )
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(12.dp))
+                if (content != "") {
+                    Text(
+                        text = content,
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        style = Typography.bodyMedium
+                    )
+                    Spacer(Modifier.height(5.dp))
+
+                }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                 }
                 Spacer(Modifier.height(24.dp))
