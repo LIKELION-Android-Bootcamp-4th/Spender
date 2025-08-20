@@ -68,5 +68,12 @@ class HomeRepository @Inject constructor(
             .document(friendId)
             .delete()
             .await()
+
+        firestore.collection("users")
+            .document(friendId)
+            .collection("friends")
+            .document(uid)
+            .delete()
+            .await()
     }
 }
