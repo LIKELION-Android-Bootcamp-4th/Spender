@@ -143,3 +143,72 @@ fun EditNicknameDialog(
         }
     }
 }
+
+
+@Composable
+fun EditImageDialog(
+    title: String,
+    onDismiss: () -> Unit,
+    onCameraClick: () -> Unit,
+    onGalleryClick: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background)
+        ) {
+            Column(
+                modifier = Modifier.padding(
+                    top = 24.dp,
+                    start = 24.dp,
+                    end = 24.dp,
+                    bottom = 14.dp
+                ),
+            ) {
+                Text(
+                    text = title,
+                    style = Typography.titleMedium,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(Modifier.height(24.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                }
+                Spacer(Modifier.height(24.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Button(
+                        onClick = onCameraClick,
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(containerColor = PointColor),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            "카메라로 촬영",
+                            style = Typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
+                    Button(
+                        onClick = onGalleryClick,
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(containerColor = PointColor),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Text(
+                            text = "갤러리에서 선택",
+                            color = Color.White,
+                            style = Typography.bodySmall.copy(
+                                fontSize = 12.sp
+                            ),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+        }
+    }
+}

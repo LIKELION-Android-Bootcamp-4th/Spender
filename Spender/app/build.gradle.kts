@@ -172,6 +172,9 @@ dependencies {
     // coil
     implementation("io.coil-kt:coil-compose:2.6.0")
 
+    // image compression
+    implementation("id.zelory:compressor:3.0.1")
+
     //Google AdMob
     implementation("com.google.android.gms:play-services-ads:23.1.0")
 
