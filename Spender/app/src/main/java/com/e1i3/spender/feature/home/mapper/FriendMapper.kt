@@ -16,6 +16,7 @@ import com.e1i3.spender.feature.report.mapper.emotionLabelMap
 import com.e1i3.spender.feature.report.mapper.toUiModel
 import com.e1i3.spender.feature.report.ui.model.CategoryUiModel
 import com.e1i3.spender.feature.report.ui.model.EmotionUiModel
+import com.e1i3.spender.ui.theme.PointColor
 
 fun FriendListDto.toDomain(userId: String): Friend {
     return Friend(
@@ -42,9 +43,8 @@ fun CategoryTotalDto.toDomain(): CategoryTotal {
     )
 }
 
-
 fun FriendDetailDto.toUiModel(): FriendDetailUiModel {
-    val safeBudget = totalBudget.takeIf { it != 0 } ?: 1 // 0 방어
+    val safeBudget = totalBudget.takeIf { it != 0 } ?: 1
     val percentage = totalExpense / safeBudget.toFloat()
 
     val topCategory = byCategory.maxByOrNull { it.totalPrice }
@@ -58,11 +58,13 @@ fun FriendDetailDto.toUiModel(): FriendDetailUiModel {
         budgetProgress = percentage * 100,
 
         topCategoryName = topCategory?.categoryName,
+        topCategoryColor = topCategory?.colorHex?.toColor() ?: PointColor,
         categoryChartData = categoryChartData,
 
-        topEmotionName = topEmotion?.emotionId.let { emotionLabelMap[it] },
+        topEmotionName = topEmotion?.emotionId?.let { emotionLabelMap[it] },
+        topEmotionColor = emotionChartData.firstOrNull {
+            it.label == emotionLabelMap[topEmotion?.emotionId]
+        }?.color ?: PointColor,
         emotionChartData = emotionChartData
     )
 }
-
-
