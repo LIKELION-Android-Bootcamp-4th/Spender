@@ -76,7 +76,7 @@ fun FriendItem(navHostController: NavHostController, friend: Friend, viewModel: 
                 .width(64.dp)
         ) {
             val painter: Painter = rememberAsyncImagePainter(
-                model = friend.profileUrl
+                model = friend.photoUrl
             )
 
             Image(

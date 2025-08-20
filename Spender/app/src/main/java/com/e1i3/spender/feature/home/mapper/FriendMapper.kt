@@ -1,7 +1,6 @@
 package com.e1i3.spender.feature.home.mapper
 
 import androidx.compose.ui.graphics.Color
-import androidx.core.graphics.toColor
 import androidx.core.graphics.toColorInt
 import com.e1i3.spender.core.common.toColor
 import com.e1i3.spender.core.data.remote.friend.FriendDetailDto
@@ -14,15 +13,13 @@ import com.e1i3.spender.feature.report.domain.model.CategoryTotal
 import com.e1i3.spender.feature.report.domain.model.EmotionTotal
 import com.e1i3.spender.feature.report.mapper.emotionLabelMap
 import com.e1i3.spender.feature.report.mapper.toUiModel
-import com.e1i3.spender.feature.report.ui.model.CategoryUiModel
-import com.e1i3.spender.feature.report.ui.model.EmotionUiModel
 import com.e1i3.spender.ui.theme.PointColor
 
 fun FriendListDto.toDomain(userId: String): Friend {
     return Friend(
         userId = userId,
         nickname = nickname,
-        profileUrl = profileUrl,
+        photoUrl = photoUrl,
         status = status,
     )
 }
