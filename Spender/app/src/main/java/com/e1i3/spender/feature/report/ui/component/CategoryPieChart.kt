@@ -67,7 +67,6 @@ fun CategoryPieChart(
                     }
                 }
             }
-
         }
 
         val data = PieData(dataSet)
@@ -79,9 +78,5 @@ fun CategoryPieChart(
             val highlight = Highlight(maxIndex.toFloat(), sortedValues[maxIndex], 0)
             chart.highlightValues(arrayOf(highlight))
         }
-
-
-//        val highlight = Highlight(maxIndex.toFloat(), values[maxIndex], 0)
-//        chart.highlightValues(arrayOf(highlight))
     })
 }
