@@ -231,17 +231,3 @@ fun UserInfoSection(
     }
 }
 
-@Composable
-fun AdBanner() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 28.dp)
-            .height(50.dp)
-            .background(Color.LightGray, RoundedCornerShape(8.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("광고 시간 나면")
-    }
-}
-

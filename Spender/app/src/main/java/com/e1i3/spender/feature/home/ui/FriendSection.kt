@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,9 +22,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.e1i3.spender.core.common.util.toCurrency
 import com.e1i3.spender.feature.home.ui.model.FriendDetailUiModel
 import com.e1i3.spender.feature.report.ui.component.CategoryPieChart
 import com.e1i3.spender.feature.report.ui.component.EmotionBarChart
@@ -51,6 +48,8 @@ fun FriendBudgetProgressSection(
 fun FriendCategorySection(
     friend: FriendDetailUiModel,
 ){
+    if(friend.nickname == "") friend.nickname = "알 수 없음"
+
     Text(
         "${friend.nickname}님은",
         modifier = Modifier.padding(horizontal = 20.dp),
@@ -61,7 +60,7 @@ fun FriendCategorySection(
             withStyle(style = SpanStyle(color = friend.topCategoryColor)) {
                 append("${friend.topCategoryName}")
             }
-            append("카테고리 지출이 많아요")
+            append(" 카테고리 지출이 많아요")
         },
         style = Typography.titleMedium,
         modifier = Modifier.padding(horizontal = 20.dp),
