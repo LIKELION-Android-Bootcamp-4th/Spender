@@ -1,10 +1,11 @@
-package com.e1i3.spender.feature.home.ui
+package com.e1i3.spender.feature.home.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.e1i3.spender.core.data.service.getFirebaseAuth
 import com.e1i3.spender.feature.expense.data.repository.ExpenseRepository
 import com.e1i3.spender.feature.home.domain.model.Transaction
+import com.e1i3.spender.feature.home.ui.SearchUiState
 import com.e1i3.spender.feature.income.data.repository.IncomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +51,9 @@ class SearchViewModel @Inject constructor(
                     Transaction(it.id, it.title, it.amount, "INCOME", it.date)
                 }
             }
-            _uiState.update { it.copy(searchResults = results) }
+
+            val sortedResults = results.sortedByDescending { it.date }
+            _uiState.update { it.copy(searchResults = sortedResults) }
         }
     }
 }

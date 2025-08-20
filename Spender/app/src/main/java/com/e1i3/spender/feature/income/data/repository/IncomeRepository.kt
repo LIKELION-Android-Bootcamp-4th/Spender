@@ -52,16 +52,15 @@ class IncomeRepository @Inject constructor() {
     suspend fun searchIncomes(userId: String, query: String): List<Income> {
         return try {
             val snapshot = usersCollection.document(userId).collection("incomes")
-                .whereGreaterThanOrEqualTo("title", query)
-                .whereLessThanOrEqualTo("title", query + "\uf8ff")
                 .get().await()
 
-            snapshot.documents.mapNotNull { document ->
+            val allIncomes = snapshot.documents.mapNotNull { document ->
                 document.toObject(Income::class.java)?.copy(id = document.id)
             }
+
+            allIncomes.filter { it.title.contains(query, ignoreCase = true) }
         } catch (e: Exception) {
             emptyList()
         }
-
     }
 }

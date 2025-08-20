@@ -22,6 +22,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.feature.home.ui.component.RecentItem
+import com.e1i3.spender.feature.home.ui.viewModel.SearchViewModel
 import com.e1i3.spender.ui.theme.Typography
 import com.e1i3.spender.ui.theme.navigation.Screen
 
