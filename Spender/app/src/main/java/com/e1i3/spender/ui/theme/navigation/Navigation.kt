@@ -20,6 +20,7 @@ import com.e1i3.spender.feature.expense.ui.expensedetail.ExpenseDetailScreen
 import com.e1i3.spender.feature.expense.ui.ocrresult.OcrResultScreen
 import com.e1i3.spender.feature.expense.ui.recurringexpensedetail.RecurringExpenseDetailScreen
 import com.e1i3.spender.feature.home.HomeScreen
+import com.e1i3.spender.feature.home.ui.FriendDetailScreen
 import com.e1i3.spender.feature.home.ui.NotificationListScreen
 import com.e1i3.spender.feature.home.ui.SearchScreen
 import com.e1i3.spender.feature.income.ui.IncomeRegistrationScreen
@@ -83,6 +84,12 @@ fun SpenderNavigation(
         }
         composable(Screen.MyinfoScreen.route) {
             MyinfoScreen(navController)
+        }
+        composable(Screen.FriendDetailScreen.route) { backStackEntry ->
+            val friendId = backStackEntry.arguments?.getString("friendId")
+            if (friendId != null) {
+                FriendDetailScreen(navHostController = navController, friendId)
+            }
         }
         composable(Screen.NotificationListScreen.route) {
             NotificationListScreen(navHostController = navController, homeViewModel = hiltViewModel())
