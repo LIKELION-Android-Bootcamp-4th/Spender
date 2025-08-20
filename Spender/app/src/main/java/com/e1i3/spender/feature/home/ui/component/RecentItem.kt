@@ -1,6 +1,8 @@
 package com.e1i3.spender.feature.home.ui.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -48,25 +50,24 @@ fun RecentItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .padding(24.dp),
+                .padding(18.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val dateFormat = SimpleDateFormat("MM.dd", Locale.getDefault())
-            Text(
-                text = dateFormat.format(date),
-                style = Typography.bodySmall,
-                fontSize = 12.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = title,
-                style = Typography.bodyMedium,
-                modifier = Modifier.weight(1f),
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Row {
+            Column(modifier = Modifier.weight(1f),) {
+                Text(
+                    text = title,
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                val dateFormat = SimpleDateFormat("yy.MM.dd", Locale.getDefault())
+                Text(
+                    text = dateFormat.format(date),
+                    style = Typography.bodySmall,
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+            }
+            Row(verticalAlignment = Alignment.Bottom) {
                 val amountText = if (type == "INCOME") {
                     "+ ${amount.toCurrency()}"
                 } else {
