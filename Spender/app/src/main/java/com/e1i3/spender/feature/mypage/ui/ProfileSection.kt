@@ -31,15 +31,20 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.e1i3.spender.R
+import com.e1i3.spender.core.ui.CustomDialog
 import com.e1i3.spender.feature.mypage.ui.component.CircularImage
 import com.e1i3.spender.feature.mypage.ui.component.EditButton
+import com.e1i3.spender.feature.mypage.ui.component.EditImageDialog
 import com.e1i3.spender.feature.mypage.ui.component.EditNicknameDialog
 import com.e1i3.spender.feature.mypage.ui.viewmodel.MypageViewModel
 import com.e1i3.spender.ui.theme.Typography
 
 @Composable
 fun ProfileSection(nickName: String) {
-    var showEditNickNameAlert by remember { mutableStateOf(false) }
+    var showEditNickNameDialog by remember { mutableStateOf(false) }
+    var showEditImageDialog by remember { mutableStateOf(false) }
+    var showDeleteImageDialog by remember { mutableStateOf(false) }
+
     val viewModel: MypageViewModel = hiltViewModel()
     val context = LocalContext.current
 
@@ -56,7 +61,7 @@ fun ProfileSection(nickName: String) {
         when (updateNicknameState) {
             is MypageViewModel.UpdateNicknameState.Success -> {
                 Toast.makeText(context, "닉네임이 변경되었어요!", Toast.LENGTH_SHORT).show()
-                showEditNickNameAlert = false
+                showEditNickNameDialog = false
             }
 
             is MypageViewModel.UpdateNicknameState.Error -> {
@@ -115,7 +120,7 @@ fun ProfileSection(nickName: String) {
             Row {
                 EditButton(text = "변경", onClick = {}) // TODO: 카메라/갤러리 다이얼로그
                 Spacer(Modifier.width(8.dp))
-                EditButton(text = "삭제", onClick = {}) // TODO: 기존의 profileUrl을 삭제하고 기본 아이콘으로 변경
+                EditButton(text = "삭제", onClick = { showDeleteImageDialog = true })
             }
         }
 
@@ -138,7 +143,7 @@ fun ProfileSection(nickName: String) {
                         modifier = Modifier.weight(1f)
                     )
                     IconButton(
-                        onClick = { showEditNickNameAlert = true },
+                        onClick = { showEditNickNameDialog = true },
                         modifier = Modifier.size(24.dp)
                     ) {
                         Icon(
@@ -162,19 +167,37 @@ fun ProfileSection(nickName: String) {
         }
     }
 
-    if (showEditNickNameAlert) {
+
+    if (showEditNickNameDialog) {
         EditNicknameDialog(
             title = "닉네임 변경",
             user = user,
             onDismiss = {
                 if (updateNicknameState !is MypageViewModel.UpdateNicknameState.Loading) {
-                    showEditNickNameAlert = false
+                    showEditNickNameDialog = false
                 }
             },
             onConfirm = { newNickname ->
                 viewModel.updateNickname(newNickname)
             },
             isLoading = updateNicknameState is MypageViewModel.UpdateNicknameState.Loading
+        )
+    }
+
+    if (showEditImageDialog) {
+        EditImageDialog(
+            title = "프로필 사진 변경",
+            onDismiss = { },
+            onCameraClick = { },
+            onGalleryClick = { }
+        )
+    }
+
+    if (showDeleteImageDialog) {
+        CustomDialog(
+            title = "프로필 사진 삭제",
+            onDismiss = { },
+            onConfirm = { }  // TODO: 기존의 profileUrl을 삭제하고 기본 아이콘으로 변경
         )
     }
 }
