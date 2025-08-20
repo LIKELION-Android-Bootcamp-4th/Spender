@@ -1,6 +1,12 @@
 package com.e1i3.spender.feature.mypage.ui
 
+import android.Manifest
+import android.net.Uri
 import android.widget.Toast
+import androidx.core.content.FileProvider
+import java.io.File
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,10 +31,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.e1i3.spender.R
 import com.e1i3.spender.core.ui.CustomDialog
@@ -50,6 +56,45 @@ fun ProfileSection(nickName: String) {
 
     val user by viewModel.user.collectAsState()
     val updateNicknameState by viewModel.updateNicknameState.collectAsState()
+    val updateProfileImageState by viewModel.updateProfileImageState.collectAsState()
+
+    var tempImageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            tempImageUri?.let { uri ->
+                viewModel.updateProfileImage(context, uri)
+            }
+        }
+    }
+
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            val tempFile = File.createTempFile("profile_image", ".jpg", context.cacheDir)
+            tempImageUri = FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.provider",
+                tempFile
+            )
+            tempImageUri?.let { uri ->
+                cameraLauncher.launch(uri)
+            }
+        } else {
+            Toast.makeText(context, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            viewModel.updateProfileImage(context, it)
+        }
+    }
 
     val currentNickname = when {
         user.displayNickname.isNotBlank() && user.displayNickname != "사용자" -> user.displayNickname
@@ -71,6 +116,24 @@ fun ProfileSection(nickName: String) {
             }
 
             is MypageViewModel.UpdateNicknameState.Loading -> {}
+            else -> {}
+        }
+    }
+
+    LaunchedEffect(updateProfileImageState) {
+        when (updateProfileImageState) {
+            is MypageViewModel.UpdateProfileImageState.Success -> {
+                Toast.makeText(context, "프로필 이미지가 변경되었어요!", Toast.LENGTH_SHORT).show()
+                showEditImageDialog = false
+            }
+
+            is MypageViewModel.UpdateProfileImageState.Error -> {
+                val errorMessage =
+                    (updateProfileImageState as MypageViewModel.UpdateProfileImageState.Error).message
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+
+            is MypageViewModel.UpdateProfileImageState.Loading -> {}
             else -> {}
         }
     }
@@ -113,12 +176,12 @@ fun ProfileSection(nickName: String) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            CircularImage(profileUrl = null)
+            CircularImage(profileUrl = user.profileUrl)
 
             Spacer(Modifier.height(16.dp))
 
             Row {
-                EditButton(text = "변경", onClick = {}) // TODO: 카메라/갤러리 다이얼로그
+                EditButton(text = "변경", onClick = { showEditImageDialog = true })
                 Spacer(Modifier.width(8.dp))
                 EditButton(text = "삭제", onClick = { showDeleteImageDialog = true })
             }
@@ -187,17 +250,32 @@ fun ProfileSection(nickName: String) {
     if (showEditImageDialog) {
         EditImageDialog(
             title = "프로필 사진 변경",
-            onDismiss = { },
-            onCameraClick = { },
-            onGalleryClick = { }
+            onDismiss = {
+                if (updateProfileImageState !is MypageViewModel.UpdateProfileImageState.Loading) {
+                    showEditImageDialog = false
+                }
+            },
+            onCameraClick = {
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            },
+            onGalleryClick = {
+                galleryLauncher.launch("image/*")
+            }
         )
     }
 
     if (showDeleteImageDialog) {
         CustomDialog(
             title = "프로필 사진 삭제",
-            onDismiss = { },
-            onConfirm = { }  // TODO: 기존의 profileUrl을 삭제하고 기본 아이콘으로 변경
+            onDismiss = {
+                if (updateProfileImageState !is MypageViewModel.UpdateProfileImageState.Loading) {
+                    showDeleteImageDialog = false
+                }
+            },
+            onConfirm = {
+                viewModel.deleteProfileImage()
+                showDeleteImageDialog = false
+            }
         )
     }
 }

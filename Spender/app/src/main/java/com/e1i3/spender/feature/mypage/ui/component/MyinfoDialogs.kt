@@ -160,7 +160,7 @@ fun EditImageDialog(
             Column(
                 modifier = Modifier.padding(
                     top = 24.dp,
-                    start = 28.dp,
+                    start = 24.dp,
                     end = 24.dp,
                     bottom = 14.dp
                 ),
@@ -189,7 +189,7 @@ fun EditImageDialog(
                             "카메라로 촬영",
                             style = Typography.bodySmall,
                             fontWeight = FontWeight.Bold,
-                            color = DefaultFontColor
+                            color = Color.White
                         )
                     }
                     Button(
@@ -201,7 +201,9 @@ fun EditImageDialog(
                         Text(
                             text = "갤러리에서 선택",
                             color = Color.White,
-                            style = Typography.bodySmall,
+                            style = Typography.bodySmall.copy(
+                                fontSize = 12.sp
+                            ),
                             fontWeight = FontWeight.Bold
                         )
                     }
