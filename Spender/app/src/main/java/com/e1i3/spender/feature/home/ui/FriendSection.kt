@@ -51,6 +51,8 @@ fun FriendBudgetProgressSection(
 fun FriendCategorySection(
     friend: FriendDetailUiModel,
 ){
+    if(friend.nickname == "") friend.nickname = "알 수 없음"
+
     Text(
         "${friend.nickname}님은",
         modifier = Modifier.padding(horizontal = 20.dp),
