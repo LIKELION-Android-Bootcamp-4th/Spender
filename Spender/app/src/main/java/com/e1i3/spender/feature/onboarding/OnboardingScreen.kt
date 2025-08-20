@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,9 +28,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.R
 import com.e1i3.spender.core.ui.CustomLongButton
+import com.e1i3.spender.feature.mypage.ui.viewmodel.MypageViewModel
 import com.e1i3.spender.feature.onboarding.data.OnboardingPref
 import com.e1i3.spender.feature.onboarding.ui.BudgetInputField
 import com.e1i3.spender.feature.onboarding.ui.FirstPage
+import com.e1i3.spender.feature.onboarding.ui.NicknameInputField
 import com.e1i3.spender.feature.onboarding.ui.OnboardingViewModel
 import com.e1i3.spender.feature.onboarding.ui.PageIndicator
 import com.e1i3.spender.ui.theme.Typography
@@ -42,12 +45,17 @@ import com.google.firebase.firestore.SetOptions
 @Composable
 fun OnboardingScreen(
     navController: NavHostController,
-    viewModel: OnboardingViewModel = hiltViewModel()
+    viewModel: OnboardingViewModel = hiltViewModel(),
+    mypageViewModel: MypageViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
     val onComplete: (Boolean) -> Unit = { isGranted ->
         saveDefaultNotificationSettingsToFirestore(isGranted)
+
+        if (viewModel.nickname.isNotBlank()) {
+            mypageViewModel.updateNickname(viewModel.nickname)
+        }
 
         viewModel.saveBudget { success ->
             if (success) {
@@ -64,6 +72,7 @@ fun OnboardingScreen(
 
     val currentPage by viewModel.currentPage.collectAsState()
     val budget = viewModel.budget
+    val updateNicknameState by mypageViewModel.updateNicknameState.collectAsState()
 
     val titles = context.resources.getStringArray(R.array.onboarding_title).toList()
 
@@ -107,6 +116,22 @@ fun OnboardingScreen(
             if (currentPage == 1) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
+                    text = "이 닉네임은 친구들에게 보여지는 이름이에요!",
+                    style = Typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(88.dp))
+                NicknameInputField(
+                    nickName = viewModel.nickname,
+                    onNicknameChange = { viewModel.updateNickname(it) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            if (currentPage == 2) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
                     text = "지출이가 예산 관리도 도와드릴게요!",
                     style = Typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onTertiary,
@@ -123,9 +148,9 @@ fun OnboardingScreen(
         }
 
         CustomLongButton(
-            text = if (currentPage < 2) "다음" else "시작하기",
+            text = if (currentPage < 3) "다음" else "시작하기",
             onClick = {
-                if (currentPage < 2) {
+                if (currentPage < 3) {
                     viewModel.onNext()
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -143,7 +168,11 @@ fun OnboardingScreen(
                     }
                 }
             },
-            isEnabled = currentPage != 1 || budget > 0
+            isEnabled = when (currentPage) {
+                1 -> viewModel.nickname.isNotBlank()
+                2 -> budget > 0
+                else -> true
+            }
         )
     }
 }
