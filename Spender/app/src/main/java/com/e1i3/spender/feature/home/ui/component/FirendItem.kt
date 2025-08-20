@@ -1,6 +1,7 @@
 package com.e1i3.spender.feature.home.ui.component
 
 import android.graphics.Paint.Align
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,15 +34,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.e1i3.spender.core.ui.CustomDialog
 import com.e1i3.spender.feature.home.domain.model.Friend
+import com.e1i3.spender.feature.home.ui.viewModel.HomeViewModel
 import com.e1i3.spender.ui.theme.LightPointColor
 import com.e1i3.spender.ui.theme.PointColor
 import com.e1i3.spender.ui.theme.Typography
@@ -50,7 +54,8 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FriendItem(navHostController: NavHostController, friend: Friend) {
+fun FriendItem(navHostController: NavHostController, friend: Friend, viewModel: HomeViewModel) {
+    val context = LocalContext.current
     var menuExpanded by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var itemPosition by remember { mutableStateOf(Offset.Zero) }
@@ -107,8 +112,11 @@ fun FriendItem(navHostController: NavHostController, friend: Friend) {
             title = "${friend.nickname}님을 삭제하시겠습니까?",
             content = "삭제하더라도 나중에 다시 친구 추가가 가능해요.",
             onConfirm = {
-                // TODO: 친구 삭제
+                viewModel.deleteFriend(friendId = friend.userId)
+                viewModel.getFriendList()
                 showDeleteDialog = false
+                Toast.makeText(context, "${friend.nickname}님이 삭제되었습니다.", Toast.LENGTH_SHORT)
+                    .show()
             },
             onDismiss = {
                 showDeleteDialog = false
@@ -147,7 +155,4 @@ fun FriendItem(navHostController: NavHostController, friend: Friend) {
             }
         }
     }
-
-
-
 }

@@ -60,4 +60,15 @@ class HomeRepository @Inject constructor(
             dto?.toDomain(userId = doc.id)
         }
     }
+
+    suspend fun deleteFriend(friendId: String) = runCatching {
+        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+
+        val snapshot = firestore.collection("users")
+            .document(uid)
+            .collection("friends")
+            .document(friendId)
+            .delete()
+            .await()
+    }
 }

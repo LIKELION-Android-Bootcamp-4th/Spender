@@ -63,7 +63,7 @@ fun FriendCategorySection(
             withStyle(style = SpanStyle(color = friend.topCategoryColor)) {
                 append("${friend.topCategoryName}")
             }
-            append("카테고리 지출이 많아요")
+            append(" 카테고리 지출이 많아요")
         },
         style = Typography.titleMedium,
         modifier = Modifier.padding(horizontal = 20.dp),

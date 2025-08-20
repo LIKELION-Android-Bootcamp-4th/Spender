@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: HomeRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _hasUnread = mutableStateOf(false)
     val hasUnread: State<Boolean> = _hasUnread
@@ -56,12 +56,18 @@ class HomeViewModel @Inject constructor(
         listenerRegistration?.remove()
     }
 
-    fun getFriendList(){
+    fun getFriendList() {
         viewModelScope.launch {
             repository.getFriendList()
                 .onSuccess { list ->
                     _friendList.value = list
                 }
+        }
+    }
+
+    fun deleteFriend(friendId: String){
+        viewModelScope.launch {
+            repository.deleteFriend(friendId)
         }
     }
 }
