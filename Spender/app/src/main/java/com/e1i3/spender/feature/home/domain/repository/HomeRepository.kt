@@ -1,12 +1,10 @@
 package com.e1i3.spender.feature.home.domain.repository
 
 import com.e1i3.spender.core.data.remote.friend.FriendListDto
-import com.e1i3.spender.feature.home.domain.model.Friend
 import com.e1i3.spender.feature.home.mapper.toDomain
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.toObject
 import jakarta.inject.Inject
 import kotlinx.coroutines.tasks.await
 
@@ -64,7 +62,7 @@ class HomeRepository @Inject constructor(
     suspend fun deleteFriend(friendId: String) = runCatching {
         val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
 
-        val snapshot = firestore.collection("users")
+        firestore.collection("users")
             .document(uid)
             .collection("friends")
             .document(friendId)
