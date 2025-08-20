@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -98,7 +99,8 @@ fun FriendItem(navHostController: NavHostController, friend: Friend) {
 
     DropdownMenu(
         expanded = menuExpanded,
-        onDismissRequest = { menuExpanded = false }
+        onDismissRequest = { menuExpanded = false },
+        offset = DpOffset(x = 64.dp, y = -50.dp)
     ) {
         DropdownMenuItem(
             text = { Text("친구 삭제") },
