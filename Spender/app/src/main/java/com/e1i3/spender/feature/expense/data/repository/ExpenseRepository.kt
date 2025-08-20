@@ -21,7 +21,9 @@ class ExpenseRepository @Inject constructor() {
 
     suspend fun getExpenseById(userId: String, expenseId: String): Expense? {
         return try {
-            val document = usersCollection.document(userId).collection("expenses").document(expenseId).get().await()
+            val document =
+                usersCollection.document(userId).collection("expenses").document(expenseId).get()
+                    .await()
             document.toObject(Expense::class.java)?.copy(id = document.id)
         } catch (e: Exception) {
             null
@@ -30,28 +32,34 @@ class ExpenseRepository @Inject constructor() {
 
     suspend fun updateExpense(userId: String, expenseId: String, expenseDto: ExpenseDto): Boolean {
         return try {
-            usersCollection.document(userId).collection("expenses").document(expenseId).set(expenseDto).await()
+            usersCollection.document(userId).collection("expenses").document(expenseId)
+                .set(expenseDto).await()
             true
-        } catch (e: Exception) { false }
+        } catch (e: Exception) {
+            false
+        }
     }
 
     suspend fun deleteExpense(userId: String, expenseId: String): Boolean {
         return try {
-            usersCollection.document(userId).collection("expenses").document(expenseId).delete().await()
+            usersCollection.document(userId).collection("expenses").document(expenseId).delete()
+                .await()
             true
-        } catch (e: Exception) { false }
+        } catch (e: Exception) {
+            false
+        }
     }
 
     suspend fun searchExpenses(userId: String, query: String): List<Expense> {
         return try {
             val snapshot = usersCollection.document(userId).collection("expenses")
-                .whereGreaterThanOrEqualTo("title", query)
-                .whereLessThanOrEqualTo("title", query + "\uf8ff")
                 .get().await()
 
-            snapshot.documents.mapNotNull { document ->
+            val allExpenses = snapshot.documents.mapNotNull { document ->
                 document.toObject(Expense::class.java)?.copy(id = document.id)
             }
+
+            allExpenses.filter { it.title.contains(query, ignoreCase = true) }
         } catch (e: Exception) {
             emptyList()
         }

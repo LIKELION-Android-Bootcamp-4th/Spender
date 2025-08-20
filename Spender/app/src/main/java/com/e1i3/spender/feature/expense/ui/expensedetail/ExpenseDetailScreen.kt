@@ -408,7 +408,7 @@ fun ExpenseDetailScreen(
                 )
                 Spacer(Modifier.height(16.dp))
 
-                if (uiState.imageUrl != null) {
+                if (!uiState.imageUrl.isNullOrBlank()) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
