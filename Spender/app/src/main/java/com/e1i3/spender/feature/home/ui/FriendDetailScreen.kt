@@ -1,6 +1,5 @@
 package com.e1i3.spender.feature.home.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
@@ -22,16 +21,11 @@ fun FriendDetailScreen(
     friendId: String,
     viewModel: FriendDetailViewModel = hiltViewModel()
 ) {
-    Log.d("FriendDetailScreen", "Composable started with friendId = $friendId")
-
     val isLoading by viewModel.isLoading
     val error by viewModel.error
     val friend = viewModel.friendDetail.value
 
-    Log.d("FriendDetailScreen", "friend = $friend, isLoading = $isLoading, error = $error")
-
     LaunchedEffect(friendId) {
-        Log.d("FriendDetail", "loadFriendDetail called with $friendId")
         viewModel.loadFriendDetail(friendId)
     }
 
