@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -219,7 +220,13 @@ fun UserInfoSection(
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Text("$userName 님", style = MaterialTheme.typography.titleMedium) //TOD: 10글자 이상 시, 말줄임표
+        Text(
+            text = "$userName 님",
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
+        )
         Spacer(modifier = Modifier.width(16.dp))
         IconButton(onClick = {navHostController.navigate("myinfo")}) {
             Icon(
