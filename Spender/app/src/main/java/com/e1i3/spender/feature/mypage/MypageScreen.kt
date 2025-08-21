@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.core.ui.CustomDialog
 import com.e1i3.spender.feature.auth.ui.viewmodel.AuthViewModel
+import com.e1i3.spender.feature.mypage.ui.component.CircularImage
 import com.e1i3.spender.feature.mypage.ui.component.MyPageItemType
 import com.e1i3.spender.feature.mypage.ui.component.Section
 import com.e1i3.spender.feature.mypage.ui.viewmodel.MypageViewModel
@@ -62,7 +63,7 @@ fun MypageScreen(
 
     var showWithdrawDialog by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }
-
+    
     LaunchedEffect(Unit) {
         mypageViewModel.loadUserInfo()
     }
@@ -93,7 +94,7 @@ fun MypageScreen(
     ) {
         UserInfoSection(
             userName = user.displayNickname,
-            iconRes = user.providerIcon,
+            profileUrl = user.profileUrl,
             navHostController = navHostController
         )
 
@@ -207,7 +208,7 @@ fun AdMobBanner() {
 @Composable
 fun UserInfoSection(
     userName: String,
-    iconRes: Int?,
+    profileUrl: String?,
     navHostController: NavHostController
 ) {
     Row(
@@ -216,14 +217,10 @@ fun UserInfoSection(
             .padding(vertical = 10.dp, horizontal = 28.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (iconRes != null) {
-            Icon(
-                painter = painterResource(id = iconRes),
-                contentDescription = "소셜 로그인 아이콘",
-                modifier = Modifier.size(24.dp),
-                tint = Color.Unspecified
-            )
-        }
+        CircularImage(
+            profileUrl = profileUrl,
+            size = 32.dp
+        )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = "$userName 님",
