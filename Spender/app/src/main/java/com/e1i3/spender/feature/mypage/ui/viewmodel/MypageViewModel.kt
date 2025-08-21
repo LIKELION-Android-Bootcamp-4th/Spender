@@ -36,7 +36,7 @@ class MypageViewModel @Inject constructor() : ViewModel() {
         loadUserInfo()
     }
 
-    private fun loadUserInfo() {
+    fun loadUserInfo() {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
         if (firebaseUser == null) {
             return
