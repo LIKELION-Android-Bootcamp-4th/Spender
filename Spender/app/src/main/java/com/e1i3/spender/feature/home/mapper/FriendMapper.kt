@@ -47,8 +47,8 @@ fun FriendDetailDto.toUiModel(): FriendDetailUiModel {
     val topCategory = byCategory.maxByOrNull { it.totalPrice }
     val categoryChartData = byCategory.map { it.toDomain() }.toUiModel()
 
-    val topEmotion = byEmotion.maxByOrNull { it.amount }
     val emotionChartData = byEmotion.map { it.toDomain() }.toUiModel()
+    val topEmotion = emotionChartData.maxByOrNull { it.amount }
 
     return FriendDetailUiModel(
         nickname = nickname,
@@ -58,10 +58,8 @@ fun FriendDetailDto.toUiModel(): FriendDetailUiModel {
         topCategoryColor = topCategory?.colorHex?.toColor() ?: PointColor,
         categoryChartData = categoryChartData,
 
-        topEmotionName = topEmotion?.emotionId?.let { emotionLabelMap[it] },
-        topEmotionColor = emotionChartData.firstOrNull {
-            it.label == emotionLabelMap[topEmotion?.emotionId]
-        }?.color ?: PointColor,
+        topEmotionName = topEmotion?.label ?: "기록 없음",
+        topEmotionColor = topEmotion?.color ?: PointColor,
         emotionChartData = emotionChartData
     )
 }
