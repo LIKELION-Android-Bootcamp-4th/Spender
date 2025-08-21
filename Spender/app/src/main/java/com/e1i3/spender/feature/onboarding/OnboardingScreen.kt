@@ -64,6 +64,8 @@ fun OnboardingScreen(
             }
         }
 
+        viewModel.setCurrentTier { success -> }
+
         OnboardingPref.setShown(context)
         navController.navigate(Screen.MainScreen.route) {
             popUpTo(Screen.OnboardingScreen.route) { inclusive = true }
