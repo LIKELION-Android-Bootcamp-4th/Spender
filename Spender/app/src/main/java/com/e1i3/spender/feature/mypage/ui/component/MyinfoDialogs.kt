@@ -70,7 +70,12 @@ fun EditNicknameDialog(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     TextField(
                         value = nickName,
-                        onValueChange = { if (!isLoading) nickName = it },
+                        onValueChange = { input ->
+                            if (!isLoading) {
+                                val newNickname = input.replace("\n", "")
+                                nickName = newNickname
+                            }
+                        },
                         placeholder = {
                             Text(
                                 "닉네임을 입력해주세요",

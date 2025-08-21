@@ -85,7 +85,7 @@ fun MypageScreen(
             .padding(vertical = 14.dp)
     ) {
         UserInfoSection(
-            userName = user.displayName,
+            userName = user.displayNickname,
             iconRes = user.providerIcon,
             navHostController = navHostController
         )
