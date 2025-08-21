@@ -15,12 +15,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,12 +34,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.core.ui.CustomDialog
 import com.e1i3.spender.feature.auth.ui.viewmodel.AuthViewModel
+import com.e1i3.spender.feature.mypage.ui.component.CircularImage
 import com.e1i3.spender.feature.mypage.ui.component.MyPageItemType
 import com.e1i3.spender.feature.mypage.ui.component.Section
 import com.e1i3.spender.feature.mypage.ui.viewmodel.MypageViewModel
@@ -59,6 +63,10 @@ fun MypageScreen(
 
     var showWithdrawDialog by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }
+    
+    LaunchedEffect(Unit) {
+        mypageViewModel.loadUserInfo()
+    }
 
     val onItemClick: (MyPageItemType) -> Unit = { item ->
         when (item) {
@@ -86,7 +94,7 @@ fun MypageScreen(
     ) {
         UserInfoSection(
             userName = user.displayNickname,
-            iconRes = user.providerIcon,
+            profileUrl = user.profileUrl,
             navHostController = navHostController
         )
 
@@ -200,7 +208,7 @@ fun AdMobBanner() {
 @Composable
 fun UserInfoSection(
     userName: String,
-    iconRes: Int?,
+    profileUrl: String?,
     navHostController: NavHostController
 ) {
     Row(
@@ -209,20 +217,22 @@ fun UserInfoSection(
             .padding(vertical = 10.dp, horizontal = 28.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (iconRes != null) {
-            Icon(
-                painter = painterResource(id = iconRes),
-                contentDescription = "소셜 로그인 아이콘",
-                modifier = Modifier.size(24.dp),
-                tint = Color.Unspecified
-            )
-        }
+        CircularImage(
+            profileUrl = profileUrl,
+            size = 32.dp
+        )
         Spacer(modifier = Modifier.width(16.dp))
-        Text("$userName 님", style = MaterialTheme.typography.titleMedium)
+        Text(
+            text = "$userName 님",
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f)
+        )
         Spacer(modifier = Modifier.width(16.dp))
         IconButton(onClick = {navHostController.navigate("myinfo")}) {
             Icon(
-                imageVector = Icons.Default.Edit,
+                imageVector = Icons.Default.Settings,
                 contentDescription = "프로필 수정",
                 modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.onTertiary
