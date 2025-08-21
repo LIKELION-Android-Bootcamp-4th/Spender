@@ -65,9 +65,11 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
     var recentExpenses by remember { mutableStateOf<List<ExpenseDto>>(emptyList()) }
     val hasUnread by viewModel.hasUnread
     val friendList by viewModel.friendList
+    val currentTier = viewModel.currentTier.value
 
     LaunchedEffect(Unit) {
         viewModel.getFriendList()
+        viewModel.getCurrentTier()
     }
 
     LaunchedEffect(hasUnread) {
@@ -159,7 +161,7 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                         modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        TierBadge(level = 1)
+                        TierBadge(level = currentTier)
                     }
                 }
 

@@ -45,9 +45,6 @@ fun FriendDetailScreen(
                         title = "${friend.nickname} 지출 현황",
                         showBackButton = true,
                         navController = navHostController,
-                        actions = {
-                            // TODO : 친구 삭제
-                        }
                     )
                 },
                 content = { padding ->

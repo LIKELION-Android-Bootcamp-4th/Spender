@@ -19,6 +19,9 @@ class HomeViewModel @Inject constructor(
     private val _hasUnread = mutableStateOf(false)
     val hasUnread: State<Boolean> = _hasUnread
 
+    private val _currentTier = mutableStateOf(3)
+    val currentTier: State<Int> = _currentTier
+
     private var listenerRegistered = false
     private var listenerRegistration: ListenerRegistration? = null
 
@@ -68,6 +71,13 @@ class HomeViewModel @Inject constructor(
     fun deleteFriend(friendId: String){
         viewModelScope.launch {
             repository.deleteFriend(friendId)
+        }
+    }
+
+    fun getCurrentTier(){
+        viewModelScope.launch {
+            repository.getCurrentTier()
+                .onSuccess { _currentTier.value = it }
         }
     }
 }
