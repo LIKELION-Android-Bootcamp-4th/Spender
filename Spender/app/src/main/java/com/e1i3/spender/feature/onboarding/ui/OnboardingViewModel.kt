@@ -48,4 +48,10 @@ class OnboardingViewModel @Inject constructor(
             onComplete(success)
         }
     }
+
+    fun setCurrentTier(onComplete: (Boolean) -> Unit) {
+        repository.setCurrentTier { success ->
+            onComplete(success)
+        }
+    }
 }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -218,11 +219,11 @@ fun UserInfoSection(
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Text("$userName 님", style = MaterialTheme.typography.titleMedium)
+        Text("$userName 님", style = MaterialTheme.typography.titleMedium) //TOD: 10글자 이상 시, 말줄임표
         Spacer(modifier = Modifier.width(16.dp))
         IconButton(onClick = {navHostController.navigate("myinfo")}) {
             Icon(
-                imageVector = Icons.Default.Edit,
+                imageVector = Icons.Default.Settings,
                 contentDescription = "프로필 수정",
                 modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.onTertiary
