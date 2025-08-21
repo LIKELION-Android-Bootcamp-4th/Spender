@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.e1i3.spender.R
@@ -40,8 +42,9 @@ fun NicknameInputField(
             TextField(
                 value = nickName,
                 onValueChange = { input ->
-                    if (input.length <= 20) {
-                        onNicknameChange(input)
+                    val newNickname = input.replace("\n", "")
+                    if (newNickname.length <= 20) {
+                        onNicknameChange(newNickname)
                     }
                 },
                 colors = TextFieldDefaults.colors(
@@ -59,7 +62,13 @@ fun NicknameInputField(
                         color = MaterialTheme.colorScheme.tertiary
                     )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = null
+                ),
                 modifier = Modifier.weight(1f),
                 singleLine = true
             )
