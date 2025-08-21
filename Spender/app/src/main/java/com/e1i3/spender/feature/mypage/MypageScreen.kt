@@ -180,7 +180,7 @@ fun AdMobBanner() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 5.dp),
+            .padding(vertical = 0.dp),
         contentAlignment = Alignment.Center
     ) {
         AndroidView(
@@ -206,7 +206,7 @@ fun UserInfoSection(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 28.dp, horizontal = 28.dp),
+            .padding(vertical = 10.dp, horizontal = 28.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (iconRes != null) {

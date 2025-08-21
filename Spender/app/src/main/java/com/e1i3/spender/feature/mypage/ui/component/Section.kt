@@ -1,6 +1,8 @@
 package com.e1i3.spender.feature.mypage.ui.component
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,8 +17,9 @@ fun Section(
     items: List<MyPageItemType>,
     onItemClick: (MyPageItemType) -> Unit
 ) {
-    Column(modifier = Modifier.padding(horizontal = 30.dp).padding(top = 20.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 30.dp).padding(top = 15.dp)) {
         Text(title, color = MaterialTheme.colorScheme.onTertiary, style = MaterialTheme.typography.titleSmall, fontSize = 16.sp)
+        Spacer(modifier = Modifier.height(3.dp))
         items.forEach { item ->
             MyPageItem(item = item, onClick = { onItemClick(item) })
         }
