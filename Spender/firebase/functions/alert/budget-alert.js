@@ -10,7 +10,7 @@ const formatMonth = (date) => {
 };
 
 module.exports = functions.pubsub
-  .schedule("0 9 20 * *") // 매월 20일 09:00
+  .schedule("0 9 21 * *") // 매월 21일 09:00
   .timeZone("Asia/Seoul")
   .onRun(async () => {
     const now = new Date();
