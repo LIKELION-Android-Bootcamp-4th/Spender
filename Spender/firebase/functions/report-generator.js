@@ -165,8 +165,25 @@ const generateMonthlyReports = pubsub
       const userRef = db.collection("users").doc(userDoc.id);
       try {
         const summary = await calculateUserReport(userRef, monthStr);
-
         const { totalBudget, totalExpense } = summary;
+
+        const currentUserTier = userDoc.data().currentTier || 3;
+        let newTier = currentUserTier;
+
+        if(totalBudget > 0){
+          if(totalExpense < totalBudget){
+            newTier = Math.min(5, currentUserTier + 1);
+          }else if(totalExpense > totalBudget){
+            newTier = Math.max(1, currentUserTier - 1);
+          }
+        }
+
+        const tierRef = userRef.collection("tiers").doc(monthStr);
+        await tierRef.set({level: newTier});
+
+        if(newTier !== currentUserTier){
+          await userRef.update({currentTier: newTier});
+        }
 
         if (totalBudget === 0 || totalExpense === 0) {
           console.log(`[${userDoc.id}] 예산 또는 지출이 0원이라 리포트 생략`);
