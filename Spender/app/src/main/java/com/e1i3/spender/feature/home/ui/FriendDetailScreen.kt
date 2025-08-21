@@ -1,5 +1,8 @@
 package com.e1i3.spender.feature.home.ui
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
@@ -13,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.core.ui.CustomTopAppBar
 import com.e1i3.spender.core.ui.LoadingScreen
+import com.e1i3.spender.feature.home.ui.component.TierBadge
 import com.e1i3.spender.feature.home.ui.viewModel.FriendDetailViewModel
 
 @Composable
@@ -41,9 +45,6 @@ fun FriendDetailScreen(
                         title = "${friend.nickname} 지출 현황",
                         showBackButton = true,
                         navController = navHostController,
-                        actions = {
-                            // TODO : 친구 삭제
-                        }
                     )
                 },
                 content = { padding ->
@@ -52,7 +53,14 @@ fun FriendDetailScreen(
                             .padding(padding)
                             .padding(vertical = 10.dp, horizontal = 8.dp)
                     ) {
-                        // TODO: 티어
+                        item {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                TierBadge(level = friend.currentTier)
+                            }
+                        }
 
                         item {
                             FriendBudgetProgressSection(friend = friend, navHostController = navHostController

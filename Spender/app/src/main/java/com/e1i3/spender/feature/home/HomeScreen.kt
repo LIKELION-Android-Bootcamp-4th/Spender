@@ -5,8 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -50,6 +52,7 @@ import com.e1i3.spender.feature.home.ui.BudgeProgress
 import com.e1i3.spender.feature.home.ui.RecentTransactionsSection
 import com.e1i3.spender.feature.home.ui.TotalExpenseCard
 import com.e1i3.spender.feature.home.ui.component.FriendItem
+import com.e1i3.spender.feature.home.ui.component.TierBadge
 import com.e1i3.spender.feature.home.ui.viewModel.HomeViewModel
 import com.e1i3.spender.ui.theme.LightPointColor
 import com.e1i3.spender.ui.theme.navigation.Screen
@@ -62,9 +65,11 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
     var recentExpenses by remember { mutableStateOf<List<ExpenseDto>>(emptyList()) }
     val hasUnread by viewModel.hasUnread
     val friendList by viewModel.friendList
+    val currentTier = viewModel.currentTier.value
 
     LaunchedEffect(Unit) {
         viewModel.getFriendList()
+        viewModel.getCurrentTier()
     }
 
     LaunchedEffect(hasUnread) {
@@ -151,7 +156,14 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                     }
                 }
 
-                // TODO: 티어 추가하기
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        TierBadge(level = currentTier)
+                    }
+                }
 
                 item {
                     TotalExpenseCard(totalExpense = totalExpense)

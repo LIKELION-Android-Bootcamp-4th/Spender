@@ -22,6 +22,7 @@ class FriendDetailRepository @Inject constructor(
 
         val userSnapshot = userRef.get().await()
         val nickname = userSnapshot.getString("nickname") ?: ""
+        val currentTier = userSnapshot.getLong("currentTier")?.toInt() ?: 3
 
         val expensesSnapshot = userRef.collection("expenses")
             .whereGreaterThanOrEqualTo("date", start)
@@ -72,6 +73,7 @@ class FriendDetailRepository @Inject constructor(
 
         FriendDetailDto(
             nickname = nickname,
+            currentTier = currentTier,
             totalBudget = totalBudget,
             totalExpense = totalExpense,
             byCategory = categoryMap.values.toList(),

@@ -76,4 +76,11 @@ class HomeRepository @Inject constructor(
             .delete()
             .await()
     }
+
+    suspend fun getCurrentTier() = runCatching {
+        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+
+        val snap = firestore.collection("users").document(uid).get().await()
+        snap.getLong("currentTier")?.toInt() ?: 3
+    }
 }
