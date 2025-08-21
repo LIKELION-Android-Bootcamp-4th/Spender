@@ -5,6 +5,7 @@ import com.e1i3.spender.core.data.remote.report.EmotionTotalDto
 
 data class FriendDetailDto(
     val nickname: String = "알 수 없음",
+    val currentTier: Int,
     val totalBudget: Int = 0,
     val totalExpense: Int = 0,
     val byCategory: List<CategoryTotalDto> = emptyList(),

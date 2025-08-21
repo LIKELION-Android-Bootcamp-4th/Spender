@@ -58,7 +58,7 @@ fun FriendDetailScreen(
                                 modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
                                 horizontalArrangement = Arrangement.Center
                             ) {
-                                TierBadge(level = 1)
+                                TierBadge(level = friend.currentTier)
                             }
                         }
 

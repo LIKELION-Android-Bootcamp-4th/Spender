@@ -52,6 +52,7 @@ fun FriendDetailDto.toUiModel(): FriendDetailUiModel {
 
     return FriendDetailUiModel(
         nickname = nickname,
+        currentTier = currentTier,
         budgetProgress = percentage * 100,
 
         topCategoryName = topCategory?.categoryName,
