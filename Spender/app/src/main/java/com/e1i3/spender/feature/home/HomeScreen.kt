@@ -150,18 +150,26 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                         contentPadding = PaddingValues(horizontal = 15.dp, vertical = 10.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        items(friendList){ friend ->
-                            FriendItem(navHostController = navHostController, friend = friend, viewModel = viewModel)
+                        items(friendList) { friend ->
+                            FriendItem(
+                                navHostController = navHostController,
+                                friend = friend,
+                                viewModel = viewModel
+                            )
                         }
                     }
                 }
 
                 item {
                     Row(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        TierBadge(level = currentTier)
+                        TierBadge(level = currentTier, onClick = {
+                            navHostController.navigate()
+                        })
                     }
                 }
 
