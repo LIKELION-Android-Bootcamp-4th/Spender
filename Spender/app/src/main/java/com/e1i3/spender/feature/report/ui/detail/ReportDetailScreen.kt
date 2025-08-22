@@ -1,6 +1,9 @@
 package com.e1i3.spender.feature.report.ui.detail
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
@@ -13,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.core.common.util.toYearMonth
 import com.e1i3.spender.core.ui.CustomTopAppBar
+import com.e1i3.spender.feature.home.ui.component.TierBadge
 import com.e1i3.spender.feature.report.mapper.toUiModel
 import com.e1i3.spender.feature.report.ui.component.BudgetProgressSection
 import com.e1i3.spender.feature.report.ui.component.CategorySpendingSection
@@ -46,8 +50,18 @@ fun ReportDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .padding(horizontal = 24.dp, vertical = 24.dp)
+                    .padding(horizontal = 24.dp, vertical = 0.dp)
             ) {
+                // 티어
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        TierBadge(level = report.tier)
+                    }
+                }
+
                 // 이번달 총 지출
                 item {
                     TotalSpendingSection(totalExpense = report.totalExpense, totalBudget = report.totalBudget)

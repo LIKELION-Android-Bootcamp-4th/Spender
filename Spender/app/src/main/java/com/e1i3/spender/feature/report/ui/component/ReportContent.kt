@@ -75,7 +75,7 @@ fun ReportContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
-                .padding(top = 3.dp),
+                .padding(top = 7.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             itemsIndexed(reports) { index, report ->

@@ -24,6 +24,7 @@ object ReportMapper {
             month = dto.month,
             totalExpense = dto.totalExpense,
             totalBudget = dto.totalBudget,
+            tier = dto.tier,
             feedback = dto.feedback,
             byCategory = dto.byCategory.map {
                 CategoryTotal(
