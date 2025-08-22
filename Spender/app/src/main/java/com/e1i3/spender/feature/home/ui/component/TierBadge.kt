@@ -25,17 +25,31 @@ import com.e1i3.spender.ui.theme.PointColor
 import com.e1i3.spender.ui.theme.SelectedColor
 import com.e1i3.spender.ui.theme.Typography
 
+data class TierInfo(
+    @DrawableRes val mainDrawableRes: Int,
+    @DrawableRes val subDrawableRes: Int,
+    val backgroundColor: Color
+)
+
+fun getTierInfo(level: Int): TierInfo = when (level) {
+    1 -> TierInfo(R.drawable.tier_1, R.drawable.rank_1, Color(0xFF5A5A5A))
+    2 -> TierInfo(R.drawable.tier_2, R.drawable.rank_2, Color(0xFFCD7F32))
+    3 -> TierInfo(R.drawable.tier_3, R.drawable.rank_3, Color(0xFFFAEFE6))
+    4 -> TierInfo(R.drawable.tier_4, R.drawable.rank_4, Color(0xFF3182F6))
+    5 -> TierInfo(R.drawable.tier_5, R.drawable.rank_5, Color(0xFFFFE46C))
+    else -> TierInfo(R.drawable.tier_3, R.drawable.rank_3, Color(0xFFFAEFE6))
+}
+
 @Composable
 fun TierBadge(
     level: Int,
     modifier: Modifier = Modifier,
     size: Dp = 200.dp,
-    pointColor: Color = PointColor,
     elevation: Dp = 2.dp,
     contentDescription: String? = "Tier $level",
     onClick: () -> Unit = {}
 ) {
-    val tierDrawable = tierDrawableRes(level)
+    val tierInfo = getTierInfo(5)
 
     Box(
         modifier = modifier
@@ -46,11 +60,11 @@ fun TierBadge(
             modifier = modifier
                 .size(size)
                 .shadow(elevation, CircleShape, clip = false)
-                .background(pointColor, CircleShape)
+                .background(tierInfo.backgroundColor, CircleShape)
                 .align(Alignment.Center)
         ) {
             Image(
-                painter = painterResource(id = tierDrawable),
+                painter = painterResource(id = tierInfo.mainDrawableRes),
                 contentDescription = contentDescription,
                 modifier = Modifier
                     .fillMaxSize(0.72f)
@@ -62,11 +76,14 @@ fun TierBadge(
         Box(
             modifier = Modifier
                 .size(75.dp)
-                .background(SelectedColor, CircleShape)
                 .align(Alignment.TopEnd),
             contentAlignment = Alignment.Center
         ) {
-            Text(contentDescription ?: "", style = Typography.bodyMedium, color = Color.Black)
+            Image(
+                painter = painterResource(id = tierInfo.subDrawableRes),
+                contentDescription = contentDescription,
+                modifier = Modifier.size(200.dp)
+            )
         }
     }
 }
