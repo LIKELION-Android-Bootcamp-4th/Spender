@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.R
 import com.e1i3.spender.core.ui.CustomLongButton
+import com.e1i3.spender.core.ui.SafeArea
 import com.e1i3.spender.feature.mypage.ui.viewmodel.MypageViewModel
 import com.e1i3.spender.feature.onboarding.data.OnboardingPref
 import com.e1i3.spender.feature.onboarding.ui.BudgetInputField
@@ -84,98 +85,100 @@ fun OnboardingScreen(
         onComplete(isGranted)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 24.dp, vertical = 32.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
+    SafeArea {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(horizontal = 24.dp, vertical = 32.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            PageIndicator(currentPage = currentPage, pageCount = titles.size)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                PageIndicator(currentPage = currentPage, pageCount = titles.size)
 
-            Text(
-                text = titles[currentPage],
-                style = Typography.titleLarge,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            if (currentPage == 0) {
-                Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "똑똑한 소비 습관을 만들기 위해 \n지출이는 아래와 같이 도와줄 거예요!",
-                    style = Typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onTertiary,
-                    textAlign = TextAlign.Center
+                    text = titles[currentPage],
+                    style = Typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
-                Spacer(modifier = Modifier.height(88.dp))
-                FirstPage()
-            }
 
-            if (currentPage == 1) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "이 닉네임은 친구들에게 보여지는 이름이에요!",
-                    style = Typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onTertiary,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(88.dp))
-                NicknameInputField(
-                    nickName = viewModel.nickname,
-                    onNicknameChange = { viewModel.updateNickname(it) },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-
-            if (currentPage == 2) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "지출이가 예산 관리도 도와드릴게요!",
-                    style = Typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onTertiary,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(88.dp))
-                BudgetInputField(
-                    budget = budget,
-                    onBudgetChange = { viewModel.updateBudget(it) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-            }
-        }
-
-        CustomLongButton(
-            text = if (currentPage < 3) "다음" else "시작하기",
-            onClick = {
-                if (currentPage < 3) {
-                    viewModel.onNext()
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        val granted = androidx.core.content.ContextCompat.checkSelfPermission(
-                            context, Manifest.permission.POST_NOTIFICATIONS
-                        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-
-                        if (granted) {
-                            onComplete(true)
-                        } else {
-                            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                        }
-                    } else {
-                        onComplete(true)
-                    }
+                if (currentPage == 0) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "똑똑한 소비 습관을 만들기 위해 \n지출이는 아래와 같이 도와줄 거예요!",
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onTertiary,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(88.dp))
+                    FirstPage()
                 }
-            },
-            isEnabled = when (currentPage) {
-                1 -> viewModel.nickname.isNotBlank()
-                2 -> budget > 0
-                else -> true
+
+                if (currentPage == 1) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "이 닉네임은 친구들에게 보여지는 이름이에요!",
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onTertiary,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(88.dp))
+                    NicknameInputField(
+                        nickName = viewModel.nickname,
+                        onNicknameChange = { viewModel.updateNickname(it) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                if (currentPage == 2) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "지출이가 예산 관리도 도와드릴게요!",
+                        style = Typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onTertiary,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(88.dp))
+                    BudgetInputField(
+                        budget = budget,
+                        onBudgetChange = { viewModel.updateBudget(it) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
             }
-        )
+
+            CustomLongButton(
+                text = if (currentPage < 3) "다음" else "시작하기",
+                onClick = {
+                    if (currentPage < 3) {
+                        viewModel.onNext()
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val granted = androidx.core.content.ContextCompat.checkSelfPermission(
+                                context, Manifest.permission.POST_NOTIFICATIONS
+                            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+
+                            if (granted) {
+                                onComplete(true)
+                            } else {
+                                permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                        } else {
+                            onComplete(true)
+                        }
+                    }
+                },
+                isEnabled = when (currentPage) {
+                    1 -> viewModel.nickname.isNotBlank()
+                    2 -> budget > 0
+                    else -> true
+                }
+            )
+        }
     }
 }
 
