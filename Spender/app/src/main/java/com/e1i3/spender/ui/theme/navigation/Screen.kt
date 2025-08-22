@@ -44,5 +44,5 @@ sealed class Screen(val route: String) {
     object MyinfoScreen : Screen("myinfo")
 
     object FriendAddScreen: Screen("add_friend")
-
+    object TierHistoryScreen: Screen("tier_history")
 }

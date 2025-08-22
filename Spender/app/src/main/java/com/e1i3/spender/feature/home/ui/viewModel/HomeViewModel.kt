@@ -10,12 +10,15 @@ import com.e1i3.spender.feature.home.domain.repository.HomeRepository
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: HomeRepository
 ) : ViewModel() {
+    private val _isLoading = mutableStateOf(true)
+    val isLoading: State<Boolean> = _isLoading
 
     private val _hasUnread = mutableStateOf(false)
     val hasUnread: State<Boolean> = _hasUnread
@@ -45,11 +48,27 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun loadHomeData() {
-        getTotalExpense()
-        getExpenseRate()
-        getRecentExpenses()
-        getFriendList()
-        getCurrentTier()
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val totalExpenseJob = async { repository.getTotalExpense() }
+                val expenseRateJob = async { repository.getExpenseRate() }
+                val recentExpensesJob = async { repository.getExpenseListForHome() }
+                val friendListJob = async { repository.getFriendList() }
+                val currentTierJob = async { repository.getCurrentTier() }
+
+                totalExpenseJob.await().onSuccess { _totalExpense.value = it }
+                expenseRateJob.await().onSuccess { _expenseRate.value = it }
+                recentExpensesJob.await().onSuccess { _recentExpenses.value = it }
+                friendListJob.await().onSuccess { _friendList.value = it }
+                currentTierJob.await().onSuccess { _currentTier.value = it }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 
     fun checkUnreadNotifications() {
@@ -78,61 +97,11 @@ class HomeViewModel @Inject constructor(
         listenerRegistration?.remove()
     }
 
-    fun getFriendList() {
-        viewModelScope.launch {
-            repository.getFriendList()
-                .onSuccess { list ->
-                    _friendList.value = list
-                }
-        }
-    }
-
     fun deleteFriend(friendId: String) {
         viewModelScope.launch {
             repository.deleteFriend(friendId)
-        }
-    }
-
-    fun getCurrentTier() {
-        viewModelScope.launch {
-            repository.getCurrentTier()
-                .onSuccess { _currentTier.value = it }
-        }
-    }
-
-    fun getTotalExpense() {
-        viewModelScope.launch {
-            repository.getTotalExpense()
-                .onSuccess { total ->
-                    _totalExpense.value = total
-                }
-                .onFailure { e ->
-                    e.printStackTrace()
-                }
-        }
-    }
-
-    fun getExpenseRate() {
-        viewModelScope.launch {
-            repository.getExpenseRate()
-                .onSuccess { rate ->
-                    _expenseRate.value = rate
-                }
-                .onFailure { e ->
-                    e.printStackTrace()
-                }
-        }
-    }
-
-    fun getRecentExpenses() {
-        viewModelScope.launch {
-            repository.getExpenseListForHome()
-                .onSuccess { expenses ->
-                    _recentExpenses.value = expenses
-                }
-                .onFailure { e ->
-                    e.printStackTrace()
-                }
+            val updatedList = _friendList.value.filterNot { it.userId == friendId }
+            _friendList.value = updatedList
         }
     }
 }

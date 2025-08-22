@@ -44,7 +44,6 @@ fun ReportListScreen(
 
     LaunchedEffect(selectedIndex) {
         if (selectedIndex >= 0) listState.animateScrollToItem(selectedIndex)
-
     }
 
     LaunchedEffect(year) {
@@ -57,10 +56,10 @@ fun ReportListScreen(
         topBar = {
             ReportTopAppBar(year = year, onPrev = viewModel::goToPreviousYear, onNext = {
                 if (year < currentYear) viewModel.goToNextYear()
-            }, onYearClick = { showYearDialog = true })
+            }, onYearClick = { showYearDialog = true }, navController = navHostController)
         },
         content = { padding ->
-            when{
+            when {
                 viewModel.isLoading.value -> LoadingScreen()
 
                 reports.isEmpty() -> EmptyReport(padding)

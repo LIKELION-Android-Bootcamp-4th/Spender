@@ -23,6 +23,7 @@ import com.e1i3.spender.feature.home.HomeScreen
 import com.e1i3.spender.feature.home.ui.FriendDetailScreen
 import com.e1i3.spender.feature.home.ui.NotificationListScreen
 import com.e1i3.spender.feature.home.ui.SearchScreen
+import com.e1i3.spender.feature.home.ui.TierHistoryScreen
 import com.e1i3.spender.feature.income.ui.IncomeRegistrationScreen
 import com.e1i3.spender.feature.income.ui.incomedetail.IncomeDetailScreen
 import com.e1i3.spender.feature.mypage.MypageScreen
@@ -92,9 +93,11 @@ fun SpenderNavigation(
             }
         }
         composable(Screen.NotificationListScreen.route) {
-            NotificationListScreen(navHostController = navController, homeViewModel = hiltViewModel())
+            NotificationListScreen(
+                navHostController = navController,
+                homeViewModel = hiltViewModel()
+            )
         }
-
         composable(Screen.ReportDetail.route) { backStackEntry ->
             val month = backStackEntry.arguments?.getString("month")
             if (month != null) {
@@ -145,7 +148,6 @@ fun SpenderNavigation(
             val date = backStackEntry.arguments?.getString("date") ?: ""
             OcrResultScreen(navController, title, amount, date)
         }
-
         composable(Screen.BudgetScreen.route) {
             BudgetScreen(navController)
         }
@@ -164,7 +166,7 @@ fun SpenderNavigation(
         composable(Screen.NotificationScreen.route) {
             NotificationScreen(navController)
         }
-        composable(Screen.OpenSourceScreen.route){
+        composable(Screen.OpenSourceScreen.route) {
             OpenSourceScreen(navController)
         }
 //        composable(Screen.ExpenseRegistrationScreen.route) {
@@ -175,6 +177,9 @@ fun SpenderNavigation(
         }
         composable(Screen.FriendAddScreen.route) {
             FriendAddScreen(navController)
+        }
+        composable(Screen.TierHistoryScreen.route) {
+            TierHistoryScreen(navController)
         }
     }
 }

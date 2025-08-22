@@ -1,6 +1,5 @@
 package com.e1i3.spender.feature.home.ui.component
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,55 +27,43 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
-import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import com.e1i3.spender.core.ui.CustomDialog
+import com.e1i3.spender.R
 import com.e1i3.spender.feature.home.domain.model.Friend
-import com.e1i3.spender.feature.home.ui.viewModel.HomeViewModel
 import com.e1i3.spender.ui.theme.LightPointColor
 import com.e1i3.spender.ui.theme.Typography
-import com.e1i3.spender.ui.theme.navigation.Screen
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FriendItem(navHostController: NavHostController, friend: Friend, viewModel: HomeViewModel) {
-    val context = LocalContext.current
+fun FriendItem(
+    friend: Friend, onClick: () -> Unit,
+    onDeleteRequest: () -> Unit
+) {
     var menuExpanded by remember { mutableStateOf(false) }
-    var showDeleteDialog by remember { mutableStateOf(false) }
-    var itemPosition by remember { mutableStateOf(Offset.Zero) }
+    val itemPosition by remember { mutableStateOf(Offset.Zero) }
 
     Box(
         modifier = Modifier
             .width(64.dp)
-            .onGloballyPositioned { coordinates ->
-                val windowPos = coordinates.localToWindow(Offset.Zero)
-                itemPosition = windowPos
-            }
-            .combinedClickable (
-                onClick = {
-                    navHostController.navigate(
-                        Screen.FriendDetailScreen.createRoute(friend.userId)
-                    )
-                },
-                onLongClick = {
-                    menuExpanded = true
-                }
-            )
+            .padding(bottom = 10.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .width(64.dp)
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = { menuExpanded = true })
         ) {
             val painter: Painter = rememberAsyncImagePainter(
-                model = friend.photoUrl
+                model = friend.photoUrl,
+                placeholder = painterResource(id = R.drawable.spender_default)
             )
 
             Image(
@@ -99,23 +86,6 @@ fun FriendItem(navHostController: NavHostController, friend: Friend, viewModel: 
         }
     }
 
-    if(showDeleteDialog){
-        CustomDialog(
-            title = "${friend.nickname}님을 삭제하시겠습니까?",
-            content = "삭제하더라도 나중에 다시 친구 추가가 가능해요.",
-            onConfirm = {
-                viewModel.deleteFriend(friendId = friend.userId)
-                viewModel.getFriendList()
-                showDeleteDialog = false
-                Toast.makeText(context, "${friend.nickname}님이 삭제되었습니다.", Toast.LENGTH_SHORT)
-                    .show()
-            },
-            onDismiss = {
-                showDeleteDialog = false
-            }
-        )
-    }
-
     if (menuExpanded) {
         Popup(
             offset = IntOffset(itemPosition.x.roundToInt() + 64, itemPosition.y.roundToInt() - 60),
@@ -125,7 +95,7 @@ fun FriendItem(navHostController: NavHostController, friend: Friend, viewModel: 
                 modifier = Modifier
                     .width(90.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(color = LightPointColor.copy(alpha = 0.85f),)
+                    .background(color = LightPointColor.copy(alpha = 0.85f))
                     .padding(vertical = 4.dp)
             ) {
                 Column {
@@ -134,7 +104,7 @@ fun FriendItem(navHostController: NavHostController, friend: Friend, viewModel: 
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                showDeleteDialog = true
+                                onDeleteRequest()
                                 menuExpanded = false
                             }
                             .padding(horizontal = 16.dp, vertical = 10.dp)
