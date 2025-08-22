@@ -88,7 +88,6 @@ class HomeRepository @Inject constructor(
         snap.getLong("currentTier")?.toInt() ?: 3
     }
 
-
     suspend fun getTotalExpense(): Result<Int> = runCatching {
         val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
 
@@ -101,7 +100,6 @@ class HomeRepository @Inject constructor(
         }
         total
     }
-
 
     suspend fun getExpenseRate(): Result<Float> = runCatching {
         val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
@@ -152,7 +150,6 @@ class HomeRepository @Inject constructor(
 
         rate
     }
-
 
     suspend fun getExpenseListForHome(): Result<List<ExpenseDto>> = runCatching {
         val uid = auth.currentUser?.uid ?: error("로그아웃 상태")

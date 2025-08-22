@@ -135,9 +135,4 @@ class HomeViewModel @Inject constructor(
                 }
         }
     }
-
-    fun refreshHomeData() {
-        loadHomeData()
-    }
-
 }
