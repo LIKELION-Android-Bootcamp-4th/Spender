@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.e1i3.spender.R
@@ -165,11 +164,4 @@ fun TierDescription(
         }
     }
     Spacer(Modifier.height(8.dp))
-}
-
-
-@Preview
-@Composable
-fun TierDialogPreview() {
-    TierDialog(onDismiss = {})
 }
