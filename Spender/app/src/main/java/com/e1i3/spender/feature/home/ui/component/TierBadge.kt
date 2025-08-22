@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,9 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.e1i3.spender.R
-import com.e1i3.spender.ui.theme.PointColor
-import com.e1i3.spender.ui.theme.SelectedColor
-import com.e1i3.spender.ui.theme.Typography
 
 data class TierInfo(
     @DrawableRes val mainDrawableRes: Int,
@@ -49,7 +45,7 @@ fun TierBadge(
     contentDescription: String? = "Tier $level",
     onClick: () -> Unit = {}
 ) {
-    val tierInfo = getTierInfo(5)
+    val tierInfo = getTierInfo(level)
 
     Box(
         modifier = modifier
@@ -75,14 +71,14 @@ fun TierBadge(
         }
         Box(
             modifier = Modifier
-                .size(75.dp)
+                .size(85.dp)
                 .align(Alignment.TopEnd),
             contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = tierInfo.subDrawableRes),
                 contentDescription = contentDescription,
-                modifier = Modifier.size(200.dp)
+                modifier = Modifier.size(100.dp)
             )
         }
     }
