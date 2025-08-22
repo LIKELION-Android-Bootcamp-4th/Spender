@@ -22,6 +22,7 @@ class ReportDetailViewModel @Inject constructor(
     private val _reportDetail = mutableStateOf(
         ReportDetail(
             month = "",
+            tier = 3,
             totalExpense = 0,
             totalBudget = 0,
             feedback = "",
