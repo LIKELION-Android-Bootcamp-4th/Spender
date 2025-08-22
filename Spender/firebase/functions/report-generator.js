@@ -191,8 +191,10 @@ const generateMonthlyReports = pubsub
         }
 
         const feedback = await generateFeedback(summary);
+
         await userRef.collection("reports").doc(monthStr).set({
           ...summary,
+          tier: newTier,
           feedback,
           month: monthStr,
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
