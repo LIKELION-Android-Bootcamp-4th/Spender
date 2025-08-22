@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.core.ui.LoadingScreen
+import com.e1i3.spender.core.ui.TierDialog
 import com.e1i3.spender.feature.home.ui.component.EmptyTier
 import com.e1i3.spender.feature.home.ui.component.TierItem
 import com.e1i3.spender.feature.home.ui.viewModel.TierHistoryViewModel
@@ -41,6 +42,7 @@ fun TierHistoryScreen(
     val tiers by viewModel.tierList
 
     var showYearDialog by remember { mutableStateOf(false) }
+    var showTierDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(year) {
         viewModel.loadTiers(year)
@@ -59,7 +61,7 @@ fun TierHistoryScreen(
                 showBackButton = true,
                 actions = {
                     IconButton(onClick = {
-
+                        showTierDialog = true
                     }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
@@ -101,6 +103,12 @@ fun TierHistoryScreen(
                 showYearDialog = false
             },
             onDismiss = { showYearDialog = false }
+        )
+    }
+    
+    if(showTierDialog){
+        TierDialog(
+            onDismiss = { showTierDialog = false }
         )
     }
 }
