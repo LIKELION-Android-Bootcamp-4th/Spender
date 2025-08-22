@@ -168,7 +168,7 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                         horizontalArrangement = Arrangement.Center
                     ) {
                         TierBadge(level = currentTier, onClick = {
-                            navHostController.navigate()
+                            navHostController.navigate("tier_history")
                         })
                     }
                 }

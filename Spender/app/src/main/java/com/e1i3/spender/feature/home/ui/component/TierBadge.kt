@@ -72,7 +72,7 @@ fun TierBadge(
 }
 
 @DrawableRes
-private fun tierDrawableRes(level: Int): Int = when (level) {
+fun tierDrawableRes(level: Int): Int = when (level) {
     1 -> R.drawable.tier_1
     2 -> R.drawable.tier_2
     3 -> R.drawable.tier_3
