@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -76,9 +77,12 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                 modifier = Modifier.height(80.dp),
                 navigationIcon = {
                     Image(
-                        painter = painterResource(id = R.drawable.ci_temp),
+                        painter = painterResource(id = R.drawable.app_icon),
                         contentDescription = "프로필 이미지",
-                        modifier = Modifier.size(100.dp)
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.size(60.dp)
+                            .padding(8.dp)
+                            .clip(CircleShape)
                     )
                 },
                 title = { },
