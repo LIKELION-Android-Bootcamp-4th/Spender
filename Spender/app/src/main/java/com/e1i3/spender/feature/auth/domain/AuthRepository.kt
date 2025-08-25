@@ -86,7 +86,7 @@ class AuthRepository @Inject constructor(
         try {
             user.delete().await()
         } catch (e: FirebaseAuthRecentLoginRequiredException) {
-            throw Exception("재인증이 필요합니다.")
+            throw Exception("처리완료. 로그아웃 후 다시 이용 부탁드립니다.")
         }
 
         when (AuthPrefs.getLoginType(context)) {

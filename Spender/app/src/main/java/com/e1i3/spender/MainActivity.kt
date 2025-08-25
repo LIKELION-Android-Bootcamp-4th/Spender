@@ -216,7 +216,7 @@ fun MainScreen(rootNavHostController: NavHostController) {
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(PointColor)
                                 .clickable {
-                                    rootNavHostController.navigate("expense_registration/1")
+                                    rootNavHostController.navigate("expense_registration/0")
                                     isFabMenuExpanded = false
                                 }
                                 .padding(vertical = 12.dp)
