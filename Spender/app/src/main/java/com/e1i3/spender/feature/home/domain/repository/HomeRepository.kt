@@ -155,7 +155,7 @@ class HomeRepository @Inject constructor(
         val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
 
         val document = firestore.collection("users").document(uid).collection("expenses")
-            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .orderBy("date", Query.Direction.DESCENDING)
             .limit(5)
             .get()
             .await()
