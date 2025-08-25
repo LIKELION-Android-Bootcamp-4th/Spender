@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -45,7 +46,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -66,6 +69,7 @@ fun RecurringExpenseContent(
     var isSheetOpen by remember { mutableStateOf(false) }
     val expenseCategories by viewModel.expenseCategories.collectAsState()
     val datePickerState = rememberDatePickerState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     //반복 날짜 바텀시트
     if (uiState.isRepeatSheetVisible) {
@@ -184,6 +188,14 @@ fun RecurringExpenseContent(
                     focusedContainerColor = Color.Transparent,
                     unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                     focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
+                ),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
                 )
             )
         }
@@ -206,7 +218,15 @@ fun RecurringExpenseContent(
                     )
                 },
                 trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
+                ),
                 visualTransformation = NumberCommaTransformation(),
                 singleLine = true,
                 textStyle = Typography.titleMedium,
@@ -341,6 +361,14 @@ fun RecurringExpenseContent(
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.tertiary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
+                ),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
                 )
             )
         }

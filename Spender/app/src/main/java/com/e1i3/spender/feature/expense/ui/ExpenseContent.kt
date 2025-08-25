@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -32,6 +33,8 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.e1i3.spender.feature.expense.domain.model.Emotion
@@ -58,6 +61,7 @@ fun ExpenseContent(
     var isSheetOpen by remember { mutableStateOf(false) }
     val expenseCategories by viewModel.expenseCategories.collectAsState()
     val datePickerState = rememberDatePickerState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -164,6 +168,14 @@ fun ExpenseContent(
                     focusedContainerColor = Color.Transparent,
                     unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                     focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
+                ),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
                 )
             )
         }
@@ -185,8 +197,17 @@ fun ExpenseContent(
                         color = MaterialTheme.colorScheme.onTertiary
                     )
                 },
+
                 trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
+                ),
                 visualTransformation = NumberCommaTransformation(),
                 singleLine = true,
                 textStyle = Typography.titleMedium,
@@ -195,7 +216,7 @@ fun ExpenseContent(
                     focusedContainerColor = Color.Transparent,
                     unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                     focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
-                )
+                ),
             )
         }
 
@@ -306,6 +327,14 @@ fun ExpenseContent(
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.tertiary,
                     unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
+                ),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
                 )
             )
         }

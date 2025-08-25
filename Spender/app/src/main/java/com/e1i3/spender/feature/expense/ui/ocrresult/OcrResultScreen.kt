@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -49,7 +50,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -84,6 +87,7 @@ fun OcrResultScreen(
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     val expenseCategories by viewModel.expenseCategories.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collect { event ->
@@ -243,7 +247,15 @@ fun OcrResultScreen(
                         focusedContainerColor = Color.Transparent,
                         unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                         focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
-                    )
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide()
+                        }
+                    ),
                 )
             }
 
@@ -265,7 +277,15 @@ fun OcrResultScreen(
                         )
                     },
                     trailingIcon = { Text("원", fontSize = 16.sp, fontWeight = FontWeight.Bold) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide()
+                        }
+                    ),
                     visualTransformation = NumberCommaTransformation(),
                     singleLine = true,
                     textStyle = Typography.titleMedium,
@@ -385,7 +405,15 @@ fun OcrResultScreen(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.tertiary,
                         unfocusedBorderColor = MaterialTheme.colorScheme.tertiary
-                    )
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide()
+                        }
+                    ),
                 )
             }
         }
