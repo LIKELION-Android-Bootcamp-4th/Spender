@@ -1,10 +1,10 @@
-package com.e1i3.spender.feature.home.ui
+package com.e1i3.spender.feature.home.ui.viewModel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.e1i3.spender.feature.home.domain.Notification
+import com.e1i3.spender.feature.home.domain.model.Notification
 import com.e1i3.spender.feature.home.domain.repository.NotificationListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

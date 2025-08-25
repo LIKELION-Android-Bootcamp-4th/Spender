@@ -49,4 +49,18 @@ class OnboardingRepository @Inject constructor() {
             .addOnFailureListener { onComplete(false) }
     }
 
+    fun setCurrentTier(onComplete: (Boolean) -> Unit) {
+        val uid = getUid() ?: return onComplete(false)
+        
+        val tierInfo = mapOf(
+            "currentTier" to 3
+        )
+
+        userCollection
+            .document(uid)
+            .update(tierInfo)
+            .addOnSuccessListener { onComplete(true) }
+            .addOnFailureListener { onComplete(false) }
+    }
+
 }

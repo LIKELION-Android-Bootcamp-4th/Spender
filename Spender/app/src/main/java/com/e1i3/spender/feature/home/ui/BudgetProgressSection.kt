@@ -33,7 +33,10 @@ import com.e1i3.spender.ui.theme.Typography
 @Composable
 fun BudgeProgress(
     percentage: Float,
-    navHostController: NavHostController
+    nickname: String = "",
+    navHostController: NavHostController,
+    showSetBudgetButton: Boolean = true,
+    showNickname: Boolean = false,
 ) {
     val percentageForDisplay = percentage
     val percentageForProgress = percentage / 100f
@@ -46,12 +49,15 @@ fun BudgeProgress(
         else -> stringResource(R.string.budgets_red)
     }
 
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
     ) {
+        if(showNickname){
+            Text("${nickname}님은", style = Typography.titleMedium)
+        }
+
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -111,23 +117,25 @@ fun BudgeProgress(
         }
 
         //예산 설정 하러 가기 텍스트 버튼
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            TextButton(
-                modifier = Modifier,
-                onClick = {
-                    navHostController.navigate("budget")
-                }
+        if(showSetBudgetButton){
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
             ) {
-                Text(
-                    text = "예산 설정하러 가기",
-                    style = Typography.labelMedium.copy(
-                        textDecoration = TextDecoration.Underline
-                    ),
-                    color = MaterialTheme.colorScheme.onTertiary
-                )
+                TextButton(
+                    modifier = Modifier,
+                    onClick = {
+                        navHostController.navigate("budget")
+                    }
+                ) {
+                    Text(
+                        text = "예산 설정하러 가기",
+                        style = Typography.labelMedium.copy(
+                            textDecoration = TextDecoration.Underline
+                        ),
+                        color = MaterialTheme.colorScheme.onTertiary
+                    )
+                }
             }
         }
     }

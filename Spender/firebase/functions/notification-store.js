@@ -7,16 +7,6 @@ function sevenDaysFromNow() {
   );
 }
 
-/**
- * 알림 문서를 저장 (알림 모아보기용)
- * @param {string} uid
- * @param {{
- *  type: "BUDGET_ALERT"|"REPORT_ALERT"|"REMINDER_ALERT",
- *  title: string,
- *  content: string,
- *  extra?: object // route, month, regularExpenseName 등
- * }} p
- */
 async function addNotification(uid, p) {
   const ref = db.collection("users").doc(uid)
     .collection("notifications").doc();
@@ -25,7 +15,7 @@ async function addNotification(uid, p) {
     notificationType: p.type,
     title: p.title,
     content: p.content,
-    isRead: p.isRead,
+    isRead: p.isRead ?? false,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
     expireAt: sevenDaysFromNow(),
     ...(p.extra || {})

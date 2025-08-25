@@ -20,14 +20,15 @@ val emotionColorMap = mapOf(
 )
 
 fun List<EmotionTotal>.toUiModel(): List<EmotionUiModel> {
-    val total = this.sumOf { it.amount }.takeIf { it > 0 } ?: 1
+    val validEmotions = this.filter { emotionLabelMap.containsKey(it.emotionId) }
+    val total = validEmotions.sumOf { it.amount }.takeIf { it > 0 } ?: 1
 
-    return this.map {
+    return validEmotions.map {
         EmotionUiModel(
-            label = emotionLabelMap[it.emotionId] ?: "기타",
+            label = emotionLabelMap[it.emotionId]!!,
             amount = it.amount,
             percentage = it.amount.toFloat() / total * 100,
-            color = emotionColorMap[it.emotionId] ?: Color(0xFF000000)
+            color = emotionColorMap[it.emotionId]!!
         )
     }
 }

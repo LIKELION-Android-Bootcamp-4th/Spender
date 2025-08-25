@@ -32,7 +32,7 @@ class ReportRepository @Inject constructor(
                 ReportListDto(
                     month = doc.id,
                     totalExpense = (data["totalExpense"] as? Number)?.toInt() ?: 0,
-                    totalBudget  = (data["totalBudget"] as? Number)?.toInt() ?: 0
+                    totalBudget = (data["totalBudget"] as? Number)?.toInt() ?: 0
                 )
             } catch (e: Exception) {
                 null
@@ -55,26 +55,27 @@ class ReportRepository @Inject constructor(
         val data = documentSnapshot.data ?: error("데이터 없음")
 
         val byCategory = (data["byCategory"] as? List<Map<String, Any>>)?.mapNotNull {
-            val id    = it["categoryId"] as? String ?: return@mapNotNull null
-            val name  = it["categoryName"] as? String ?: return@mapNotNull null
+            val id = it["categoryId"] as? String ?: return@mapNotNull null
+            val name = it["categoryName"] as? String ?: return@mapNotNull null
             val price = (it["totalPrice"] as? Number)?.toInt() ?: 0
             val color = it["color"] as? String ?: return@mapNotNull null
             CategoryTotalDto(id, name, price, color)
         } ?: emptyList()
 
         val byEmotion = (data["byEmotion"] as? List<Map<String, Any>>)?.mapNotNull {
-            val id  = it["emotionId"] as? String ?: return@mapNotNull null
+            val id = it["emotionId"] as? String ?: return@mapNotNull null
             val amt = (it["amount"] as? Number)?.toInt() ?: 0
             EmotionTotalDto(id, amt)
         } ?: emptyList()
 
         ReportDetailDto(
-            month        = documentSnapshot.id,
-            totalBudget  = (data["totalBudget"] as? Number)?.toInt() ?: 0,
+            month = documentSnapshot.id,
+            tier = (data["tier"] as? Number)?.toInt() ?: 3,
+            totalBudget = (data["totalBudget"] as? Number)?.toInt() ?: 0,
             totalExpense = (data["totalExpense"] as? Number)?.toInt() ?: 0,
-            feedback     = data["feedback"] as? String ?: "",
-            byCategory   = byCategory,
-            byEmotion    = byEmotion,
+            feedback = data["feedback"] as? String ?: "",
+            byCategory = byCategory,
+            byEmotion = byEmotion,
         )
     }
 }

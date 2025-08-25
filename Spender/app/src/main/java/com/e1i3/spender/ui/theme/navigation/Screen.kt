@@ -5,7 +5,11 @@ sealed class Screen(val route: String) {
     object AuthScreen : Screen("auth")
     object OnboardingScreen : Screen("onboarding")
     object SplashScreen : Screen("splash")
+    object SearchScreen : Screen("search")
 
+    object FriendDetailScreen: Screen("friend_detail/{friendId}"){
+        fun createRoute(friendId: String) = "friend_detail/$friendId"
+    }
     object NotificationListScreen: Screen("notification_list")
 
     object ReportDetail : Screen("report_detail/{month}") {
@@ -37,5 +41,8 @@ sealed class Screen(val route: String) {
     object NotificationScreen : Screen("notification")
     object OpenSourceScreen: Screen("open_source")
     object IncomeRegistrationScreen : Screen("income_registration")
+    object MyinfoScreen : Screen("myinfo")
 
+    object FriendAddScreen: Screen("add_friend")
+    object TierHistoryScreen: Screen("tier_history")
 }

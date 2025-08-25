@@ -1,8 +1,8 @@
 package com.e1i3.spender.feature.home.mapper
 
 import com.e1i3.spender.core.data.remote.notification.NotificationDto
-import com.e1i3.spender.feature.home.domain.Notification
-import com.e1i3.spender.feature.home.domain.NotificationType
+import com.e1i3.spender.feature.home.domain.model.Notification
+import com.e1i3.spender.feature.home.domain.model.NotificationType
 import com.google.firebase.Timestamp
 import java.util.Date
 

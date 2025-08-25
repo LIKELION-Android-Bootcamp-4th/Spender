@@ -55,7 +55,6 @@ fun ReportContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-            .padding(top = 0.dp)
             .background(color = MaterialTheme.colorScheme.background)
     ) {
         MonthlySpendingBarChart(
@@ -75,7 +74,8 @@ fun ReportContent(
             state = listState,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp)
+                .padding(top = 7.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             itemsIndexed(reports) { index, report ->

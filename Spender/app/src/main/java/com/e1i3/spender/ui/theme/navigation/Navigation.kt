@@ -20,13 +20,18 @@ import com.e1i3.spender.feature.expense.ui.expensedetail.ExpenseDetailScreen
 import com.e1i3.spender.feature.expense.ui.ocrresult.OcrResultScreen
 import com.e1i3.spender.feature.expense.ui.recurringexpensedetail.RecurringExpenseDetailScreen
 import com.e1i3.spender.feature.home.HomeScreen
+import com.e1i3.spender.feature.home.ui.FriendDetailScreen
 import com.e1i3.spender.feature.home.ui.NotificationListScreen
+import com.e1i3.spender.feature.home.ui.SearchScreen
+import com.e1i3.spender.feature.home.ui.TierHistoryScreen
 import com.e1i3.spender.feature.income.ui.IncomeRegistrationScreen
 import com.e1i3.spender.feature.income.ui.incomedetail.IncomeDetailScreen
 import com.e1i3.spender.feature.mypage.MypageScreen
 import com.e1i3.spender.feature.mypage.ui.BudgetScreen
 import com.e1i3.spender.feature.mypage.ui.ExpenseCategoryScreen
+import com.e1i3.spender.feature.mypage.ui.FriendAddScreen
 import com.e1i3.spender.feature.mypage.ui.IncomeCategoryScreen
+import com.e1i3.spender.feature.mypage.ui.MyinfoScreen
 import com.e1i3.spender.feature.mypage.ui.NotificationScreen
 import com.e1i3.spender.feature.mypage.ui.OpenSourceScreen
 import com.e1i3.spender.feature.mypage.ui.RegularExpenseScreen
@@ -57,6 +62,9 @@ fun SpenderNavigation(
         composable(Screen.OnboardingScreen.route) {
             OnboardingScreen(navController)
         }
+        composable(Screen.SearchScreen.route) {
+            SearchScreen(navController)
+        }
         composable(Screen.AuthScreen.route) {
             AuthScreen(navController)
         }
@@ -75,11 +83,21 @@ fun SpenderNavigation(
         composable(BottomNavigationItem.Mypage.route) {
             MypageScreen(navController)
         }
-
-        composable(Screen.NotificationListScreen.route) {
-            NotificationListScreen(navHostController = navController, homeViewModel = hiltViewModel())
+        composable(Screen.MyinfoScreen.route) {
+            MyinfoScreen(navController)
         }
-
+        composable(Screen.FriendDetailScreen.route) { backStackEntry ->
+            val friendId = backStackEntry.arguments?.getString("friendId")
+            if (friendId != null) {
+                FriendDetailScreen(navHostController = navController, friendId)
+            }
+        }
+        composable(Screen.NotificationListScreen.route) {
+            NotificationListScreen(
+                navHostController = navController,
+                homeViewModel = hiltViewModel()
+            )
+        }
         composable(Screen.ReportDetail.route) { backStackEntry ->
             val month = backStackEntry.arguments?.getString("month")
             if (month != null) {
@@ -130,7 +148,6 @@ fun SpenderNavigation(
             val date = backStackEntry.arguments?.getString("date") ?: ""
             OcrResultScreen(navController, title, amount, date)
         }
-
         composable(Screen.BudgetScreen.route) {
             BudgetScreen(navController)
         }
@@ -149,7 +166,7 @@ fun SpenderNavigation(
         composable(Screen.NotificationScreen.route) {
             NotificationScreen(navController)
         }
-        composable(Screen.OpenSourceScreen.route){
+        composable(Screen.OpenSourceScreen.route) {
             OpenSourceScreen(navController)
         }
 //        composable(Screen.ExpenseRegistrationScreen.route) {
@@ -157,6 +174,12 @@ fun SpenderNavigation(
 //        }
         composable(Screen.IncomeRegistrationScreen.route) {
             IncomeRegistrationScreen(navController)
+        }
+        composable(Screen.FriendAddScreen.route) {
+            FriendAddScreen(navController)
+        }
+        composable(Screen.TierHistoryScreen.route) {
+            TierHistoryScreen(navController)
         }
     }
 }

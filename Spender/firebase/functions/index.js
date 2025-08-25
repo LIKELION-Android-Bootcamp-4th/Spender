@@ -15,6 +15,7 @@ const generateMonthlyReports = require("./report-generator");
 const scheduleReportAlerts = require("./alert/report-alert");
 const scheduleBudgetAlerts = require("./alert/budget-alert");
 const scheduleReminderAlerts = require("./alert/reminder-alert");
+const updateProfile = require("./update-profile");
 
 exports.addDailyExpenses = addRegularExpenses;
 exports.onRegularExpenseCreate = onRegularExpenseCreate;
@@ -25,3 +26,4 @@ exports.generateMonthlyReports = generateMonthlyReports;
 exports.scheduleReportAlerts = scheduleReportAlerts;
 exports.scheduleBudgetAlerts = scheduleBudgetAlerts;
 exports.scheduleReminderAlerts = scheduleReminderAlerts;
+exports.updateProfile  = updateProfile;

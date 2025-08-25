@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.R
+import com.e1i3.spender.core.ui.SafeArea
 import com.e1i3.spender.feature.splash.ui.SplashViewModel
 import com.e1i3.spender.feature.splash.ui.SplashViewModel.SplashUiState
 import com.e1i3.spender.ui.theme.navigation.Screen
@@ -43,15 +44,17 @@ fun SplashScreen(
         }
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ci_temp),
-            contentDescription = null,
-            tint = Color.Unspecified,
-            modifier = Modifier.size(250.dp),
-        )
+    SafeArea {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ci_temp),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier.size(250.dp),
+            )
+        }
     }
 }

@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.e1i3.spender.R
 import com.e1i3.spender.core.common.readRawTextFile
+import com.e1i3.spender.core.ui.SafeArea
 import com.e1i3.spender.core.ui.TermsDialog
 import com.e1i3.spender.feature.auth.ui.GoogleLogin
 import com.e1i3.spender.feature.auth.ui.KakaoLogin
@@ -53,114 +54,116 @@ fun AuthScreen(navController: NavHostController) {
 
     val context = LocalContext.current
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    SafeArea {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(WhiteColor)
-                .padding(horizontal = 24.dp, vertical = 20.dp)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(Modifier.height(96.dp))
-                Icon(
-                    painter = painterResource(id = R.drawable.auth_image),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                    modifier = Modifier.size(screenWidth * 0.8f),
-                )
-                Spacer(Modifier.weight(1f))
-                GoogleLogin(navController)
-                Spacer(Modifier.height(24.dp))
-                NaverLogin(navController)
-                Spacer(Modifier.height(24.dp))
-                KakaoLogin(navController)
-
-                Spacer(Modifier.weight(1f))
-
-                Row(
-                    modifier = Modifier.padding(bottom = 8.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "로그인 시",
-                        style = Typography.labelSmall,
-                        color = LightFontColor
-                    )
-
-                    TextButton(
-                        modifier = Modifier,
-                        onClick = { showTerms = true }
-                    ) {
-                        Text(
-                            text = "[이용약관]",
-                            style = Typography.labelSmall.copy(
-                                textDecoration = TextDecoration.Underline
-                            ),
-                            color = LightFontColor
-                        )
-                    }
-
-                    Text(
-                        text = "및",
-                        style = Typography.labelSmall,
-                        color = LightFontColor
-                    )
-
-                    TextButton(
-                        modifier = Modifier,
-                        onClick = { showPrivacy = true }
-                    ) {
-                        Text(
-                            text = "[개인정보 처리방침]",
-                            style = Typography.labelSmall.copy(
-                                textDecoration = TextDecoration.Underline
-                            ),
-                            color = LightFontColor
-                        )
-                    }
-
-                    Text(
-                        text = "에 동의함으로 간주합니다.",
-                        style = Typography.labelSmall,
-                        color = LightFontColor
-                    )
-
-                }
-            }
-        }
-
-        if (isLoading) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.2f)),
-                contentAlignment = Alignment.Center
+                    .background(WhiteColor)
+                    .padding(horizontal = 24.dp, vertical = 20.dp)
             ) {
-                CircularProgressIndicator()
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(Modifier.height(96.dp))
+                    Icon(
+                        painter = painterResource(id = R.drawable.auth_image),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(screenWidth * 0.8f),
+                    )
+                    Spacer(Modifier.weight(1f))
+                    GoogleLogin(navController)
+                    Spacer(Modifier.height(24.dp))
+                    NaverLogin(navController)
+                    Spacer(Modifier.height(24.dp))
+                    KakaoLogin(navController)
+
+                    Spacer(Modifier.weight(1f))
+
+                    Row(
+                        modifier = Modifier.padding(bottom = 8.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "로그인 시",
+                            style = Typography.labelSmall,
+                            color = LightFontColor
+                        )
+
+                        TextButton(
+                            modifier = Modifier,
+                            onClick = { showTerms = true }
+                        ) {
+                            Text(
+                                text = "[이용약관]",
+                                style = Typography.labelSmall.copy(
+                                    textDecoration = TextDecoration.Underline
+                                ),
+                                color = LightFontColor
+                            )
+                        }
+
+                        Text(
+                            text = "및",
+                            style = Typography.labelSmall,
+                            color = LightFontColor
+                        )
+
+                        TextButton(
+                            modifier = Modifier,
+                            onClick = { showPrivacy = true }
+                        ) {
+                            Text(
+                                text = "[개인정보 처리방침]",
+                                style = Typography.labelSmall.copy(
+                                    textDecoration = TextDecoration.Underline
+                                ),
+                                color = LightFontColor
+                            )
+                        }
+
+                        Text(
+                            text = "에 동의함으로 간주합니다.",
+                            style = Typography.labelSmall,
+                            color = LightFontColor
+                        )
+
+                    }
+                }
             }
-        }
 
-        if (showTerms) {
-            TermsDialog(
-                title = "이용약관",
-                content = readRawTextFile(context, R.raw.terms),
-                onDismiss = { showTerms = false }
-            )
-        }
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.2f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
 
-        if (showPrivacy) {
-            TermsDialog(
-                title = "개인정보 처리방침",
-                content = readRawTextFile(context, R.raw.privacy),
-                onDismiss = { showPrivacy = false }
-            )
-        }
+            if (showTerms) {
+                TermsDialog(
+                    title = "이용약관",
+                    content = readRawTextFile(context, R.raw.terms),
+                    onDismiss = { showTerms = false }
+                )
+            }
 
+            if (showPrivacy) {
+                TermsDialog(
+                    title = "개인정보 처리방침",
+                    content = readRawTextFile(context, R.raw.privacy),
+                    onDismiss = { showPrivacy = false }
+                )
+            }
+
+        }
     }
 }

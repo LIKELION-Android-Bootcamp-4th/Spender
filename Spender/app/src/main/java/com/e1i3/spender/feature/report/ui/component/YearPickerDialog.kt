@@ -47,7 +47,7 @@ fun YearPickerDialog(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                val yearList = (currentYear downTo currentYear - 3).toList()
+                val yearList = (currentYear downTo currentYear - 2).toList()
                 var tempYear by remember { mutableIntStateOf(selectedYear) }
 
                 LazyColumn(
