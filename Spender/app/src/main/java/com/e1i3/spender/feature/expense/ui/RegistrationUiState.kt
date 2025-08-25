@@ -6,7 +6,7 @@ import java.util.Date
 
 data class RegistrationUiState(
     // 탭 상태
-    val selectedTabIndex: Int = 1,
+    val selectedTabIndex: Int = 0,
 
     // 공통 입력 상태
     val amount: String = "",

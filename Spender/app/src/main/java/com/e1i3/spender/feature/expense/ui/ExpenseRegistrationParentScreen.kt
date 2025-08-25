@@ -49,7 +49,8 @@ fun ExpenseRegistrationParentScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
-    val tabs = listOf("영수증", "지출", "정기지출")
+    val tabs = listOf("지출", "정기지출")
+//    val tabs = listOf("영수증", "지출", "정기지출") ocr아웃
 
     LaunchedEffect(key1 = initialTabIndex) {
         viewModel.setInitialTabIndex(initialTabIndex)
@@ -93,7 +94,8 @@ fun ExpenseRegistrationParentScreen(
             )
         },
         bottomBar = {
-            if (uiState.selectedTabIndex == 1 || uiState.selectedTabIndex == 2) {
+//            if (uiState.selectedTabIndex == 1 || uiState.selectedTabIndex == 2) {
+            if (uiState.selectedTabIndex == 0 || uiState.selectedTabIndex == 1) {
                 Button(
                     onClick = { viewModel.onRegisterClick() },
                     modifier = Modifier
@@ -166,8 +168,8 @@ fun ExpenseRegistrationParentScreen(
                 }
             }
             when (uiState.selectedTabIndex) {
-                0 -> OcrContent(uiState, viewModel)
-                1 -> ExpenseContent(
+//                0 -> OcrContent(uiState, viewModel) ocr
+                0 -> ExpenseContent(
                     uiState,
                     viewModel,
                     onManageCategoriesClick = {
@@ -175,7 +177,7 @@ fun ExpenseRegistrationParentScreen(
                     }
                 )
 
-                2 -> RecurringExpenseContent(
+                1 -> RecurringExpenseContent(
                     uiState,
                     viewModel,
                     onManageCategoriesClick = {
