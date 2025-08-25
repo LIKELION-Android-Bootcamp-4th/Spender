@@ -131,8 +131,10 @@ class RegistrationViewModel @Inject constructor(
     fun onRegisterClick() {
         viewModelScope.launch {
             when (_uiState.value.selectedTabIndex) {
-                1 -> registerExpense()
-                2 -> registerRecurringExpense()
+                0 -> registerExpense()
+                1 -> registerRecurringExpense()
+//                1 -> registerExpense()
+//                2 -> registerRecurringExpense()
             }
         }
     }
