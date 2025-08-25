@@ -179,42 +179,42 @@ fun FirstPage() {
             )
         }
 
-        //5
-        Row(
-            modifier = Modifier
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Card(
-                modifier = Modifier
-                    .size(24.dp),
-                shape = RoundedCornerShape(10.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.tertiary
-                ),
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.PostAdd,
-                        contentDescription = "PostAdd",
-                        modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-            }
-
-            Spacer(Modifier.width(8.dp))
-
-            Text(
-                text = "영수증 인식으로 편히 등록할 수 있게",
-                style = Typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
+//        //5
+//        Row(
+//            modifier = Modifier
+//                .padding(12.dp),
+//            horizontalArrangement = Arrangement.Center,
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            Card(
+//                modifier = Modifier
+//                    .size(24.dp),
+//                shape = RoundedCornerShape(10.dp),
+//                colors = CardDefaults.cardColors(
+//                    containerColor = MaterialTheme.colorScheme.tertiary
+//                ),
+//            ) {
+//                Box(
+//                    modifier = Modifier.fillMaxSize(),
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Icon(
+//                        imageVector = Icons.Default.PostAdd,
+//                        contentDescription = "PostAdd",
+//                        modifier = Modifier.size(16.dp),
+//                        tint = MaterialTheme.colorScheme.onBackground
+//                    )
+//                }
+//            }
+//
+//            Spacer(Modifier.width(8.dp))
+//
+//            Text(
+//                text = "영수증 인식으로 편히 등록할 수 있게",
+//                style = Typography.bodyMedium,
+//                color = MaterialTheme.colorScheme.onBackground
+//            )
+//        }
 
     }
 }
