@@ -19,7 +19,7 @@ fun Section(
 ) {
     Column(modifier = Modifier.padding(horizontal = 30.dp).padding(top = 15.dp)) {
         Text(title, color = MaterialTheme.colorScheme.onTertiary, style = MaterialTheme.typography.titleSmall, fontSize = 16.sp)
-        Spacer(modifier = Modifier.height(3.dp))
+        Spacer(modifier = Modifier.height(2.dp))
         items.forEach { item ->
             MyPageItem(item = item, onClick = { onItemClick(item) })
         }
