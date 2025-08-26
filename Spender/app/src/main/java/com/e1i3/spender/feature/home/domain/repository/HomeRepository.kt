@@ -248,13 +248,33 @@ class HomeRepository @Inject constructor(
                 val expenses = snapshot?.documents?.map { doc ->
                     val data = doc.data ?: return@map null
 
+                    val amount = try {
+                        data["amount"].toString().toInt()
+                    } catch (_: Exception) {
+                        0
+                    }
+
+                    val title = data["title"].toString()
+
+                    val dateTs: Timestamp? = doc.getTimestamp("date")
+                        ?: (data["date"] as? Timestamp)
+
+                    val createdAtTs: Timestamp? = doc.getTimestamp("createdAt")
+                        ?: (data["createdAt"] as? Timestamp)
+
+                    val categoryId = data["categoryId"].toString()
+
+                    if (dateTs == null || createdAtTs == null) {
+                        return@map null
+                    }
+
                     ExpenseDto(
                         id = doc.id,
-                        amount = data["amount"].toString().toInt(),
-                        title = data["title"].toString(),
-                        date = data["date"] as Timestamp,
-                        categoryId = data["categoryId"].toString(),
-                        createdAt = data["createdAt"] as Timestamp
+                        amount = amount,
+                        title = title,
+                        date = dateTs,
+                        categoryId = categoryId,
+                        createdAt = createdAtTs
                     )
                 }?.filterNotNull() ?: emptyList()
                 trySend(expenses)
