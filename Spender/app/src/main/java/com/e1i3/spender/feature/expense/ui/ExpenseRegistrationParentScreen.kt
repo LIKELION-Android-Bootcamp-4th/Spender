@@ -3,6 +3,7 @@ package com.e1i3.spender.feature.expense.ui
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,6 +54,7 @@ fun ExpenseRegistrationParentScreen(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     val tabs = listOf("지출", "정기지출")
+    val focusManager = LocalFocusManager.current
 //    val tabs = listOf("영수증", "지출", "정기지출") ocr아웃
 
     LaunchedEffect(key1 = initialTabIndex) {
@@ -122,6 +126,11 @@ fun ExpenseRegistrationParentScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        focusManager.clearFocus()
+                    })
+                },
         ) {
             // 탭 메뉴
             TabRow(
