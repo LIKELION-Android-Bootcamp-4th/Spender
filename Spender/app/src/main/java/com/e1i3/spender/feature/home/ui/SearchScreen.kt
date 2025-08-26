@@ -38,6 +38,7 @@ fun SearchScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
+    val searchResults by viewModel.searchResults.collectAsState()
     val tabs = listOf("지출", "수입")
 
     Scaffold(
@@ -140,7 +141,7 @@ fun SearchScreen(
                 contentPadding = PaddingValues(vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(uiState.searchResults, key = { it.id }) { transaction ->
+                items(searchResults, key = { it.id }) { transaction ->
                     RecentItem(
                         title = transaction.title,
                         amount = transaction.amount.toInt(),
