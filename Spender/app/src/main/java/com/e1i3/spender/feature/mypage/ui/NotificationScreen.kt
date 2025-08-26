@@ -20,9 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.e1i3.spender.R
 import com.e1i3.spender.core.ui.CustomTopAppBar
 import com.e1i3.spender.feature.mypage.ui.viewmodel.NotificationSettingsViewModel
 import com.e1i3.spender.ui.theme.PointColor
@@ -56,21 +59,21 @@ fun NotificationScreen(
             ) {
                 item {
                     NotificationSettingRow(
-                        title = "지출 리포트 피드백 알림",
+                        title = stringResource(R.string.notification_setting_report),
                         checked = settings?.reportAlert ?: false,
                         onCheckedChange = { viewModel.toggleReport(it) }
                     )
                 }
                 item {
                     NotificationSettingRow(
-                        title = "정기 지출 예정 알림",
+                        title = stringResource(R.string.notification_setting_regular),
                         checked = settings?.reminderAlert ?: false,
                         onCheckedChange = { viewModel.toggleReminder(it) }
                     )
                 }
                 item {
                     NotificationSettingRow(
-                        title = "예산 초과/임박 알림",
+                        title = stringResource(R.string.notification_setting_budget),
                         checked = settings?.budgetAlert ?: false,
                         onCheckedChange = { viewModel.toggleBudget(it) }
                     )
@@ -94,7 +97,8 @@ private fun NotificationSettingRow(
     ) {
         Text(
             text = title,
-            style = Typography.titleMedium
+            style = Typography.titleSmall,
+            fontSize = 17.sp
         )
         Switch(
             checked = checked,

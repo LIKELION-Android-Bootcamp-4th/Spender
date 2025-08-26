@@ -3,6 +3,9 @@ package com.e1i3.spender.feature.income.data.repository
 import com.e1i3.spender.feature.income.data.remote.IncomeDto
 import com.e1i3.spender.feature.income.domain.medel.Income
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -49,18 +52,15 @@ class IncomeRepository @Inject constructor() {
         }
     }
 
-    suspend fun searchIncomes(userId: String, query: String): List<Income> {
-        return try {
-            val snapshot = usersCollection.document(userId).collection("incomes")
-                .get().await()
-
-            val allIncomes = snapshot.documents.mapNotNull { document ->
-                document.toObject(Income::class.java)?.copy(id = document.id)
+    fun getAllIncomes(userId: String): Flow<List<Income>> = callbackFlow {
+        val listener = usersCollection.document(userId).collection("incomes")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) { close(error); return@addSnapshotListener }
+                val incomes = snapshot?.documents?.mapNotNull { document ->
+                    document.toObject(Income::class.java)?.copy(id = document.id)
+                } ?: emptyList()
+                trySend(incomes)
             }
-
-            allIncomes.filter { it.title.contains(query, ignoreCase = true) }
-        } catch (e: Exception) {
-            emptyList()
-        }
+        awaitClose { listener.remove() }
     }
 }
