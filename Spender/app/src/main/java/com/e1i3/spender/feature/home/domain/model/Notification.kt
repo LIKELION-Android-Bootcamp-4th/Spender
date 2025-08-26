@@ -15,5 +15,6 @@ data class Notification(
 enum class NotificationType {
     BUDGET_ALERT,
     REPORT_ALERT,
-    REMINDER_ALERT
+    REMINDER_ALERT,
+    REPORT_DEADLINE_ALERT
 }

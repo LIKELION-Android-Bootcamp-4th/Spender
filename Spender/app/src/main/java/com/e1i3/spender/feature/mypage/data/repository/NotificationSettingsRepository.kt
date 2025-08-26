@@ -13,7 +13,7 @@ class NotificationSettingsRepository @Inject constructor(
     private val auth: FirebaseAuth
 ) {
     // 기존 알림 설정 가져오기
-    suspend fun getNotificationSettings()  = runCatching{
+    suspend fun getNotificationSettings() = runCatching {
         val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
 
         val documentSnapshot = firestore.collection("users")
@@ -23,9 +23,10 @@ class NotificationSettingsRepository @Inject constructor(
 
         val map = documentSnapshot.get("notificationSettings") as? Map<*, *>
         NotificationSettingsDto(
-            budgetAlert   = map?.get("budgetAlert")   as? Boolean ?: false,
-            reportAlert   = map?.get("reportAlert")   as? Boolean ?: false,
-            reminderAlert = map?.get("reminderAlert") as? Boolean ?: false
+            budgetAlert = map?.get("budgetAlert") as? Boolean ?: false,
+            reportAlert = map?.get("reportAlert") as? Boolean ?: false,
+            reminderAlert = map?.get("reminderAlert") as? Boolean ?: false,
+            reportDeadlineAlert = map?.get("reportDeadlineAlert") as? Boolean ?: false,
         )
     }
 
@@ -57,7 +58,8 @@ class NotificationSettingsRepository @Inject constructor(
                 "notificationSettings" to mapOf(
                     "budgetAlert" to enabled,
                     "reportAlert" to enabled,
-                    "reminderAlert" to enabled
+                    "reminderAlert" to enabled,
+                    "reportDeadline" to enabled
                 )
             )
             userDocRef.set(settingsMap, SetOptions.merge()).await()
