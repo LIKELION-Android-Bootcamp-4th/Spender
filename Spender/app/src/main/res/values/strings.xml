@@ -24,5 +24,6 @@
     <string name="notification_setting_report">지출 리포트 피드백 알림</string>
     <string name="notification_setting_regular">정기 지출 예정 알림</string>
     <string name="notification_setting_budget">예산 중간 점검 알림</string>
+    <string name="notification_setting_deadline">리포트 반영 마감 안내</string>
 
 </resources>

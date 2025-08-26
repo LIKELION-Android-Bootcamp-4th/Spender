@@ -78,6 +78,13 @@ fun NotificationScreen(
                         onCheckedChange = { viewModel.toggleBudget(it) }
                     )
                 }
+                item {
+                    NotificationSettingRow(
+                        title = stringResource(R.string.notification_setting_deadline),
+                        checked = settings?.reportDeadlineAlert ?: false,
+                        onCheckedChange = { viewModel.toggleDeadline(it) }
+                    )
+                }
             }
         })
 }
