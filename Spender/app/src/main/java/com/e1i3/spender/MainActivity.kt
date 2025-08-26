@@ -164,7 +164,7 @@ fun MainScreen(rootNavHostController: NavHostController) {
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     composable(BottomNavigationItem.Home.route) {
-                        HomeScreen(rootNavHostController)
+                        HomeScreen(rootNavHostController, bottomBarNavController)
                     }
                     composable(BottomNavigationItem.Analysis.route) {
                         AnalysisScreen(rootNavHostController)
