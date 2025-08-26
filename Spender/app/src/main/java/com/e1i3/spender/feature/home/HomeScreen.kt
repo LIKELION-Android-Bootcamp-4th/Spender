@@ -30,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,9 +61,10 @@ import com.e1i3.spender.ui.theme.navigation.Screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
-    val totalExpense by viewModel.totalExpense
-    val expenseRate by viewModel.expenseRate
-    val recentExpenses by viewModel.recentExpenses
+    val totalExpense by viewModel.totalExpense.collectAsState()
+    val expenseRate by viewModel.expenseRate.collectAsState()
+    val recentExpenses by viewModel.recentExpenses.collectAsState()
+
     val hasUnread by viewModel.hasUnread
     val friendList by viewModel.friendList
     val currentTier = viewModel.currentTier.value
@@ -80,7 +82,8 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                         painter = painterResource(id = R.drawable.app_icon),
                         contentDescription = "프로필 이미지",
                         contentScale = ContentScale.Crop,
-                        modifier = Modifier.size(60.dp)
+                        modifier = Modifier
+                            .size(60.dp)
                             .padding(8.dp)
                             .clip(CircleShape)
                     )
@@ -165,7 +168,13 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                         }
 
                         item {
-                            HorizontalDivider(modifier = Modifier.padding(bottom = 10.dp, start = 10.dp, end = 10.dp))
+                            HorizontalDivider(
+                                modifier = Modifier.padding(
+                                    bottom = 10.dp,
+                                    start = 10.dp,
+                                    end = 10.dp
+                                )
+                            )
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -199,14 +208,18 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                 }
             }
 
-            if(friendToDelete != null){
+            if (friendToDelete != null) {
                 CustomDialog(
                     title = "${friendToDelete!!.nickname}님을 삭제하시겠습니까?",
                     content = "삭제하더라도 나중에 다시 친구 추가가 가능해요.",
                     onConfirm = {
                         val deletedFriendName = friendToDelete!!.nickname
                         viewModel.deleteFriend(friendToDelete!!.userId)
-                        Toast.makeText(context, "${deletedFriendName}님이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "${deletedFriendName}님이 삭제되었습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         friendToDelete = null
                     },
                     onDismiss = {

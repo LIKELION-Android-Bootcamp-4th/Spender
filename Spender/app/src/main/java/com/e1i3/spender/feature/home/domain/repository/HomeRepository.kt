@@ -9,6 +9,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import jakarta.inject.Inject
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.Calendar
 
@@ -88,21 +92,37 @@ class HomeRepository @Inject constructor(
         snap.getLong("currentTier")?.toInt() ?: 3
     }
 
-    suspend fun getTotalExpense(): Result<Int> = runCatching {
-        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
-
-        val ref = firestore.collection("users").document(uid).collection("expenses")
-        val document = ref.get().await()
-
-        var total = 0
-        for (doc in document.documents) {
-            total += doc.data?.get("amount")?.toString()?.toInt() ?: 0
+    fun observeTotalExpense(): Flow<Int> = callbackFlow {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            close(IllegalStateException("로그아웃 상태"))
+            return@callbackFlow
         }
-        total
+
+        val listener = firestore.collection("users")
+            .document(uid)
+            .collection("expenses")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                var total = 0
+                snapshot?.documents?.forEach { doc ->
+                    total += doc.data?.get("amount")?.toString()?.toInt() ?: 0
+                }
+                trySend(total)
+            }
+        awaitClose { listener.remove() }
     }
 
-    suspend fun getExpenseRate(): Result<Float> = runCatching {
-        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+    fun observeExpenseRate(): Flow<Float> = callbackFlow {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            close(IllegalStateException("로그아웃 상태"))
+            return@callbackFlow
+        }
 
         val startOfMonth = Calendar.getInstance().apply {
             set(Calendar.DAY_OF_MONTH, 1)
@@ -120,59 +140,98 @@ class HomeRepository @Inject constructor(
             set(Calendar.MILLISECOND, 999)
         }
 
-        val budgetRef = firestore.collection("users").document(uid).collection("budgets")
+        suspend fun calculateAndSendRate() {
+            try {
+                val budgetRef = firestore.collection("users").document(uid).collection("budgets")
+                    .orderBy("createdAt", Query.Direction.DESCENDING)
+                    .limit(1)
+                val expenseRef = firestore.collection("users").document(uid).collection("expenses")
+                    .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfMonth.time))
+                    .whereLessThanOrEqualTo("createdAt", Timestamp(endOfMonth.time))
+
+                val budgetDocument = budgetRef.get().await()
+                val expenseDocument = expenseRef.get().await()
+
+                var budget = 1
+                var expense = 0
+
+                for (doc in budgetDocument) {
+                    budget = doc.data["amount"].toString().toInt()
+                    break
+                }
+
+                for (doc in expenseDocument) {
+                    expense += doc.data["amount"].toString().toInt()
+                }
+
+                val rate = if (budget > 0) {
+                    (expense.toDouble() / budget.toDouble() * 100).toFloat()
+                } else {
+                    0f
+                }
+
+                trySend(rate)
+            } catch (e: Exception) {
+            }
+        }
+
+        val budgetListener = firestore.collection("users")
+            .document(uid)
+            .collection("budgets")
             .orderBy("createdAt", Query.Direction.DESCENDING)
             .limit(1)
-        val expenseRef = firestore.collection("users").document(uid).collection("expenses")
+            .addSnapshotListener { _, _ ->
+                launch { calculateAndSendRate() }
+            }
+
+        val expenseListener = firestore.collection("users")
+            .document(uid)
+            .collection("expenses")
             .whereGreaterThanOrEqualTo("createdAt", Timestamp(startOfMonth.time))
             .whereLessThanOrEqualTo("createdAt", Timestamp(endOfMonth.time))
+            .addSnapshotListener { _, _ ->
+                launch { calculateAndSendRate() }
+            }
 
-        val budgetDocument = budgetRef.get().await()
-        val expenseDocument = expenseRef.get().await()
+        launch { calculateAndSendRate() }
 
-        var budget = 1
-        var expense = 0
-
-        for (doc in budgetDocument) {
-            budget = doc.data["amount"].toString().toInt()
-            break
+        awaitClose {
+            budgetListener.remove()
+            expenseListener.remove()
         }
-
-        for (doc in expenseDocument) {
-            expense += doc.data["amount"].toString().toInt()
-        }
-
-        val rate = if (budget > 0) {
-            (expense.toDouble() / budget.toDouble() * 100).toFloat()
-        } else {
-            0f
-        }
-
-        rate
     }
 
-    suspend fun getExpenseListForHome(): Result<List<ExpenseDto>> = runCatching {
-        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
-
-        val document = firestore.collection("users").document(uid).collection("expenses")
-            .orderBy("createdAt", Query.Direction.DESCENDING)
-            .limit(5)
-            .get()
-            .await()
-
-        val expenses = mutableListOf<ExpenseDto>()
-        for (doc in document) {
-            val data = doc.data
-            val expense = ExpenseDto(
-                id = doc.id,
-                amount = data["amount"].toString().toInt(),
-                title = data["title"].toString(),
-                date = data["date"] as Timestamp,
-                categoryId = data["categoryId"].toString(),
-                createdAt = data["createdAt"] as Timestamp
-            )
-            expenses.add(expense)
+    fun observeRecentExpenses(): Flow<List<ExpenseDto>> = callbackFlow {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            close(IllegalStateException("로그아웃 상태"))
+            return@callbackFlow
         }
-        expenses
+
+        val listener = firestore.collection("users")
+            .document(uid)
+            .collection("expenses")
+            .orderBy("date", Query.Direction.DESCENDING)
+            .limit(5)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                val expenses = snapshot?.documents?.map { doc ->
+                    val data = doc.data ?: return@map null
+                    ExpenseDto(
+                        id = doc.id,
+                        amount = data["amount"].toString().toInt(),
+                        title = data["title"].toString(),
+                        date = data["date"] as Timestamp,
+                        categoryId = data["categoryId"].toString(),
+                        createdAt = data["createdAt"] as Timestamp
+                    )
+                }?.filterNotNull() ?: emptyList()
+                trySend(expenses)
+            }
+        awaitClose { listener.remove() }
     }
 }
