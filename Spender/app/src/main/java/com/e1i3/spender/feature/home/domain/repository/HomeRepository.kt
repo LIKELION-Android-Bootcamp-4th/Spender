@@ -247,6 +247,12 @@ class HomeRepository @Inject constructor(
 
                 val expenses = snapshot?.documents?.map { doc ->
                     val data = doc.data ?: return@map null
+
+                    val d = doc.get("date")
+                    val c = doc.get("createdAt")
+                    android.util.Log.d("RecentExpense",
+                        "doc=${doc.id}, date=$d (${d?.javaClass?.name}), createdAt=$c (${c?.javaClass?.name}), pending=${doc.metadata.hasPendingWrites()}")
+
                     ExpenseDto(
                         id = doc.id,
                         amount = data["amount"].toString().toInt(),

@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -26,6 +27,9 @@ class HomeViewModel @Inject constructor(
     private var listenerRegistration: ListenerRegistration? = null
 
     val totalExpense = repository.observeTotalExpense()
+        .catch { e ->
+            emit(0)
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -33,6 +37,9 @@ class HomeViewModel @Inject constructor(
         )
 
     val expenseRate = repository.observeExpenseRate()
+        .catch { e ->
+            emit(0f)
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -40,6 +47,9 @@ class HomeViewModel @Inject constructor(
         )
 
     val recentExpenses = repository.observeRecentExpenses()
+        .catch { e ->
+            emit(emptyList())
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -105,7 +115,13 @@ class HomeViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
+        clearListeners()
+    }
+
+    fun clearListeners(){
         listenerRegistration?.remove()
+        listenerRegistration = null
+        listenerRegistered = false
     }
 
     fun deleteFriend(friendId: String) {
