@@ -47,24 +47,22 @@ fun NotificationItem(
                             notification.route
                         )
                     }
-
-                    notification.route == "analysis" -> {
-                        rootNavController.navigate(
-                            notification.route
-                        )
-                    }
-
-                    notification.route == "home" -> {
-                        rootNavController.navigate(
-                            notification.route
-                        )
-                    }
+//                    notification.route == "analysis" -> {
+//                        rootNavController.navigate(
+//                            notification.route
+//                        )
+//                    }
+//
+//                    notification.route == "home" -> {
+//                        rootNavController.navigate(
+//                            notification.route
+//                        )
+//                    }
 
                     else -> {
-                        // 예외 처리 또는 홈 이동
-                        rootNavController.navigate(
-                            com.e1i3.spender.ui.theme.navigation.BottomNavigationItem.Home.route
-                        )
+//                        rootNavController.navigate(
+//                            com.e1i3.spender.ui.theme.navigation.BottomNavigationItem.Home.route
+//                        )
                     }
                 }
             }
@@ -77,6 +75,7 @@ fun NotificationItem(
                 NotificationType.BUDGET_ALERT -> R.drawable.notification_budget
                 NotificationType.REPORT_ALERT -> R.drawable.notification_report
                 NotificationType.REMINDER_ALERT -> R.drawable.notification_regular
+                NotificationType.REPORT_DEADLINE_ALERT -> R.drawable.notification_report_deadline
             }
 
             Image(

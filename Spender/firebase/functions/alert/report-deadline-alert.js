@@ -59,7 +59,7 @@ module.exports = functions.pubsub
         addNotification(uid, {
           type: "REPORT_DEADLINE_ALERT",
           title: "리포트 반영 마감 임박!",
-          content: "말일까지 입력한 지출만 이번 달 리포트에 반영돼요. 오늘 자정 전까지 입력해주세요!",
+          content: "오늘까지 입력한 지출만 이번 달 리포트에 반영돼요. 오늘 자정 전까지 입력해주세요!",
           isRead: false,
           extra: { route: `add_expense`, month }
         }).catch(err => console.error("REPORT DEADLINE save error", uid, err))

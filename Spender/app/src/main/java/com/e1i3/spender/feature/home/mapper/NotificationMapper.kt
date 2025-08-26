@@ -12,6 +12,7 @@ fun NotificationDto.toDomain(id: String): Notification? {
         "BUDGET_ALERT" -> NotificationType.BUDGET_ALERT
         "REMINDER_ALERT" -> NotificationType.REMINDER_ALERT
         "REPORT_ALERT" -> NotificationType.REPORT_ALERT
+        "REPORT_DEADLINE_ALERT" -> NotificationType.REPORT_DEADLINE_ALERT
         else -> return null
     }
     return Notification(
