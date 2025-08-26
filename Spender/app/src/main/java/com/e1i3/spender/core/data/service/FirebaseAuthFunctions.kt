@@ -21,12 +21,18 @@ fun login(user: FirebaseUser?, provider: String) {
                     "createdAt" to FieldValue.serverTimestamp()
                 )
                 ref.set(userInfo)
+                    .addOnFailureListener { error ->
+                        if (error.message?.contains("PERMISSION_DENIED") != true) {
+                            error.printStackTrace()
+                        }
+                    }
             }
         }
+            .addOnFailureListener { error ->
+                if (error.message?.contains("PERMISSION_DENIED") != true) {
+                    error.printStackTrace()
+                }
+            }
     } else {
     }
-}
-
-fun logout() {
-    FirebaseAuth.getInstance().signOut()
 }

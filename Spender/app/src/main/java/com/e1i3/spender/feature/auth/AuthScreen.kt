@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,11 +41,22 @@ import com.e1i3.spender.feature.auth.ui.viewmodel.AuthViewModel
 import com.e1i3.spender.ui.theme.LightFontColor
 import com.e1i3.spender.ui.theme.Typography
 import com.e1i3.spender.ui.theme.WhiteColor
+import com.e1i3.spender.core.data.remote.auth.LoginType
+
+@Composable
+fun getLoginTypeDisplayName(loginType: LoginType): String {
+    return when (loginType) {
+        LoginType.GOOGLE -> "구글"
+        LoginType.NAVER -> "네이버"
+        LoginType.KAKAO -> "카카오"
+    }
+}
 
 @Composable
 fun AuthScreen(navController: NavHostController) {
     val viewModel: AuthViewModel = hiltViewModel()
     val isLoading by viewModel.isLoading
+    val recentLoginType by viewModel.recentLoginType
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
@@ -75,6 +87,17 @@ fun AuthScreen(navController: NavHostController) {
                         tint = Color.Unspecified,
                         modifier = Modifier.size(screenWidth * 0.8f),
                     )
+
+                    recentLoginType?.let { loginType ->
+                        Spacer(Modifier.height(24.dp))
+                        Text(
+                            text = "최근에 ${getLoginTypeDisplayName(loginType)}(을)를 통해 로그인 했어요!",
+                            style = Typography.bodySmall,
+                            color = LightFontColor,
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                        )
+                    }
+
                     Spacer(Modifier.weight(1f))
                     GoogleLogin(navController)
                     Spacer(Modifier.height(24.dp))
