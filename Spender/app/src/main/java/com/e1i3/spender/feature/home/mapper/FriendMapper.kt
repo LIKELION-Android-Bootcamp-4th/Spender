@@ -55,7 +55,7 @@ fun FriendDetailDto.toUiModel(): FriendDetailUiModel {
         currentTier = currentTier,
         budgetProgress = percentage * 100,
 
-        topCategoryName = topCategory?.categoryName,
+        topCategoryName = topCategory?.categoryName ?: "기록 없음",
         topCategoryColor = topCategory?.colorHex?.toColor() ?: PointColor,
         categoryChartData = categoryChartData,
 

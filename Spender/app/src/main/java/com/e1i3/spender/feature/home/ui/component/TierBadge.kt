@@ -63,7 +63,7 @@ fun TierBadge(
                 painter = painterResource(id = tierInfo.mainDrawableRes),
                 contentDescription = contentDescription,
                 modifier = Modifier
-                    .fillMaxSize(0.72f)
+                    .fillMaxSize(0.79f)
                     .align(Alignment.Center)
                     .offset(x = -(3).dp),
                 contentScale = ContentScale.Fit

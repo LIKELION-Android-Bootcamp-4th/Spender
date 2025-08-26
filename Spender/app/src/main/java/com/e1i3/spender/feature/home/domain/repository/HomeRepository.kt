@@ -1,8 +1,7 @@
 package com.e1i3.spender.feature.home.domain.repository
 
 import com.e1i3.spender.core.data.remote.expense.ExpenseDto
-import com.e1i3.spender.core.data.remote.friend.FriendListDto
-import com.e1i3.spender.feature.home.mapper.toDomain
+import com.e1i3.spender.feature.home.domain.model.Friend
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -52,19 +51,30 @@ class HomeRepository @Inject constructor(
             }
     }
 
-    suspend fun getFriendList() = runCatching {
-        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+    fun observeFriends(): Flow<List<Friend>> = callbackFlow {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            close(IllegalStateException("로그아웃 상태"))
+            return@callbackFlow
+        }
 
-        val snapshot = firestore.collection("users")
+        val listener = firestore.collection("users")
             .document(uid)
             .collection("friends")
-            .get()
-            .await()
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
 
-        snapshot.documents.mapNotNull { doc ->
-            val dto = doc.toObject(FriendListDto::class.java)
-            dto?.toDomain(userId = doc.id)
-        }
+                val friends: List<Friend> = snapshot?.documents?.mapNotNull { doc ->
+                    doc.toObject(Friend::class.java)?.copy(userId = doc.id)
+                } ?: emptyList()
+
+                trySend(friends)
+            }
+
+        awaitClose { listener.remove() }
     }
 
     suspend fun deleteFriend(friendId: String) = runCatching {
@@ -85,12 +95,28 @@ class HomeRepository @Inject constructor(
             .await()
     }
 
-    suspend fun getCurrentTier() = runCatching {
-        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+    fun observeCurrentTier(): Flow<Int> = callbackFlow {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            close(IllegalStateException("로그아웃 상태"))
+            return@callbackFlow
+        }
 
-        val snap = firestore.collection("users").document(uid).get().await()
-        snap.getLong("currentTier")?.toInt() ?: 3
+        val listener = firestore.collection("users")
+            .document(uid)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                val tier = snapshot?.getLong("currentTier")?.toInt() ?: 3
+                trySend(tier)
+            }
+
+        awaitClose { listener.remove() }
     }
+
 
     fun observeTotalExpense(): Flow<Int> = callbackFlow {
         val uid = auth.currentUser?.uid
@@ -221,13 +247,34 @@ class HomeRepository @Inject constructor(
 
                 val expenses = snapshot?.documents?.map { doc ->
                     val data = doc.data ?: return@map null
+
+                    val amount = try {
+                        data["amount"].toString().toInt()
+                    } catch (_: Exception) {
+                        0
+                    }
+
+                    val title = data["title"].toString()
+
+                    val dateTs: Timestamp? = doc.getTimestamp("date")
+                        ?: (data["date"] as? Timestamp)
+
+                    val createdAtTs: Timestamp? = doc.getTimestamp("createdAt")
+                        ?: (data["createdAt"] as? Timestamp)
+
+                    val categoryId = data["categoryId"].toString()
+
+                    if (dateTs == null || createdAtTs == null) {
+                        return@map null
+                    }
+
                     ExpenseDto(
                         id = doc.id,
-                        amount = data["amount"].toString().toInt(),
-                        title = data["title"].toString(),
-                        date = data["date"] as Timestamp,
-                        categoryId = data["categoryId"].toString(),
-                        createdAt = data["createdAt"] as Timestamp
+                        amount = amount,
+                        title = title,
+                        date = dateTs,
+                        categoryId = categoryId,
+                        createdAt = createdAtTs
                     )
                 }?.filterNotNull() ?: emptyList()
                 trySend(expenses)
