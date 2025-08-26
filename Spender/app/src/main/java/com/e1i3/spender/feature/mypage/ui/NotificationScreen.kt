@@ -59,13 +59,6 @@ fun NotificationScreen(
             ) {
                 item {
                     NotificationSettingRow(
-                        title = stringResource(R.string.notification_setting_report),
-                        checked = settings?.reportAlert ?: false,
-                        onCheckedChange = { viewModel.toggleReport(it) }
-                    )
-                }
-                item {
-                    NotificationSettingRow(
                         title = stringResource(R.string.notification_setting_regular),
                         checked = settings?.reminderAlert ?: false,
                         onCheckedChange = { viewModel.toggleReminder(it) }
@@ -76,6 +69,20 @@ fun NotificationScreen(
                         title = stringResource(R.string.notification_setting_budget),
                         checked = settings?.budgetAlert ?: false,
                         onCheckedChange = { viewModel.toggleBudget(it) }
+                    )
+                }
+                item {
+                    NotificationSettingRow(
+                        title = stringResource(R.string.notification_setting_report),
+                        checked = settings?.reportAlert ?: false,
+                        onCheckedChange = { viewModel.toggleReport(it) }
+                    )
+                }
+                item {
+                    NotificationSettingRow(
+                        title = stringResource(R.string.notification_setting_deadline),
+                        checked = settings?.reportDeadlineAlert ?: false,
+                        onCheckedChange = { viewModel.toggleDeadline(it) }
                     )
                 }
             }

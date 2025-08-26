@@ -56,6 +56,7 @@ class NotificationSettingsViewModel @Inject constructor(
     fun toggleReport(enabled: Boolean) = update(NotificationSettingsField.Report, enabled)
     fun toggleBudget(enabled: Boolean) = update(NotificationSettingsField.Budget, enabled)
     fun toggleReminder(enabled: Boolean) = update(NotificationSettingsField.Reminder, enabled)
+    fun toggleDeadline(enabled: Boolean) = update(NotificationSettingsField.ReportDeadline, enabled)
 
     private fun update(field: NotificationSettingsField, enabled: Boolean) {
         viewModelScope.launch {
@@ -67,6 +68,7 @@ class NotificationSettingsViewModel @Inject constructor(
                             NotificationSettingsField.Report -> it.copy(reportAlert = enabled)
                             NotificationSettingsField.Budget -> it.copy(budgetAlert = enabled)
                             NotificationSettingsField.Reminder -> it.copy(reminderAlert = enabled)
+                            NotificationSettingsField.ReportDeadline -> it.copy(reportDeadlineAlert = enabled)
                         }
                     } ?: settings
                 },

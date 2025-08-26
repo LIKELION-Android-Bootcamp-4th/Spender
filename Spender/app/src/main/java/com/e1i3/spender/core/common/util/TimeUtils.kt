@@ -15,7 +15,7 @@ fun getRelativeTimeString(date: Date): String {
         minutes < 60 -> "${minutes}분 전"
         hours < 24 -> "${hours}시간 전"
         days == 1L -> "1일 전"
-        days < 7 -> "${days}일 전"
+        days <= 7 -> "${days}일 전"
         else -> {
             val calendar = Calendar.getInstance().apply { time = date }
             val month = calendar.get(Calendar.MONTH) + 1

@@ -259,9 +259,17 @@ private fun HandlePushNavigation(
                     Screen.ReportDetail.createRoute(extractedMonth)
                 )
             }
+            route == "add_expense" -> {
+                bottomNavController.navigate(BottomNavigationItem.Home.route) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+                rootNavController.navigate("expense_registration/0") {
+                    launchSingleTop = true
+                }
+            }
             else -> bottomNavController.navigate(BottomNavigationItem.Home.route)
         }
-
         intent.replaceExtras(Bundle())
     }
 
