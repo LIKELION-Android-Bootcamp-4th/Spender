@@ -52,6 +52,7 @@ import com.e1i3.spender.feature.home.domain.model.Friend
 import com.e1i3.spender.feature.home.ui.BudgeProgress
 import com.e1i3.spender.feature.home.ui.RecentTransactionsSection
 import com.e1i3.spender.feature.home.ui.TotalExpenseCard
+import com.e1i3.spender.feature.home.ui.component.AddFriendItem
 import com.e1i3.spender.feature.home.ui.component.FriendItem
 import com.e1i3.spender.feature.home.ui.component.TierBadge
 import com.e1i3.spender.feature.home.ui.viewModel.HomeViewModel
@@ -151,6 +152,12 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                                 contentPadding = PaddingValues(horizontal = 15.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
+                                item {
+                                    AddFriendItem {
+                                        navHostController.navigate(Screen.FriendAddScreen.route)
+                                    }
+                                }
+
                                 items(friendList) { friend ->
                                     FriendItem(
                                         friend = friend,
