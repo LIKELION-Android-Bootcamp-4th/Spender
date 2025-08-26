@@ -67,10 +67,9 @@ class HomeRepository @Inject constructor(
                     return@addSnapshotListener
                 }
 
-                val friends: List<Friend> = snapshot
-                    ?.toObjects(Friend::class.java)
-                    ?.filterNotNull()
-                    .orEmpty()
+                val friends: List<Friend> = snapshot?.documents?.mapNotNull { doc ->
+                    doc.toObject(Friend::class.java)?.copy(userId = doc.id)
+                } ?: emptyList()
 
                 trySend(friends)
             }
