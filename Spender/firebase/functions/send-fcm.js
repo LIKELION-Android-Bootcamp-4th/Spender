@@ -36,9 +36,20 @@ function payloadReminder(title, body) {
   };
 }
 
+// 리포트 마감 임박 알림 페이로드
+function payloadReportDeadline(month) {
+  return {
+    title: "리포트 마감 임박!",
+    body: "말일까지 입력한 지출만 이번 달 리포트에 반영돼요. 오늘 자정 전까지 입력해주세요!",
+    route: "add_expense",
+    month,
+  };
+}
+
 module.exports = {
   sendDataOnly,
   payloadReport,
   payloadBudget,
-  payloadReminder
+  payloadReminder,
+  payloadReportDeadline
 };
