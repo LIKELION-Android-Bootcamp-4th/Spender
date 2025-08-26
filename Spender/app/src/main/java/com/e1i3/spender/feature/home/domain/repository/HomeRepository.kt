@@ -1,6 +1,5 @@
 package com.e1i3.spender.feature.home.domain.repository
 
-import android.system.Os.close
 import com.e1i3.spender.core.data.remote.expense.ExpenseDto
 import com.e1i3.spender.feature.home.domain.model.Friend
 import com.google.firebase.Timestamp
@@ -53,7 +52,11 @@ class HomeRepository @Inject constructor(
     }
 
     fun observeFriends(): Flow<List<Friend>> = callbackFlow {
-        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            close(IllegalStateException("로그아웃 상태"))
+            return@callbackFlow
+        }
 
         val listener = firestore.collection("users")
             .document(uid)
@@ -93,12 +96,28 @@ class HomeRepository @Inject constructor(
             .await()
     }
 
-    suspend fun getCurrentTier() = runCatching {
-        val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
+    fun observeCurrentTier(): Flow<Int> = callbackFlow {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            close(IllegalStateException("로그아웃 상태"))
+            return@callbackFlow
+        }
 
-        val snap = firestore.collection("users").document(uid).get().await()
-        snap.getLong("currentTier")?.toInt() ?: 3
+        val listener = firestore.collection("users")
+            .document(uid)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+
+                val tier = snapshot?.getLong("currentTier")?.toInt() ?: 3
+                trySend(tier)
+            }
+
+        awaitClose { listener.remove() }
     }
+
 
     fun observeTotalExpense(): Flow<Int> = callbackFlow {
         val uid = auth.currentUser?.uid
