@@ -32,6 +32,7 @@ fun HomeContent(
     onAddFriendClick: () -> Unit,
     onTierClick: () -> Unit,
     navHostController: NavHostController,
+    bottomNavController : NavHostController,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -74,7 +75,8 @@ fun HomeContent(
         item {
             RecentTransactionsSection(
                 recentExpenses = recentExpenses,
-                navHostController = navHostController
+                navHostController = navHostController,
+                bottomNavController = bottomNavController
             )
         }
     }

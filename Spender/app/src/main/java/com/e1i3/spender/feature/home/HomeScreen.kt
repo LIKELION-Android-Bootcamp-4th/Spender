@@ -25,7 +25,11 @@ import com.e1i3.spender.feature.home.ui.viewModel.HomeViewModel
 import com.e1i3.spender.ui.theme.navigation.Screen
 
 @Composable
-fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    navHostController: NavHostController,
+    bottomNavController: NavHostController? = null,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
     val uiState by viewModel.homeUiState.collectAsState()
     val hasUnread by viewModel.hasUnread
     var friendToDelete by remember { mutableStateOf<Friend?>(null) }
@@ -64,6 +68,7 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                         onAddFriendClick = { navHostController.navigate(Screen.FriendAddScreen.route) },
                         onTierClick = { navHostController.navigate("tier_history") },
                         navHostController = navHostController,
+                        bottomNavController = bottomNavController ?: navHostController,
                         modifier = Modifier.padding(padding)
                     )
                 }

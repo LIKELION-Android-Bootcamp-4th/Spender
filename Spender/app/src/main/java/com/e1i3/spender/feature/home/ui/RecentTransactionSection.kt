@@ -25,7 +25,8 @@ import com.e1i3.spender.ui.theme.navigation.Screen
 @Composable
 fun RecentTransactionsSection(
     recentExpenses: List<ExpenseDto>,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    bottomNavController: NavHostController
 ) {
     Column(
         modifier = Modifier
@@ -47,7 +48,10 @@ fun RecentTransactionsSection(
                 TextButton(
                     modifier = Modifier,
                     onClick = {
-                        navHostController.navigate(BottomNavigationItem.Analysis.route)
+                        bottomNavController.navigate(BottomNavigationItem.Analysis.route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 ) {
                     Text(
