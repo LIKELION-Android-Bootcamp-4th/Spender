@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.material3.*
@@ -16,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -33,6 +37,8 @@ fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val searchResults by viewModel.searchResults.collectAsState()
     val tabs = listOf("지출", "수입")
 
     Scaffold(
@@ -56,7 +62,15 @@ fun SearchScreen(
                             focusedContainerColor = Color.Transparent,
                             unfocusedIndicatorColor = MaterialTheme.colorScheme.tertiary,
                             focusedIndicatorColor = MaterialTheme.colorScheme.tertiary
-                        )
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                keyboardController?.hide()
+                            }
+                        ),
                     )
                 },
                 navigationIcon = {
@@ -127,7 +141,7 @@ fun SearchScreen(
                 contentPadding = PaddingValues(vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(uiState.searchResults, key = { it.id }) { transaction ->
+                items(searchResults, key = { it.id }) { transaction ->
                     RecentItem(
                         title = transaction.title,
                         amount = transaction.amount.toInt(),

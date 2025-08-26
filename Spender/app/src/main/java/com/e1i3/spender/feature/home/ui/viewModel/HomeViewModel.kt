@@ -4,13 +4,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.e1i3.spender.core.data.remote.expense.ExpenseDto
 import com.e1i3.spender.feature.home.domain.model.Friend
 import com.e1i3.spender.feature.home.domain.repository.HomeRepository
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -32,14 +33,26 @@ class HomeViewModel @Inject constructor(
     private val _friendList = mutableStateOf<List<Friend>>(emptyList())
     val friendList: State<List<Friend>> = _friendList
 
-    private val _totalExpense = mutableStateOf(0)
-    val totalExpense: State<Int> = _totalExpense
+    val totalExpense = repository.observeTotalExpense()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 0
+        )
 
-    private val _expenseRate = mutableStateOf(0f)
-    val expenseRate: State<Float> = _expenseRate
+    val expenseRate = repository.observeExpenseRate()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 0f
+        )
 
-    private val _recentExpenses = mutableStateOf<List<ExpenseDto>>(emptyList())
-    val recentExpenses: State<List<ExpenseDto>> = _recentExpenses
+    val recentExpenses = repository.observeRecentExpenses()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
     init {
         checkUnreadNotifications()
@@ -51,15 +64,9 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val totalExpenseJob = async { repository.getTotalExpense() }
-                val expenseRateJob = async { repository.getExpenseRate() }
-                val recentExpensesJob = async { repository.getExpenseListForHome() }
                 val friendListJob = async { repository.getFriendList() }
                 val currentTierJob = async { repository.getCurrentTier() }
 
-                totalExpenseJob.await().onSuccess { _totalExpense.value = it }
-                expenseRateJob.await().onSuccess { _expenseRate.value = it }
-                recentExpensesJob.await().onSuccess { _recentExpenses.value = it }
                 friendListJob.await().onSuccess { _friendList.value = it }
                 currentTierJob.await().onSuccess { _currentTier.value = it }
 

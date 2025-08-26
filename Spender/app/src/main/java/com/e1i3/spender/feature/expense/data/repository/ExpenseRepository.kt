@@ -3,6 +3,9 @@ package com.e1i3.spender.feature.expense.data.repository
 import com.e1i3.spender.feature.expense.data.remote.ExpenseDto
 import com.e1i3.spender.feature.expense.domain.model.Expense
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -49,19 +52,15 @@ class ExpenseRepository @Inject constructor() {
             false
         }
     }
-
-    suspend fun searchExpenses(userId: String, query: String): List<Expense> {
-        return try {
-            val snapshot = usersCollection.document(userId).collection("expenses")
-                .get().await()
-
-            val allExpenses = snapshot.documents.mapNotNull { document ->
-                document.toObject(Expense::class.java)?.copy(id = document.id)
+    fun getAllExpenses(userId: String): Flow<List<Expense>> = callbackFlow {
+        val listener = usersCollection.document(userId).collection("expenses")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) { close(error); return@addSnapshotListener }
+                val expenses = snapshot?.documents?.mapNotNull { doc ->
+                    doc.toObject(Expense::class.java)?.copy(id = doc.id)
+                } ?: emptyList()
+                trySend(expenses)
             }
-
-            allExpenses.filter { it.title.contains(query, ignoreCase = true) }
-        } catch (e: Exception) {
-            emptyList()
-        }
+        awaitClose { listener.remove() }
     }
 }

@@ -59,21 +59,6 @@ fun AccountInfoSection(userName: String, userEmail: String, iconRes: Int?) {
 
         Row {
             Text(
-                text = "   이름",
-                style = Typography.titleMedium
-            )
-            Spacer(Modifier.width(16.dp))
-            Text(
-                text = name,
-                style = Typography.titleMedium,
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        Spacer(Modifier.height(32.dp))
-
-        Row {
-            Text(
                 text = "이메일",
                 style = Typography.titleMedium
             )

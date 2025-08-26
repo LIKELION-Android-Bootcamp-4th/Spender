@@ -64,7 +64,7 @@ fun RecentItem(
                     text = dateFormat.format(date),
                     style = Typography.bodySmall,
                     fontSize = 12.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onTertiary
                 )
             }
             Row(verticalAlignment = Alignment.Bottom) {
