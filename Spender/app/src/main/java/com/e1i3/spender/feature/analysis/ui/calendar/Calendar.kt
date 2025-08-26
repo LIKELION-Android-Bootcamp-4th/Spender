@@ -37,6 +37,7 @@ import com.e1i3.spender.feature.analysis.domain.model.CalendarItemData
 import com.e1i3.spender.ui.theme.PointColor
 import com.e1i3.spender.ui.theme.TabColor
 import com.e1i3.spender.ui.theme.Typography
+import java.text.DecimalFormat
 
 @Composable
 fun CalendarHeader( //캘린더 상단 화살표 및 연월표시
@@ -139,7 +140,11 @@ fun Calendar(data: List<CalendarItemData>, onClick: (Int) -> Unit, selection: Li
                     fontWeight = FontWeight.SemiBold),
                     modifier = Modifier.padding(top = 6.dp)
                 )
-                Text(text = if (item.expense == 0) "" else if (item.expense == Int.MAX_VALUE) "0" else item.expense.toString(), style = TextStyle(
+                Text(text =
+                    if (item.expense == 0) ""
+                    else if (item.expense == Int.MAX_VALUE) "0"
+                    else DecimalFormat("#,###").format(item.expense),
+                    style = TextStyle(
                     fontSize = 8.sp,
                     color = when {
                         item.expense > 0 && item.today -> Color.White
