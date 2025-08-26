@@ -47,7 +47,7 @@ fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: List<ExpenseDto>
         Spacer(Modifier.height(10.dp))
         LazyColumn {
             itemsIndexed(list) { _, item ->
-                SpendListItemComponent(item, {
+                SpendListItemComponent(item) {
                     if (item.amount > 0) {
                         navHostController.navigate(
                             Screen.IncomeDetailScreen.createRoute(item.id)
@@ -57,7 +57,7 @@ fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: List<ExpenseDto>
                             Screen.ExpenseDetailScreen.createRoute(item.id)
                         )
                     }
-                })
+                }
                 Spacer(Modifier.height(8.dp))
             }
         }
