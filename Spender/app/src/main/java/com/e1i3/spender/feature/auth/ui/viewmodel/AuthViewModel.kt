@@ -37,6 +37,17 @@ class AuthViewModel @Inject constructor(
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
+    private val _recentLoginType = mutableStateOf<LoginType?>(null)
+    val recentLoginType: State<LoginType?> = _recentLoginType
+
+    init {
+        loadRecentLoginType()
+    }
+
+    private fun loadRecentLoginType() {
+        _recentLoginType.value = AuthPrefs.getRecentLoginType(getApplication())
+    }
+
     fun googleLogin(
         context: Context,
         activityResult: ActivityResult,
@@ -163,8 +174,12 @@ class AuthViewModel @Inject constructor(
 
     fun logout(context: Context, onDone: () -> Unit) {
         viewModelScope.launch {
-            authRepository.logoutUser(context)
-            onDone()
+            try {
+                authRepository.logoutUser(context)
+                onDone()
+            } catch (e: Exception) {
+                onDone()
+            }
         }
     }
 

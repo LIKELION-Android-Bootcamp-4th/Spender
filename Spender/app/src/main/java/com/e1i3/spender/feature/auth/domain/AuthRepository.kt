@@ -47,34 +47,42 @@ class AuthRepository @Inject constructor(
     }
 
     fun logoutUser(context: Context) {
-        when (AuthPrefs.getLoginType(context)) {
-            LoginType.KAKAO -> {
-                UserApiClient.instance.logout { error ->
-                    if (error != null) {
-                    } else {
+        try {
+            when (AuthPrefs.getLoginType(context)) {
+                LoginType.KAKAO -> {
+                    UserApiClient.instance.logout { error ->
+                        if (error != null) {
+                        } else {
+                        }
                     }
                 }
-            }
 
-            LoginType.NAVER -> {
-                NaverIdLoginSDK.logout()
-            }
+                LoginType.NAVER -> {
+                    NaverIdLoginSDK.logout()
+                }
 
-            LoginType.GOOGLE -> {
-                GoogleSignIn.getClient(
-                    context,
-                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
-                ).signOut().addOnCompleteListener {
+                LoginType.GOOGLE -> {
+                    GoogleSignIn.getClient(
+                        context,
+                        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+                    ).signOut().addOnCompleteListener {
+                    }
+                }
+
+                else -> {
                 }
             }
 
-            else -> {
+            FirebaseAuth.getInstance().signOut()
+            AuthPrefs.clear(context)
+        } catch (e: Exception) {
+            try {
+                FirebaseAuth.getInstance().signOut()
+                AuthPrefs.clear(context)
+            } catch (innerException: Exception) {
+                AuthPrefs.clear(context)
             }
         }
-
-        FirebaseAuth.getInstance().signOut()
-
-        AuthPrefs.clear(context)
     }
 
     suspend fun withdrawUser(context: Context) {
@@ -111,7 +119,7 @@ class AuthRepository @Inject constructor(
 
             else -> {}
         }
-        AuthPrefs.clear(context)
+        AuthPrefs.clearAll(context)
     }
 
     private suspend fun deleteAllUserData(uid: String) {
