@@ -190,7 +190,8 @@ fun saveDefaultNotificationSettingsToFirestore(enabled: Boolean) {
         "notificationSettings" to mapOf(
             "budgetAlert" to enabled,
             "reportAlert" to enabled,
-            "reminderAlert" to enabled
+            "reminderAlert" to enabled,
+            "reportDeadlineAlert" to enabled
         )
     )
 
