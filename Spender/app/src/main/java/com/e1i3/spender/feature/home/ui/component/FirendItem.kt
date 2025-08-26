@@ -30,14 +30,17 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.e1i3.spender.R
 import com.e1i3.spender.feature.home.domain.model.Friend
+import com.e1i3.spender.feature.mypage.ui.component.CircularImage
 import com.e1i3.spender.ui.theme.LightPointColor
 import com.e1i3.spender.ui.theme.Typography
 import kotlin.math.roundToInt
@@ -64,29 +67,10 @@ fun FriendItem(
                     onClick = onClick,
                     onLongClick = { menuExpanded = true })
         ) {
-            val painter: Painter = rememberAsyncImagePainter(
-                model = friend.photoUrl,
-                placeholder = painterResource(id = R.drawable.spender_default)
+            CircularImage(
+                profileUrl = friend.photoUrl,
+                size = 60.dp
             )
-
-
-            Box(
-                modifier = Modifier
-                    .size(60.dp)
-                    .shadow(elevation = 2.dp, shape = CircleShape, clip = false)
-                    .background(MaterialTheme.colorScheme.surface, CircleShape)
-                    .padding(2.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painter,
-                    contentDescription = "${friend.nickname}의 프로필",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-            }
 
             Text(
                 modifier = Modifier.padding(top = 5.dp),

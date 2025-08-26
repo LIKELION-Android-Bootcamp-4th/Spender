@@ -36,7 +36,7 @@ fun CircularImage(
             .size(size)
             .shadow(elevation = 3.dp, shape = CircleShape, clip = false)
             .background(MaterialTheme.colorScheme.surface , CircleShape)
-            .border(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant, shape = CircleShape),
+            .border(width = 0.dp, color = MaterialTheme.colorScheme.outlineVariant, shape = CircleShape),
         colors = CardDefaults.cardColors(
             containerColor = WhiteColor
         )
