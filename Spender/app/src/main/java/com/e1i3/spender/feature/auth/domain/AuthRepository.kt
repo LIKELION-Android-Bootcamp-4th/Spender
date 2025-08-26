@@ -120,6 +120,8 @@ class AuthRepository @Inject constructor(
 
         try {
             val subcollections = listOf(
+                "tiers",
+                "friends",
                 "categories",
                 "expenses",
                 "incomes",
