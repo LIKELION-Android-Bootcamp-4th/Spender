@@ -60,7 +60,11 @@ import com.e1i3.spender.ui.theme.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    navHostController: NavHostController, 
+    bottomNavController: NavHostController? = null,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
     val totalExpense by viewModel.totalExpense.collectAsState()
     val expenseRate by viewModel.expenseRate.collectAsState()
     val recentExpenses by viewModel.recentExpenses.collectAsState()
@@ -201,7 +205,8 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                         item {
                             RecentTransactionsSection(
                                 recentExpenses = recentExpenses,
-                                navHostController = navHostController
+                                navHostController = navHostController,
+                                bottomNavController = bottomNavController ?: navHostController
                             )
                         }
                     }
