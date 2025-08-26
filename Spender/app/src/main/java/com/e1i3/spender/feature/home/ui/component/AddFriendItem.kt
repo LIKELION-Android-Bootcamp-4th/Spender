@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +22,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.e1i3.spender.ui.theme.LightPointColor
 import com.e1i3.spender.ui.theme.Typography
 
 @Composable
@@ -43,14 +43,14 @@ fun AddFriendItem(onClick: () -> Unit) {
                     .size(60.dp)
                     .shadow(elevation = 2.dp, shape = CircleShape, clip = false)
                     .background(MaterialTheme.colorScheme.surface, CircleShape)
-                    .padding(2.dp),
+                    .padding(1.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(CircleShape)
-                        .background(Color(0xFFBDBDBD)),
+                        .background(LightPointColor),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
