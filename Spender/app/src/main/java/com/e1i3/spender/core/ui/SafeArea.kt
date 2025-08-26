@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.runtime.Composable
@@ -16,7 +17,7 @@ fun SafeArea(
     content: @Composable BoxScope.() -> Unit
 ) {
     Box(
-        modifier = modifier.padding(insets.asPaddingValues()),
+        modifier = modifier.padding(insets.asPaddingValues()).navigationBarsPadding(),
         content = content
     )
 }
