@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.e1i3.spender.feature.home.domain.model.Friend
 import com.e1i3.spender.feature.home.domain.repository.HomeRepository
+import com.e1i3.spender.feature.home.ui.component.HomeUiState
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -18,9 +21,6 @@ import kotlinx.coroutines.launch
 class HomeViewModel @Inject constructor(
     private val repository: HomeRepository
 ) : ViewModel() {
-    private val _isLoading = mutableStateOf(true)
-    val isLoading: State<Boolean> = _isLoading
-
     private val _hasUnread = mutableStateOf(false)
     val hasUnread: State<Boolean> = _hasUnread
 
@@ -29,9 +29,6 @@ class HomeViewModel @Inject constructor(
 
     private var listenerRegistered = false
     private var listenerRegistration: ListenerRegistration? = null
-
-    private val _friendList = mutableStateOf<List<Friend>>(emptyList())
-    val friendList: State<List<Friend>> = _friendList
 
     val totalExpense = repository.observeTotalExpense()
         .stateIn(
@@ -54,27 +51,40 @@ class HomeViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
+    val friendList = repository.observeFriends()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    val homeUiState: StateFlow<HomeUiState> = combine(
+        friendList, totalExpense, expenseRate, recentExpenses
+    ) { friends, total, rate, recent ->
+        HomeUiState.Success(
+            friends = friends,
+            tier = currentTier.value,
+            totalExpense = total,
+            expenseRate = rate,
+            recentExpenses = recent
+        )
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        HomeUiState.Loading
+    )
+
     init {
         checkUnreadNotifications()
         observeUnread()
-        loadHomeData()
+        loadCurrentTier()
     }
 
-    private fun loadHomeData() {
+    private fun loadCurrentTier(){
         viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                val friendListJob = async { repository.getFriendList() }
-                val currentTierJob = async { repository.getCurrentTier() }
-
-                friendListJob.await().onSuccess { _friendList.value = it }
-                currentTierJob.await().onSuccess { _currentTier.value = it }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                _isLoading.value = false
-            }
+            repository.getCurrentTier()
+                .onSuccess { _currentTier.value = it }
+                .onFailure { e -> e.printStackTrace() }
         }
     }
 
@@ -107,8 +117,6 @@ class HomeViewModel @Inject constructor(
     fun deleteFriend(friendId: String) {
         viewModelScope.launch {
             repository.deleteFriend(friendId)
-            val updatedList = _friendList.value.filterNot { it.userId == friendId }
-            _friendList.value = updatedList
         }
     }
 }

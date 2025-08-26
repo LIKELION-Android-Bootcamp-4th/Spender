@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.e1i3.spender.ui.theme.Typography
 
 @Composable
-fun AddFriendItem(onClick: () -> Unit){
+fun AddFriendItem(onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .width(64.dp)
@@ -37,7 +38,6 @@ fun AddFriendItem(onClick: () -> Unit){
                 .width(64.dp)
                 .clickable(onClick = onClick)
         ) {
-
             Box(
                 modifier = Modifier
                     .size(60.dp)
@@ -54,7 +54,7 @@ fun AddFriendItem(onClick: () -> Unit){
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Add,
+                        imageVector = Icons.Rounded.Add,
                         contentDescription = "친구 추가",
                         tint = Color.White,
                         modifier = Modifier.size(28.dp)

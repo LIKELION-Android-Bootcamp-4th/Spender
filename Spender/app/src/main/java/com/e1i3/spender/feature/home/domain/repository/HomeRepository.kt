@@ -1,8 +1,8 @@
 package com.e1i3.spender.feature.home.domain.repository
 
+import android.system.Os.close
 import com.e1i3.spender.core.data.remote.expense.ExpenseDto
-import com.e1i3.spender.core.data.remote.friend.FriendListDto
-import com.e1i3.spender.feature.home.mapper.toDomain
+import com.e1i3.spender.feature.home.domain.model.Friend
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -52,19 +52,27 @@ class HomeRepository @Inject constructor(
             }
     }
 
-    suspend fun getFriendList() = runCatching {
+    fun observeFriends(): Flow<List<Friend>> = callbackFlow {
         val uid = auth.currentUser?.uid ?: error("로그아웃 상태")
 
-        val snapshot = firestore.collection("users")
+        val listener = firestore.collection("users")
             .document(uid)
             .collection("friends")
-            .get()
-            .await()
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
 
-        snapshot.documents.mapNotNull { doc ->
-            val dto = doc.toObject(FriendListDto::class.java)
-            dto?.toDomain(userId = doc.id)
-        }
+                val friends: List<Friend> = snapshot
+                    ?.toObjects(Friend::class.java)
+                    ?.filterNotNull()
+                    .orEmpty()
+
+                trySend(friends)
+            }
+
+        awaitClose { listener.remove() }
     }
 
     suspend fun deleteFriend(friendId: String) = runCatching {
