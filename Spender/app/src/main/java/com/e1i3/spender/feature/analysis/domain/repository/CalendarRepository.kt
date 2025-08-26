@@ -51,6 +51,7 @@ class CalendarRepository @Inject constructor(
                     memo = data["memo"]?.toString() ?: "",
                     title = data["title"]?.toString() ?: "",
                     date = data["date"] as? Timestamp ?: Timestamp.now(),
+                    emotionId = data["emotion"]?.toString() ?: "",
                     categoryId = data["categoryId"]?.toString() ?: "",
                     createdAt = data["createdAt"] as? Timestamp ?: Timestamp.now()
                 )
@@ -98,6 +99,7 @@ class CalendarRepository @Inject constructor(
                     memo = data["memo"]?.toString() ?: "",
                     title = data["title"]?.toString() ?: "",
                     date = data["date"] as? Timestamp ?: Timestamp.now(),
+                    emotionId = data["emotion"]?.toString() ?: "",
                     categoryId = data["categoryId"]?.toString() ?: "",
                     createdAt = data["createdAt"] as? Timestamp ?: Timestamp.now()
                 )
@@ -146,7 +148,7 @@ class CalendarRepository @Inject constructor(
                     title = data["title"]?.toString() ?: "",
                     date = data["date"] as? Timestamp ?: Timestamp.now(),
                     receiptUrl = "",
-                    emotionId = "",
+                    emotionId = data["emotion"]?.toString() ?: "",
                     categoryId = data["categoryId"]?.toString() ?: "",
                     createdAt = data["createdAt"] as? Timestamp ?: Timestamp.now()
                 )
@@ -170,7 +172,7 @@ class CalendarRepository @Inject constructor(
                     title = doc["title"]?.toString() ?: "",
                     date = doc["date"] as? Timestamp ?: Timestamp.now(),
                     receiptUrl = "",
-                    emotionId = "",
+                    emotionId = doc["emotion"]?.toString() ?: "",
                     categoryId = doc["categoryId"]?.toString() ?: "",
                     createdAt = doc["createdAt"] as? Timestamp ?: Timestamp.now()
                 )
