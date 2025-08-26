@@ -148,7 +148,7 @@ fun HomeScreen(navHostController: NavHostController, viewModel: HomeViewModel = 
                     ) {
                         item {
                             LazyRow(
-                                contentPadding = PaddingValues(horizontal = 15.dp, vertical = 0.dp),
+                                contentPadding = PaddingValues(horizontal = 15.dp),
                                 horizontalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
                                 items(friendList) { friend ->
