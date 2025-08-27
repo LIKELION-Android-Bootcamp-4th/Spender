@@ -37,7 +37,7 @@ fun HomeTopBar(
     onNotificationClick: () -> Unit
 ) {
     TopAppBar(
-        modifier = Modifier.height(80.dp),
+        modifier = Modifier.height(60.dp),
         navigationIcon = {
             Image(
                 painter = painterResource(id = R.drawable.app_icon),

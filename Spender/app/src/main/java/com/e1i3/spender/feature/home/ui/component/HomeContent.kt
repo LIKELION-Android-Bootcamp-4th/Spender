@@ -43,7 +43,8 @@ fun HomeContent(
         item {
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 15.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(top = 10.dp)
             ) {
                 item { AddFriendItem(onClick = onAddFriendClick) }
                 items(friends) { friend ->
