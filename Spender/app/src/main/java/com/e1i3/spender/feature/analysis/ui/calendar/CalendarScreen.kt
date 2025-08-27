@@ -79,25 +79,27 @@ fun CalendarScreen(navHostController: NavHostController) {
                 viewModel.updateSelection(it, year, month)
             }, selectionState, year, month)
             Spacer(Modifier.height(10.dp))
-            if (selectionState == listOf(0, 0, 0)) {
-                SpendListByDate(
-                    viewModel.nowMonth,
-                    viewModel.nowDay,
-                    (viewModel.now.get(Calendar.DAY_OF_WEEK)) % 7,
-                    dailyList,
-                    navHostController
-                )
-            } else {
-                calendar.set(Calendar.YEAR, selectionState[0])
-                calendar.set(Calendar.MONTH, selectionState[1])
-                calendar.set(Calendar.DATE, selectionState[2])
-                SpendListByDate(
-                    selectionState[1],
-                    selectionState[2],
-                    (calendar.get(Calendar.DAY_OF_WEEK)) % 7,
-                    dailyList,
-                    navHostController
-                )
+            Box(modifier = Modifier.weight(1f)) {
+                if (selectionState == listOf(0, 0, 0)) {
+                    SpendListByDate(
+                        viewModel.nowMonth,
+                        viewModel.nowDay,
+                        (viewModel.now.get(Calendar.DAY_OF_WEEK)) % 7,
+                        dailyList,
+                        navHostController
+                    )
+                } else {
+                    calendar.set(Calendar.YEAR, selectionState[0])
+                    calendar.set(Calendar.MONTH, selectionState[1])
+                    calendar.set(Calendar.DATE, selectionState[2])
+                    SpendListByDate(
+                        selectionState[1],
+                        selectionState[2],
+                        (calendar.get(Calendar.DAY_OF_WEEK)) % 7,
+                        dailyList,
+                        navHostController
+                    )
+                }
             }
         }
 

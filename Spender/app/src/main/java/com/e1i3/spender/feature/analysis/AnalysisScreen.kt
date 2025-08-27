@@ -36,61 +36,59 @@ fun AnalysisScreen(navHostController: NavHostController) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     val tabs = listOf("캘린더", "그래프")
 
-    SafeArea {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.height(20.dp))
+    Column(modifier = Modifier.fillMaxSize()) {
+        Spacer(modifier = Modifier.height(20.dp))
 
-            // 탭 메뉴
-            TabRow(
-                selectedTabIndex = selectedTabIndex,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .height(56.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                containerColor = MaterialTheme.colorScheme.tertiary,
-                indicator = { tabPositions ->
-                    Box(
-                        modifier = Modifier
-                            .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                            .fillMaxSize()
-                            .padding(4.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.background,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                    )
-                },
-                divider = {}
-            ) {
-                tabs.forEachIndexed { index, title ->
-                    val isSelected = selectedTabIndex == index
-                    Box(
-                        modifier = Modifier
-                            .height(52.dp)
-                            .fillMaxHeight()
-                            .zIndex(1f)
-                            .clip(RoundedCornerShape(10.dp))
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = { selectedTabIndex = index }
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = title,
-                            style = Typography.titleMedium,
-                            color = if (isSelected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onTertiary,
-                            modifier = Modifier.padding(horizontal = 16.dp)
+        // 탭 메뉴
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .height(56.dp)
+                .clip(RoundedCornerShape(8.dp)),
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            indicator = { tabPositions ->
+                Box(
+                    modifier = Modifier
+                        .tabIndicatorOffset(tabPositions[selectedTabIndex])
+                        .fillMaxSize()
+                        .padding(4.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.background,
+                            shape = RoundedCornerShape(8.dp)
                         )
-                    }
+                )
+            },
+            divider = {}
+        ) {
+            tabs.forEachIndexed { index, title ->
+                val isSelected = selectedTabIndex == index
+                Box(
+                    modifier = Modifier
+                        .height(52.dp)
+                        .fillMaxHeight()
+                        .zIndex(1f)
+                        .clip(RoundedCornerShape(10.dp))
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { selectedTabIndex = index }
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = title,
+                        style = Typography.titleMedium,
+                        color = if (isSelected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.onTertiary,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TabContent(selectedTabIndex, navHostController)
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TabContent(selectedTabIndex, navHostController)
     }
 }
 

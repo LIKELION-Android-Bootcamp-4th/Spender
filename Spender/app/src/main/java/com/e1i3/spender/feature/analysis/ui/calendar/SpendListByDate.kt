@@ -3,6 +3,7 @@ package com.e1i3.spender.feature.analysis.ui.calendar
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,7 +30,7 @@ fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: List<ExpenseDto>
             data.amount > 0
         ))
     }
-    Column {
+    Column(modifier = Modifier.fillMaxSize()) {
         Row(verticalAlignment = Alignment.Bottom) {
             Text(text = when(dayOfWeek) {
                 0 -> "토요일"
@@ -45,7 +46,7 @@ fun SpendListByDate(month: Int, day: Int, dayOfWeek: Int, list: List<ExpenseDto>
             Text(text = "${month+1}월 ${day}일", style = Typography.bodyMedium)
         }
         Spacer(Modifier.height(10.dp))
-        LazyColumn {
+        LazyColumn(Modifier.fillMaxSize()) {
             itemsIndexed(list) { _, item ->
                 SpendListItemComponent(item) {
                     if (item.amount > 0) {
