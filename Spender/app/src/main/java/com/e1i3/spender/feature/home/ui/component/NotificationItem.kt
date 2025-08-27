@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,7 +35,7 @@ fun NotificationItem(
     rootNavController: NavHostController,
     dateText: String
 ) {
-    val backgroundColor = if (!notification.isRead) LightReportHighlightColor else Color.White
+    val backgroundColor = if (!notification.isRead) LightReportHighlightColor else MaterialTheme.colorScheme.surface
     Column(
         modifier = Modifier
             .fillMaxWidth()
