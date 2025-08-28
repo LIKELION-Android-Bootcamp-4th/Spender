@@ -263,6 +263,10 @@ class HomeRepository @Inject constructor(
                         ?: (data["createdAt"] as? Timestamp)
 
                     val categoryId = data["categoryId"].toString()
+                    val emotionId = (doc.get("emotion") as? String)
+                        ?: data["emotion"]?.toString()
+                        ?: data["emotionId"]?.toString()
+                        ?: ""
 
                     if (dateTs == null || createdAtTs == null) {
                         return@map null
@@ -273,6 +277,7 @@ class HomeRepository @Inject constructor(
                         amount = amount,
                         title = title,
                         date = dateTs,
+                        emotionId = emotionId,
                         categoryId = categoryId,
                         createdAt = createdAtTs
                     )

@@ -1,7 +1,6 @@
 package com.e1i3.spender.feature.home.ui.component
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,10 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.e1i3.spender.core.common.util.toCurrency
+import com.e1i3.spender.feature.analysis.mapper.emotionIdToString
 import com.e1i3.spender.ui.theme.PointColor
 import com.e1i3.spender.ui.theme.Typography
 import java.text.SimpleDateFormat
@@ -34,8 +33,10 @@ fun RecentItem(
     amount: Int,
     type: String,
     date: Date,
+    emotionId: String = "",
     onClick: () -> Unit
 ) {
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -60,12 +61,24 @@ fun RecentItem(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 val dateFormat = SimpleDateFormat("yy.MM.dd", Locale.getDefault())
-                Text(
-                    text = dateFormat.format(date),
-                    style = Typography.bodySmall,
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onTertiary
-                )
+                val emotionText = emotionIdToString(emotionId)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = dateFormat.format(date),
+                        style = Typography.bodySmall,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onTertiary
+                    )
+                    if (emotionText.isNotEmpty()) {
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = emotionText,
+                            style = Typography.bodySmall,
+                            fontSize = 10.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             }
             Row(verticalAlignment = Alignment.Bottom) {
                 val amountText = if (type == "INCOME") {
