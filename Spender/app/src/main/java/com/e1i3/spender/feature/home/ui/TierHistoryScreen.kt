@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.e1i3.spender.core.ui.CustomTopAppBar
 import com.e1i3.spender.core.ui.LoadingScreen
 import com.e1i3.spender.core.ui.TierDialog
 import com.e1i3.spender.feature.home.ui.component.EmptyTier
@@ -50,13 +51,8 @@ fun TierHistoryScreen(
 
     Scaffold(
         topBar = {
-            ReportTopAppBar(
-                year = year,
-                onPrev = { viewModel.goToPreviousYear() },
-                onNext = { viewModel.goToNextYear() },
-                onYearClick = {
-                    showYearDialog = true
-                },
+            CustomTopAppBar(
+                title = "지난 티어 모아보기",
                 navController = navHostController,
                 showBackButton = true,
                 actions = {
@@ -70,6 +66,26 @@ fun TierHistoryScreen(
                     }
                 }
             )
+//            ReportTopAppBar(
+//                year = year,
+//                onPrev = { viewModel.goToPreviousYear() },
+//                onNext = { viewModel.goToNextYear() },
+//                onYearClick = {
+//                    showYearDialog = true
+//                },
+//                navController = navHostController,
+//                showBackButton = true,
+//                actions = {
+//                    IconButton(onClick = {
+//                        showTierDialog = true
+//                    }) {
+//                        Icon(
+//                            imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
+//                            contentDescription = "티어 설명보기"
+//                        )
+//                    }
+//                }
+//            )
         },
         content = { padding ->
             when {
@@ -105,8 +121,8 @@ fun TierHistoryScreen(
             onDismiss = { showYearDialog = false }
         )
     }
-    
-    if(showTierDialog){
+
+    if (showTierDialog) {
         TierDialog(
             onDismiss = { showTierDialog = false }
         )
