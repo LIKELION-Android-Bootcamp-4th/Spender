@@ -79,7 +79,7 @@ private fun deepLinkToHome(context: Context): Intent =
 private fun deepLinkToExpenseRegistration(context: Context): Intent =
     Intent(context, MainActivity::class.java).apply {
         action = Intent.ACTION_VIEW
-        data = "spender://expense_registration".toUri()
+        data = "spender://expense_registration/0".toUri()
         addFlags(
             Intent.FLAG_ACTIVITY_NEW_TASK or
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or

@@ -127,7 +127,7 @@ fun SpenderNavigation(
             listOf(
                 navArgument("selectedTabIndex") {
                     type = NavType.IntType
-                    defaultValue = 1
+                    defaultValue = 0
                 },
             ),
             deepLinks = listOf(
@@ -139,7 +139,7 @@ fun SpenderNavigation(
             val selectedTabIndex = backStackEntry.arguments?.getInt("selectedTabIndex")
             ExpenseRegistrationParentScreen(
                 navController,
-                selectedTabIndex ?: 1
+                selectedTabIndex ?: 0
             )
         }
         composable(Screen.OcrResultScreen.route) { backStackEntry ->
