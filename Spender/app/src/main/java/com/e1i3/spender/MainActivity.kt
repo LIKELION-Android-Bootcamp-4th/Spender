@@ -86,8 +86,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        onNewIntentCallback?.invoke(intent ?: return)
         setIntent(intent)
+        onNewIntentCallback?.invoke(intent ?: return)
     }
 }
 
@@ -246,7 +246,48 @@ private fun HandlePushNavigation(
     val activity = LocalActivity.current as MainActivity
 
     fun navigateByExtras(intent: Intent) {
-        val route = intent.getStringExtra("route") ?: return
+        // URI 딥링크 먼저 처리 (위젯 등)
+        intent.data?.let { data ->
+            if (intent.action == Intent.ACTION_VIEW && data.scheme == "spender") {
+                when (data.host) {
+                    "expense_registration" -> {
+                        bottomNavController.navigate(BottomNavigationItem.Home.route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                        rootNavController.navigate("expense_registration/0") {
+                            launchSingleTop = true
+                        }
+                    }
+                    "income_registration" -> {
+                        bottomNavController.navigate(BottomNavigationItem.Home.route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                        rootNavController.navigate(Screen.IncomeRegistrationScreen.route) {
+                            launchSingleTop = true
+                        }
+                    }
+                    "home" -> {
+                        bottomNavController.navigate(BottomNavigationItem.Home.route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                }
+                intent.data = null
+                intent.replaceExtras(Bundle())
+                return
+            }
+        }
+
+        // FCM 등에서 extras로 들어오는 경우 처리
+        val route = intent.getStringExtra("route") ?: run {
+            // route가 없으면 기본 Home으로만 보냄 (URI가 있었다면 위에서 return 됨)
+            bottomNavController.navigate(BottomNavigationItem.Home.route)
+            intent.replaceExtras(Bundle())
+            return
+        }
 
         // 탭 이동
         when {
@@ -265,6 +306,15 @@ private fun HandlePushNavigation(
                     restoreState = true
                 }
                 rootNavController.navigate("expense_registration/0") {
+                    launchSingleTop = true
+                }
+            }
+            route == "add_income" -> {
+                bottomNavController.navigate(BottomNavigationItem.Home.route) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+                rootNavController.navigate(Screen.IncomeRegistrationScreen.route) {
                     launchSingleTop = true
                 }
             }

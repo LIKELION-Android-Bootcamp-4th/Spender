@@ -30,7 +30,6 @@ fun WidgetButton(
 ){
     Box(
         modifier = modifier
-            .fillMaxWidth()
             .height(40.dp)
             .background(ColorProvider(PointColor))
             .cornerRadius(8.dp)
