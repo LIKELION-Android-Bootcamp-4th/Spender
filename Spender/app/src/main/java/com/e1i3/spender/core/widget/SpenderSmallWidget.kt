@@ -75,7 +75,6 @@ private fun deepLinkToHome(context: Context): Intent =
         )
     }
 
-
 @Composable
 private fun SpenderSmallWidgetContent(
     percent: Float,

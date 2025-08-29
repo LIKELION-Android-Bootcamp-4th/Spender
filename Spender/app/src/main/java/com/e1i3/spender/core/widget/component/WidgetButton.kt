@@ -3,6 +3,7 @@ package com.e1i3.spender.core.widget.component
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
@@ -25,11 +26,14 @@ import com.e1i3.spender.ui.theme.PointColor
 @Composable
 fun WidgetButton(
     text: String,
+    height: Dp? = null,
     onClickIntent: Intent,
     modifier: GlanceModifier = GlanceModifier
 ){
+    val base = if (height != null) modifier.height(height) else modifier
+
     Box(
-        modifier = modifier
+        modifier = base
             .height(40.dp)
             .background(ColorProvider(PointColor))
             .cornerRadius(8.dp)
