@@ -64,7 +64,7 @@ fun MypageScreen(
 
     var showWithdrawDialog by remember { mutableStateOf(false) }
     var showLogoutDialog by remember { mutableStateOf(false) }
-    
+
     LaunchedEffect(Unit) {
         mypageViewModel.loadUserInfo()
     }
@@ -88,101 +88,104 @@ fun MypageScreen(
         }
     }
 
-    SafeArea {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 14.dp)
-        ) {
-            UserInfoSection(
-                userName = user.displayNickname,
-                profileUrl = user.profileUrl,
-                navHostController = navHostController
-            )
 
-            Section(
-                title = "가계부",
-                items = listOf(
-                    MyPageItemType.IncomeCategory,
-                    MyPageItemType.ExpenseCategory,
-                    MyPageItemType.Budget,
-                    MyPageItemType.RegularExpense,
-                    MyPageItemType.AddFriend
-                ),
-                onItemClick = onItemClick
-            )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 14.dp)
+    ) {
+        UserInfoSection(
+            userName = user.displayNickname,
+            profileUrl = user.profileUrl,
+            navHostController = navHostController
+        )
 
-            Spacer(modifier = Modifier.height(10.dp))
+        Section(
+            title = "가계부",
+            items = listOf(
+                MyPageItemType.IncomeCategory,
+                MyPageItemType.ExpenseCategory,
+                MyPageItemType.Budget,
+                MyPageItemType.RegularExpense,
+                MyPageItemType.AddFriend
+            ),
+            onItemClick = onItemClick
+        )
 
-            Section(
-                title = "설정",
-                items = listOf(
-                    MyPageItemType.Notification,
-                    MyPageItemType.Withdraw,
-                    MyPageItemType.Logout
-                ),
-                onItemClick = onItemClick
-            )
+        Spacer(modifier = Modifier.height(10.dp))
 
-            TextButton(
-                onClick = {
-                    navHostController.navigate("open_source")
-                }
-            ) {
-                Text(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    text = "오픈소스 라이선스 보기",
-                    style = Typography.bodyMedium.copy(textDecoration = TextDecoration.Underline, color = LightFontColor)
-                )
+        Section(
+            title = "설정",
+            items = listOf(
+                MyPageItemType.Notification,
+                MyPageItemType.Withdraw,
+                MyPageItemType.Logout
+            ),
+            onItemClick = onItemClick
+        )
+
+        TextButton(
+            onClick = {
+                navHostController.navigate("open_source")
             }
-
-            AdMobBanner()
-        }
-
-        if (showWithdrawDialog) {
-            CustomDialog(
-                title = "탈퇴하시겠습니까?",
-                onConfirm = {
-                    showWithdrawDialog = false
-
-                    authViewModel.withdraw(
-                        context,
-                        onSuccess = {
-                            Toast.makeText(context, "탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.", Toast.LENGTH_SHORT)
-                                .show()
-                            navHostController.navigate("auth") {
-                                popUpTo("main") { inclusive = true }
-                            }
-                        },
-                        onError = { msg ->
-                            Toast.makeText(context, "회원탈퇴 실패 $msg", Toast.LENGTH_SHORT).show()
-                        }
-                    )
-                },
-                onDismiss = {
-                    showWithdrawDialog = false
-                }
+        ) {
+            Text(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                text = "오픈소스 라이선스 보기",
+                style = Typography.bodyMedium.copy(
+                    textDecoration = TextDecoration.Underline,
+                    color = LightFontColor
+                )
             )
         }
-        if (showLogoutDialog) {
-            CustomDialog(
-                title = "로그아웃 하시겠습니까?",
-                onConfirm = {
-                    showLogoutDialog = false
 
-                    authViewModel.logout(context) {
-                        Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+        AdMobBanner()
+    }
+
+    if (showWithdrawDialog) {
+        CustomDialog(
+            title = "탈퇴하시겠습니까?",
+            onConfirm = {
+                showWithdrawDialog = false
+
+                authViewModel.withdraw(
+                    context,
+                    onSuccess = {
+                        Toast.makeText(context, "탈퇴가 완료되었습니다. 이용해주셔서 감사합니다.", Toast.LENGTH_SHORT)
+                            .show()
                         navHostController.navigate("auth") {
                             popUpTo("main") { inclusive = true }
                         }
+                    },
+                    onError = { msg ->
+                        Toast.makeText(context, "회원탈퇴 실패 $msg", Toast.LENGTH_SHORT).show()
                     }
-                },
-                onDismiss = {
-                    showLogoutDialog = false
-                }
-            )
-        }
+                )
+            },
+            onDismiss = {
+                showWithdrawDialog = false
+            }
+        )
     }
+    if (showLogoutDialog) {
+        CustomDialog(
+            title = "로그아웃 하시겠습니까?",
+            onConfirm = {
+                showLogoutDialog = false
+
+                authViewModel.logout(context) {
+                    Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                    navHostController.navigate("auth") {
+                        popUpTo("main") { inclusive = true }
+                    }
+                }
+            },
+            onDismiss = {
+                showLogoutDialog = false
+            }
+        )
+    }
+
 }
 
 @Composable
@@ -231,7 +234,7 @@ fun UserInfoSection(
             modifier = Modifier.weight(1f)
         )
         Spacer(modifier = Modifier.width(16.dp))
-        IconButton(onClick = {navHostController.navigate("myinfo")}) {
+        IconButton(onClick = { navHostController.navigate("myinfo") }) {
             Icon(
                 imageVector = Icons.Default.Settings,
                 contentDescription = "프로필 수정",
