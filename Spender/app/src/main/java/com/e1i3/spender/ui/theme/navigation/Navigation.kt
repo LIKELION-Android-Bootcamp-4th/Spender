@@ -172,7 +172,12 @@ fun SpenderNavigation(
 //        composable(Screen.ExpenseRegistrationScreen.route) {
 //            ExpenseRegistrationParentScreen(navController)
 //        }
-        composable(Screen.IncomeRegistrationScreen.route) {
+        composable(
+            Screen.IncomeRegistrationScreen.route,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "spender://income_registration"
+            })
+        ) {
             IncomeRegistrationScreen(navController)
         }
         composable(Screen.FriendAddScreen.route) {

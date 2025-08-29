@@ -259,6 +259,15 @@ private fun HandlePushNavigation(
                             launchSingleTop = true
                         }
                     }
+                    "income_registration" -> {
+                        bottomNavController.navigate(BottomNavigationItem.Home.route) {
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                        rootNavController.navigate(Screen.IncomeRegistrationScreen.route) {
+                            launchSingleTop = true
+                        }
+                    }
                     "home" -> {
                         bottomNavController.navigate(BottomNavigationItem.Home.route) {
                             launchSingleTop = true
@@ -297,6 +306,15 @@ private fun HandlePushNavigation(
                     restoreState = true
                 }
                 rootNavController.navigate("expense_registration/0") {
+                    launchSingleTop = true
+                }
+            }
+            route == "add_income" -> {
+                bottomNavController.navigate(BottomNavigationItem.Home.route) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+                rootNavController.navigate(Screen.IncomeRegistrationScreen.route) {
                     launchSingleTop = true
                 }
             }

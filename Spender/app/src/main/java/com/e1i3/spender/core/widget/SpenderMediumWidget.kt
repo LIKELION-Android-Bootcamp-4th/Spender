@@ -26,7 +26,6 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
-import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
@@ -69,6 +68,17 @@ private fun deepLinkToHome(context: Context): Intent =
     Intent(context, MainActivity::class.java).apply {
         action = Intent.ACTION_VIEW
         data = "spender://home".toUri()
+        addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP
+        )
+    }
+
+private fun deepLinkToIncomeRegistration(context: Context): Intent =
+    Intent(context, MainActivity::class.java).apply {
+        action = Intent.ACTION_VIEW
+        data = "spender://income_registration/1".toUri()
         addFlags(
             Intent.FLAG_ACTIVITY_NEW_TASK or
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or
@@ -174,11 +184,26 @@ fun SpenderMediumWidgetContent(
 
                 Spacer(GlanceModifier.height(10.dp))
 
-                WidgetButton(
-                    text = "등록",
-                    onClickIntent = deepLinkToExpenseRegistration(context = LocalContext.current),
-                    modifier = GlanceModifier.fillMaxHeight()
-                )
+                Row(
+                    modifier = GlanceModifier.fillMaxWidth().padding(0.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    WidgetButton(
+                        text = "수입",
+                        onClickIntent = deepLinkToIncomeRegistration(context = LocalContext.current),
+                        modifier = GlanceModifier
+                            .defaultWeight()
+                    )
+
+                    Spacer(GlanceModifier.width(8.dp))
+
+                    WidgetButton(
+                        text = "지출",
+                        onClickIntent = deepLinkToExpenseRegistration(context = LocalContext.current),
+                        modifier = GlanceModifier
+                            .defaultWeight()
+                    )
+                }
             }
         }
     }
