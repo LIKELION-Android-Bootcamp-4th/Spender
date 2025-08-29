@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -13,9 +14,11 @@ import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.LocalSize
 import androidx.glance.action.actionParametersOf
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
@@ -48,6 +51,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class SpenderMediumWidget : GlanceAppWidget() {
+    override val sizeMode: SizeMode = SizeMode.Responsive(
+        setOf(
+            DpSize(120.dp, 120.dp),
+            DpSize(213.dp, 213.dp),
+            DpSize(240.dp, 240.dp)
+        )
+    )
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val percent0to100 = withContext(Dispatchers.IO) {
             runCatching { getExpenseRate() }.getOrElse { 0f }
@@ -102,6 +113,11 @@ fun SpenderMediumWidgetContent(
     percent: Float,
     percentText: String
 ) {
+    val size = LocalSize.current
+    val outerPad = 10.dp
+    val side = (if (size.width < size.height) size.width else size.height) - (outerPad * 2)
+
+
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
@@ -111,7 +127,8 @@ fun SpenderMediumWidgetContent(
     ) {
         Box(
             modifier = GlanceModifier
-                .fillMaxSize()
+                .width(side)
+                .height(side)
                 .padding(horizontal = 13.dp, vertical = 9.dp)
                 .background(ColorProvider(day = Color.White, night = DarkModeBackground))
                 .clickable(onClick = actionStartActivity(deepLinkToHome(context = LocalContext.current))),
