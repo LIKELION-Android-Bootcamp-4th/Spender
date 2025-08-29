@@ -317,8 +317,6 @@ private fun HandlePushNavigation(
 
         // FCM 등에서 extras로 들어오는 경우 처리
         val route = intent.getStringExtra("route") ?: run {
-            // route가 없으면 기본 Home으로만 보냄 (URI가 있었다면 위에서 return 됨)
-            bottomNavController.navigate(BottomNavigationItem.Home.route)
             intent.replaceExtras(Bundle())
             return
         }
