@@ -25,6 +25,15 @@
         <meta-data
             android:name="android.app.shortcuts"
             android:resource="@xml/shortcuts" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="push_general_high" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/spender_happy" />
+
         <receiver android:name=".core.widget.SpenderSmallReceiverWidget"
             android:exported="true">
             <intent-filter>

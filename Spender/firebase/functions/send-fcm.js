@@ -1,10 +1,16 @@
 const admin = require("firebase-admin");
 
 // 공용 FCM 전송 함수
-async function sendDataOnly(token, payload) {
+async function sendWithNotification(token, payload) {
+  const { title, body, ...rest } = payload; // title, body 제외
+
   return admin.messaging().send({
     token,
-    data: payload, // 데이터 페이로드
+    notification: {
+      title,
+      body,
+    },
+    data: rest, // route, month 등만 들어감
   });
 }
 
@@ -47,7 +53,7 @@ function payloadReportDeadline(month) {
 }
 
 module.exports = {
-  sendDataOnly,
+  sendWithNotification,
   payloadReport,
   payloadBudget,
   payloadReminder,

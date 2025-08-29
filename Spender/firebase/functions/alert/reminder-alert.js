@@ -1,6 +1,6 @@
 const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
-const { sendDataOnly, payloadReminder } = require("../send-fcm");
+const { sendWithNotification, payloadReminder } = require("../send-fcm");
 const { addNotification } = require("../notification-store");
 
 module.exports = functions.pubsub
@@ -51,7 +51,7 @@ module.exports = functions.pubsub
 
       // 1) FCM 발송
       sendJobs.push(
-        sendDataOnly(token, payloadReminder(title, content)).catch(err => {
+        sendWithNotification(token, payloadReminder(title, content)).catch(err => {
             console.error("REMINDER send error", uid, err);
             if (err?.errorInfo?.code === "messaging/registration-token-not-registered") {
              return userDoc.ref.update({ fcmToken: admin.firestore.FieldValue.delete() });

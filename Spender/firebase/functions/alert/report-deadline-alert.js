@@ -1,6 +1,6 @@
 const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
-const { sendDataOnly, payloadReportDeadline } = require("../send-fcm");
+const { sendWithNotification, payloadReportDeadline } = require("../send-fcm");
 const { addNotification } = require("../notification-store");
 
 function nowInSeoul() {
@@ -45,7 +45,7 @@ module.exports = functions.pubsub
 
       // 1) FCM 전송
       sendJobs.push(
-        sendDataOnly(token, payloadReportDeadline(month)).catch(err => {
+        sendWithNotification(token, payloadReportDeadline(month)).catch(err => {
           console.error("REPORT DEADLINE send error", uid, err);
           // 토큰 만료 처리
           if (err?.errorInfo?.code === "messaging/registration-token-not-registered") {

@@ -1,6 +1,6 @@
 const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
-const { sendDataOnly, payloadReport } = require("../send-fcm");
+const { sendWithNotification, payloadReport } = require("../send-fcm");
 const { addNotification } = require("../notification-store");
 
 function prevMonthYYYYMM() {
@@ -34,7 +34,7 @@ module.exports = functions.pubsub
 
       // 1) 푸시 전송
       sendJobs.push(
-        sendDataOnly(token, payloadReport(month)).catch(err => {
+        sendWithNotification(token, payloadReport(month)).catch(err => {
           console.error("REPORT send error", uid, err);
           if (err?.errorInfo?.code === "messaging/registration-token-not-registered") {
             return userDoc.ref.update({ fcmToken: admin.firestore.FieldValue.delete() });

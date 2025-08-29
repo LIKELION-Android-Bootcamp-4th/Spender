@@ -1,8 +1,11 @@
 package com.e1i3.spender
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -25,6 +28,28 @@ class MyApplication : Application() {
             clientName = getString(R.string.app_name)
         )
         setupShortcuts(this)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val id = "push_general_high" // 서버 channelId와 동일
+            val nm = getSystemService(NotificationManager::class.java)
+            val existing = nm.getNotificationChannel(id)
+
+            if (existing == null || existing.importance != NotificationManager.IMPORTANCE_HIGH) {
+                if (existing != null) {
+                    nm.deleteNotificationChannel(id)
+                }
+                val name = "기본 알림"
+                val channel = NotificationChannel(id, name, NotificationManager.IMPORTANCE_HIGH).apply {
+                    description = "Spender 일반 알림 채널"
+                    setShowBadge(true)
+                    enableVibration(true)
+                    enableLights(true)
+                    lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
+                }
+                nm.createNotificationChannel(channel)
+            }
+        }
+
     }
 
     private fun setupShortcuts(context: Context) {
