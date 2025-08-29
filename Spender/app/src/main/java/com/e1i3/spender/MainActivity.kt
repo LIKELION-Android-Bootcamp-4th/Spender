@@ -83,7 +83,9 @@ class MainActivity : ComponentActivity() {
 
         if (intent.data != null) {
             val code = intent.data.toString()
-            handleDeepLink(code.substring(code.length-8, code.length))
+            if(code.contains("invite")){
+                handleDeepLink(code.substring(code.length-8, code.length))
+            }
         }
 
         setContent {
