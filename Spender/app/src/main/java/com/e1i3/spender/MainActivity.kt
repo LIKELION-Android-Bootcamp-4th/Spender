@@ -2,6 +2,8 @@ package com.e1i3.spender
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
@@ -43,6 +45,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -52,6 +56,8 @@ import com.e1i3.spender.core.ui.BottomNavigationBar
 import com.e1i3.spender.feature.analysis.AnalysisScreen
 import com.e1i3.spender.feature.home.HomeScreen
 import com.e1i3.spender.feature.mypage.MypageScreen
+import com.e1i3.spender.feature.mypage.data.repository.FriendRepository
+import com.e1i3.spender.feature.mypage.ui.viewmodel.FriendViewModel
 import com.e1i3.spender.feature.report.ui.list.ReportListScreen
 import com.e1i3.spender.ui.theme.PointColor
 import com.e1i3.spender.ui.theme.SpenderTheme
@@ -60,16 +66,26 @@ import com.e1i3.spender.ui.theme.WhiteColor
 import com.e1i3.spender.ui.theme.navigation.BottomNavigationItem
 import com.e1i3.spender.ui.theme.navigation.Screen
 import com.e1i3.spender.ui.theme.navigation.SpenderNavigation
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     var onNewIntentCallback: ((Intent) -> Unit)? = null
+    val repository = FriendRepository(FirebaseAuth.getInstance())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        if (intent.data != null) {
+            val code = intent.data.toString()
+            handleDeepLink(code.substring(code.length-8, code.length))
+        }
+
         setContent {
             SpenderTheme(
                 dynamicColor = false
@@ -86,8 +102,26 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        setIntent(intent)
-        onNewIntentCallback?.invoke(intent ?: return)
+        intent.data?.let { uri ->
+            val code = uri.toString()
+            if (code.contains("invite")) {
+                handleDeepLink(code.substring(code.length-8, code.length))
+            } else {
+                onNewIntentCallback?.invoke(intent ?: return)
+                setIntent(intent)
+            }
+        }
+    }
+
+    private fun handleDeepLink(code: String) {
+        lifecycleScope.launch {
+            val msg = repository.addFriend(code)
+            showMessage(msg)
+        }
+    }
+
+    private fun showMessage(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 }
 

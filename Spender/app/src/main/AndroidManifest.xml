@@ -70,6 +70,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="spender" android:host="expense_registration" />
+                <data android:scheme="https" android:host="spender-5f3c4.web.app" android:pathPrefix="/invite" />
             </intent-filter>
         </activity>
         <activity

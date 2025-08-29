@@ -2,6 +2,7 @@ package com.e1i3.spender.feature.mypage.ui
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -65,6 +67,16 @@ fun FriendAddScreen(
         }
     }
 
+    fun share() {
+        val intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "친구가 꽉잡아 지출이로 초대했어요!\n\nhttps://spender-5f3c4.web.app/invite/$myCode")
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(intent, "공유하기")
+        context.startActivity(shareIntent)
+    }
+
     Scaffold (
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -79,6 +91,12 @@ fun FriendAddScreen(
                 Row {
                     Text("내 초대코드", style = Typography.titleMedium)
                     Spacer(modifier = Modifier.weight(1f))
+                    Icon(
+                        imageVector = Icons.Outlined.Share,
+                        contentDescription = "코드 공유",
+                        modifier = Modifier.clickable { share() }
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
                     Icon(
                         imageVector = Icons.Outlined.Refresh,
                         contentDescription = "코드 새로고침",
