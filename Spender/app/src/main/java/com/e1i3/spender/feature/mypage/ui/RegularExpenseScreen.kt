@@ -39,7 +39,7 @@ fun RegularExpenseScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            navHostController.navigate(Screen.ExpenseRegistrationScreen.createRoute(2))
+                            navHostController.navigate(Screen.ExpenseRegistrationScreen.createRoute(1))
                         }
                     ) {
                         Icon(Icons.Default.Add, contentDescription = "추가하기")
