@@ -2,7 +2,6 @@ package com.e1i3.spender
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
@@ -45,7 +44,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -57,7 +55,6 @@ import com.e1i3.spender.feature.analysis.AnalysisScreen
 import com.e1i3.spender.feature.home.HomeScreen
 import com.e1i3.spender.feature.mypage.MypageScreen
 import com.e1i3.spender.feature.mypage.data.repository.FriendRepository
-import com.e1i3.spender.feature.mypage.ui.viewmodel.FriendViewModel
 import com.e1i3.spender.feature.report.ui.list.ReportListScreen
 import com.e1i3.spender.ui.theme.PointColor
 import com.e1i3.spender.ui.theme.SpenderTheme
@@ -68,13 +65,14 @@ import com.e1i3.spender.ui.theme.navigation.Screen
 import com.e1i3.spender.ui.theme.navigation.SpenderNavigation
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     var onNewIntentCallback: ((Intent) -> Unit)? = null
+    var pendingDeepLink: Intent? = null
     val repository = FriendRepository(FirebaseAuth.getInstance())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,6 +92,8 @@ class MainActivity : ComponentActivity() {
             ) {
                 val navController = rememberNavController()
 
+                RootIntentHandler(navController)
+
                 SpenderNavigation(
                     navController = navController,
                     startDestination = Screen.SplashScreen.route
@@ -104,16 +104,16 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        intent.data?.let { uri ->
-            val code = uri.toString()
-            if (code.contains("invite")) {
-                handleDeepLink(code.substring(code.length-8, code.length))
-            } else {
-                onNewIntentCallback?.invoke(intent ?: return)
-                setIntent(intent)
-            }
+        setIntent(intent)
+
+        val data = intent.data
+        if (data != null && data.toString().contains("invite")) {
+            handleDeepLink(data.toString().takeLast(8))
+            return
         }
+        onNewIntentCallback?.invoke(intent)
     }
+
 
     private fun handleDeepLink(code: String) {
         lifecycleScope.launch {
@@ -128,6 +128,112 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+fun RootIntentHandler(rootNavController: NavHostController) {
+    val activity = LocalActivity.current as MainActivity
+
+    fun handleUriDeepLink(intent: Intent): Boolean {
+        val data = intent.data ?: return false
+        if (data.scheme != "spender") return false
+
+        when (data.host) {
+            "home" -> {
+                rootNavController.navigate(Screen.MainScreen.route) {
+                    launchSingleTop = true
+                }
+            }
+            "expense_registration" -> {
+                rootNavController.navigate("expense_registration/0") {
+                    launchSingleTop = true
+                }
+            }
+            "income_registration" -> {
+                rootNavController.navigate(Screen.IncomeRegistrationScreen.route) {
+                    launchSingleTop = true
+                }
+            }
+            "report_detail" -> {
+                val month = data.pathSegments.getOrNull(0) ?: return false
+                rootNavController.navigate(Screen.ReportDetail.createRoute(month)) {
+                    launchSingleTop = true
+                }
+            }
+            else -> return false
+        }
+
+        intent.data = null
+        intent.replaceExtras(Bundle())
+        return true
+    }
+
+    fun handleRouteExtra(intent: Intent): Boolean {
+        val route = intent.getStringExtra("route") ?: return false
+        when {
+            route == "home" -> {
+                rootNavController.navigate(Screen.MainScreen.route) { launchSingleTop = true }
+            }
+            route == "analysis" -> {
+                rootNavController.navigate(BottomNavigationItem.Analysis.route) {
+                    launchSingleTop = true
+                }
+            }
+            route.startsWith("report_detail/") -> {
+                val month = route.removePrefix("report_detail/")
+                rootNavController.navigate(Screen.ReportDetail.createRoute(month)) {
+                    launchSingleTop = true
+                }
+            }
+            route == "add_expense" -> {
+                rootNavController.navigate("expense_registration/0") { launchSingleTop = true }
+            }
+            route == "add_income" -> {
+                rootNavController.navigate(Screen.IncomeRegistrationScreen.route) { launchSingleTop = true }
+            }
+            else -> {
+                rootNavController.navigate(Screen.MainScreen.route) { launchSingleTop = true }
+            }
+        }
+        intent.replaceExtras(Bundle())
+        return true
+    }
+
+    fun tryNavigate(intent: Intent): Boolean {
+        if (handleUriDeepLink(intent)) return true
+        if (handleRouteExtra(intent)) return true
+        return false
+    }
+
+    LaunchedEffect(rootNavController) {
+        rootNavController.currentBackStackEntryFlow.first()
+        activity.intent?.let { intent ->
+            if (!tryNavigate(intent)) {
+                activity.pendingDeepLink = intent
+            }
+        }
+    }
+
+    // 그래프 변화 시마다 pending 재시도
+    LaunchedEffect(rootNavController.currentBackStackEntry) {
+        activity.pendingDeepLink?.let { pending ->
+            if (tryNavigate(pending)) {
+                activity.pendingDeepLink = null
+            }
+        }
+    }
+
+    // 포그라운드 새 인텐트 도착 시
+    DisposableEffect(Unit) {
+        val cb: (Intent) -> Unit = { intent ->
+            if (!tryNavigate(intent)) {
+                activity.pendingDeepLink = intent
+            }
+        }
+        activity.onNewIntentCallback = cb
+        onDispose { activity.onNewIntentCallback = null }
+    }
+}
+
+
+@Composable
 fun MainScreen(rootNavHostController: NavHostController) {
     val bottomBarNavController = rememberNavController()
     var isFabMenuExpanded by remember { mutableStateOf(false) }
@@ -138,11 +244,6 @@ fun MainScreen(rootNavHostController: NavHostController) {
     LaunchedEffect(currentRoute) {
         isFabMenuExpanded = false
     }
-
-    HandlePushNavigation(
-        rootNavController = rootNavHostController,
-        bottomNavController = bottomBarNavController
-    )
 
     Scaffold(
         floatingActionButton = {
@@ -272,100 +373,4 @@ fun MainScreen(rootNavHostController: NavHostController) {
             }
         },
     )
-}
-
-@Composable
-private fun HandlePushNavigation(
-    rootNavController: NavHostController,
-    bottomNavController: NavHostController
-) {
-    val activity = LocalActivity.current as MainActivity
-
-    fun navigateByExtras(intent: Intent) {
-        // URI 딥링크 먼저 처리 (위젯 등)
-        intent.data?.let { data ->
-            if (intent.action == Intent.ACTION_VIEW && data.scheme == "spender") {
-                when (data.host) {
-                    "expense_registration" -> {
-                        bottomNavController.navigate(BottomNavigationItem.Home.route) {
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                        rootNavController.navigate("expense_registration/0") {
-                            launchSingleTop = true
-                        }
-                    }
-                    "income_registration" -> {
-                        bottomNavController.navigate(BottomNavigationItem.Home.route) {
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                        rootNavController.navigate(Screen.IncomeRegistrationScreen.route) {
-                            launchSingleTop = true
-                        }
-                    }
-                    "home" -> {
-                        bottomNavController.navigate(BottomNavigationItem.Home.route) {
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                }
-                intent.data = null
-                intent.replaceExtras(Bundle())
-                return
-            }
-        }
-
-        // FCM 등에서 extras로 들어오는 경우 처리
-        val route = intent.getStringExtra("route") ?: run {
-            intent.replaceExtras(Bundle())
-            return
-        }
-
-        // 탭 이동
-        when {
-            route == "home" -> bottomNavController.navigate(BottomNavigationItem.Home.route)
-            route == "analysis" -> bottomNavController.navigate(BottomNavigationItem.Analysis.route)
-            route.startsWith("report_detail/") -> {
-                val extractedMonth = route.removePrefix("report_detail/")
-                bottomNavController.navigate(BottomNavigationItem.Report.route)
-                rootNavController.navigate(
-                    Screen.ReportDetail.createRoute(extractedMonth)
-                )
-            }
-            route == "add_expense" -> {
-                bottomNavController.navigate(BottomNavigationItem.Home.route) {
-                    launchSingleTop = true
-                    restoreState = true
-                }
-                rootNavController.navigate("expense_registration/0") {
-                    launchSingleTop = true
-                }
-            }
-            route == "add_income" -> {
-                bottomNavController.navigate(BottomNavigationItem.Home.route) {
-                    launchSingleTop = true
-                    restoreState = true
-                }
-                rootNavController.navigate(Screen.IncomeRegistrationScreen.route) {
-                    launchSingleTop = true
-                }
-            }
-            else -> bottomNavController.navigate(BottomNavigationItem.Home.route)
-        }
-        intent.replaceExtras(Bundle())
-    }
-
-    // 앱이 꺼진 상태에서 시작(콜드스타트)
-    LaunchedEffect(Unit) {
-        navigateByExtras(activity.intent)
-    }
-
-    // 앱이 켜진 상태에서 알림 클릭(onNewIntent)
-    DisposableEffect(Unit) {
-        val cb: (Intent) -> Unit = { intent -> navigateByExtras(intent) }
-        activity.onNewIntentCallback = cb
-        onDispose { activity.onNewIntentCallback = null }
-    }
 }

@@ -45,8 +45,6 @@ fun SpenderNavigation(
     navController: NavHostController,
     startDestination: String
 ) {
-    HandleDeepLink(navController)
-
     NavHost(
         navController = navController,
         startDestination = startDestination
@@ -186,22 +184,5 @@ fun SpenderNavigation(
         composable(Screen.TierHistoryScreen.route) {
             TierHistoryScreen(navController)
         }
-    }
-}
-
-@Composable
-private fun HandleDeepLink(navController: NavHostController) {
-    val activity = androidx.activity.compose.LocalActivity.current as? MainActivity
-
-    // 앱이 꺼진 상태에서 시작(콜드 스타트)
-    LaunchedEffect(Unit) {
-        activity?.intent?.let { navController.handleDeepLink(it) }
-    }
-
-    // 앱이 켜져 있는 상태에서 새 Intent 도착(onNewIntent)
-    DisposableEffect(Unit) {
-        val cb: (Intent) -> Unit = { intent -> navController.handleDeepLink(intent) }
-        activity?.onNewIntentCallback = cb
-        onDispose { activity?.onNewIntentCallback = null }
     }
 }
