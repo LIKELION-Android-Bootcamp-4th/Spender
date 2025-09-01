@@ -67,7 +67,7 @@ fun BudgeProgress(
                 style = Typography.titleMedium
             )
             Text(
-                text = "${percentageForDisplay.toInt().toCurrency()}",
+                text = "${percentageForDisplay.toInt().toCurrency()}%",
                 style = Typography.titleMedium.copy(
                     color = highlightColor
                 )
