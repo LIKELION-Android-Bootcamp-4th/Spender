@@ -117,7 +117,6 @@ class HomeRepository @Inject constructor(
         awaitClose { listener.remove() }
     }
 
-
     fun observeTotalExpense(): Flow<Int> = callbackFlow {
         val uid = auth.currentUser?.uid
         if (uid == null) {
@@ -125,9 +124,23 @@ class HomeRepository @Inject constructor(
             return@callbackFlow
         }
 
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startOfMonth = Timestamp(calendar.time)
+
+        calendar.add(Calendar.MONTH, 1)
+        calendar.add(Calendar.MILLISECOND, -1)
+        val endOfMonth = Timestamp(calendar.time)
+
         val listener = firestore.collection("users")
             .document(uid)
             .collection("expenses")
+            .whereGreaterThanOrEqualTo("date", startOfMonth)
+            .whereLessThanOrEqualTo("date", endOfMonth)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     close(error)
