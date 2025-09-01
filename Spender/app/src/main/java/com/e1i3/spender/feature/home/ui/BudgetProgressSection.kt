@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.e1i3.spender.R
+import com.e1i3.spender.core.common.util.toCurrency
 import com.e1i3.spender.feature.home.ui.component.BudgetProgressBar
 import com.e1i3.spender.ui.theme.PointColor
 import com.e1i3.spender.ui.theme.PointRedColor
@@ -66,7 +67,7 @@ fun BudgeProgress(
                 style = Typography.titleMedium
             )
             Text(
-                text = "$percentText",
+                text = "${percentageForDisplay.toInt().toCurrency()}",
                 style = Typography.titleMedium.copy(
                     color = highlightColor
                 )
