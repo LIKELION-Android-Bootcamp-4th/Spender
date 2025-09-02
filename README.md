@@ -17,12 +17,7 @@
 
 # 주요 화면
 | 홈 | 통계 | 리포트 | 지출 등록 |
-| <div style="display: flex; gap: 10px;"> <img width="150" height="400" alt="Image" src="https://github.com/user-attachments/assets/da164496-8560-4cbf-a7ff-d8d59bab9b04" /> </div> 
-| <div style="display: flex; gap: 10px;"> <img width="150" height="400" alt="Image" src="https://github.com/user-attachments/assets/8b1a06c8-d77c-4d63-bf53-81feac996e7f" />
-</div>
-| <div style="display: flex; gap: 10px;"> <img width="150" height="400" alt="Image" src="https://github.com/user-attachments/assets/365df8df-51a9-444c-92ed-23e609293558" />
-</div>
-| <div style="display: flex; gap: 10px;"> <img width="150" height="400" alt="Image" src="https://github.com/user-attachments/assets/a7bf8c4e-3afe-4af7-a304-d9fb6d12bec6" /> </div>
+| <img width="150" height="400" alt="Image" src="https://github.com/user-attachments/assets/da164496-8560-4cbf-a7ff-d8d59bab9b04" /> | <img width="150" height="400" alt="Image" src="https://github.com/user-attachments/assets/8b1a06c8-d77c-4d63-bf53-81feac996e7f" /> | <img width="150" height="400" alt="Image" src="https://github.com/user-attachments/assets/365df8df-51a9-444c-92ed-23e609293558" /> | <img width="150" height="400" alt="Image" src="https://github.com/user-attachments/assets/a7bf8c4e-3afe-4af7-a304-d9fb6d12bec6" /> |
 |
 
 # 개발 기간 및 작업 관리
