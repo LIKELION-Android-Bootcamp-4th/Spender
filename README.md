@@ -15,11 +15,15 @@
 | 마이페이지, 홈, 지출/수입 등록 관련 기능 | DB(firebase storage) 설정, 통계 관련 기능 | firebase cloud functions 설정, 리포트 관련 기능 | 소셜 로그인, firebase auth 설정, 로그인/온보딩 관련 기능 |
 | [@xogns950](https://github.com/xogns950) | [@esfjge](https://github.com/EunaJ99/EunaJ99) | [@jessica3579](https://github.com/jessica3579) | [@urhelp](https://github.com/urhelp) |
 
+# 주요 화면
+| 홈 | 통계 | 리포트 | 지출 등록 |
+| <img width="4412" height="8824" alt="Image" src="https://github.com/user-attachments/assets/da164496-8560-4cbf-a7ff-d8d59bab9b04" /> | <img width="2400" height="4818" alt="Image" src="https://github.com/user-attachments/assets/8b1a06c8-d77c-4d63-bf53-81feac996e7f" /> | <img width="1200" height="2467" alt="Image" src="https://github.com/user-attachments/assets/365df8df-51a9-444c-92ed-23e609293558" /> | <img width="2400" height="4712" alt="Image" src="https://github.com/user-attachments/assets/a7bf8c4e-3afe-4af7-a304-d9fb6d12bec6" /> |
+
 # 개발 기간 및 작업 관리
 ### 개발 기간
 * 기획 및 업무 분장: 2025-07-24 ~ 2025-07-28
 * UI 개발: 2025-07-28 ~ 2025-08-05
-* 기능 개발: 2025-08-01 ~
+* 기능 개발: 2025-08-01 ~ 2025-09-02
 
 ### 작업 관리
 * 디자인은 Figma에서 관리, 기획 기간에 화면 명세서 개발 완료
